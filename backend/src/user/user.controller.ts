@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { AppHttpException } from 'src/app.http.exception';
 
 @Controller('user')
 @ApiTags('user')
@@ -24,9 +25,13 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('get/:index')
+  @ApiOperation({ summary: 'Return a User by index' })
+  @ApiOkResponse({ description: 'Return a User by index.', type: User })
+  @ApiNotFoundResponse({ description: 'User not found.', type: AppHttpException })
+  @ApiParam({description: 'Users index', name: 'index'})
+  findOne(@Param('index') index: string) {
+    return this.userService.findOne(+index);
   }
 
   @Patch(':id')
