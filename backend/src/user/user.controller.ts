@@ -1,8 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { AppHttpException } from 'src/app.http.exception';
 
@@ -20,7 +33,10 @@ export class UserController {
 
   @Get('get/all')
   @ApiOperation({ summary: 'Return all Users' })
-  @ApiOkResponse({ description: 'Return all Users as JSON array.', type: [User] })
+  @ApiOkResponse({
+    description: 'Return all Users as JSON array.',
+    type: [User],
+  })
   findAll() {
     return this.userService.findAll();
   }
@@ -28,8 +44,11 @@ export class UserController {
   @Get('get/:index')
   @ApiOperation({ summary: 'Return a User by index' })
   @ApiOkResponse({ description: 'Return a User by index.', type: User })
-  @ApiNotFoundResponse({ description: 'User not found.', type: AppHttpException })
-  @ApiParam({description: 'Users index', name: 'index'})
+  @ApiNotFoundResponse({
+    description: 'User not found.',
+    type: AppHttpException,
+  })
+  @ApiParam({ description: 'Users index', name: 'index' })
   findOne(@Param('index') index: string) {
     return this.userService.findOne(+index);
   }
@@ -37,8 +56,11 @@ export class UserController {
   @Patch('update/:index')
   @ApiOperation({ summary: 'Update a User by index' })
   @ApiCreatedResponse({ description: 'Update a User by index.', type: User })
-  @ApiNotFoundResponse({ description: 'User not found.', type: AppHttpException })
-  @ApiParam({description: 'Users index', name: 'index'})
+  @ApiNotFoundResponse({
+    description: 'User not found.',
+    type: AppHttpException,
+  })
+  @ApiParam({ description: 'Users index', name: 'index' })
   update(@Param('index') index: string, @Body() updateUser: User) {
     return this.userService.update(+index, updateUser);
   }
@@ -46,9 +68,12 @@ export class UserController {
   @Delete('delete/:index')
   @ApiOperation({ summary: 'Delete a User by index' })
   @ApiOkResponse({ description: 'Delete a User by index.', type: User })
-  @ApiNotFoundResponse({ description: 'User not found.', type: AppHttpException })
-  @ApiParam({description: 'Users index', name: 'index'})
-  remove(@Param('index') index: String) {
+  @ApiNotFoundResponse({
+    description: 'User not found.',
+    type: AppHttpException,
+  })
+  @ApiParam({ description: 'Users index', name: 'index' })
+  remove(@Param('index') index: string) {
     return this.userService.remove(+index);
   }
 }

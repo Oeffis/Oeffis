@@ -1,9 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
-let users = [];
+const users = [];
 
 @Injectable()
 export class UserService {
@@ -17,14 +15,14 @@ export class UserService {
   }
 
   findOne(index: number) {
-    if(index < 0 || index >= users.length) {
+    if (index < 0 || index >= users.length) {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     }
     return users[index];
   }
 
   update(index: number, updateUser: User) {
-    if(index < 0 || index >= users.length) {
+    if (index < 0 || index >= users.length) {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     } else {
       users[index] = updateUser;
@@ -34,7 +32,7 @@ export class UserService {
 
   remove(index: number) {
     let deletedUser = null;
-    if(index < 0 || index >= users.length) {
+    if (index < 0 || index >= users.length) {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     } else {
       deletedUser = users[index];
