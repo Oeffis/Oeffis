@@ -17,7 +17,9 @@ export class UserController {
     return this.userService.create(createUser);
   }
 
-  @Get()
+  @Get('get/all')
+  @ApiOperation({ summary: 'Return all Users' })
+  @ApiOkResponse({ description: 'Return all Users as JSON array.', type: [User] })
   findAll() {
     return this.userService.findAll();
   }
