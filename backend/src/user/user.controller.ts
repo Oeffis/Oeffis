@@ -34,9 +34,13 @@ export class UserController {
     return this.userService.findOne(+index);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch('update/:index')
+  @ApiOperation({ summary: 'Update a User by index' })
+  @ApiCreatedResponse({ description: 'Update a User by index.', type: User })
+  @ApiNotFoundResponse({ description: 'User not found.', type: AppHttpException })
+  @ApiParam({description: 'Users index', name: 'index'})
+  update(@Param('index') index: string, @Body() updateUser: User) {
+    return this.userService.update(+index, updateUser);
   }
 
   @Delete(':id')

@@ -23,8 +23,13 @@ export class UserService {
     return user[index];
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(index: number, updateUser: User) {
+    if(index < 0 || index >= user.length) {
+      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+    } else {
+      user[index] = updateUser;
+    }
+    return user[index];
   }
 
   remove(id: number) {
