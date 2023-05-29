@@ -43,8 +43,12 @@ export class UserController {
     return this.userService.update(+index, updateUser);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete('delete/:index')
+  @ApiOperation({ summary: 'Delete a User by index' })
+  @ApiOkResponse({ description: 'Delete a User by index.', type: User })
+  @ApiNotFoundResponse({ description: 'User not found.', type: AppHttpException })
+  @ApiParam({description: 'Users index', name: 'index'})
+  remove(@Param('index') index: String) {
+    return this.userService.remove(+index);
   }
 }

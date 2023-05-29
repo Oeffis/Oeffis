@@ -32,7 +32,14 @@ export class UserService {
     return user[index];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(index: number) {
+    let deletedUser = null;
+    if(index < 0 || index >= user.length) {
+      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+    } else {
+      deletedUser = user[index];
+      user.slice(index, 1);
+    }
+    return deletedUser;
   }
 }
