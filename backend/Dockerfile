@@ -9,15 +9,13 @@ WORKDIR /app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
-COPY . .
+RUN npm ci
 
 # Build application
 RUN npm run build
+
+# Remove dev-dependencies
+RUN npm ci --only=production && npm cache clean --force 
 
 # Expose port 3000
 EXPOSE 3000

@@ -1,0 +1,22 @@
+name: Container CI
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - .github/workflows/container_ci.yml
+
+jobs:
+    container:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+        - working-directory: backend
+          run: |
+            docker build . -t oeffies:latest
+        - name: Upload image
+          uses: ishworkh/docker-image-artifact-upload@v1
+          with:
+            image: oeffies:latest
+            retention_days: 30

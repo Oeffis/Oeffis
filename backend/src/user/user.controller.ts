@@ -1,23 +1,23 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiTags,
   ApiOperation,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
-import { UserService } from './user.service';
+import { AppHttpException } from '../app.http.exception';
 import { User } from './entities/user.entity';
-import { AppHttpException } from 'src/app.http.exception';
+import { UserService } from './user.service';
 
 @Controller('user')
 @ApiTags('user')
