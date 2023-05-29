@@ -3,42 +3,42 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
-let user = [];
+let users = [];
 
 @Injectable()
 export class UserService {
   create(createUser: User) {
-    user.push(createUser);
+    users.push(createUser);
     return createUser;
   }
 
   findAll() {
-    return user;
+    return users;
   }
 
   findOne(index: number) {
-    if(index < 0 || index >= user.length) {
+    if(index < 0 || index >= users.length) {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     }
-    return user[index];
+    return users[index];
   }
 
   update(index: number, updateUser: User) {
-    if(index < 0 || index >= user.length) {
+    if(index < 0 || index >= users.length) {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     } else {
-      user[index] = updateUser;
+      users[index] = updateUser;
     }
-    return user[index];
+    return users[index];
   }
 
   remove(index: number) {
     let deletedUser = null;
-    if(index < 0 || index >= user.length) {
+    if(index < 0 || index >= users.length) {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     } else {
-      deletedUser = user[index];
-      user.slice(index, 1);
+      deletedUser = users[index];
+      users.slice(index, 1);
     }
     return deletedUser;
   }
