@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "angular.ng-template",
+        "streetsidesoftware.code-spell-checker",
+        "github.vscode-github-actions"
+    ]
+}

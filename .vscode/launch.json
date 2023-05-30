@@ -1,0 +1,86 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Backend",
+            "args": [
+                "${workspaceFolder}/backend/src/main.ts"
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}/backend",
+            "console": "integratedTerminal",
+            "protocol": "inspector"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Frontend",
+            "url": "http://localhost:8000",
+            "webRoot": "${workspaceRoot}/frontend/src",
+            "sourceMaps": true,
+            "preLaunchTask": "Frontend (watch)"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Backend Tests",
+            "args": [
+                "node_modules/.bin/jest",
+                "--watch",
+                "--runInBand",
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}/backend",
+            "console": "integratedTerminal",
+            "protocol": "inspector",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "name": "Frontend Tests",
+            "autoAttachChildProcesses": true,
+            "cwd": "${workspaceFolder}/frontend",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
+            "args": [
+                "run-script",
+                "test.unit"
+            ],
+            "smartStep": true,
+            "console": "integratedTerminal"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack",
+            "configurations": [
+                "Backend",
+                "Frontend"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "",
+                "order": 1
+            }
+        }
+    ]
+}
