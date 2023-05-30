@@ -111,6 +111,11 @@ jobs:
               };
             });
 
+            if (projectItemsToBeUpdated.length === 0) {
+              console.log('No project items to be updated');
+              return;
+            }
+
             const mutations = projectItemsToBeUpdated.map((projectItem, index) => {
               return `updateProjectV2ItemFieldValue${index}: updateProjectV2ItemFieldValue(input: {
                 projectId: $project_id
