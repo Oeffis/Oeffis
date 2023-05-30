@@ -24,7 +24,7 @@ jobs:
         - name: Lint
           working-directory: frontend
           run: |
-            npm run lint -- --max-warnings 0
+            npm run lint -- --max-warnings 0 --no-fix
         - name: Test
           working-directory: frontend
           run: |

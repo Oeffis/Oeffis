@@ -3,8 +3,10 @@ name: Container CI
 on:
   push:
     branches: [ main ]
+  pull_request:
     paths: 
       - .github/workflows/container_ci.yml
+      - backend/Dockerfile
 
 jobs:
     container:
