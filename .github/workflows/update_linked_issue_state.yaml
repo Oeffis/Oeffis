@@ -1,0 +1,140 @@
+name: "Update linked issue state"
+
+on:
+  pull_request:
+    types: [ready_for_review, opened, converted_to_draft, edited, synchronize]
+
+env:
+  GITHUB_PROJECT_NUMBER: 1
+
+jobs:
+  update_linked_issue_state:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        with:
+          app_id: ${{ secrets.GH_OEFFIS_BOT_APP_ID }}
+          private_key: ${{ secrets.GH_OEFFIS_BOT_APP_PEM }}
+
+      - name: Run github script
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+
+            function determineDesiredIssueState() {
+              // is draft
+              if (context.payload.pull_request.draft) {
+                return '🛠️ Doing';
+              }
+
+              // is ready for review
+              if (context.payload.pull_request.ready_for_review) {
+                return '👀 Review';
+              }
+
+              // is open
+              if (context.payload.pull_request.state === 'open') {
+                return '👀 Review';
+              }
+
+              throw new Error('Could not determine desired issue state: ' + JSON.stringify(context.payload.pull_request));
+            }
+
+            const desiredIssueState = determineDesiredIssueState();
+
+            const query = `
+              query ($org: String!, $repository: String!, $pull_request_number: Int!, $project_number: Int!) {
+                organization(login: $org) {
+                  repository(name: $repository) {
+                    pullRequest(number: $pull_request_number) {
+                      id
+                      number
+                      closingIssuesReferences(first: 10) {
+                        nodes {
+                          id
+                          number
+                          projectItems(first: 5) {
+                            nodes {
+                              id
+                              project {
+                                id
+                              }
+                              fieldValueByName(name: "Status") {
+                                ... on ProjectV2ItemFieldSingleSelectValue {
+                                  id
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  projectV2(number: $project_number) {
+                    id
+                    field(name: "Status") {
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const queryVariables = {
+              org: context.repo.owner,
+              repository: context.repo.repo,
+              pull_request_number: context.payload.pull_request.number,
+              project_number: parseInt(process.env.GITHUB_PROJECT_NUMBER),
+            };
+
+            const queryResult = await github.graphql(query, queryVariables);
+
+            const desiredIssueStateOptionId = queryResult.organization.projectV2.field.options.find(option => option.name === desiredIssueState).id;
+            const projectId = queryResult.organization.projectV2.id;
+            const fieldConfigId = queryResult.organization.projectV2.field.id;
+
+            const projectItemsToBeUpdated = queryResult.organization.repository.pullRequest.closingIssuesReferences.nodes.map((node) => {
+              const projectItem = node.projectItems.nodes.find((projectItem) => projectItem.project.id === projectId);
+
+              return {
+                itemId: projectItem.id,
+              };
+            });
+
+            const mutations = projectItemsToBeUpdated.map((projectItem, index) => {
+              return `updateProjectV2ItemFieldValue${index}: updateProjectV2ItemFieldValue(input: {
+                projectId: $project_id
+                itemId: "${projectItem.itemId}"
+                fieldId: "${fieldConfigId}"
+                value: {
+                  singleSelectOptionId: $option_id
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }`;
+            }).join('\n');
+
+            const mutation = `
+              mutation ($project_id: ID!, $option_id: String!) {
+                ${mutations}
+              }
+            `;
+
+            const mutationVariables = {
+              project_id: projectId,
+              option_id: desiredIssueStateOptionId,
+            };
+
+            await github.graphql(mutation, mutationVariables);
