@@ -78,7 +78,7 @@ jobs:
             const timeSpendFieldId = queryResult.repository.issue.projectItems.nodes[0].project.field.id;
             const projectId = queryResult.repository.issue.projectItems.nodes[0].project.id;
             const issueProjectItemId = queryResult.repository.issue.projectItems.nodes[0].id;
-            const timeSpentSoFar = queryResult.repository.issue.projectItems.nodes[0].fieldValueByName.number;
+            const timeSpentSoFar = queryResult.repository.issue.projectItems.nodes[0].fieldValueByName?.number || 0;
 
             const mutation = `
               mutation ($project_id: ID!, $item_id: ID!, $time_spent_field_id: ID!, $time_spent_field_value: Float!) {
