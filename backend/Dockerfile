@@ -1,25 +1,29 @@
-# Use node v18 docker image
-FROM node:18
+FROM node:18 AS base
 
-# Create app directory
+# The builder layer will be used to build the application
+FROM base AS builder
+
 WORKDIR /app
+
+# The dependencies will be cached unless package.json changes.
+COPY package*.json ./
+RUN npm ci
 
 COPY . .
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
-RUN npm ci
-
-# Build application
+# And the release layer will be used to run the application.
+# Only required files will be copied from the builder layer to the release layer.
 RUN npm run build
 
-# Remove dev-dependencies
-RUN npm ci --only=production && npm cache clean --force 
+FROM base AS release
 
-# Expose port 3000
+WORKDIR /app
+
+# If additional files are required, they can be copied from the builder layer to the release layer.
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+
 EXPOSE 3000
 
 CMD [ "node", "dist/main" ]
