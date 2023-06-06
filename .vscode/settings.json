@@ -1,0 +1,22 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/out": true,
+    },
+    "git.branchProtection": [
+        "main"
+    ],
+    "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
+    "git.pullBeforeCheckout": true,
+    "git.mergeEditor": true,
+    "files.insertFinalNewline": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": true
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": true
+    },
+}

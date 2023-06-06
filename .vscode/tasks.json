@@ -1,0 +1,60 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Backend (watch)",
+            "type": "npm",
+            "script": "start:debug",
+            "path": "backend",
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": [
+                "$tsc-watch",
+                {
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".*File change detected.*",
+                        "endsPattern": ".*Nest application successfully started.*"
+                    },
+                    "pattern": {
+                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                        "file": 1,
+                        "location": 2,
+                        "message": 3
+                    }
+                }
+            ],
+            "isBackground": true,
+            "presentation": {
+                "group": "watchers"
+            }
+        },
+        {
+            "label": "Frontend (watch)",
+            "type": "npm",
+            "script": "dev",
+            "path": "frontend",
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": {
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*",
+                    "endsPattern": ".*"
+                },
+                "pattern": {
+                    "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                }
+            },
+            "isBackground": true,
+            "presentation": {
+                "group": "watchers"
+            }
+        },
+    ]
+}
