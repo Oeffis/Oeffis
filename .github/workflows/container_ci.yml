@@ -9,7 +9,7 @@ on:
       - backend/Dockerfile
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: oeffis/${{ github.repository }}/backend
+  IMAGE_NAME: oeffis/oeffis/backend
 
 jobs:
   container:
