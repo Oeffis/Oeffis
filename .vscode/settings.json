@@ -2,7 +2,7 @@
     "search.exclude": {
         "**/node_modules": true,
         "**/dist": true,
-        "**/out": true,
+        "**/out": true
     },
     "git.branchProtection": [
         "main"
@@ -23,5 +23,8 @@
         "./app",
         "./frontend",
         "./backend"
+    ],
+    "cSpell.words": [
+      "Hafas"
     ]
 }
