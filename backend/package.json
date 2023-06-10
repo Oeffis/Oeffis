@@ -25,7 +25,6 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.4.3",
     "@nestjs/swagger": "^6.3.0",
-    "db-hafas": "^6.0.0",
     "hafas-client": "^6.0.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
