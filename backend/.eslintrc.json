@@ -10,10 +10,6 @@
     "import"
   ],
   "extends": [
-    "plugin:react/recommended",
     "../.eslintrc.json"
-  ],
-  "rules": {
-    "arrow-body-style": ["error", "as-needed"]
-  }
+  ]
 }
