@@ -117,7 +117,6 @@ jobs:
 
   debug_on_permission_fail:
     runs-on: ubuntu-latest
-    if: github.event.issue && contains(github.event.comment.body, 'Time spent:')
     steps:
       - name: Generate token
         id: generate_token
