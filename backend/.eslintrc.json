@@ -2,13 +2,13 @@
   "root": true,
   "env": {
     "es6": true,
-    "browser": true,
     "node": true
   },
-  "plugins": [
-    "@typescript-eslint",
-    "import"
-  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "project": ["tsconfig.json"],
+    "ecmaVersion": 6
+  },
   "extends": [
     "../.eslintrc.json"
   ]

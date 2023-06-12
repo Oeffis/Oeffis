@@ -1,9 +1,7 @@
 {
   "root": true,
   "env": {
-    "es6": true,
-    "browser": true,
-    "node": true
+    "es6": true
   },
   "plugins": [
     "@typescript-eslint",
@@ -12,12 +10,9 @@
   "extends": [
     "plugin:@typescript-eslint/recommended"
   ],
-  "parserOptions": {
-    "sourceType": "module",
-    "project": ["tsconfig.json"],
-    "ecmaVersion": 6
-  },
+
   "rules": {
+    "arrow-body-style": ["error", "as-needed"],
     "no-debugger": "off",
     "no-console": 0,
     "no-unused-vars": "error",
@@ -36,11 +31,5 @@
             "allowTemplateLiterals": true
         }
     ]
-  },
-  "ignorePatterns": [
-    "out",
-    "dist",
-    "**/*.d.ts",
-    "src/test/fixtures/**"
-  ]
+  }
 }
