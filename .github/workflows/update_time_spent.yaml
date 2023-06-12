@@ -10,7 +10,7 @@ env:
 jobs:
   update-time-spent:
     runs-on: ubuntu-latest
-    if: github.event.issue && contains(github.event.comment.body, 'Time spent:') && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER' || github.event.comment.author_association == 'COLLABORATOR')
+    if: github.event.issue && contains(github.event.comment.body, 'Time spent:') && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER' || github.event.comment.author_association == 'COLLABORATOR' || github.event.comment.author_association == 'CONTRIBUTOR')
     steps:
       - name: Generate token
         id: generate_token
@@ -114,23 +114,3 @@ jobs:
               repo: context.repo.repo,
               content: '+1'
             });
-
-  debug_on_permission_fail:
-    runs-on: ubuntu-latest
-    if: github.event.issue && contains(github.event.comment.body, 'Time spent:')
-    steps:
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
-        with:
-          app_id: ${{ secrets.GH_OEFFIS_BOT_APP_ID }}
-          private_key: ${{ secrets.GH_OEFFIS_BOT_APP_PEM }}
-
-      - name: Run github script
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ steps.generate_token.outputs.token }}
-          script: |
-            console.log('author_association', context.payload.comment.author_association);
-            console.log('body', context.payload.comment.body);
-            console.log('payload', JSON.stringify(context.payload, null, 2));
