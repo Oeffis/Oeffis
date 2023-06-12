@@ -10,7 +10,6 @@
   "extends": [
     "plugin:@typescript-eslint/recommended"
   ],
-
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "no-debugger": "off",
