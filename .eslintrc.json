@@ -20,7 +20,6 @@
   "rules": {
     "no-debugger": "off",
     "no-console": 0,
-    "arrow-body-style": ["error", "as-needed"],
     "no-unused-vars": "error",
     "no-empty": "error",
     "@typescript-eslint/explicit-function-return-type": "error",
