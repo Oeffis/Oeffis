@@ -71,4 +71,4 @@ jobs:
           run: |
             docker buildx imagetools create \
               --tag ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_IMAGE_NAME }}:latest \
-              user/app:latest
+              ${{ env.GITHUB_IMAGE_NAME }}:latest
