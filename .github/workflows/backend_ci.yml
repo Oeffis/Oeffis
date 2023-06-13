@@ -1,12 +1,6 @@
 name: Backend CI
 
-on: 
-  push:
-    branches:
-      - main
-    paths: 
-      - backend/**
-      - .github/workflows/backend_ci.yml
+on: [push]
 
 env:
   GITHUB_REGISTRY: ghcr.io
