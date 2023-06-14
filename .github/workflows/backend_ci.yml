@@ -13,22 +13,27 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@v3
+
         - name: Install Node.js
           uses: actions/setup-node@v3
           with:
             node-version: 18.x
+
         - name: Install Dependencies
           working-directory: backend
           run: |
             npm ci
+
         - name: Lint
           working-directory: backend
           run: |
             npm run lint -- --max-warnings 0 --no-fix
+
         - name: Test
           working-directory: backend
           run: |
             npm run test
+
         - name: Build
           working-directory: backend
           run: |
