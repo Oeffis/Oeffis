@@ -47,7 +47,6 @@ jobs:
       name: Build and Deploy Frontend Container
       needs: frontend_ci
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/main'
       permissions:
         contents: read
         packages: write
@@ -79,7 +78,7 @@ jobs:
           with:
             context: backend
             platforms: linux/amd64,linux/arm64
-            push: true
+            push: ${{ github.ref == 'refs/heads/main' }}
             tags: ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
 
     backend_ci:
@@ -118,7 +117,6 @@ jobs:
         name: Build and Deploy Backend Container
         needs: backend_ci
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main'
         permissions:
             contents: read
             packages: write
@@ -150,5 +148,5 @@ jobs:
             with:
                 context: backend
                 platforms: linux/amd64,linux/arm64
-                push: true
+                push: ${{ github.ref == 'refs/heads/main' }}
                 tags: ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
