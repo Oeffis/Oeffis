@@ -15,15 +15,12 @@ COPY . .
 # Only required files will be copied from the builder layer to the release layer.
 RUN npm run build
 
-FROM base AS release
+FROM nginx:1.25.1 as release
 
 WORKDIR /app
 
 # If additional files are required, they can be copied from the builder layer to the release layer.
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./www
+COPY nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 8080
-
-CMD [ "npx", "http-server", "dist" ]
+EXPOSE 80
