@@ -1,6 +1,8 @@
 name: Frontend CI
 
-on: [push]
+on:
+  push:
+  merge_group:
 
 env:
   GITHUB_REGISTRY: ghcr.io
@@ -39,7 +41,7 @@ jobs:
           run: |
             npm run build
 
-    
+
     container:
       name: Build and Deploy Container
       needs: frontend_ci
