@@ -79,7 +79,9 @@ jobs:
             context: backend
             platforms: linux/amd64,linux/arm64
             push: ${{ github.ref == 'refs/heads/main' }}
-            tags: ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
 
     backend_ci:
       name: Lint, Test and Build Backend
@@ -149,4 +151,6 @@ jobs:
                 context: backend
                 platforms: linux/amd64,linux/arm64
                 push: ${{ github.ref == 'refs/heads/main' }}
-                tags: ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+                tags: |
+                  ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+                  ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
