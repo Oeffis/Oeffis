@@ -83,6 +83,8 @@ jobs:
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
               ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
     backend_ci:
       name: Lint, Test and Build Backend
@@ -157,3 +159,5 @@ jobs:
                 tags: |
                   ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
                   ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+                cache-from: type=gha
+                cache-to: type=gha,mode=max
