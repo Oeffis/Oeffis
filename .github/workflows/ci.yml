@@ -68,13 +68,15 @@ jobs:
 
         - name: Log in to the Container registry
           uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          if: github.ref == 'refs/heads/main'
           with:
             registry: ${{ env.GITHUB_REGISTRY }}
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build
+        - name: Build and Push
           uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
           with:
             context: backend
             platforms: linux/amd64,linux/arm64
@@ -134,18 +136,20 @@ jobs:
 
           - name: Log in to the Container registry
             uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+            if: github.ref == 'refs/heads/main'
             with:
                 username: ${{ secrets.DOCKER_HUB_USER }}
                 password: ${{ secrets.DOCKER_HUB_PASS }}
 
           - name: Log in to the Container registry
             uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+            if: github.ref == 'refs/heads/main'
             with:
                 registry: ${{ env.GITHUB_REGISTRY }}
                 username: ${{ github.actor }}
                 password: ${{ secrets.GITHUB_TOKEN }}
 
-          - name: Build
+          - name: Build and Push
             uses: docker/build-push-action@v4
             with:
                 context: backend
