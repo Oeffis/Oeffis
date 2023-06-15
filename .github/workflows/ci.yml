@@ -76,7 +76,6 @@ jobs:
 
         - name: Build and Push
           uses: docker/build-push-action@v4
-          if: github.ref == 'refs/heads/main'
           with:
             context: backend
             platforms: linux/amd64,linux/arm64
