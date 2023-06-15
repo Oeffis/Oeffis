@@ -1,6 +1,12 @@
 name: CI
 
-on: [push, merge_group]
+on: 
+  pull_request:
+  merge_group:
+  push:
+    branches:
+      - main
+
 
 env:
   GITHUB_REGISTRY: ghcr.io
