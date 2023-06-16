@@ -12,7 +12,7 @@
   ],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
-    "no-debugger": "off",
+    "no-debugger": 2,
     "no-console": 0,
     "no-unused-vars": "error",
     "no-empty": "error",
