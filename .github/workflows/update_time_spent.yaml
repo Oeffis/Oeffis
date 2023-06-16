@@ -10,7 +10,7 @@ env:
 jobs:
   update-time-spent:
     runs-on: ubuntu-latest
-    if: github.event.issue && contains(github.event.comment.body, 'Time spent:') && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER' || github.event.comment.author_association == 'COLLABORATOR' || github.event.comment.author_association == 'CONTRIBUTOR')
+    if: github.event.issue && contains(github.event.comment.body, 'Time spent:') && (github.event.comment.user.login == 'AconexOfficial' || github.event.comment.user.login == 'dkrakau' || github.event.comment.user.login == 'Escowei98' || github.event.comment.user.login == 'JaJako' || github.event.comment.user.login == 'LaraBiss' || github.event.comment.user.login == 'Paulomart' || github.event.comment.user.login == 'timvahlbrock' || github.event.comment.user.login == 'WConen')
     steps:
       - name: Generate token
         id: generate_token

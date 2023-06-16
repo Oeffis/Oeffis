@@ -9,6 +9,7 @@ env:
 
 jobs:
   update_linked_issue_state:
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
