@@ -17,6 +17,7 @@
     "no-empty": "error",
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-explicit-any": "off",
     "eqeqeq": "warn",
     "no-throw-literal": "warn",
     "prefer-const": "warn",
