@@ -10,18 +10,18 @@ export class UserService {
     return createUser;
   }
 
-  findAll() {
+  findAll(): any {
     return users;
   }
 
-  findOne(index: number) {
+  findOne(index: number): any {
     if (index < 0 || index >= users.length) {
       throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     }
     return users[index];
   }
 
-  update(index: number, updateUser: User) {
+  update(index: number, updateUser: User): any {
     if (index < 0 || index >= users.length) {
       throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     } else {
@@ -30,7 +30,7 @@ export class UserService {
     return users[index];
   }
 
-  remove(index: number) {
+  remove(index: number): any {
     let deletedUser = null;
     if (index < 0 || index >= users.length) {
       throw new HttpException("User not found.", HttpStatus.NOT_FOUND);

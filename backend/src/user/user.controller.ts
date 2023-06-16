@@ -22,12 +22,12 @@ import { UserService } from "./user.service";
 @Controller("user")
 @ApiTags("user")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   @ApiOperation({ summary: "Create a User" })
   @ApiCreatedResponse({ description: "Create a User.", type: User })
-  create(@Body() createUser: User) {
+  create(@Body() createUser: User): any {
     return this.userService.create(createUser);
   }
 
@@ -37,7 +37,7 @@ export class UserController {
     description: "Return all Users as JSON array.",
     type: [User],
   })
-  findAll() {
+  findAll(): any {
     return this.userService.findAll();
   }
 
@@ -49,7 +49,7 @@ export class UserController {
     type: AppHttpException,
   })
   @ApiParam({ description: "Users index", name: "index" })
-  findOne(@Param("index") index: string) {
+  findOne(@Param("index") index: string): any {
     return this.userService.findOne(+index);
   }
 
@@ -61,7 +61,7 @@ export class UserController {
     type: AppHttpException,
   })
   @ApiParam({ description: "Users index", name: "index" })
-  update(@Param("index") index: string, @Body() updateUser: User) {
+  update(@Param("index") index: string, @Body() updateUser: User): any {
     return this.userService.update(+index, updateUser);
   }
 
@@ -73,7 +73,7 @@ export class UserController {
     type: AppHttpException,
   })
   @ApiParam({ description: "Users index", name: "index" })
-  remove(@Param("index") index: string) {
+  remove(@Param("index") index: string): any {
     return this.userService.remove(+index);
   }
 }

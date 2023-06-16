@@ -6,7 +6,7 @@ import { HelloWorld } from "./helloworld.entity";
 @Controller("app")
 @ApiTags("app")
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   @Get("helloworld")
   @ApiOperation({ summary: "Returns \"Hello World!\"" })
