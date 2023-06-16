@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "../.eslintrc.json"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "project": ["tsconfig.json"],
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "react/self-closing-comp": ["error", {
+      "component": true,
+      "html": true
+    }]
+  }
+}

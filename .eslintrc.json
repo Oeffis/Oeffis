@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "env": {
+    "es6": true
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "arrow-body-style": ["error", "as-needed"],
+    "no-debugger": 2,
+    "no-console": 0,
+    "no-empty": "error",
+    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "eqeqeq": "warn",
+    "no-throw-literal": "warn",
+    "prefer-const": "warn",
+    "semi": "error",
+    "quotes": [
+        "warn",
+        "double",
+        {
+            "allowTemplateLiterals": true
+        }
+    ]
+  }
+}

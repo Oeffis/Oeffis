@@ -19,4 +19,9 @@
         "editor.defaultFormatter": "vscode.typescript-language-features",
         "editor.formatOnSave": true
     },
+    "eslint.workingDirectories": [
+        "./app",
+        "./frontend",
+        "./backend"
+    ]
 }
