@@ -1,17 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
-import { AppService } from './app.service';
-import { HelloWorld } from './helloworld.entity';
+import { Controller, Get } from "@nestjs/common";
+import { ApiOkResponse, ApiTags, ApiOperation } from "@nestjs/swagger";
+import { AppService } from "./app.service";
+import { HelloWorld } from "./helloworld.entity";
 
-@Controller('app')
-@ApiTags('app')
+@Controller("app")
+@ApiTags("app")
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('helloworld')
-  @ApiOperation({ summary: 'Returns "Hello World!"' })
+  @Get("helloworld")
+  @ApiOperation({ summary: "Returns \"Hello World!\"" })
   @ApiOkResponse({
-    description: 'Returns a "Hello World!" message.',
+    description: "Returns a \"Hello World!\" message.",
     type: [HelloWorld],
   })
   getHello(): string {
