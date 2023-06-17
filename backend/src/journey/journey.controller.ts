@@ -7,13 +7,13 @@ import {HafasClient} from "hafas-client";
  * Import 'file-type' ES-Module in CommonJS Node.js module
  */
 const hafas: Promise<HafasClient> = (async () => {
-  const {createClient} = await (eval('import("hafas-client")') as Promise<typeof import('hafas-client')>);
-  const {profile} = await (eval('import("hafas-client/p/db/index.js")') as Promise<typeof import('hafas-client/p/db/index.js')>);
+  const {createClient} = await (eval("import(\"hafas-client\")") as Promise<typeof import("hafas-client")>);
+  const {profile} = await (eval("import(\"hafas-client/p/db/index.js\")") as Promise<typeof import("hafas-client/p/db/index.js")>);
 
-  const hafasClient: HafasClient = createClient(profile, 'userAgent1234');
+  const hafasClient: HafasClient = createClient(profile, "userAgent1234");
 
   // Berlin Jungfernheide to München Hbf
-  const {journeys} = await hafasClient.journeys('8011167', '8000261', {
+  const {journeys} = await hafasClient.journeys("8011167", "8000261", {
     results: 1,
   });
   console.log(journeys[0]);
@@ -33,32 +33,32 @@ const hafas: Promise<HafasClient> = (async () => {
 /**
  * Endpoint for request regarding planning a journey. 
  */
-@Controller('journey')
-@ApiTags('journey')
+@Controller("journey")
+@ApiTags("journey")
 export class JourneyController {
 
   private hafas;
 
   constructor(
-    @Inject('JourneyHafasService')
+    @Inject("JourneyHafasService")
     private readonly journeyHafasService: JourneyService,
   ) { }
 
   // just some test method
-  @Get('get/test')
-  @ApiOperation({ summary: 'Test method.' })
-  @ApiOkResponse({ description: 'Worked.' })
+  @Get("get/test")
+  @ApiOperation({ summary: "Test method." })
+  @ApiOkResponse({ description: "Worked." })
   async respond() {
 
     // Berlin Jungfernheide to München Hbf
     const hafasClient: HafasClient = await hafas;
 
-    const { journeys } = await hafasClient.journeys('8011167', '8000261', {
+    const { journeys } = await hafasClient.journeys("8011167", "8000261", {
       results: 1,
     });
     console.log(journeys[0]);
 
-    return 'Just some response.';
+    return "Just some response.";
   }
 
   // TODO methods for requests.

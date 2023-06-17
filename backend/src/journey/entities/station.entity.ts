@@ -6,8 +6,8 @@ import {ApiProperty} from "@nestjs/swagger";
 export class Station {
 
   @ApiProperty({
-    description: 'Name of a station.',
-    example: 'Wuppertal Hbf',
+    description: "Name of a station.",
+    example: "Wuppertal Hbf",
     required: true,
   })
   name: string;

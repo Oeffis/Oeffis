@@ -9,12 +9,12 @@ export class Journey {
   // Minimal set of fields for now.
 
   @ApiProperty({
-    description: 'Station where the journey starts.',
+    description: "Station where the journey starts.",
   })
   from: Station;
 
   @ApiProperty({
-    description: 'Station where the journey ends.',
+    description: "Station where the journey ends.",
   })
   to: Station;
 

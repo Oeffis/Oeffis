@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { JourneyController } from './journey.controller';
-import { JourneyHafasService } from './services/journey.hafas.service';
+import {Module} from "@nestjs/common";
+import {JourneyController} from "./journey.controller";
+import {JourneyHafasService} from "./services/journey.hafas.service";
 
 @Module({
   controllers: [JourneyController],
   providers: [
     {
-      provide: 'JourneyHafasService',
+      provide: "JourneyHafasService",
       useClass: JourneyHafasService,
     }
   ],
