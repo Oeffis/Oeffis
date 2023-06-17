@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Backend" type="NodeJSConfigurationType" application-parameters="$ProjectFileDir$/backend/src/main.ts" node-parameters="--nolazy -r ts-node/register -r tsconfig-paths/register" working-dir="$PROJECT_DIR$/backend">
+    <method v="2" />
+  </configuration>
+</component>
