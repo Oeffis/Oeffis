@@ -24,7 +24,7 @@ import { AppHttpException } from 'src/app.http.exception';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('create')
   @ApiOperation({ summary: 'Create a User' })
   @ApiCreatedResponse({ description: 'Create a User.', type: User })
   create(@Body() createUser: User) {
