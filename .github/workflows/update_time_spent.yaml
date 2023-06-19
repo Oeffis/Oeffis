@@ -1,0 +1,116 @@
+name: "Update spent time on comment"
+
+on:
+  issue_comment:
+    types: [created]
+
+env:
+  GITHUB_PROJECT_NUMBER: 1
+
+jobs:
+  update-time-spent:
+    runs-on: ubuntu-latest
+    if: github.event.issue && contains(github.event.comment.body, 'Time spent:') && (github.event.comment.user.login == 'AconexOfficial' || github.event.comment.user.login == 'dkrakau' || github.event.comment.user.login == 'Escowei98' || github.event.comment.user.login == 'JaJako' || github.event.comment.user.login == 'LaraBiss' || github.event.comment.user.login == 'Paulomart' || github.event.comment.user.login == 'timvahlbrock' || github.event.comment.user.login == 'WConen')
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        with:
+          app_id: ${{ secrets.GH_OEFFIS_BOT_APP_ID }}
+          private_key: ${{ secrets.GH_OEFFIS_BOT_APP_PEM }}
+
+      - name: Run github script
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+            const regex = /^Time spent: (?:(?:(?<hours>\d+) hours? (?<minutes>30|0) minutes?)|(?:(?<justHours>\d+) hours?)|(?:(?<justMinutes>30|0) minutes?))$/i;
+
+            const match = regex.exec(context.payload.comment.body);
+
+            if (!match) {
+              console.log('no match');
+              return;
+            }
+
+            const minutes = parseInt(match.groups.minutes || match.groups.justMinutes || 0);
+            const hours = parseInt(match.groups.hours || match.groups.justHours || 0);
+
+            console.log({ minutes, hours });
+
+            const query = `
+              query ($org: String!, $issue_number: Int!, $repository: String!) {
+                repository(owner: $org, name: $repository) {
+                  issue(number: $issue_number) {
+                    projectItems(first: 10) {
+                      nodes {
+                        ... on ProjectV2Item {
+                          id
+                          project {
+                            id
+                            field(name: "Spent Hours") {
+                              ... on ProjectV2FieldCommon {
+                                id
+                              }
+                            }
+                          }
+                        }
+                        fieldValueByName(name: "Spent Hours") {
+                          ... on ProjectV2ItemFieldNumberValue {
+                            number
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const queryVariables = {
+              org: context.repo.owner,
+              issue_number: context.issue.number,
+              repository: context.repo.repo
+            };
+
+            const queryResult = await github.graphql(query, queryVariables);
+
+            const timeSpendFieldId = queryResult.repository.issue.projectItems.nodes[0].project.field.id;
+            const projectId = queryResult.repository.issue.projectItems.nodes[0].project.id;
+            const issueProjectItemId = queryResult.repository.issue.projectItems.nodes[0].id;
+            const timeSpentSoFar = queryResult.repository.issue.projectItems.nodes[0].fieldValueByName?.number || 0;
+
+            const mutation = `
+              mutation ($project_id: ID!, $item_id: ID!, $time_spent_field_id: ID!, $time_spent_field_value: Float!) {
+                set_time_spent: updateProjectV2ItemFieldValue(input: {
+                  projectId: $project_id
+                  itemId: $item_id
+                  fieldId: $time_spent_field_id
+                  value: {
+                    number: $time_spent_field_value
+                  }
+                }) {
+                  projectV2Item {
+                    id
+                  }
+                }
+              }
+            `;
+
+            const newTimeSpent = timeSpentSoFar + hours + (minutes / 60);
+
+            const mutationVariables = {
+              project_id: projectId,
+              item_id: issueProjectItemId,
+              time_spent_field_id: timeSpendFieldId,
+              time_spent_field_value: newTimeSpent,
+            };
+
+            await github.graphql(mutation, mutationVariables);
+
+            const mutationResult = await github.rest.reactions.createForIssueComment({
+              comment_id: context.payload.comment.id,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              content: '+1'
+            });

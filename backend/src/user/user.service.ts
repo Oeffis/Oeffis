@@ -1,39 +1,39 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from './entities/user.entity';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { User } from "./entities/user.entity";
 
 const users: User[] = [];
 
 @Injectable()
 export class UserService {
-  create(createUser: User) {
+  create(createUser: User): User {
     users.push(createUser);
     return createUser;
   }
 
-  findAll() {
+  findAll(): unknown {
     return users;
   }
 
-  findOne(index: number) {
+  findOne(index: number): unknown {
     if (index < 0 || index >= users.length) {
-      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+      throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     }
     return users[index];
   }
 
-  update(index: number, updateUser: User) {
+  update(index: number, updateUser: User): unknown {
     if (index < 0 || index >= users.length) {
-      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+      throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     } else {
       users[index] = updateUser;
     }
     return users[index];
   }
 
-  remove(index: number) {
+  remove(index: number): unknown {
     let deletedUser = null;
     if (index < 0 || index >= users.length) {
-      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+      throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     } else {
       deletedUser = users[index];
       users.splice(index, 1);
