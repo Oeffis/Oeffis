@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { AppService, HelloWorld, UserService } from "../api";
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonInput, IonItem, IonList } from "@ionic/react";
+import { useEffect, useState } from "react";
+import { AppService, HelloWorld, User, UserService } from "../api";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonInput, IonItem, IonLabel, IonList } from "@ionic/react";
 
 interface ContainerProps { }
 
 const UserContianer: React.FC<ContainerProps> = () => {
 
     const [helloWorld, setHelloWorld] = useState<Array<HelloWorld>>();
+    const [users, setUsers] = useState<Array<User>>([]);
 
     const [createUserName, setCreateUserName] = useState<string>("");
     const [createUserAge, setCreateUserAge] = useState<number>(0);
@@ -63,6 +64,43 @@ const UserContianer: React.FC<ContainerProps> = () => {
         setUserInfo(JSON.stringify(user));
     }
 
+    const fetchUsers = async () => {
+        setUsers(await UserService.userControllerFindAll());
+        console.log(users);
+    }
+
+    const getAllUsers = () => {
+        return (
+            <IonList>
+                <IonItem>
+                    <IonLabel>index</IonLabel>
+                    <IonLabel>name</IonLabel>
+                    <IonLabel>age</IonLabel>
+                    <IonLabel>city</IonLabel>
+                </IonItem>
+                {users.map((user, index) => (
+                    <IonItem key={index}>
+                        <IonLabel>
+                            {index}
+                        </IonLabel>
+                        <IonLabel>
+                            {user.name}
+                        </IonLabel>
+                        <IonLabel>
+                            {user.age}
+                        </IonLabel>
+                        <IonLabel>
+                            {user.city}
+                        </IonLabel>
+                    </IonItem>
+                ))}
+            </IonList>
+        );
+    }
+
+    /* useEffect(() => {
+        fetchUsers();
+    }, [users]); */
 
     return (
         <div className="UserContianer">
@@ -149,6 +187,18 @@ const UserContianer: React.FC<ContainerProps> = () => {
                         </IonItem>
                         <IonItem>
                             <IonButton onClick={getUser}>GET USER</IonButton>
+                        </IonItem>
+                    </IonList>
+                </IonCard>
+
+                <IonCard>
+                    <IonCardHeader>
+                        <IonCardTitle>Get all User</IonCardTitle>
+                    </IonCardHeader>
+                    {getAllUsers()}
+                    <IonList>
+                        <IonItem>
+                            <IonButton onClick={fetchUsers}>GET ALL USER</IonButton>
                         </IonItem>
                     </IonList>
                 </IonCard>
