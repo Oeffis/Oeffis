@@ -4,7 +4,7 @@ import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, Ion
 
 interface ContainerProps { }
 
-const UserContianer: React.FC<ContainerProps> = () => {
+const UserContainer: React.FC<ContainerProps> = () => {
 
     const [helloWorld, setHelloWorld] = useState<Array<HelloWorld>>();
     const [users, setUsers] = useState<Array<User>>([]);
@@ -209,4 +209,4 @@ const UserContianer: React.FC<ContainerProps> = () => {
 
 };
 
-export default UserContianer;
+export default UserContainer;

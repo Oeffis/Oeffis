@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
 import ExploreContainer from '../components/ExploreContainer';
-import UserContianer from '../components/UserContainer';
+import UserContainer from '../components/UserContainer';
 
 const Home: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <ExploreContainer />
-        <UserContianer />
+        <UserContainer />
       </IonContent>
     </IonPage>
   );
