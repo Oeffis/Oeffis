@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 
-const users = [];
+let users: User[] = [];
 
 @Injectable()
 export class UserService {
@@ -36,7 +36,13 @@ export class UserService {
       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     } else {
       deletedUser = users[index];
-      users.slice(index, 1);
+      let newUsers: User[] = [];
+      for(let i = 0; i < users.length; i++) {
+        if(index !== i) {
+          newUsers.push(users[i]);
+        }
+      }
+      users = newUsers;
     }
     return deletedUser;
   }
