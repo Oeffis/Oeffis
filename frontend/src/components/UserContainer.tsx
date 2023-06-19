@@ -17,6 +17,8 @@ const UserContianer: React.FC<ContainerProps> = () => {
     const [updateUserAge, setUpdateUserAge] = useState<number>(0);
     const [updateUserCity, setUpdateUserCity] = useState<string>("");
 
+    const [deleteUserByIndex, setDeleteUserByIndex] = useState<string>("");
+
     const fetchHelloWorld = async () => {
         setHelloWorld(await AppService.appControllerGetHello());
     }
@@ -46,6 +48,11 @@ const UserContianer: React.FC<ContainerProps> = () => {
             city: updateUserCity
         }
         await UserService.userControllerUpdate(updateUserIndex, user);
+    }
+
+    const deleteUser = async () => {
+        console.log(deleteUserByIndex)
+        await UserService.userControllerRemove(deleteUserByIndex);
     }
 
 
@@ -105,6 +112,20 @@ const UserContianer: React.FC<ContainerProps> = () => {
                         </IonItem>
                         <IonItem>
                             <IonButton onClick={updateUser}>UPDATE USER</IonButton>
+                        </IonItem>
+                    </IonList>
+                </IonCard>
+
+                <IonCard>
+                    <IonCardHeader>
+                        <IonCardTitle>Delete User</IonCardTitle>
+                    </IonCardHeader>
+                    <IonList>
+                        <IonItem>
+                            <IonInput onIonChange={e => setDeleteUserByIndex(e.detail.value!)} label="Index" type="number" placeholder="0"></IonInput>
+                        </IonItem>
+                        <IonItem>
+                            <IonButton onClick={deleteUser}>DELETE USER</IonButton>
                         </IonItem>
                     </IonList>
                 </IonCard>
