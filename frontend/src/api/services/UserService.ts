@@ -20,7 +20,7 @@ requestBody: User,
 ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/user',
+            url: '/user/create',
             body: requestBody,
             mediaType: 'application/json',
         });
