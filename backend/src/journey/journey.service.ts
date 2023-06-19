@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { HafasClient, Journeys, Location, Station, Stop } from "hafas-client";
-import { HAFAS_CLIENT } from "src/symbols";
+import { HAFAS_CLIENT } from "../symbols";
 import { JourneyRequest } from "./entities/journey.request.entity";
 
 
