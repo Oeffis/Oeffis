@@ -1,17 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "./entities/user.entity";
+import { User } from "../entity/user.entity";
 
-const users = [];
+const users: User[] = [];
 
 @Injectable()
-export class UserService {
-  create(createUser: User): User {
-    users.push(createUser);
-    return createUser;
-  }
+export class UsersService {
 
   findAll(): unknown {
     return users;
+  }
+
+  create(createUser: User): User {
+    users.push(createUser);
+    return createUser;
   }
 
   findOne(index: number): unknown {
@@ -36,7 +37,7 @@ export class UserService {
       throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     } else {
       deletedUser = users[index];
-      users.slice(index, 1);
+      users.splice(index, 1);
     }
     return deletedUser;
   }
