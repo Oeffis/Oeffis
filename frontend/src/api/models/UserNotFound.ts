@@ -2,13 +2,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AppHttpException = {
+export type UserNotFound = {
     /**
      * Http status code
      */
-    statusCode: number;
+    statusCode: Record<string, any>;
     /**
      * Error message
      */
-    message: string;
+    message: Record<string, any>;
 };
