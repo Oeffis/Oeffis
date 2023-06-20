@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { PartialType } from "@nestjs/mapped-types";
 
 export class CreateUserDto {
   @ApiProperty({
@@ -17,3 +18,5 @@ export class CreateUserDto {
   })
   city: string;
 }
+
+export class UpdateUserDto extends PartialType(CreateUserDto) { }
