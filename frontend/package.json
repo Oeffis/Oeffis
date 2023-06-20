@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint --fix --ext .ts,.tsx"
+    "lint": "eslint --fix ."
   },
   "dependencies": {
     "@capacitor/app": "5.0.3",
