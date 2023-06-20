@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { UsersService } from "service/users.service";
 import { UsersController } from "./users.controller";
-import { UsersService } from "src/service/users.service";
 
 
 
