@@ -10,7 +10,7 @@ import { request as __request } from '../core/request';
 export class AppService {
 
     /**
-     * Returns "Hello World!"
+     * returns a "Hello World!" message
      * @returns HelloWorld Returns a "Hello World!" message.
      * @throws ApiError
      */

@@ -4,7 +4,7 @@
     "/app/helloworld": {
       "get": {
         "operationId": "AppController_getHello",
-        "summary": "Returns \"Hello World!\"",
+        "summary": "returns a \"Hello World!\" message",
         "parameters": [],
         "responses": {
           "200": {
@@ -26,10 +26,33 @@
         ]
       }
     },
-    "/user/create": {
+    "/users": {
+      "get": {
+        "operationId": "UsersController_findAll",
+        "summary": "returns all users",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Users as JSON array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
       "post": {
-        "operationId": "UserController_create",
-        "summary": "Create a User",
+        "operationId": "UsersController_create",
+        "summary": "creates a new user, returns the created on",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -54,39 +77,14 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       }
     },
-    "/user/get/all": {
+    "/users/{index}": {
       "get": {
-        "operationId": "UserController_findAll",
-        "summary": "Return all Users",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Return all Users as JSON array.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "user"
-        ]
-      }
-    },
-    "/user/get/{index}": {
-      "get": {
-        "operationId": "UserController_findOne",
-        "summary": "Return a User by index",
+        "operationId": "UsersController_findOne",
+        "summary": "returns a specific user",
         "parameters": [
           {
             "name": "index",
@@ -121,14 +119,12 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
-      }
-    },
-    "/user/update/{index}": {
+      },
       "patch": {
-        "operationId": "UserController_update",
-        "summary": "Update a User by index",
+        "operationId": "UsersController_update",
+        "summary": "updates a specific user",
         "parameters": [
           {
             "name": "index",
@@ -173,14 +169,12 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
-      }
-    },
-    "/user/delete/{index}": {
+      },
       "delete": {
-        "operationId": "UserController_remove",
-        "summary": "Delete a User by index",
+        "operationId": "UsersController_remove",
+        "summary": "deletes a specific user",
         "parameters": [
           {
             "name": "index",
@@ -215,7 +209,7 @@
           }
         },
         "tags": [
-          "user"
+          "users"
         ]
       }
     }

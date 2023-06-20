@@ -1,7 +1,7 @@
 import { Controller, Get } from "@nestjs/common";
 import { ApiOkResponse, ApiTags, ApiOperation } from "@nestjs/swagger";
-import { AppService } from "./app.service";
-import { HelloWorld } from "./helloworld.entity";
+import { AppService } from "../service/app.service";
+import { HelloWorld } from "../schema/helloworld.schema";
 
 @Controller("app")
 @ApiTags("app")
@@ -9,7 +9,7 @@ export class AppController {
   constructor(private readonly appService: AppService) { }
 
   @Get("helloworld")
-  @ApiOperation({ summary: "Returns \"Hello World!\"" })
+  @ApiOperation({ summary: "returns a \"Hello World!\" message" })
   @ApiOkResponse({
     description: "Returns a \"Hello World!\" message.",
     type: [HelloWorld],

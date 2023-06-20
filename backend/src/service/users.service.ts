@@ -1,17 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "./entities/user.entity";
+import { User } from "src/schema/user.schema";
 
 const users: User[] = [];
 
 @Injectable()
-export class UserService {
-  create(createUser: User): User {
-    users.push(createUser);
-    return createUser;
-  }
+export class UsersService {
 
   findAll(): unknown {
     return users;
+  }
+
+  create(createUser: User): User {
+    users.push(createUser);
+    return createUser;
   }
 
   findOne(index: number): unknown {

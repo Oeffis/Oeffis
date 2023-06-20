@@ -11,4 +11,4 @@ export type { HelloWorld } from './models/HelloWorld';
 export type { User } from './models/User';
 
 export { AppService } from './services/AppService';
-export { UserService } from './services/UserService';
+export { UsersService } from './services/UsersService';

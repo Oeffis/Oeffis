@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AppService, HelloWorld, User, UserService } from "../api";
+import { AppService, HelloWorld, User, UsersService } from "../api";
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonInput, IonItem, IonLabel, IonList } from "@ionic/react";
 
 interface ContainerProps { }
@@ -33,12 +33,12 @@ const UserContainer: React.FC<ContainerProps> = () => {
             age: createUserAge,
             city: createUserCity
         }
-        await UserService.userControllerCreate(user);
+        await UsersService.usersControllerCreate(user);
     }
 
     const loadUser = async (index: string) => {
         setUpdateUserIndex(index);
-        let user = await UserService.userControllerFindOne(index);
+        let user = await UsersService.usersControllerFindOne(index);
         console.log(user);
         setUpdateUserName(user.name);
         setUpdateUserAge(user.age);
@@ -51,21 +51,21 @@ const UserContainer: React.FC<ContainerProps> = () => {
             age: updateUserAge,
             city: updateUserCity
         }
-        await UserService.userControllerUpdate(updateUserIndex, user);
+        await UsersService.usersControllerUpdate(updateUserIndex, user);
     }
 
     const deleteUser = async () => {
         console.log(deleteUserByIndex)
-        await UserService.userControllerRemove(deleteUserByIndex);
+        await UsersService.usersControllerRemove(deleteUserByIndex);
     }
 
     const getUser = async () => {
-        let user = await UserService.userControllerFindOne(getUserByIndex);
+        let user = await UsersService.usersControllerFindOne(getUserByIndex);
         setUserInfo(JSON.stringify(user));
     }
 
     const fetchUsers = async () => {
-        setUsers(await UserService.userControllerFindAll());
+        setUsers(await UsersService.usersControllerFindAll());
         console.log(users);
     }
 

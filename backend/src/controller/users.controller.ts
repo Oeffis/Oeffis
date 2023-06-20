@@ -15,34 +15,35 @@ import {
   ApiParam,
   ApiTags,
 } from "@nestjs/swagger";
-import { AppHttpException } from "../app.http.exception";
-import { User } from "./entities/user.entity";
-import { UserService } from "./user.service";
+import { AppHttpException } from "src/schema/apphttpexception.schema";
+import { User } from "src/schema/user.schema";
+import { UsersService } from "src/service/users.service";
 
-@Controller("user")
-@ApiTags("user")
-export class UserController {
-  constructor(private readonly userService: UserService) { }
 
-  @Post("create")
-  @ApiOperation({ summary: "Create a User" })
-  @ApiCreatedResponse({ description: "Create a User.", type: User })
-  create(@Body() createUser: User): unknown {
-    return this.userService.create(createUser);
-  }
+@Controller("users")
+@ApiTags("users")
+export class UsersController {
+  constructor(private readonly usersService: UsersService) { }
 
-  @Get("get/all")
-  @ApiOperation({ summary: "Return all Users" })
+  @Get()
+  @ApiOperation({ summary: "returns all users" })
   @ApiOkResponse({
     description: "Return all Users as JSON array.",
     type: [User],
   })
   findAll(): unknown {
-    return this.userService.findAll();
+    return this.usersService.findAll();
   }
 
-  @Get("get/:index")
-  @ApiOperation({ summary: "Return a User by index" })
+  @Post()
+  @ApiOperation({ summary: "creates a new user, returns the created on" })
+  @ApiCreatedResponse({ description: "Create a User.", type: User })
+  create(@Body() createUser: User): unknown {
+    return this.usersService.create(createUser);
+  }
+
+  @Get("/:index")
+  @ApiOperation({ summary: "returns a specific user" })
   @ApiOkResponse({ description: "Return a User by index.", type: User })
   @ApiNotFoundResponse({
     description: "User not found.",
@@ -50,11 +51,11 @@ export class UserController {
   })
   @ApiParam({ description: "Users index", name: "index" })
   findOne(@Param("index") index: string): unknown {
-    return this.userService.findOne(+index);
+    return this.usersService.findOne(+index);
   }
 
-  @Patch("update/:index")
-  @ApiOperation({ summary: "Update a User by index" })
+  @Patch("/:index")
+  @ApiOperation({ summary: "updates a specific user" })
   @ApiCreatedResponse({ description: "Update a User by index.", type: User })
   @ApiNotFoundResponse({
     description: "User not found.",
@@ -62,11 +63,11 @@ export class UserController {
   })
   @ApiParam({ description: "Users index", name: "index" })
   update(@Param("index") index: string, @Body() updateUser: User): unknown {
-    return this.userService.update(+index, updateUser);
+    return this.usersService.update(+index, updateUser);
   }
 
-  @Delete("delete/:index")
-  @ApiOperation({ summary: "Delete a User by index" })
+  @Delete("/:index")
+  @ApiOperation({ summary: "deletes a specific user" })
   @ApiOkResponse({ description: "Delete a User by index.", type: User })
   @ApiNotFoundResponse({
     description: "User not found.",
@@ -74,6 +75,6 @@ export class UserController {
   })
   @ApiParam({ description: "Users index", name: "index" })
   remove(@Param("index") index: string): unknown {
-    return this.userService.remove(+index);
+    return this.usersService.remove(+index);
   }
 }

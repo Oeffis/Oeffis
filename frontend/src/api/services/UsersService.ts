@@ -7,49 +7,49 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class UserService {
+export class UsersService {
 
     /**
-     * Create a User
+     * returns all users
+     * @returns User Return all Users as JSON array.
+     * @throws ApiError
+     */
+    public static usersControllerFindAll(): CancelablePromise<Array<User>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/users',
+        });
+    }
+
+    /**
+     * creates a new user, returns the created on
      * @param requestBody 
      * @returns User Create a User.
      * @throws ApiError
      */
-    public static userControllerCreate(
+    public static usersControllerCreate(
 requestBody: User,
 ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/user/create',
+            url: '/users',
             body: requestBody,
             mediaType: 'application/json',
         });
     }
 
     /**
-     * Return all Users
-     * @returns User Return all Users as JSON array.
-     * @throws ApiError
-     */
-    public static userControllerFindAll(): CancelablePromise<Array<User>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/user/get/all',
-        });
-    }
-
-    /**
-     * Return a User by index
+     * returns a specific user
      * @param index Users index
      * @returns User Return a User by index.
      * @throws ApiError
      */
-    public static userControllerFindOne(
+    public static usersControllerFindOne(
 index: string,
 ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/user/get/{index}',
+            url: '/users/{index}',
             path: {
                 'index': index,
             },
@@ -60,19 +60,19 @@ index: string,
     }
 
     /**
-     * Update a User by index
+     * updates a specific user
      * @param index Users index
      * @param requestBody 
      * @returns User Update a User by index.
      * @throws ApiError
      */
-    public static userControllerUpdate(
+    public static usersControllerUpdate(
 index: string,
 requestBody: User,
 ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/user/update/{index}',
+            url: '/users/{index}',
             path: {
                 'index': index,
             },
@@ -85,17 +85,17 @@ requestBody: User,
     }
 
     /**
-     * Delete a User by index
+     * deletes a specific user
      * @param index Users index
      * @returns User Delete a User by index.
      * @throws ApiError
      */
-    public static userControllerRemove(
+    public static usersControllerRemove(
 index: string,
 ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/user/delete/{index}',
+            url: '/users/{index}',
             path: {
                 'index': index,
             },
