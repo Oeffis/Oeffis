@@ -1,10 +1,11 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/app/helloworld": {
+    "/app": {
       "get": {
         "operationId": "AppController_getHello",
         "summary": "returns a \"Hello World!\" message",
+        "description": "Test enpoint to send a \"Hello World!\" message to frontend.",
         "parameters": [],
         "responses": {
           "200": {
@@ -19,6 +20,16 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -30,6 +41,7 @@
       "get": {
         "operationId": "UsersController_findAll",
         "summary": "returns all users",
+        "description": "Get all users.",
         "parameters": [],
         "responses": {
           "200": {
@@ -44,6 +56,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -53,6 +75,7 @@
       "post": {
         "operationId": "UsersController_create",
         "summary": "creates a new user, returns the created on",
+        "description": "Create a new user.",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -66,11 +89,21 @@
         },
         "responses": {
           "201": {
-            "description": "Create a User.",
+            "description": "Returns the created user.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
                 }
               }
             }
@@ -85,6 +118,7 @@
       "get": {
         "operationId": "UsersController_findOne",
         "summary": "returns a specific user",
+        "description": "Get a specific user.",
         "parameters": [
           {
             "name": "index",
@@ -98,7 +132,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Return a User by index.",
+            "description": "Returns a User by index.",
             "content": {
               "application/json": {
                 "schema": {
@@ -112,7 +146,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppHttpException"
+                  "$ref": "#/components/schemas/UserNotFound"
                 }
               }
             }
@@ -125,6 +159,7 @@
       "patch": {
         "operationId": "UsersController_update",
         "summary": "updates a specific user",
+        "description": "Update a specific user.",
         "parameters": [
           {
             "name": "index",
@@ -148,7 +183,7 @@
         },
         "responses": {
           "201": {
-            "description": "Update a User by index.",
+            "description": "Returns the updated user.",
             "content": {
               "application/json": {
                 "schema": {
@@ -162,7 +197,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppHttpException"
+                  "$ref": "#/components/schemas/UserNotFound"
                 }
               }
             }
@@ -175,6 +210,7 @@
       "delete": {
         "operationId": "UsersController_remove",
         "summary": "deletes a specific user",
+        "description": "Delete a specific user.",
         "parameters": [
           {
             "name": "index",
@@ -188,7 +224,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Delete a User by index.",
+            "description": "Returns the deleted user.",
             "content": {
               "application/json": {
                 "schema": {
@@ -202,7 +238,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppHttpException"
+                  "$ref": "#/components/schemas/UserNotFound"
                 }
               }
             }
@@ -239,6 +275,25 @@
           "message"
         ]
       },
+      "BadRequest": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 400
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "Bad request."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
       "User": {
         "type": "object",
         "properties": {
@@ -264,16 +319,16 @@
           "city"
         ]
       },
-      "AppHttpException": {
+      "UserNotFound": {
         "type": "object",
         "properties": {
           "statusCode": {
-            "type": "number",
+            "type": "object",
             "description": "Http status code",
             "example": 404
           },
           "message": {
-            "type": "string",
+            "type": "object",
             "description": "Error message",
             "example": "User not found."
           }

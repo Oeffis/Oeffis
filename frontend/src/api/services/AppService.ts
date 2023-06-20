@@ -11,13 +11,17 @@ export class AppService {
 
     /**
      * returns a "Hello World!" message
+     * Test enpoint to send a "Hello World!" message to frontend.
      * @returns HelloWorld Returns a "Hello World!" message.
      * @throws ApiError
      */
     public static appControllerGetHello(): CancelablePromise<Array<HelloWorld>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/app/helloworld',
+            url: '/app',
+            errors: {
+                400: `Bad request.`,
+            },
         });
     }
 

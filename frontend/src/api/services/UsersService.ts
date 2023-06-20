@@ -11,6 +11,7 @@ export class UsersService {
 
     /**
      * returns all users
+     * Get all users.
      * @returns User Return all Users as JSON array.
      * @throws ApiError
      */
@@ -18,13 +19,17 @@ export class UsersService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/users',
+            errors: {
+                404: `Bad request.`,
+            },
         });
     }
 
     /**
      * creates a new user, returns the created on
+     * Create a new user.
      * @param requestBody 
-     * @returns User Create a User.
+     * @returns User Returns the created user.
      * @throws ApiError
      */
     public static usersControllerCreate(
@@ -35,13 +40,17 @@ requestBody: User,
             url: '/users',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                404: `Bad request.`,
+            },
         });
     }
 
     /**
      * returns a specific user
+     * Get a specific user.
      * @param index Users index
-     * @returns User Return a User by index.
+     * @returns User Returns a User by index.
      * @throws ApiError
      */
     public static usersControllerFindOne(
@@ -61,9 +70,10 @@ index: string,
 
     /**
      * updates a specific user
+     * Update a specific user.
      * @param index Users index
      * @param requestBody 
-     * @returns User Update a User by index.
+     * @returns User Returns the updated user.
      * @throws ApiError
      */
     public static usersControllerUpdate(
@@ -86,8 +96,9 @@ requestBody: User,
 
     /**
      * deletes a specific user
+     * Delete a specific user.
      * @param index Users index
-     * @returns User Delete a User by index.
+     * @returns User Returns the deleted user.
      * @throws ApiError
      */
     public static usersControllerRemove(
