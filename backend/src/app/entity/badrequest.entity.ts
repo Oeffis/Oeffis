@@ -1,14 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class AppHttpException {
+export class BadRequest {
   @ApiProperty({
     description: "Http status code",
-    example: 404,
+    example: 400,
   })
-  statusCode: number;
+  statusCode = 400;
   @ApiProperty({
     description: "Error message",
-    example: "User not found.",
+    example: "Bad request.",
   })
-  message: string;
+  message = "Bad Request.";
 }
