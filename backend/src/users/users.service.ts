@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "schema/user.schema";
+import { User } from "users/entities/user.entity";
 
 const users: User[] = [];
 

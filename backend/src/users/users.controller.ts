@@ -15,9 +15,9 @@ import {
   ApiParam,
   ApiTags,
 } from "@nestjs/swagger";
-import { AppHttpException } from "schema/apphttpexception.schema";
-import { User } from "schema/user.schema";
-import { UsersService } from "service/users.service";
+import { AppHttpException } from "app/entities/apphttpexception.entity";
+import { User } from "users/entities/user.entity";
+import { UsersService } from "users/users.service";
 
 
 @Controller("users")
