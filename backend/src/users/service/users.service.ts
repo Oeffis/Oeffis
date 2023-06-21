@@ -6,7 +6,7 @@ const users: User[] = [];
 @Injectable()
 export class UsersService {
 
-  findAll(): unknown {
+  findAll(): User[] {
     return users;
   }
 
@@ -22,7 +22,7 @@ export class UsersService {
     return users[index];
   }
 
-  update(index: number, updateUser: User): unknown {
+  update(index: number, updateUser: User): User {
     if (index < 0 || index >= users.length) {
       throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
     } else {
@@ -31,7 +31,7 @@ export class UsersService {
     return users[index];
   }
 
-  remove(index: number): unknown {
+  remove(index: number): User {
     let deletedUser = null;
     if (index < 0 || index >= users.length) {
       throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
