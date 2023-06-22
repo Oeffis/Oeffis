@@ -12,7 +12,7 @@ const Home: React.FC = () => (
           <IonIcon icon={menu} />
         </IonFabButton>
         <IonFabList side="bottom">
-          <IonFabButton color="secondary">
+          <IonFabButton color="secondary" href="/userDemo">
             <IonIcon icon={person} />
           </IonFabButton>
         </IonFabList>

@@ -18,8 +18,7 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
-
-/* Theme variables */
+import UserContainer from "./components/UserContainer";
 import "./theme/variables.css";
 
 setupIonicReact();
@@ -33,6 +32,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
+        </Route>
+        <Route exact path="/userDemo">
+          <UserContainer />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
