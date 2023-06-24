@@ -2,7 +2,7 @@
     "search.exclude": {
         "**/node_modules": true,
         "**/dist": true,
-        "**/out": true,
+        "**/out": true
     },
     "git.branchProtection": [
         "main"
@@ -22,5 +22,8 @@
     "eslint.workingDirectories": [
         "./frontend",
         "./backend"
+    ],
+    "cSpell.words": [
+      "Hafas"
     ]
 }

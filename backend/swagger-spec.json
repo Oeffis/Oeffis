@@ -248,6 +248,92 @@
           "users"
         ]
       }
+    },
+    "/journey": {
+      "post": {
+        "operationId": "JourneysController_planJourney",
+        "summary": "Returns planned journeys.",
+        "description": "Plan a journey.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JourneysRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns planned journeys."
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
+    },
+    "/journey/refresh/{token}": {
+      "get": {
+        "operationId": "JourneysController_refreshJourney",
+        "summary": "Returns refreshed data of a journey.",
+        "description": "Refresh (receive updated data of) a journey that has been planned before.",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns refreshed journey."
+          },
+          "405": {
+            "description": "Refreshing journey is not available in given API.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshJourneyNotAvailable"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
+    },
+    "/journey/location/{query}": {
+      "get": {
+        "operationId": "JourneysController_searchLocation",
+        "summary": "Returns all locations matching the given query.",
+        "description": "Search a location with the given query.",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns location results."
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
     }
   },
   "info": {
@@ -331,6 +417,42 @@
             "type": "object",
             "description": "Error message",
             "example": "User not found."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "JourneysRequest": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Where the journey starts (id of station/stop/location)."
+          },
+          "to": {
+            "type": "string",
+            "description": "Where the journey ends (id of station/stop/location)."
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ]
+      },
+      "RefreshJourneyNotAvailable": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 405
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "Refresh journey not available."
           }
         },
         "required": [
