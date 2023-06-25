@@ -1,5 +1,5 @@
 import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonPage } from "@ionic/react";
-import { menu, person } from "ionicons/icons";
+import { menu, person, analytics } from "ionicons/icons";
 import LeafletMapContainer from "../components/LeafletMapContainer";
 import "./Home.css";
 
@@ -14,6 +14,9 @@ const Home: React.FC = () => (
         <IonFabList side="bottom">
           <IonFabButton color="secondary" href="/userDemo">
             <IonIcon icon={person} />
+          </IonFabButton>
+          <IonFabButton color="secondary" href="/journeyDemo">
+            <IonIcon icon={analytics} />
           </IonFabButton>
         </IonFabList>
       </IonFab>

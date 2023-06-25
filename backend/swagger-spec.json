@@ -1,1 +1,465 @@
-{"openapi":"3.0.0","paths":{"/app":{"get":{"operationId":"AppController_getHello","summary":"returns a \"Hello World!\" message","description":"Test enpoint to send a \"Hello World!\" message to frontend.","parameters":[],"responses":{"200":{"description":"Returns a \"Hello World!\" message.","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/HelloWorld"}}}}},"400":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["app"]}},"/users":{"get":{"operationId":"UsersController_findAll","summary":"returns all users","description":"Get all users.","parameters":[],"responses":{"200":{"description":"Return all Users as JSON array.","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/User"}}}}},"404":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["users"]},"post":{"operationId":"UsersController_create","summary":"creates a new user, returns the created on","description":"Create a new user.","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"responses":{"201":{"description":"Returns the created user.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["users"]}},"/users/{index}":{"get":{"operationId":"UsersController_findOne","summary":"returns a specific user","description":"Get a specific user.","parameters":[{"name":"index","required":true,"in":"path","description":"Users index","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns a User by index.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"User not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserNotFound"}}}}},"tags":["users"]},"patch":{"operationId":"UsersController_update","summary":"updates a specific user","description":"Update a specific user.","parameters":[{"name":"index","required":true,"in":"path","description":"Users index","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"responses":{"201":{"description":"Returns the updated user.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"User not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserNotFound"}}}}},"tags":["users"]},"delete":{"operationId":"UsersController_remove","summary":"deletes a specific user","description":"Delete a specific user.","parameters":[{"name":"index","required":true,"in":"path","description":"Users index","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the deleted user.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"User not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserNotFound"}}}}},"tags":["users"]}}},"info":{"title":"NestJS Swagger","description":"API description","version":"1.0","contact":{}},"tags":[],"servers":[{"url":"http://localhost:3000"}],"components":{"schemas":{"HelloWorld":{"type":"object","properties":{"message":{"type":"string"}},"required":["message"]},"BadRequest":{"type":"object","properties":{"statusCode":{"type":"object","description":"Http status code","example":400},"message":{"type":"object","description":"Error message","example":"Bad request."}},"required":["statusCode","message"]},"User":{"type":"object","properties":{"name":{"type":"string","description":"Name of a User","example":"John Smith"},"age":{"type":"number","description":"Age of a User","example":45},"city":{"type":"string","description":"City of a User","example":"New York"}},"required":["name","age","city"]},"UserNotFound":{"type":"object","properties":{"statusCode":{"type":"object","description":"Http status code","example":404},"message":{"type":"object","description":"Error message","example":"User not found."}},"required":["statusCode","message"]}}}}
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/app": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "summary": "returns a \"Hello World!\" message",
+        "description": "Test enpoint to send a \"Hello World!\" message to frontend.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns a \"Hello World!\" message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HelloWorld"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "app"
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "operationId": "UsersController_findAll",
+        "summary": "returns all users",
+        "description": "Get all users.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Users as JSON array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "UsersController_create",
+        "summary": "creates a new user, returns the created on",
+        "description": "Create a new user.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{index}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "summary": "returns a specific user",
+        "description": "Get a specific user.",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "Users index",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a User by index.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "summary": "updates a specific user",
+        "description": "Update a specific user.",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "Users index",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the updated user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "summary": "deletes a specific user",
+        "description": "Delete a specific user.",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "Users index",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the deleted user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/journey": {
+      "post": {
+        "operationId": "JourneysController_planJourney",
+        "summary": "Returns planned journeys.",
+        "description": "Plan a journey.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JourneysRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns planned journeys."
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
+    },
+    "/journey/refresh/{token}": {
+      "get": {
+        "operationId": "JourneysController_refreshJourney",
+        "summary": "Returns refreshed data of a journey.",
+        "description": "Refresh (receive updated data of) a journey that has been planned before.",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns refreshed journey."
+          },
+          "405": {
+            "description": "Refreshing journey is not available in given API.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshJourneyNotAvailable"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
+    },
+    "/journey/location/{query}": {
+      "get": {
+        "operationId": "JourneysController_searchLocation",
+        "summary": "Returns all locations matching the given query.",
+        "description": "Search a location with the given query.",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns location results."
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "NestJS Swagger",
+    "description": "API description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "HelloWorld": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "BadRequest": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 400
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "Bad request."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of a User",
+            "example": "John Smith"
+          },
+          "age": {
+            "type": "number",
+            "description": "Age of a User",
+            "example": 45
+          },
+          "city": {
+            "type": "string",
+            "description": "City of a User",
+            "example": "New York"
+          }
+        },
+        "required": [
+          "name",
+          "age",
+          "city"
+        ]
+      },
+      "UserNotFound": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 404
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "User not found."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "JourneysRequest": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Where the journey starts (id of station/stop/location)."
+          },
+          "to": {
+            "type": "string",
+            "description": "Where the journey ends (id of station/stop/location)."
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ]
+      },
+      "RefreshJourneyNotAvailable": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 405
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "Refresh journey not available."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      }
+    }
+  }
+}
