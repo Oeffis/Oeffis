@@ -18,6 +18,7 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
+import JourneysContainer from "./components/JourneysContainer";
 import UserContainer from "./components/UserContainer";
 import "./theme/variables.css";
 
@@ -35,6 +36,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/userDemo">
           <UserContainer />
+        </Route>
+        <Route exact path="/journeyDemo">
+          <JourneysContainer />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

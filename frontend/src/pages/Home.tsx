@@ -1,5 +1,5 @@
 import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonPage } from "@ionic/react";
-import { menu, person, analytics } from "ionicons/icons";
+import { analytics, menu, person } from "ionicons/icons";
 import LeafletMapContainer from "../components/LeafletMapContainer";
 import "./Home.css";
 
