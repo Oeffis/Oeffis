@@ -1,8 +1,8 @@
-# <p style="text-align: center"> Öffis </p>
+# <p align="center"> Öffis </p>
 
-### <p style="text-align: center"> The navigation system created for public transport. </p>
+### <p align="center"> The navigation system created for public transport. </p>
 
-## <p style="text-align: center"> [About](#about)&nbsp; • &nbsp;[Features](#features)&nbsp; • &nbsp;[Getting Started](#getting-started)&nbsp; • &nbsp;[Dependencies](#dependencies)&nbsp; • &nbsp;[Contact](#contact-information)&nbsp; • &nbsp;[Licence](#license)</p>
+## <p align="center"> [About](#about)&nbsp; • &nbsp;[Features](#features)&nbsp; • &nbsp;[Getting Started](#getting-started)&nbsp; • &nbsp;[Dependencies](#dependencies)&nbsp; • &nbsp;[Contact](#contact)&nbsp; • &nbsp;[Licence](#license)</p>
 
 </p>
 
@@ -14,7 +14,7 @@
 
 ## Features
 
-- new features will be added soon
+-   new features will be added soon
 
 ## Getting started
 
@@ -22,7 +22,7 @@
 
          git clone https://github.com/Oeffis/Oeffis.git
 
-2.  Istall NPM packages:
+2.  Istall NPM packages in Oeffis/frontend and Oeffis/backend:
 
         npm install
 
@@ -40,9 +40,9 @@
 
 Needed dependencies will be listed here:
 
--
+-   install Node.js Version 18
 
-## Contact Information
+## Contact
 
 Open a discussion and tag core-team (@Oeffis/core-team).
 
