@@ -4,6 +4,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonContent,
   IonInput,
   IonItem,
   IonLabel,
@@ -20,7 +21,7 @@ type Locations = ReadonlyArray<Station | Stop | Location>;
 /**
  * Container of elements related to journeys.
  */
-const JourneysContainer: React.FC = () => {
+const JourneysPage: React.FC = () => {
 
   const [locations, setLocations] = useState<Locations>([]);
   const [journeys, setJourneys] = useState<Journeys>();
@@ -90,62 +91,64 @@ const JourneysContainer: React.FC = () => {
   );
 
   return (
-    <div className="JourneysContainer">
+    <IonContent>
+      <div className="JourneysContainer">
 
-      {/* Element to search for locations. */}
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Search locations</IonCardTitle>
-        </IonCardHeader>
-        <IonList>
-          {/* Input for query string. */}
-          <IonItem>
-            {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-            <IonInput onIonChange={e => setSearchLocationsQuery(e.detail.value!)}
-                      label="Location query"
-                      placeholder="Enter location query."/>
-            <IonButton onClick={searchLocations}>SEARCH LOCATIONS</IonButton>
-          </IonItem>
-        </IonList>
-        {/* Output of locations search. */}
-        {getLocationResults()}
-      </IonCard>
+        {/* Element to search for locations. */}
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Search locations</IonCardTitle>
+          </IonCardHeader>
+          <IonList>
+            {/* Input for query string. */}
+            <IonItem>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonInput onIonChange={e => setSearchLocationsQuery(e.detail.value!)}
+                label="Location query"
+                placeholder="Enter location query." />
+              <IonButton onClick={searchLocations}>SEARCH LOCATIONS</IonButton>
+            </IonItem>
+          </IonList>
+          {/* Output of locations search. */}
+          {getLocationResults()}
+        </IonCard>
 
-      {/* Element to plan a journey */}
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Plan journey</IonCardTitle>
-          <IonCardSubtitle>Use searched locations to plan a journey.</IonCardSubtitle>
-        </IonCardHeader>
-        <IonList>
-          {/* Input for start location. */}
-          <IonItem>
-            {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-            <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
-                      label="Start (id)"
-                      placeholder="Enter start location (id)."/>
-          </IonItem>
+        {/* Element to plan a journey */}
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Plan journey</IonCardTitle>
+            <IonCardSubtitle>Use searched locations to plan a journey.</IonCardSubtitle>
+          </IonCardHeader>
+          <IonList>
+            {/* Input for start location. */}
+            <IonItem>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
+                label="Start (id)"
+                placeholder="Enter start location (id)." />
+            </IonItem>
 
-          {/* Input for destination location. */}
-          <IonItem>
-            {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-            <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
-                      label="Destination (id)"
-                      placeholder="Enter destination location (id)."/>
-          </IonItem>
+            {/* Input for destination location. */}
+            <IonItem>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
+                label="Destination (id)"
+                placeholder="Enter destination location (id)." />
+            </IonItem>
 
-          {/* Button to trigger planning the journey. */}
-          <IonItem>
-            <IonButton onClick={planJourney}>PLAN JOURNEY</IonButton>
-          </IonItem>
-        </IonList>
+            {/* Button to trigger planning the journey. */}
+            <IonItem>
+              <IonButton onClick={planJourney}>PLAN JOURNEY</IonButton>
+            </IonItem>
+          </IonList>
 
-        {/* Area to show planned journeys. */}
-        {getPlannedJourneys()}
-      </IonCard>
+          {/* Area to show planned journeys. */}
+          {getPlannedJourneys()}
+        </IonCard>
 
-    </div>
+      </div>
+    </IonContent>
   );
 };
 
-export default JourneysContainer;
+export default JourneysPage;
