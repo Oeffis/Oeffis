@@ -22,7 +22,7 @@
 
          git clone https://github.com/Oeffis/Oeffis.git
 
-2.  Istall NPM packages in Oeffis/frontend and Oeffis/backend:
+2.  Install NPM packages in Oeffis/frontend and Oeffis/backend:
 
         npm install
 
