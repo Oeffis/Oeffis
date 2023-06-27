@@ -48,4 +48,4 @@ Open a discussion and tag core-team (@Oeffis/core-team).
 
 ## License
 
-See LICENSE file for more information or visit [Gnu.org](https://www.gnu.org/licenses/gpl-3.0) .
+See LICENSE file for more information or visit [Gnu.org](https://choosealicense.com/licenses/agpl-3.0/) .
