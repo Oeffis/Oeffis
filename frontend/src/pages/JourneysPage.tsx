@@ -8,15 +8,15 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
-  IonTextarea
+  IonList
 } from "@ionic/react";
-import { Journeys, Location, Station, Stop } from "hafas-client";
+import { Journey, Journeys, Location, Station, Stop } from "hafas-client";
 import React, { useState } from "react";
 import { JourneyService, JourneysRequest } from "../api";
 
 /** Type alias for results of location query. */
 type Locations = ReadonlyArray<Station | Stop | Location>;
+type JourneysResult = ReadonlyArray<Journey>;
 
 /**
  * Container of elements related to journeys.
@@ -24,7 +24,7 @@ type Locations = ReadonlyArray<Station | Stop | Location>;
 const JourneysPage: React.FC = () => {
 
   const [locations, setLocations] = useState<Locations>([]);
-  const [journeys, setJourneys] = useState<Journeys>();
+  const [journeys, setJourneys] = useState<JourneysResult>([]);
 
   const [searchLocationsQuery, setSearchLocationsQuery] = useState<string>("");
 
@@ -48,9 +48,27 @@ const JourneysPage: React.FC = () => {
       to: planJourneyDestination
     };
 
-    setJourneys(await JourneyService.journeysControllerPlanJourney(journeyRequest));
-    console.log(journeys);
+    const journeysResult: Journeys =
+      await JourneyService.journeysControllerPlanJourney(journeyRequest);
+    if (journeysResult.journeys !== undefined) {
+      setJourneys(journeysResult.journeys);
+      console.log(journeysResult.journeys);
+    }
   };
+
+  /**
+   * Generates a short description of given journey.
+   *
+   * @param journey journey
+   */
+  const getJourneyShortDescr = (journey: Journey): string => (
+    journey.legs
+      .filter(leg => !leg.walking)
+      .map(leg => (
+        leg.line?.name + " (" + leg.direction + ")"
+      ))
+      .join(" -> ")
+  );
 
   /**
    * Returns the results of the location search as a JSX element.
@@ -66,7 +84,7 @@ const JourneysPage: React.FC = () => {
       {locations.map((location, index) => (
         <IonItem key={index}>
           <IonLabel>{index}</IonLabel>
-          <IonLabel>{location.name}</IonLabel>
+          <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
           <IonLabel>{location.type}</IonLabel>
           <IonLabel>{location.id}</IonLabel>
         </IonItem>
@@ -79,12 +97,11 @@ const JourneysPage: React.FC = () => {
    */
   const getPlannedJourneys = (): JSX.Element => (
     <IonList>
-      <IonItem>
-        <IonLabel>journey</IonLabel>
-      </IonItem>
-      {journeys?.journeys?.map((journey, index) => (
+      <IonItem>journeys</IonItem>
+      {journeys.map((journey, index) => (
         <IonItem key={index}>
-          <IonTextarea>{JSON.stringify(journey, null, 2)}</IonTextarea>
+          <IonLabel>{index}</IonLabel>
+          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey)}</IonLabel>
         </IonItem>
       ))}
     </IonList>
