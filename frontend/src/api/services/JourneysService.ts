@@ -4,20 +4,22 @@ import { OpenAPI } from "../core/OpenAPI";
 import { request as __request } from "../core/request";
 /* tslint:disable */
 /* eslint-disable */
-import type { JourneysRequest } from '../models/JourneysRequest';
+import type { JourneyLocation } from '../models/JourneyLocation';
+import type { JourneyVariant } from '../models/JourneyVariant';
+import type { PlanJourneyDto } from '../models/PlanJourneyDto';
 
 export class JourneysService {
 
     /**
-     * Returns planned journeys.
-     * Plan a journey.
+     * Returns variants of planned journey.
+     * Plan variants of a journey.
      * @param requestBody
-     * @returns any Returns planned journeys.
+     * @returns JourneyVariant Returns variants of planned journey.
      * @throws ApiError
      */
     public static journeysControllerPlanJourney(
-      requestBody: JourneysRequest,
-    ): CancelablePromise<any> {
+      requestBody: PlanJourneyDto,
+    ): CancelablePromise<Array<JourneyVariant>> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/journeys',
@@ -27,15 +29,15 @@ export class JourneysService {
     }
 
     /**
-     * Returns refreshed data of a journey.
-     * Refresh (receive updated data of) a journey that has been planned before.
+     * Returns refreshed data of a journey variant.
+     * Refresh (receive updated data of) a journey variant that has been planned before.
      * @param token
-     * @returns any Returns refreshed journey.
+     * @returns JourneyVariant Returns refreshed journey variant.
      * @throws ApiError
      */
     public static journeysControllerRefreshJourney(
       token: string,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<JourneyVariant> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/journeys/refresh/{token}',
@@ -43,7 +45,7 @@ export class JourneysService {
                 'token': token,
             },
             errors: {
-                400: `Refreshing journey is not available with used API.`,
+                400: `Refreshing journey variant is not available with endpoint being used.`,
             },
         });
     }
@@ -52,12 +54,12 @@ export class JourneysService {
      * Returns all locations matching the given query.
      * Search a location with the given query.
      * @param query
-     * @returns any Returns location results.
+     * @returns JourneyLocation Returns location results.
      * @throws ApiError
      */
     public static journeysControllerSearchLocation(
       query: string,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<Array<JourneyLocation>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/journeys/location/{query}',

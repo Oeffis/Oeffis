@@ -252,22 +252,32 @@
     "/journeys": {
       "post": {
         "operationId": "JourneysController_planJourney",
-        "summary": "Returns planned journeys.",
-        "description": "Plan a journey.",
+        "summary": "Returns variants of planned journey.",
+        "description": "Plan variants of a journey.",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JourneysRequest"
+                "$ref": "#/components/schemas/PlanJourneyDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Returns planned journeys."
+            "description": "Returns variants of planned journey.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JourneyVariant"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -278,8 +288,8 @@
     "/journeys/refresh/{token}": {
       "get": {
         "operationId": "JourneysController_refreshJourney",
-        "summary": "Returns refreshed data of a journey.",
-        "description": "Refresh (receive updated data of) a journey that has been planned before.",
+        "summary": "Returns refreshed data of a journey variant.",
+        "description": "Refresh (receive updated data of) a journey variant that has been planned before.",
         "parameters": [
           {
             "name": "token",
@@ -292,10 +302,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns refreshed journey."
+            "description": "Returns refreshed journey variant.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JourneyVariant"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Refreshing journey is not available with used API.",
+            "description": "Refreshing journey variant is not available with endpoint being used.",
             "content": {
               "application/json": {
                 "schema": {
@@ -327,7 +344,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns location results."
+            "description": "Returns location results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JourneyLocation"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -424,21 +451,81 @@
           "message"
         ]
       },
-      "JourneysRequest": {
+      "JourneyStopStationIdDto": {
+        "type": "object",
+        "properties": {
+          "stopStationId": {
+            "type": "string",
+            "description": "ID of a hafas stop or station."
+          }
+        },
+        "required": [
+          "stopStationId"
+        ]
+      },
+      "JourneyUserLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the user location."
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the user location."
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "PlanJourneyDto": {
         "type": "object",
         "properties": {
           "from": {
-            "type": "string",
-            "description": "Where the journey starts (id of station/stop/location)."
+            "description": "Location where the journey starts.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/JourneyStopStationIdDto"
+              },
+              {
+                "$ref": "#/components/schemas/JourneyUserLocationDto"
+              }
+            ]
           },
           "to": {
-            "type": "string",
-            "description": "Where the journey ends (id of station/stop/location)."
+            "description": "Location where the journey ends.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/JourneyStopStationIdDto"
+              },
+              {
+                "$ref": "#/components/schemas/JourneyUserLocationDto"
+              }
+            ]
           }
         },
         "required": [
           "from",
           "to"
+        ]
+      },
+      "JourneyVariant": {
+        "type": "object",
+        "properties": {
+          "journey": {
+            "type": "object",
+            "description": "One variant of a planned journey (Friendly Public Transport Format, FPTF)."
+          },
+          "updatedAt": {
+            "type": "number",
+            "description": "Point of time the data of the journey variant has been fetched."
+          }
+        },
+        "required": [
+          "journey",
+          "updatedAt"
         ]
       },
       "RefreshJourneyNotAvailable": {
@@ -458,6 +545,18 @@
         "required": [
           "statusCode",
           "message"
+        ]
+      },
+      "JourneyLocation": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "object",
+            "description": "One location that can be a FPTF station, stop or location (FPTF = Friendly Public Transport Format)."
+          }
+        },
+        "required": [
+          "location"
         ]
       }
     }

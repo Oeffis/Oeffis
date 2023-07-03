@@ -10,21 +10,24 @@ import {
   IonLabel,
   IonList
 } from "@ionic/react";
-import { Journey, Journeys, Location, Station, Stop } from "hafas-client";
+import { Journey, Location, Station, Stop } from "hafas-client";
 import React, { useState } from "react";
-import { JourneyService, JourneysRequest } from "../api";
-
-/** Type alias for results of location query. */
-type Locations = ReadonlyArray<Station | Stop | Location>;
-type JourneysResult = ReadonlyArray<Journey>;
+import {
+  JourneyLocation,
+  JourneysService,
+  JourneyStopStationIdDto,
+  JourneyUserLocationDto,
+  JourneyVariant,
+  PlanJourneyDto
+} from "../api";
 
 /**
  * Container of elements related to journeys.
  */
 const JourneysPage: React.FC = () => {
 
-  const [locations, setLocations] = useState<Locations>([]);
-  const [journeys, setJourneys] = useState<JourneysResult>([]);
+  const [locations, setLocations] = useState<JourneyLocation[]>([]);
+  const [journeys, setJourneys] = useState<JourneyVariant[]>([]);
 
   const [searchLocationsQuery, setSearchLocationsQuery] = useState<string>("");
 
@@ -35,7 +38,7 @@ const JourneysPage: React.FC = () => {
    * Searches for locations with given query.
    */
   const searchLocations = async (): Promise<void> => {
-    setLocations(await JourneyService.journeysControllerSearchLocation(searchLocationsQuery));
+    setLocations(await JourneysService.journeysControllerSearchLocation(searchLocationsQuery));
     console.log(locations);
   };
 
@@ -44,16 +47,14 @@ const JourneysPage: React.FC = () => {
    */
   const planJourney = async (): Promise<void> => {
     const journeyRequest: JourneysRequest = {
-      from: planJourneyStart,
-      to: planJourneyDestination
+      from: { stopStationId: planJourneyStart, locationObj: {} }, // TODO Why I have to fill an optional field here?
+      to: { stopStationId: planJourneyDestination, locationObj: {} }
     };
 
-    const journeysResult: Journeys =
-      await JourneyService.journeysControllerPlanJourney(journeyRequest);
-    if (journeysResult.journeys !== undefined) {
-      setJourneys(journeysResult.journeys);
-      console.log(journeysResult.journeys);
-    }
+    const journeyVariants: JourneyVariant[] =
+      await JourneysService.journeysControllerPlanJourney(journeyParameters);
+    setJourneys(journeyVariants);
+    console.log(journeyVariants);
   };
 
   /**
@@ -81,14 +82,16 @@ const JourneysPage: React.FC = () => {
         <IonLabel>type</IonLabel>
         <IonLabel>id</IonLabel>
       </IonItem>
-      {locations.map((location, index) => (
-        <IonItem key={index}>
-          <IonLabel>{index}</IonLabel>
-          <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
-          <IonLabel>{location.type}</IonLabel>
-          <IonLabel>{location.id}</IonLabel>
-        </IonItem>
-      ))}
+      {locations
+        .map(journeyLocation => journeyLocation.location as (Station | Stop | Location))
+        .map((location, index) => (
+          <IonItem key={index}>
+            <IonLabel>{index}</IonLabel>
+            <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
+            <IonLabel>{location.type}</IonLabel>
+            <IonLabel>{location.id}</IonLabel>
+          </IonItem>
+        ))}
     </IonList>
   );
 
@@ -101,7 +104,7 @@ const JourneysPage: React.FC = () => {
       {journeys.map((journey, index) => (
         <IonItem key={index}>
           <IonLabel>{index}</IonLabel>
-          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey)}</IonLabel>
+          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey.journey as Journey)}</IonLabel>
         </IonItem>
       ))}
     </IonList>
