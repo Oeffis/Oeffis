@@ -14,5 +14,5 @@ export type { User } from './models/User';
 export type { UserNotFound } from './models/UserNotFound';
 
 export { AppService } from './services/AppService';
-export { JourneyService } from './services/JourneyService';
+export { JourneysService } from './services/JourneysService';
 export { UsersService } from './services/UsersService';

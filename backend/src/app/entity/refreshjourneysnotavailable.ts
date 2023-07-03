@@ -4,9 +4,9 @@ export class RefreshJourneyNotAvailable {
 
   @ApiProperty({
     description: "Http status code",
-    example: 405,
+    example: 400,
   })
-  statusCode = 405;
+  statusCode = 400;
 
   @ApiProperty({
     description: "Error message",

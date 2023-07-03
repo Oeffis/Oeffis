@@ -8,8 +8,8 @@ import { JourneysService, Locations } from "../service/journeys.service";
 /**
  * Endpoint for request regarding planning a journey.
  */
-@Controller("journey")
-@ApiTags("journey")
+@Controller("journeys")
+@ApiTags("journeys")
 export class JourneysController {
 
   constructor(
@@ -38,8 +38,8 @@ export class JourneysController {
   @ApiOkResponse({
     description: "Returns refreshed journey.",
   })
-  @ApiMethodNotAllowedResponse({
-    description: "Refreshing journey is not available in given API.",
+  @ApiBadRequestResponse({
+    description: "Refreshing journey is not available with used API.",
     type: RefreshJourneyNotAvailable
   })
   refreshJourney(@Param("token") refreshToken: string): Promise<JourneyWithRealtimeData> {

@@ -6,7 +6,7 @@ import { request as __request } from "../core/request";
 /* eslint-disable */
 import type { JourneysRequest } from '../models/JourneysRequest';
 
-export class JourneyService {
+export class JourneysService {
 
     /**
      * Returns planned journeys.
@@ -20,7 +20,7 @@ export class JourneyService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/journey',
+            url: '/journeys',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -38,12 +38,12 @@ export class JourneyService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/journey/refresh/{token}',
+            url: '/journeys/refresh/{token}',
             path: {
                 'token': token,
             },
             errors: {
-                405: `Refreshing journey is not available in given API.`,
+                400: `Refreshing journey is not available with used API.`,
             },
         });
     }
@@ -60,7 +60,7 @@ export class JourneyService {
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/journey/location/{query}',
+            url: '/journeys/location/{query}',
             path: {
                 'query': query,
             },

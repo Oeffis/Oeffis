@@ -249,7 +249,7 @@
         ]
       }
     },
-    "/journey": {
+    "/journeys": {
       "post": {
         "operationId": "JourneysController_planJourney",
         "summary": "Returns planned journeys.",
@@ -271,11 +271,11 @@
           }
         },
         "tags": [
-          "journey"
+          "journeys"
         ]
       }
     },
-    "/journey/refresh/{token}": {
+    "/journeys/refresh/{token}": {
       "get": {
         "operationId": "JourneysController_refreshJourney",
         "summary": "Returns refreshed data of a journey.",
@@ -294,8 +294,8 @@
           "200": {
             "description": "Returns refreshed journey."
           },
-          "405": {
-            "description": "Refreshing journey is not available in given API.",
+          "400": {
+            "description": "Refreshing journey is not available with used API.",
             "content": {
               "application/json": {
                 "schema": {
@@ -306,11 +306,11 @@
           }
         },
         "tags": [
-          "journey"
+          "journeys"
         ]
       }
     },
-    "/journey/location/{query}": {
+    "/journeys/location/{query}": {
       "get": {
         "operationId": "JourneysController_searchLocation",
         "summary": "Returns all locations matching the given query.",
@@ -331,7 +331,7 @@
           }
         },
         "tags": [
-          "journey"
+          "journeys"
         ]
       }
     }
@@ -447,7 +447,7 @@
           "statusCode": {
             "type": "object",
             "description": "Http status code",
-            "example": 405
+            "example": 400
           },
           "message": {
             "type": "object",
