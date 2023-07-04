@@ -4,6 +4,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCheckbox,
   IonContent,
   IonInput,
   IonItem,
@@ -32,7 +33,9 @@ const JourneysPage: React.FC = () => {
   const [searchLocationsQuery, setSearchLocationsQuery] = useState<string>("");
 
   const [planJourneyStart, setPlanJourneyStart] = useState<string>("");
+  const [useLocationAsStart, setUseLocationAsStart] = useState<boolean>(false);
   const [planJourneyDestination, setPlanJourneyDestination] = useState<string>("");
+  const [useLocationAsDestination, setUseLocationAsDestination] = useState<boolean>(false);
 
   /**
    * Searches for locations with given query.
@@ -46,9 +49,23 @@ const JourneysPage: React.FC = () => {
    * Plans a journey with given start and destination.
    */
   const planJourney = async (): Promise<void> => {
-    const journeyRequest: JourneysRequest = {
-      from: { stopStationId: planJourneyStart, locationObj: {} }, // TODO Why I have to fill an optional field here?
-      to: { stopStationId: planJourneyDestination, locationObj: {} }
+    // Mock for the user location (uses "Westfälische Hochschule Gelsenkirchen" as user location).
+    const userLocation: JourneyUserLocationDto = {
+      // TODO Get address from latitude and longitude at frontend and not at backend?
+      latitude: 51.574272755490284,
+      longitude: 7.027275510766967
+    };
+
+    const startLocation = !useLocationAsStart
+      ? { stopStationId: planJourneyStart } as JourneyStopStationIdDto
+      : userLocation;
+    const destinationLocation = !useLocationAsDestination
+      ? { stopStationId: planJourneyDestination } as JourneyStopStationIdDto
+      : userLocation;
+
+    const journeyParameters: PlanJourneyDto = {
+      from: startLocation,
+      to: destinationLocation
     };
 
     const journeyVariants: JourneyVariant[] =
@@ -141,19 +158,33 @@ const JourneysPage: React.FC = () => {
           </IonCardHeader>
           <IonList>
             {/* Input for start location. */}
+            <IonLabel>START</IonLabel>
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
-                label="Start (id)"
-                placeholder="Enter start location (id)." />
+                        disabled={useLocationAsStart}
+                        label="Start (id)"
+                        placeholder="Enter start location (id)."/>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonCheckbox onIonChange={e => setUseLocationAsStart(e.detail.checked)}
+                           disabled={useLocationAsDestination}
+                           checked={useLocationAsStart}
+                           justify="end">USE LOCATION</IonCheckbox>
             </IonItem>
 
             {/* Input for destination location. */}
+            <IonLabel>DESTINATION</IonLabel>
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
-                label="Destination (id)"
-                placeholder="Enter destination location (id)." />
+                        disabled={useLocationAsDestination}
+                        label="Destination (id)"
+                        placeholder="Enter destination location (id)."/>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonCheckbox onIonChange={e => setUseLocationAsDestination(e.detail.checked)}
+                           disabled={useLocationAsStart}
+                           checked={useLocationAsDestination}
+                           justify="end">USE LOCATION</IonCheckbox>
             </IonItem>
 
             {/* Button to trigger planning the journey. */}
