@@ -509,6 +509,17 @@
                 "$ref": "#/components/schemas/JourneyUserLocationDto"
               }
             ]
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date for the journey to take place.",
+            "default": "current point of time"
+          },
+          "isArrivalDate": {
+            "type": "boolean",
+            "description": "If the specified date for the journey determines when to arrive at destination.",
+            "default": false
           }
         },
         "required": [

@@ -24,13 +24,19 @@ export class JourneysService {
    * @return variants for the requested journey
    */
   planJourney(journeyParameters: PlanJourneyDto): Promise<JourneyVariant[]> {
+    const hafasOptions: JourneysOptions = {
+      language: HAFAS_LANGUAGE,
+      results: 3,
+    };
+
     const fromLocation = this.extractLocation(journeyParameters.from);
     const toLocation = this.extractLocation(journeyParameters.to);
 
-    const hafasOptions: JourneysOptions = {
-      results: 3,
-      language: HAFAS_LANGUAGE,
-    };
+    if (journeyParameters.isArrivalDate) {
+      hafasOptions.arrival = journeyParameters.date ?? new Date();
+    } else {
+      hafasOptions.departure = journeyParameters.date ?? new Date();
+    }
 
     return this.hafas
       .journeys(fromLocation, toLocation, hafasOptions)
@@ -71,8 +77,8 @@ export class JourneysService {
    */
   searchLocations(locationQuery: string): Promise<JourneyLocation[]> {
     const hafasOptions: LocationsOptions = {
-      results: 5,
       language: HAFAS_LANGUAGE,
+      results: 5,
     };
 
     return this.hafas
