@@ -20,6 +20,13 @@ export class JourneyStopStationIdDto {
 export class JourneyUserLocationDto {
 
   @ApiProperty({
+    description: "(Full) address of the location specified by latitude and longitude.",
+    type: String,
+    required: true
+  })
+  address!: string;
+
+  @ApiProperty({
     description: "Latitude of the user location.",
     type: Number,
     required: true

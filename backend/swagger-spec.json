@@ -466,6 +466,10 @@
       "JourneyUserLocationDto": {
         "type": "object",
         "properties": {
+          "address": {
+            "type": "string",
+            "description": "(Full) address of the location specified by latitude and longitude."
+          },
           "latitude": {
             "type": "number",
             "description": "Latitude of the user location."
@@ -476,6 +480,7 @@
           }
         },
         "required": [
+          "address",
           "latitude",
           "longitude"
         ]

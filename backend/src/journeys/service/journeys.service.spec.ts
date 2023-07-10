@@ -98,6 +98,7 @@ describe("JourneysService", () => {
   it("Should return journey variants using user's location as start.", async () => {
     // Given
     const journeyLocationFrom: JourneyUserLocationDto = {
+      address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
       latitude: 51.574272755490284,
       longitude: 7.027275510766967
     };
@@ -140,6 +141,7 @@ describe("JourneysService", () => {
       stopStationId: "5912"
     };
     const journeyLocationTo: JourneyUserLocationDto = {
+      address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
       latitude: 51.574272755490284,
       longitude: 7.027275510766967
     };

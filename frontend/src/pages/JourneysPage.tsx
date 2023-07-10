@@ -50,8 +50,9 @@ const JourneysPage: React.FC = () => {
    */
   const planJourney = async (): Promise<void> => {
     // Mock for the user location (uses "Westfälische Hochschule Gelsenkirchen" as user location).
+    // TODO Determine real user location.
     const userLocation: JourneyUserLocationDto = {
-      // TODO Get address from latitude and longitude at frontend and not at backend?
+      address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
       latitude: 51.574272755490284,
       longitude: 7.027275510766967
     };

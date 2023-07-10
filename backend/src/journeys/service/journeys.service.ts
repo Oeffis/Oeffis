@@ -53,7 +53,7 @@ export class JourneysService {
   private createHafasLocation(userLocation: JourneyUserLocationDto): Location {
     return <Location>{
       type: "location",
-      address: "Neidenburger Str. 43, 45897 Gelsenkirchen", // TODO Get address from latitude and longitude.
+      address: userLocation.address,
       latitude: userLocation.latitude,
       longitude: userLocation.longitude
     };
