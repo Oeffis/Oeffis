@@ -1,14 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import {
-  HafasClient,
-  Journeys,
-  JourneysOptions,
-  Location,
-  LocationsOptions,
-  RefreshJourneyOptions,
-  Station,
-  Stop
-} from "hafas-client";
+import { HafasClient, JourneysOptions, Location, LocationsOptions, RefreshJourneyOptions } from "hafas-client";
+import { FPTFSupport } from "../../hafas/FPTFSupport";
 import { HAFAS_CLIENT, HAFAS_LANGUAGE } from "../../symbols";
 import { JourneyStopStationIdDto, JourneyUserLocationDto } from "../dto/journey.location.dto";
 import { PlanJourneyDto } from "../dto/journey.parameters.dto";
@@ -42,31 +34,12 @@ export class JourneysService {
 
     return this.hafas
       .journeys(fromLocation, toLocation, hafasOptions)
-      .then(this.mapToJourneyVariants);
+      .then(FPTFSupport.createJourneyVariantsFromFPTFJourneys);
   }
 
   private extractLocation(journeyLocation: (JourneyStopStationIdDto | JourneyUserLocationDto)): string | Location {
     return (journeyLocation as JourneyStopStationIdDto).stopStationId
-      ?? this.createHafasLocation(journeyLocation as JourneyUserLocationDto);
-  }
-
-  private createHafasLocation(userLocation: JourneyUserLocationDto): Location {
-    return <Location>{
-      type: "location",
-      address: userLocation.address,
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude
-    };
-  }
-
-  private mapToJourneyVariants(result: Journeys): JourneyVariant[] {
-    return result.journeys
-        ?.map(journey =>
-          <JourneyVariant>{
-            journey: journey,
-            updatedAt: result.realtimeDataUpdatedAt
-          })
-      ?? [];
+      ?? FPTFSupport.createFPTFLocation(journeyLocation as JourneyUserLocationDto);
   }
 
   /**
@@ -87,11 +60,7 @@ export class JourneysService {
 
     return this.hafas
       .refreshJourney(refreshToken, hafasOptions)
-      .then(refreshedData =>
-        <JourneyVariant>{
-          journey: refreshedData.journey,
-          updatedAt: refreshedData.realtimeDataUpdatedAt
-        });
+      .then(FPTFSupport.createJourneyVariantFromFPTFJourneyWithRealtimeData);
   }
 
   /**
@@ -108,14 +77,7 @@ export class JourneysService {
 
     return this.hafas
       .locations(locationQuery, hafasOptions)
-      .then(this.mapToJourneyLocations);
-  }
-
-  private mapToJourneyLocations(result: readonly (Location | Station | Stop)[]): JourneyLocation[] {
-    return result.map(location =>
-      <JourneyLocation>{
-        location: location
-      });
+      .then(FPTFSupport.createJourneyLocationsFromFPTFLocations);
   }
 
 }
