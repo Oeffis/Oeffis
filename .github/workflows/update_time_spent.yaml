@@ -24,7 +24,7 @@ jobs:
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           script: |
-            const regex = /^Time spent: (?:(?:(?<hours>\d+) hours? (?<minutes>30|0) minutes?)|(?:(?<justHours>\d+) hours?)|(?:(?<justMinutes>30|0) minutes?))$/i;
+            const regex = /Time spent: (?:(?:(?<hours>\d+) hours? (?<minutes>30|0) minutes?)|(?:(?<justHours>\d+) hours?)|(?:(?<justMinutes>30|0) minutes?))/i;
 
             const match = regex.exec(context.payload.comment.body);
 
