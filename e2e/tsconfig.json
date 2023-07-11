@@ -1,7 +1,9 @@
 {
     "include": [
         "cypress/**/*.ts",
-        "cypress.config.ts"
+        "cypress.config.ts",
+        "support.ts",
+        "commands/index.ts"
     ],
     "compilerOptions": {
         "target": "ESNext",
