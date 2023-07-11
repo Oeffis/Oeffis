@@ -4,38 +4,44 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCheckbox,
   IonContent,
   IonInput,
   IonItem,
   IonLabel,
   IonList
 } from "@ionic/react";
-import { Journey, Journeys, Location, Station, Stop } from "hafas-client";
+import { Journey, Location, Station, Stop } from "hafas-client";
 import React, { useState } from "react";
-import { JourneyService, JourneysRequest } from "../api";
-
-/** Type alias for results of location query. */
-type Locations = ReadonlyArray<Station | Stop | Location>;
-type JourneysResult = ReadonlyArray<Journey>;
+import {
+  JourneyLocation,
+  JourneysService,
+  JourneyStopStationIdDto,
+  JourneyUserLocationDto,
+  JourneyVariant,
+  PlanJourneyDto
+} from "../api";
 
 /**
  * Container of elements related to journeys.
  */
 const JourneysPage: React.FC = () => {
 
-  const [locations, setLocations] = useState<Locations>([]);
-  const [journeys, setJourneys] = useState<JourneysResult>([]);
+  const [locations, setLocations] = useState<JourneyLocation[]>([]);
+  const [journeys, setJourneys] = useState<JourneyVariant[]>([]);
 
   const [searchLocationsQuery, setSearchLocationsQuery] = useState<string>("");
 
   const [planJourneyStart, setPlanJourneyStart] = useState<string>("");
+  const [useLocationAsStart, setUseLocationAsStart] = useState<boolean>(false);
   const [planJourneyDestination, setPlanJourneyDestination] = useState<string>("");
+  const [useLocationAsDestination, setUseLocationAsDestination] = useState<boolean>(false);
 
   /**
    * Searches for locations with given query.
    */
   const searchLocations = async (): Promise<void> => {
-    setLocations(await JourneyService.journeysControllerSearchLocation(searchLocationsQuery));
+    setLocations(await JourneysService.journeysControllerSearchLocation(searchLocationsQuery));
     console.log(locations);
   };
 
@@ -43,17 +49,30 @@ const JourneysPage: React.FC = () => {
    * Plans a journey with given start and destination.
    */
   const planJourney = async (): Promise<void> => {
-    const journeyRequest: JourneysRequest = {
-      from: planJourneyStart,
-      to: planJourneyDestination
+    // Mock for the user location (uses "Westfälische Hochschule Gelsenkirchen" as user location).
+    // TODO Determine real user location.
+    const userLocation: JourneyUserLocationDto = {
+      address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
+      latitude: 51.574272755490284,
+      longitude: 7.027275510766967
     };
 
-    const journeysResult: Journeys =
-      await JourneyService.journeysControllerPlanJourney(journeyRequest);
-    if (journeysResult.journeys !== undefined) {
-      setJourneys(journeysResult.journeys);
-      console.log(journeysResult.journeys);
-    }
+    const startLocation = !useLocationAsStart
+      ? { stopStationId: planJourneyStart } as JourneyStopStationIdDto
+      : userLocation;
+    const destinationLocation = !useLocationAsDestination
+      ? { stopStationId: planJourneyDestination } as JourneyStopStationIdDto
+      : userLocation;
+
+    const journeyParameters: PlanJourneyDto = {
+      from: startLocation,
+      to: destinationLocation
+    };
+
+    const journeyVariants: JourneyVariant[] =
+      await JourneysService.journeysControllerPlanJourney(journeyParameters);
+    setJourneys(journeyVariants);
+    console.log(journeyVariants);
   };
 
   /**
@@ -81,14 +100,16 @@ const JourneysPage: React.FC = () => {
         <IonLabel>type</IonLabel>
         <IonLabel>id</IonLabel>
       </IonItem>
-      {locations.map((location, index) => (
-        <IonItem key={index}>
-          <IonLabel>{index}</IonLabel>
-          <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
-          <IonLabel>{location.type}</IonLabel>
-          <IonLabel>{location.id}</IonLabel>
-        </IonItem>
-      ))}
+      {locations
+        .map(journeyLocation => journeyLocation.location as (Station | Stop | Location))
+        .map((location, index) => (
+          <IonItem key={index}>
+            <IonLabel>{index}</IonLabel>
+            <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
+            <IonLabel>{location.type}</IonLabel>
+            <IonLabel>{location.id}</IonLabel>
+          </IonItem>
+        ))}
     </IonList>
   );
 
@@ -101,7 +122,7 @@ const JourneysPage: React.FC = () => {
       {journeys.map((journey, index) => (
         <IonItem key={index}>
           <IonLabel>{index}</IonLabel>
-          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey)}</IonLabel>
+          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey.journey as Journey)}</IonLabel>
         </IonItem>
       ))}
     </IonList>
@@ -138,19 +159,33 @@ const JourneysPage: React.FC = () => {
           </IonCardHeader>
           <IonList>
             {/* Input for start location. */}
+            <IonLabel>START</IonLabel>
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
-                label="Start (id)"
-                placeholder="Enter start location (id)." />
+                        disabled={useLocationAsStart}
+                        label="Start (id)"
+                        placeholder="Enter start location (id)."/>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonCheckbox onIonChange={e => setUseLocationAsStart(e.detail.checked)}
+                           disabled={useLocationAsDestination}
+                           checked={useLocationAsStart}
+                           justify="end">USE LOCATION</IonCheckbox>
             </IonItem>
 
             {/* Input for destination location. */}
+            <IonLabel>DESTINATION</IonLabel>
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
-                label="Destination (id)"
-                placeholder="Enter destination location (id)." />
+                        disabled={useLocationAsDestination}
+                        label="Destination (id)"
+                        placeholder="Enter destination location (id)."/>
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
+              <IonCheckbox onIonChange={e => setUseLocationAsDestination(e.detail.checked)}
+                           disabled={useLocationAsStart}
+                           checked={useLocationAsDestination}
+                           justify="end">USE LOCATION</IonCheckbox>
             </IonItem>
 
             {/* Button to trigger planning the journey. */}
