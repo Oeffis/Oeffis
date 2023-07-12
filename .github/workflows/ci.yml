@@ -168,3 +168,26 @@ jobs:
                   ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
                 cache-from: type=gha
                 cache-to: type=gha,mode=max
+
+    e2e_ci:
+      name: Lint E2E
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
+
+        - name: Lint
+          working-directory: e2e
+          run: |
+            npm run lint -- --max-warnings 0 --no-fix
+      
