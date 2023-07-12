@@ -3,7 +3,9 @@
         "cypress/**/*.ts",
         "cypress.config.ts",
         "support.ts",
-        "commands/index.ts"
+        "commands/index.ts",
+        "features/**/*.ts",
+        "stepDefinitions/**/*.ts"
     ],
     "compilerOptions": {
         "target": "ESNext",

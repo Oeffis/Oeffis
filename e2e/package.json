@@ -1,12 +1,16 @@
 {
   "scripts": {
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "lint": "eslint --fix ."
   },
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^18.0.1",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
     "cypress": "^12.17.1",
+    "eslint": "^8.44.0",
+    "eslint-plugin-import": "^2.27.5",
     "typescript": "^5.1.6"
   }
 }
