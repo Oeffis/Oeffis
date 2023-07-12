@@ -190,4 +190,28 @@ jobs:
           working-directory: e2e
           run: |
             npm run lint -- --max-warnings 0 --no-fix
+
+    e2e_test:
+      name: Run E2E Tests
+      needs: [frontend_container, backend_container]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
+
+        - name: Run Tests
+          working-directory: e2e
+          run: |
+            npm run cypress:run
+      
       
