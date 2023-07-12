@@ -7,7 +7,12 @@
         "es6": true,
         "browser": true
     },
+    "plugins": [
+        "@typescript-eslint",
+        "cypress"
+    ],
     "extends": [
+        "plugin:cypress/recommended",
         "../.eslintrc.json"
     ],
     "parserOptions": {
