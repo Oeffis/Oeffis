@@ -19,7 +19,7 @@
     "sourceType": "module",
     "project": [
       "tsconfig.json",
-      "tsconfig.node.json",
+      "tsconfig.node.json"
     ],
     "ecmaVersion": 6
   },
