@@ -254,5 +254,6 @@ jobs:
                 type=oci,dest=backend.tar
           
         - name: Load Image
+          working-directory: backend
           run: |
               docker load -i backend.tar
