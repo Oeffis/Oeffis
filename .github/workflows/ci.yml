@@ -18,6 +18,12 @@ env:
   BACKEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/backend
 
 jobs:
+    clear_catches:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Clear caches
+          uses: easimon/wipe-cache@main
+
     frontend_ci:
       name: Lint, Test and Build Frontend
       runs-on: ubuntu-latest
