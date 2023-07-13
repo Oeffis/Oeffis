@@ -7,7 +7,7 @@ WORKDIR /app
 
 # The dependencies will be cached unless package.json changes.
 COPY package*.json ./
-RUN npm ci --loglevel verbose
+RUN npm ci
 
 COPY . .
 
