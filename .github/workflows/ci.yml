@@ -252,6 +252,10 @@ jobs:
               cache-to: type=gha,mode=max
               outputs: |
                 type=oci,dest=backend.tar
+
+        - name: List dir
+          run: |
+              ls -lsah backend
           
         - name: Load Image
           working-directory: backend
