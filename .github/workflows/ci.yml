@@ -251,4 +251,8 @@ jobs:
               cache-from: type=gha
               cache-to: type=gha,mode=max
               outputs: |
-                type=oci,dest=out.tar
+                type=oci,dest=backend.tar
+          
+        - name: Load Image
+          run: |
+              docker load -i backend.tar
