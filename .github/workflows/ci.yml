@@ -50,51 +50,6 @@ jobs:
           run: |
             npm run build
 
-    
-    frontend_container:
-      name: Build and Deploy Frontend Container
-      needs: frontend_ci
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
-
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v2
-
-        - name: Log in to the Container registry
-          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-          if: github.ref == 'refs/heads/main'
-          with:
-            username: ${{ secrets.DOCKER_HUB_USER }}
-            password: ${{ secrets.DOCKER_HUB_PASS }}
-
-        - name: Log in to the Container registry
-          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-          if: github.ref == 'refs/heads/main'
-          with:
-            registry: ${{ env.GITHUB_REGISTRY }}
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-
-        - name: Build and Push
-          uses: docker/build-push-action@v4
-          with:
-            context: backend
-            platforms: linux/amd64,linux/arm64
-            push: ${{ github.ref == 'refs/heads/main' }}
-            tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
-            cache-from: type=gha
-            cache-to: type=gha,mode=max
-
     backend_ci:
       name: Lint, Test and Build Backend
       runs-on: ubuntu-latest
@@ -126,55 +81,6 @@ jobs:
           working-directory: backend
           run: |
               npm run build
-
-    backend_container:
-        name: Build and Deploy Backend Container
-        needs: backend_ci
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v3
-
-          - name: Set up QEMU
-            uses: docker/setup-qemu-action@v2
-
-          - name: Set up Docker Buildx
-            uses: docker/setup-buildx-action@v2
-
-          - name: Log in to the Container registry
-            uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-            if: github.ref == 'refs/heads/main'
-            with:
-                username: ${{ secrets.DOCKER_HUB_USER }}
-                password: ${{ secrets.DOCKER_HUB_PASS }}
-
-          - name: Log in to the Container registry
-            uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-            if: github.ref == 'refs/heads/main'
-            with:
-                registry: ${{ env.GITHUB_REGISTRY }}
-                username: ${{ github.actor }}
-                password: ${{ secrets.GITHUB_TOKEN }}
-
-          - name: Build and Push
-            uses: docker/build-push-action@v4
-            with:
-                context: backend
-                platforms: linux/amd64,linux/arm64
-                push: ${{ github.ref == 'refs/heads/main' }}
-                tags: |
-                  ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-                  ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
-                cache-from: type=gha
-                cache-to: type=gha,mode=max
-
-          - name: Upload image
-            uses: ishworkh/container-image-artifact-upload@v1.0.0
-            with:
-              image: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
 
     e2e_ci:
       name: Lint E2E
@@ -256,3 +162,96 @@ jobs:
           working-directory: e2e
           run: |
             docker-compose down
+
+    frontend_container:
+      name: Build and Deploy Frontend Container
+      needs: [frontend_ci, e2e_test]
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          if: github.ref == 'refs/heads/main'
+          with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          if: github.ref == 'refs/heads/main'
+          with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Build and Push
+          uses: docker/build-push-action@v4
+          with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: ${{ github.ref == 'refs/heads/main' }}
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
+
+    backend_container:
+      name: Build and Deploy Backend Container
+      needs: [backend_ci, e2e_test]
+      runs-on: ubuntu-latest
+      permissions:
+          contents: read
+          packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          if: github.ref == 'refs/heads/main'
+          with:
+              username: ${{ secrets.DOCKER_HUB_USER }}
+              password: ${{ secrets.DOCKER_HUB_PASS }}
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          if: github.ref == 'refs/heads/main'
+          with:
+              registry: ${{ env.GITHUB_REGISTRY }}
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Build and Push
+          uses: docker/build-push-action@v4
+          with:
+              context: backend
+              platforms: linux/amd64,linux/arm64
+              push: ${{ github.ref == 'refs/heads/main' }}
+              tags: |
+                ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+                ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+              cache-from: type=gha
+              cache-to: type=gha,mode=max
+
+        - name: Upload image
+          uses: ishworkh/container-image-artifact-upload@v1.0.0
+          with:
+            image: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
