@@ -51,7 +51,7 @@ jobs:
             npm run build
 
     frontend_container:
-      name: Build and Deploy Frontend Container
+      name: Build and Push Frontend Container
       needs: frontend_ci
       runs-on: ubuntu-latest
       permissions:
@@ -80,7 +80,7 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build and Push Frontend Container Image
+        - name: Build and Push Container
           uses: docker/build-push-action@v4
           with:
             context: backend
@@ -125,7 +125,7 @@ jobs:
               npm run build
 
     backend_container:
-      name: Build and Deploy Backend Container
+      name: Build and Push Backend Container
       needs: backend_ci
       runs-on: ubuntu-latest
       permissions:
@@ -154,7 +154,7 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Backend Container Image
+      - name: Build and Push Container
         uses: docker/build-push-action@v4
         with:
             context: backend
