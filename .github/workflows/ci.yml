@@ -18,202 +18,45 @@ env:
   BACKEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/backend
 
 jobs:
-    # frontend_ci:
-    #   name: Lint, Test and Build Frontend
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+    frontend_ci:
+      name: Lint, Test and Build Frontend
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
 
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #         node-version: 18.x
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
 
-    #     - name: Install Dependencies
-    #       working-directory: frontend
-    #       run: |
-    #         npm ci
+        - name: Install Dependencies
+          working-directory: frontend
+          run: |
+            npm ci
 
-    #     - name: Lint
-    #       working-directory: frontend
-    #       run: |
-    #         npm run lint -- --max-warnings 0 --no-fix
+        - name: Lint
+          working-directory: frontend
+          run: |
+            npm run lint -- --max-warnings 0 --no-fix
 
-    #     - name: Test
-    #       working-directory: frontend
-    #       run: |
-    #         npm run test.unit -- run
+        - name: Test
+          working-directory: frontend
+          run: |
+            npm run test.unit -- run
 
-    #     - name: Build
-    #       working-directory: frontend
-    #       run: |
-    #         npm run build
+        - name: Build
+          working-directory: frontend
+          run: |
+            npm run build
 
-    # backend_ci:
-    #   name: Lint, Test and Build Backend
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
-
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #           node-version: 18.x
-
-    #     - name: Install Dependencies
-    #       working-directory: backend
-    #       run: |
-    #           npm ci
-
-    #     - name: Lint
-    #       working-directory: backend
-    #       run: |
-    #           npm run lint -- --max-warnings 0 --no-fix
-
-    #     - name: Test
-    #       working-directory: backend
-    #       run: |
-    #           npm run test
-
-    #     - name: Build
-    #       working-directory: backend
-    #       run: |
-    #           npm run build
-
-    # e2e_ci:
-    #   name: Lint E2E
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
-
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #         node-version: 18.x
-
-    #     - name: Install Dependencies
-    #       working-directory: e2e
-    #       run: |
-    #         npm ci
-
-    #     - name: Lint
-    #       working-directory: e2e
-    #       run: |
-    #         npm run lint -- --max-warnings 0 --no-fix
-
-    # e2e_test:
-    #   name: Run E2E Tests
-    #   needs: [e2e_ci]
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
-
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #         node-version: 18.x
-
-    #     - name: Set up QEMU
-    #       uses: docker/setup-qemu-action@v2
-
-    #     - name: Set up Docker Buildx
-    #       uses: docker/setup-buildx-action@v2
-        
-    #     - name: Build Frontend E2E Image
-    #       uses: docker/build-push-action@v4
-    #       with:
-    #           context: frontend
-    #           platforms: linux/amd64
-    #           load: true
-    #           tags: ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:latest
-    #           cache-from: type=gha
-    #           cache-to: type=gha,mode=max
-
-    #     - name: Build Backend E2E Image
-    #       uses: docker/build-push-action@v4
-    #       with:
-    #           context: backend
-    #           platforms: linux/amd64
-    #           load: true
-    #           tags: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
-    #           cache-from: type=gha
-    #           cache-to: type=gha,mode=max
-
-    #     - name: Install Dependencies
-    #       working-directory: e2e
-    #       run: |
-    #         npm ci
-
-    #     - name: Launch Containers
-    #       working-directory: e2e
-    #       run: |
-    #         docker-compose up -d
-
-    #     - name: Run Tests
-    #       working-directory: e2e
-    #       run: |
-    #         npm run cypress:run
-
-    #     - name: Stop Containers
-    #       working-directory: e2e
-    #       run: |
-    #         docker-compose down
-
-    # frontend_container:
-    #   name: Build and Deploy Frontend Container
-    #   needs: [frontend_ci, e2e_test]
-    #   runs-on: ubuntu-latest
-    #   permissions:
-    #     contents: read
-    #     packages: write
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
-
-    #     - name: Set up QEMU
-    #       uses: docker/setup-qemu-action@v2
-
-    #     - name: Set up Docker Buildx
-    #       uses: docker/setup-buildx-action@v2
-
-    #     - name: Log in to the Container registry
-    #       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-    #       if: github.ref == 'refs/heads/main'
-    #       with:
-    #         username: ${{ secrets.DOCKER_HUB_USER }}
-    #         password: ${{ secrets.DOCKER_HUB_PASS }}
-
-    #     - name: Log in to the Container registry
-    #       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-    #       if: github.ref == 'refs/heads/main'
-    #       with:
-    #         registry: ${{ env.GITHUB_REGISTRY }}
-    #         username: ${{ github.actor }}
-    #         password: ${{ secrets.GITHUB_TOKEN }}
-
-    #     - name: Build and Push
-    #       uses: docker/build-push-action@v4
-    #       with:
-    #         context: backend
-    #         platforms: linux/amd64,linux/arm64
-    #         push: ${{ github.ref == 'refs/heads/main' }}
-    #         tags: |
-    #           ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-    #           ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
-    #         cache-from: type=gha
-    #         cache-to: type=gha,mode=max
-
-    backend_container:
-      name: Build and Deploy Backend Container
-      # needs: [backend_ci, e2e_test]
+    frontend_container:
+      name: Build and Deploy Frontend Container
+      needs: frontend_ci
       runs-on: ubuntu-latest
       permissions:
-          contents: read
-          packages: write
+        contents: read
+        packages: write
       steps:
         - name: Checkout
           uses: actions/checkout@v3
@@ -228,36 +71,182 @@ jobs:
           uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
           if: github.ref == 'refs/heads/main'
           with:
-              username: ${{ secrets.DOCKER_HUB_USER }}
-              password: ${{ secrets.DOCKER_HUB_PASS }}
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
 
         - name: Log in to the Container registry
           uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
           if: github.ref == 'refs/heads/main'
           with:
-              registry: ${{ env.GITHUB_REGISTRY }}
-              username: ${{ github.actor }}
-              password: ${{ secrets.GITHUB_TOKEN }}
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build Backend Container Image
+        - name: Build and Push
+          uses: docker/build-push-action@v4
+          with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:\${{ github.sha }}-untested,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:\${{ github.sha }}-untested
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
+         
+
+    backend_ci:
+      name: Lint, Test and Build Backend
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+              node-version: 18.x
+
+        - name: Install Dependencies
+          working-directory: backend
+          run: |
+              npm ci
+
+        - name: Lint
+          working-directory: backend
+          run: |
+              npm run lint -- --max-warnings 0 --no-fix
+
+        - name: Test
+          working-directory: backend
+          run: |
+              npm run test
+
+        - name: Build
+          working-directory: backend
+          run: |
+              npm run build
+
+    backend_container:
+      name: Build and Deploy Backend Container
+      needs: backend_ci
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        if: github.ref == 'refs/heads/main'
+        with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        if: github.ref == 'refs/heads/main'
+        with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Backend Container Image
+        uses: docker/build-push-action@v4
+        with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:\${{ github.sha }}-untested,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:\${{ github.sha }}-untested
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
+          
+    e2e_ci:
+      name: Lint E2E
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
+
+        - name: Lint
+          working-directory: e2e
+          run: |
+            npm run lint -- --max-warnings 0 --no-fix
+
+    e2e_test:
+      name: Run E2E Tests
+      needs: [e2e_ci,frontend_container,backend_container]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+        
+        - name: Build Frontend E2E Image
+          uses: docker/build-push-action@v4
+          with:
+              context: frontend
+              platforms: linux/amd64
+              load: true
+              tags: ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:latest
+              cache-from: type=gha
+              cache-to: type=gha,mode=max
+
+        - name: Build Backend E2E Image
           uses: docker/build-push-action@v4
           with:
               context: backend
-              platforms: linux/amd64,linux/arm64
-              push: ${{ github.ref == 'refs/heads/main' }}
-              tags:
-                ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
+              platforms: linux/amd64
+              load: true
+              tags: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
               cache-from: type=gha
               cache-to: type=gha,mode=max
-              outputs: type=oci,dest=/tmp/oeffis-backend.tar
 
-        - name: Upload artifact
-          uses: actions/upload-artifact@v3
-          with:
-            name: oeffis-backend
-            path: /tmp/oeffis-backend.tar
-          
-        - name: Load image
+        - name: Install Dependencies
+          working-directory: e2e
           run: |
-            docker load --input /tmp/oeffis-backend.tar
-            docker image ls -a
+            npm ci
+
+        - name: Launch Containers
+          run: |
+            docker run -d -p 3000:3000 --name backend ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
+            docker run -d -p 80:80 --name frontend ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
+
+        - name: Run Tests
+          working-directory: e2e
+          run: |
+            npm run cypress:run
+
+        - name: Stop Containers
+          run: |
+            docker stop frontend
+            docker stop backend
