@@ -19,6 +19,8 @@ env:
 
 jobs:
     clear_catches:
+      permissions: 
+        actions: write
       runs-on: ubuntu-latest
       steps:
         - name: Clear caches
