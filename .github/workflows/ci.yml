@@ -18,220 +18,212 @@ env:
   BACKEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/backend
 
 jobs:
-    clear_catches:
-      permissions: 
-        actions: write
+    frontend_ci:
+      name: Lint, Test and Build Frontend
       runs-on: ubuntu-latest
       steps:
-        - name: Clear caches
-          uses: easimon/wipe-cache@main
+        - name: Checkout
+          uses: actions/checkout@v3
 
-    # frontend_ci:
-    #   name: Lint, Test and Build Frontend
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
 
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #         node-version: 18.x
+        - name: Install Dependencies
+          working-directory: frontend
+          run: |
+            npm ci
 
-    #     - name: Install Dependencies
-    #       working-directory: frontend
-    #       run: |
-    #         npm ci
+        - name: Lint
+          working-directory: frontend
+          run: |
+            npm run lint -- --max-warnings 0 --no-fix
 
-    #     - name: Lint
-    #       working-directory: frontend
-    #       run: |
-    #         npm run lint -- --max-warnings 0 --no-fix
+        - name: Test
+          working-directory: frontend
+          run: |
+            npm run test.unit -- run
 
-    #     - name: Test
-    #       working-directory: frontend
-    #       run: |
-    #         npm run test.unit -- run
+        - name: Build
+          working-directory: frontend
+          run: |
+            npm run build
 
-    #     - name: Build
-    #       working-directory: frontend
-    #       run: |
-    #         npm run build
+    frontend_container:
+      name: Build and Push Frontend Container
+      needs: frontend_ci
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
 
-    # frontend_container:
-    #   name: Build and Push Frontend Container
-    #   needs: frontend_ci
-    #   runs-on: ubuntu-latest
-    #   permissions:
-    #     contents: read
-    #     packages: write
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
 
-    #     - name: Set up QEMU
-    #       uses: docker/setup-qemu-action@v2
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
 
-    #     - name: Set up Docker Buildx
-    #       uses: docker/setup-buildx-action@v2
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
 
-    #     - name: Log in to the Container registry
-    #       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-    #       with:
-    #         username: ${{ secrets.DOCKER_HUB_USER }}
-    #         password: ${{ secrets.DOCKER_HUB_PASS }}
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
-    #     - name: Log in to the Container registry
-    #       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-    #       with:
-    #         registry: ${{ env.GITHUB_REGISTRY }}
-    #         username: ${{ github.actor }}
-    #         password: ${{ secrets.GITHUB_TOKEN }}
-
-    #     - name: Build and Push Container
-    #       uses: docker/build-push-action@v4
-    #       with:
-    #         context: frontend
-    #         platforms: linux/amd64,linux/arm64
-    #         push: true
-    #         tags: |
-    #           ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
-    #           ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
-    #         cache-from: type=gha
-    #         cache-to: type=gha,mode=max
+        - name: Build and Push Container
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
          
-    # backend_ci:
-    #   name: Lint, Test and Build Backend
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+    backend_ci:
+      name: Lint, Test and Build Backend
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
 
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #           node-version: 18.x
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+              node-version: 18.x
 
-    #     - name: Install Dependencies
-    #       working-directory: backend
-    #       run: |
-    #           npm ci
+        - name: Install Dependencies
+          working-directory: backend
+          run: |
+              npm ci
 
-    #     - name: Lint
-    #       working-directory: backend
-    #       run: |
-    #           npm run lint -- --max-warnings 0 --no-fix
+        - name: Lint
+          working-directory: backend
+          run: |
+              npm run lint -- --max-warnings 0 --no-fix
 
-    #     - name: Test
-    #       working-directory: backend
-    #       run: |
-    #           npm run test
+        - name: Test
+          working-directory: backend
+          run: |
+              npm run test
 
-    #     - name: Build
-    #       working-directory: backend
-    #       run: |
-    #           npm run build
+        - name: Build
+          working-directory: backend
+          run: |
+              npm run build
 
-    # backend_container:
-    #   name: Build and Push Backend Container
-    #   needs: backend_ci
-    #   runs-on: ubuntu-latest
-    #   permissions:
-    #     contents: read
-    #     packages: write
-    #   steps:
-    #   - name: Checkout
-    #     uses: actions/checkout@v3
+    backend_container:
+      name: Build and Push Backend Container
+      needs: backend_ci
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    #   - name: Set up QEMU
-    #     uses: docker/setup-qemu-action@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
-    #   - name: Set up Docker Buildx
-    #     uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    #   - name: Log in to the Container registry
-    #     uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-    #     with:
-    #         username: ${{ secrets.DOCKER_HUB_USER }}
-    #         password: ${{ secrets.DOCKER_HUB_PASS }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
 
-    #   - name: Log in to the Container registry
-    #     uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-    #     with:
-    #         registry: ${{ env.GITHUB_REGISTRY }}
-    #         username: ${{ github.actor }}
-    #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
-    #   - name: Build and Push Container
-    #     uses: docker/build-push-action@v4
-    #     with:
-    #         context: backend
-    #         platforms: linux/amd64,linux/arm64
-    #         push: true
-    #         tags: |
-    #           ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
-    #           ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
-    #         cache-from: type=gha
-    #         cache-to: type=gha,mode=max
+      - name: Build and Push Container
+        uses: docker/build-push-action@v4
+        with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
 
-    # e2e_ci:
-    #   name: Lint E2E
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+    e2e_ci:
+      name: Lint E2E
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
 
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #         node-version: 18.x
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
 
-    #     - name: Install Dependencies
-    #       working-directory: e2e
-    #       run: |
-    #         npm ci
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
 
-    #     - name: Lint
-    #       working-directory: e2e
-    #       run: |
-    #         npm run lint -- --max-warnings 0 --no-fix
+        - name: Lint
+          working-directory: e2e
+          run: |
+            npm run lint -- --max-warnings 0 --no-fix
 
-    # e2e_test:
-    #   name: Run E2E Tests
-    #   needs: [e2e_ci,frontend_container,backend_container]
-    #   runs-on: ubuntu-latest
-    #   services:
-    #     backend:
-    #       image: oeffis/backend:${{ github.sha }}-untested
-    #       ports:
-    #         - 8000:80
-    #       options: --network oeffis-net
-    #     frontend:
-    #       image: oeffis/frontend:${{ github.sha }}-untested
-    #       ports:
-    #         - 3000:3000
-    #       options: --network oeffis-net
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+    e2e_test:
+      name: Run E2E Tests
+      needs: [e2e_ci,frontend_container,backend_container]
+      runs-on: ubuntu-latest
+      services:
+        backend:
+          image: oeffis/backend:${{ github.sha }}-untested
+          ports:
+            - 8000:80
+          options: --network oeffis-net
+        frontend:
+          image: oeffis/frontend:${{ github.sha }}-untested
+          ports:
+            - 3000:3000
+          options: --network oeffis-net
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
 
-    #     - name: Install Node.js
-    #       uses: actions/setup-node@v3
-    #       with:
-    #         node-version: 18.x
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
 
-    #     - name: Set up QEMU
-    #       uses: docker/setup-qemu-action@v2
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
 
-    #     - name: Set up Docker Buildx
-    #       uses: docker/setup-buildx-action@v2
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
 
-    #     - name: Install Dependencies
-    #       working-directory: e2e
-    #       run: |
-    #         npm ci
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
 
-    #     - name: Run Tests
-    #       working-directory: e2e
-    #       run: |
-    #         npm run cypress:run
+        - name: Run Tests
+          working-directory: e2e
+          run: |
+            npm run cypress:run
