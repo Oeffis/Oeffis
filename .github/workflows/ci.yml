@@ -202,7 +202,7 @@ jobs:
 
     e2e_test:
       name: Run E2E Tests
-      needs: [frontend_container, backend_container]
+      needs: [e2e_ci, frontend_container, backend_container]
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
