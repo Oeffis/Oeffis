@@ -250,8 +250,3 @@ jobs:
                 ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
               cache-from: type=gha
               cache-to: type=gha,mode=max
-
-        - name: Upload image
-          uses: ishworkh/container-image-artifact-upload@v1.0.0
-          with:
-            image: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
