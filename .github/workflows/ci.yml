@@ -88,8 +88,8 @@ jobs:
             context: backend
             platforms: linux/amd64,linux/arm64
             tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:\${{ github.sha }}-untested,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:\${{ github.sha }}-untested
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
             cache-from: type=gha
             cache-to: type=gha,mode=max
          
@@ -165,8 +165,8 @@ jobs:
             platforms: linux/amd64,linux/arm64
             push: true
             tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:\${{ github.sha }}-untested,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:\${{ github.sha }}-untested
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
             cache-from: type=gha
             cache-to: type=gha,mode=max
           
@@ -210,26 +210,6 @@ jobs:
 
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v2
-        
-        - name: Build Frontend E2E Image
-          uses: docker/build-push-action@v4
-          with:
-              context: frontend
-              platforms: linux/amd64
-              load: true
-              tags: ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:latest
-              cache-from: type=gha
-              cache-to: type=gha,mode=max
-
-        - name: Build Backend E2E Image
-          uses: docker/build-push-action@v4
-          with:
-              context: backend
-              platforms: linux/amd64
-              load: true
-              tags: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
-              cache-from: type=gha
-              cache-to: type=gha,mode=max
 
         - name: Install Dependencies
           working-directory: e2e
