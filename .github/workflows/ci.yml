@@ -239,24 +239,25 @@ jobs:
               username: ${{ github.actor }}
               password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build and Push
+        - name: Build Backend Container Image
           uses: docker/build-push-action@v4
           with:
               context: backend
               platforms: linux/amd64,linux/arm64
               push: ${{ github.ref == 'refs/heads/main' }}
-              # tags: |
-              #   ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-              #   ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+              tags:
+                ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
               cache-from: type=gha
               cache-to: type=gha,mode=max
-              outputs: |
-                type=oci,dest=${{github.workspace}}/backend.tar
+              outputs: type=docker,dest=/tmp/oeffis-backend.tar
 
-        - name: List dir
-          run: |
-              ls -lsah .
+        - name: Upload artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: oeffis-backend
+            path: /tmp/oeffis-backend.tar
           
-        - name: Load Image
+        - name: Load image
           run: |
-              docker import ${{github.workspace}}/backend.tar
+            docker load --input /tmp/oeffis-backend.tar
+            docker image ls -a
