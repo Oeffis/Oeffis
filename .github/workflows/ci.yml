@@ -251,13 +251,12 @@ jobs:
               cache-from: type=gha
               cache-to: type=gha,mode=max
               outputs: |
-                type=oci,dest=backend.tar
+                type=oci,dest=${{github.workspace}}/backend.tar
 
         - name: List dir
           run: |
-              ls -lsah backend
+              ls -lsah .
           
         - name: Load Image
-          working-directory: backend
           run: |
-              docker load -i backend.tar
+              docker load -i ${{github.workspace}}/backend.tar
