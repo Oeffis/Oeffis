@@ -83,7 +83,7 @@ jobs:
         - name: Build and Push Container
           uses: docker/build-push-action@v4
           with:
-            context: backend
+            context: frontend
             platforms: linux/amd64,linux/arm64
             push: true
             tags: |
