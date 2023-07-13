@@ -92,6 +92,10 @@ jobs:
               ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
             cache-from: type=gha
             cache-to: type=gha,mode=max
+        - name: Upload image
+          uses: ishworkh/container-image-artifact-upload@v1.0.0
+          with:
+            image: ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest
 
     backend_ci:
       name: Lint, Test and Build Backend
@@ -169,6 +173,11 @@ jobs:
                 cache-from: type=gha
                 cache-to: type=gha,mode=max
 
+          - name: Upload image
+            uses: ishworkh/container-image-artifact-upload@v1.0.0
+            with:
+              image: ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest
+
     e2e_ci:
       name: Lint E2E
       runs-on: ubuntu-latest
@@ -203,15 +212,33 @@ jobs:
           uses: actions/setup-node@v3
           with:
             node-version: 18.x
+        
+        - name: Download frontend image
+          uses: ishworkh/container-image-artifact-download@v1.0.0
+          with:
+            image: ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest
+
+        - name: Download backend image
+          uses: ishworkh/container-image-artifact-download@v1.0.0
+          with:
+            image: ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest
 
         - name: Install Dependencies
           working-directory: e2e
           run: |
             npm ci
 
+        - name: Launch Containers
+          working-directory: e2e
+          run: |
+            docker-compose up -d
+
         - name: Run Tests
           working-directory: e2e
           run: |
             npm run cypress:run
-      
-      
+
+        - name: Stop Containers
+          working-directory: e2e
+          run: |
+            docker-compose down

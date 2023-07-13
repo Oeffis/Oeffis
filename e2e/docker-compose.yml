@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+
+  frontend:
+    image: oeffis/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: oeffis/backend
+    ports:
+      - "3000:3000"
