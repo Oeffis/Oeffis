@@ -215,7 +215,7 @@ jobs:
         - name: Launch Containers
           run: |
             docker run -d -p 3000:3000 --name backend ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
-            docker run -d -p 8000:80 --name frontend ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
+            docker run -d -p 80:8000 --name frontend ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
 
         - name: Run Tests
           working-directory: e2e
