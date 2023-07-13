@@ -214,8 +214,9 @@ jobs:
 
         - name: Launch Containers
           run: |
-            docker run -d -p 3000:3000 --name backend ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
-            docker run -d -p 8000:80 --name frontend ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=bridge
+            docker network create oeffis-net
+            docker run -d -p 3000:3000 --name backend --network=oeffis-net ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested --network=oeffis-net
+            docker run -d -p 8000:80 --name frontend --network=oeffis-net ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:${{ github.sha }}-untested
 
         - name: Run Tests
           working-directory: e2e
