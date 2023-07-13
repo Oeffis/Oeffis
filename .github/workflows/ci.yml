@@ -88,7 +88,7 @@ jobs:
           with:
             context: backend
             platforms: linux/amd64,linux/arm64
-            load: true
+            push: ${{ github.ref == 'refs/heads/main' }}
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
               ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
@@ -164,7 +164,7 @@ jobs:
             with:
                 context: backend
                 platforms: linux/amd64,linux/arm64
-                load: true
+                push: ${{ github.ref == 'refs/heads/main' }}
                 tags: |
                   ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
                   ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
