@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-        "composite": true
-    },
-    "include": [
-        "cypress/**/*.ts",
-        "cypress.config.ts"
-    ]
-}
