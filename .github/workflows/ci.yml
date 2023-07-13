@@ -197,12 +197,10 @@ jobs:
           image: oeffis/backend:${{ github.sha }}-untested
           ports:
             - 8000:80
-          options: --network oeffis-net
         frontend:
           image: oeffis/frontend:${{ github.sha }}-untested
           ports:
             - 3000:3000
-          options: --network oeffis-net
       steps:
         - name: Checkout
           uses: actions/checkout@v3
