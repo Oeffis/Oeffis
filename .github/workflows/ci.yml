@@ -249,7 +249,7 @@ jobs:
                 ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
               cache-from: type=gha
               cache-to: type=gha,mode=max
-              outputs: type=docker,dest=/tmp/oeffis-backend.tar
+              outputs: type=oci,dest=/tmp/oeffis-backend.tar
 
         - name: Upload artifact
           uses: actions/upload-artifact@v3
