@@ -259,4 +259,4 @@ jobs:
           
         - name: Load Image
           run: |
-              docker load -i ${{github.workspace}}/backend.tar
+              docker import -i ${{github.workspace}}/backend.tar
