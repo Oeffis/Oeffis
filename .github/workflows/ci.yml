@@ -10,6 +10,8 @@ on:
 
 env:
   GITHUB_REGISTRY: ghcr.io
+  FRONTEND_SIMPLE_IMAGE_NAME: oeffis/frontend
+  BACKEND_SIMPLE_IMAGE_NAME: oeffis/backend
   FRONTEND_GITHUB_IMAGE_NAME: oeffis/oeffis/frontend
   FRONTEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/frontend
   BACKEND_GITHUB_IMAGE_NAME: oeffis/oeffis/backend
@@ -95,7 +97,7 @@ jobs:
         - name: Upload image
           uses: ishworkh/container-image-artifact-upload@v1.0.0
           with:
-            image: ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest
+            image: ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:latest
 
     backend_ci:
       name: Lint, Test and Build Backend
@@ -176,7 +178,7 @@ jobs:
           - name: Upload image
             uses: ishworkh/container-image-artifact-upload@v1.0.0
             with:
-              image: ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest
+              image: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
 
     e2e_ci:
       name: Lint E2E
@@ -216,12 +218,12 @@ jobs:
         - name: Download frontend image
           uses: ishworkh/container-image-artifact-download@v1.0.0
           with:
-            image: ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest
+            image: ${{ env.FRONTEND_SIMPLE_IMAGE_NAME }}:latest
 
         - name: Download backend image
           uses: ishworkh/container-image-artifact-download@v1.0.0
           with:
-            image: ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest
+            image: ${{ env.BACKEND_SIMPLE_IMAGE_NAME }}:latest
 
         - name: Install Dependencies
           working-directory: e2e
