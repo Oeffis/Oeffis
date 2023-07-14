@@ -229,4 +229,6 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: cypress-report
-            path: e2e/cypress/(videos|screenshots)/**/*
+            path: |
+              e2e/cypress/screenshots
+              e2e/cypress/videos
