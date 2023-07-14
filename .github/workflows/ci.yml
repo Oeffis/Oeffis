@@ -91,8 +91,8 @@ jobs:
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
               ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
-            cache-from: type=gha
-            cache-to: type=gha,mode=max
+            cache-from: type=gha,scope=${{github.ref_name}}-frontend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
          
     backend_ci:
       name: Lint, Test and Build Backend
@@ -167,8 +167,8 @@ jobs:
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
               ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
-            cache-from: type=gha
-            cache-to: type=gha,mode=max
+            cache-from: type=gha,scope=${{github.ref_name}}-backend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
 
     e2e_ci:
       name: Lint E2E
