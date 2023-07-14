@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { beforeEach, expect, it, test, vi } from "vitest";
 import { HAFAS_CLIENT } from "../../symbols";
 import { JourneyStopStationIdDto, JourneyUserLocationDto } from "../dto/journey.location.dto";
 import { PlanJourneyDto } from "../dto/journey.parameters.dto";
@@ -6,7 +7,7 @@ import { JourneyLocation } from "../entities/journey.location.entity";
 import { JourneyVariant } from "../entities/journey.variant.entity";
 import { JourneysService } from "./journeys.service";
 
-describe("JourneysService", () => {
+test("JourneysService", () => {
   let service: JourneysService;
 
   /**
@@ -19,7 +20,7 @@ describe("JourneysService", () => {
         {
           provide: HAFAS_CLIENT,
           useValue: {
-            journeys: jest.fn().mockResolvedValue({
+            journeys: vi.fn().mockResolvedValue({
               journeys: [
                 {
                   type: "journey",
@@ -32,14 +33,14 @@ describe("JourneysService", () => {
               ],
               realtimeDataUpdatedAt: 125
             }),
-            refreshJourney: jest.fn().mockResolvedValue({
+            refreshJourney: vi.fn().mockResolvedValue({
               journey: {
                 type: "journey",
                 id: "12345"
               },
               realtimeDataUpdatedAt: 125
             }),
-            locations: jest.fn().mockResolvedValue([
+            locations: vi.fn().mockResolvedValue([
               {
                 type: "station",
                 name: "Gelsenkirchen Hbf"

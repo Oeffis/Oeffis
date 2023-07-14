@@ -1,8 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { beforeEach, expect, it, test, vi } from "vitest";
 import { JourneysService } from "../service/journeys.service";
 import { JourneysController } from "./journeys.controller";
 
-describe("JourneysController", () => {
+test("JourneysController", () => {
   let controller: JourneysController;
 
   beforeEach(async () => {
@@ -12,9 +13,9 @@ describe("JourneysController", () => {
         {
           provide: JourneysService,
           useValue: {
-            planJourney: jest.fn().mockResolvedValue({}),
-            refreshJourney: jest.fn().mockResolvedValue({}),
-            searchLocations: jest.fn().mockResolvedValue({})
+            planJourney: vi.fn().mockResolvedValue({}),
+            refreshJourney: vi.fn().mockResolvedValue({}),
+            searchLocations: vi.fn().mockResolvedValue({})
           }
         }
       ]
