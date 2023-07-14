@@ -204,11 +204,11 @@ jobs:
         backend:
           image: oeffis/backend:${{ github.sha }}-untested
           ports:
-            - 8000:80
+            - 3000:3000
         frontend:
           image: oeffis/frontend:${{ github.sha }}-untested
           ports:
-            - 3000:3000
+            - 8000:80
       steps:
         - name: Checkout
           uses: actions/checkout@v3
