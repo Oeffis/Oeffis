@@ -1,4 +1,9 @@
+import { vi as viImport } from "vitest";
 import { defineConfig } from "vitest/dist/config";
+
+declare global {
+    const vi: typeof viImport;
+}
 
 export default defineConfig({
     test: {
