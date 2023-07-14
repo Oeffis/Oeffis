@@ -1,5 +1,4 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { beforeEach, expect, it, test } from "vitest";
 import { UsersService } from "./users.service";
 
 test("UserService", () => {
