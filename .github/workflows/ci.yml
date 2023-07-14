@@ -236,3 +236,82 @@ jobs:
             path: |
               e2e/cypress/screenshots
               e2e/cypress/videos
+
+    publish:
+      name: Publish Images
+      needs: [frontend_container,backend_container,e2e_test]
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+          with:
+            platforms: arm64
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+              username: ${{ secrets.DOCKER_HUB_USER }}
+              password: ${{ secrets.DOCKER_HUB_PASS }}
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+              registry: ${{ env.GITHUB_REGISTRY }}
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Release Frontend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }},
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+        
+        - name: Release Backend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+
+        - name: Release Frontend Container (latest)
+          uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest,
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+      
+        - name: Release Backend Container (latest)
+          uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
