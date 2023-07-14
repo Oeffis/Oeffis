@@ -239,7 +239,7 @@ jobs:
 
     publish:
       name: Publish Images
-      needs: [frontend_container,backend_container,e2e_test]
+      needs: [e2e_test]
       runs-on: ubuntu-latest
       permissions:
         contents: read
