@@ -227,7 +227,8 @@ jobs:
             working-directory: e2e
 
         - name: Upload Artifacts
+          if: always()
           uses: actions/upload-artifact@v2
           with:
             name: cypress-report
-            path: e2e/cypress/videos
+            path: e2e/cypress/(videos|screenshots)/**/*
