@@ -222,6 +222,12 @@ jobs:
             npm ci
 
         - name: Run Tests
-          working-directory: e2e
-          run: |
-            npm run cypress:run
+          uses: cypress-io/github-action@v5
+          with:
+            working-directory: e2e
+
+        - name: Upload Artifacts
+          uses: actions/upload-artifact@v2
+          with:
+            name: cypress-report
+            path: e2e/cypress/videos
