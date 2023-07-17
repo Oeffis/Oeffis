@@ -2,7 +2,7 @@
 import { IonButton, IonCard, IonIcon, IonImg, IonLabel } from "@ionic/react";
 import { chevronDownOutline, chevronUpOutline } from "ionicons/icons";
 import "./RouteOptionDetail.css";
-import { IJourney } from "../interfaces/IJourney";
+import { IJourney } from "../interfaces/IJourney.interface";
 import JourneyStepComponent from "./JourneyStepComponent";
 import { useState } from "react";
 

@@ -4,7 +4,7 @@ import JourneysContainer from "../components/JourneysContainer";
 import RouteOptionDetail from "../components/RouteOptionDetail";
 import UserContainer from "../components/UserContainer";
 import "./Home.css";
-import { IJourney } from "../interfaces/IJourney";
+import { IJourney } from "../interfaces/IJourney.interface";
 
 
 const journey : IJourney = {

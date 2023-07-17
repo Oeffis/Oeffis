@@ -1,5 +1,5 @@
 import "./JourneyStepComponent.css";
-import { IJourneyStep } from "../interfaces/IJourneyStep";
+import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 
 export interface stationProps {step: IJourneyStep, first?: boolean, last?: boolean}
 

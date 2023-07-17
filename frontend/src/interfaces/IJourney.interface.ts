@@ -1,4 +1,4 @@
-import { IJourneyStep } from "./IJourneyStep";
+import { IJourneyStep } from "./IJourneyStep.interface";
 
 export interface IJourney {
     travelDuration: number;
