@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 40px;
+    position: relative;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.left {
+    display: flex;
+}
+
+.timeline {
+    width: 4px;
+    height: 100%;
+    background: gray;
+    position: absolute;
+    left: 20%;
+}

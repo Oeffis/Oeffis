@@ -11,6 +11,7 @@ ion-label {
 
 .content-section {
     min-width: 100%;
+    min-height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -21,7 +22,20 @@ ion-label {
     flex-direction: column;
 }
 
-.bottom-section {
+.bottom-section-closed {
     position: relative;
     padding-top: 4px;
+}
+
+.bottom-section-opened {
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+}
+
+IonButton {
+    color: transparent;
 }

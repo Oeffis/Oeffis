@@ -35,7 +35,6 @@ const JourneysContainer: React.FC = () => {
    */
   const searchLocations = async (): Promise<void> => {
     setLocations(await JourneyService.journeysControllerSearchLocation(searchLocationsQuery));
-    console.log(locations);
   };
 
   /**
