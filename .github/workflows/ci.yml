@@ -18,7 +18,7 @@ env:
   BACKEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/backend
 
 jobs:
-    frontend_ci:
+    frontend_lint_test_build:
       name: Lint, Test and Build Frontend
       runs-on: ubuntu-latest
       steps:
@@ -52,7 +52,7 @@ jobs:
 
     frontend_container:
       name: Build and Push Frontend Container
-      needs: frontend_ci
+      needs: frontend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
         contents: read
@@ -96,7 +96,7 @@ jobs:
               type=gha,scope=${{github.base_ref}}-frontend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
          
-    backend_ci:
+    backend_lint_test_build:
       name: Lint, Test and Build Backend
       runs-on: ubuntu-latest
       steps:
@@ -130,7 +130,7 @@ jobs:
 
     backend_container:
       name: Build and Push Backend Container
-      needs: backend_ci
+      needs: backend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
         contents: read
@@ -174,7 +174,7 @@ jobs:
               type=gha,scope=${{github.base_ref}}-backend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
 
-    e2e_ci:
+    e2e_lint:
       name: Lint E2E
       runs-on: ubuntu-latest
       steps:
@@ -198,7 +198,7 @@ jobs:
 
     e2e_test:
       name: Run E2E Tests
-      needs: [e2e_ci,frontend_container,backend_container]
+      needs: [e2e_lint,frontend_container,backend_container]
       runs-on: ubuntu-latest
       services:
         backend:
