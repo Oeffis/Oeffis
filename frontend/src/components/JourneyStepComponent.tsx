@@ -1,5 +1,6 @@
 import "./JourneyStepComponent.css";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
+import { IonLabel } from "@ionic/react";
 
 export interface stationProps {step: IJourneyStep, first?: boolean, last?: boolean}
 
@@ -7,11 +8,21 @@ const JourneyStepComponent: React.FC<stationProps> = (props: stationProps) => (
     <div className="container">
         <div className="left">
             {props.step.arrivalTime}
+            <div className="timeline-container">
+            <div className="circle"/>
+            <div className="line"/>
         </div>
-        <div className="timeline"/>
+        </div>
         <div className="step-info">
-            {props.step.stopName} {props.step.stationName}
-            {props.step.startTime}
+            <IonLabel>
+                {props.step.stopName} "{props.step.stationName}"
+            </IonLabel>
+            <IonLabel>
+                Abfahrt: {props.step.startTime}
+            </IonLabel>
+            <IonLabel>
+                Ankunft: {props.step.arrivalTime}
+            </IonLabel>
         </div>
     </div>
   );

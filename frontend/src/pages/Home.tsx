@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import ExploreContainer from "../components/ExploreContainer";
 import JourneysContainer from "../components/JourneysContainer";
-import RouteOptionDetail from "../components/RouteOptionDetail";
+import JourneyDetail from "../components/JourneyDetail";
 import UserContainer from "../components/UserContainer";
 import "./Home.css";
 import { IJourney } from "../interfaces/IJourney.interface";
@@ -57,7 +57,7 @@ const Home: React.FC = () => (
       <ExploreContainer/>
       <UserContainer/>
       <JourneysContainer/>
-      <RouteOptionDetail journey={journey} />
+      <JourneyDetail journey={journey} />
     </IonContent>
   </IonPage>
 );

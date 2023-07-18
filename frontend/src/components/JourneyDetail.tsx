@@ -1,16 +1,14 @@
  
 import { IonButton, IonCard, IonIcon, IonImg, IonLabel } from "@ionic/react";
 import { chevronDownOutline, chevronUpOutline } from "ionicons/icons";
-import "./RouteOptionDetail.css";
+import "./JourneyDetail.css";
 import { IJourney } from "../interfaces/IJourney.interface";
 import JourneyStepComponent from "./JourneyStepComponent";
 import { useState } from "react";
 
 export interface travelProps {journey: IJourney}
 
-
-
-const RouteOptionDetail: React.FC<travelProps> = (props: travelProps) => {
+const JourneyDetail: React.FC<travelProps> = (props: travelProps) => {
     const [showDetails, setShowDetails] = useState(false);
     
     const openDetails = (): void => {
@@ -18,7 +16,7 @@ const RouteOptionDetail: React.FC<travelProps> = (props: travelProps) => {
         console.log(showDetails);
     };
     return (
-        <div className="RouteOptionDetail">
+        <div className="JourneyDetail">
                 <IonCard className="detail-card">
                     <div className="content-section">
                         <div className="img-container">
@@ -61,5 +59,5 @@ const RouteOptionDetail: React.FC<travelProps> = (props: travelProps) => {
     );
 };
   
-  export default RouteOptionDetail;
+  export default JourneyDetail;
   
