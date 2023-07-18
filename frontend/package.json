@@ -8,8 +8,7 @@
     "dev": "vite --port 8000",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test.e2e": "cypress run",
-    "test.unit": "vitest",
+    "test": "vitest",
     "lint": "eslint --fix ."
   },
   "dependencies": {
@@ -46,7 +45,6 @@
     "@typescript-eslint/parser": "5.47.1",
     "@vitejs/plugin-legacy": "^4.0.4",
     "@vitejs/plugin-react": "^4.0.0",
-    "cypress": "^12.7.0",
     "eslint": "^8.35.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "^7.32.2",

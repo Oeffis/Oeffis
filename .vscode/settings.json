@@ -21,9 +21,10 @@
     },
     "eslint.workingDirectories": [
         "./frontend",
-        "./backend"
+        "./backend",
+        "./e2e"
     ],
     "cSpell.words": [
-      "Hafas"
+        "Hafas"
     ]
 }

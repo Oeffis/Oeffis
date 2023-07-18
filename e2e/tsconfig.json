@@ -1,0 +1,29 @@
+{
+    "include": [
+        "cypress/**/*.ts",
+        "cypress.config.ts",
+        "support.ts",
+        "commands/index.ts",
+        "features/**/*.ts",
+        "stepDefinitions/**/*.ts"
+    ],
+    "compilerOptions": {
+        "target": "ESNext",
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
+        "allowJs": false,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "ESNext",
+        "moduleResolution": "NodeNext",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true
+    }
+}
