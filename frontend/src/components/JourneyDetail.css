@@ -39,3 +39,7 @@ ion-label {
 IonButton {
     color: transparent;
 }
+
+.JourneyDetail {
+    width: 100%;
+}

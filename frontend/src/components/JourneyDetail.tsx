@@ -1,4 +1,3 @@
- 
 import { IonButton, IonCard, IonIcon, IonImg, IonLabel } from "@ionic/react";
 import { chevronDownOutline, chevronUpOutline } from "ionicons/icons";
 import "./JourneyDetail.css";
