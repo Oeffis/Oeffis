@@ -9,6 +9,8 @@ import { JourneysService } from "./journeys.service";
 test("JourneysService", () => {
   let service: JourneysService;
 
+  // TODO Test cases should get specific mocking regarding the expected input(s).
+
   /**
    * Creates the service and mocks the hafas-client needed by the service.
    */
@@ -69,6 +71,84 @@ test("JourneysService", () => {
     const journeyParameters: PlanJourneyDto = {
       from: journeyLocationFrom,
       to: journeyLocationTo
+    };
+
+    // When
+    const plannedVariants: JourneyVariant[] =
+      await service.planJourney(journeyParameters);
+
+    // Then
+    expect(plannedVariants)
+      .toEqual([
+        {
+          journey: {
+            type: "journey",
+            id: "54321"
+          },
+          updatedAt: 125
+        },
+        {
+          journey: {
+            type: "journey",
+            id: "12345"
+          },
+          updatedAt: 125
+        }
+      ]);
+  });
+
+  it("Should return journey variants for specific date.", async () => {
+    // Given
+    const journeyLocationFrom: JourneyStopStationIdDto = {
+      stopStationId: "5912"
+    };
+    const journeyLocationTo: JourneyStopStationIdDto = {
+      stopStationId: "5912"
+    };
+
+    const journeyParameters: PlanJourneyDto = {
+      from: journeyLocationFrom,
+      to: journeyLocationTo,
+      date: new Date(2011, 11, 11, 11, 11, 11)
+    };
+
+    // When
+    const plannedVariants: JourneyVariant[] =
+      await service.planJourney(journeyParameters);
+
+    // Then
+    expect(plannedVariants)
+      .toEqual([
+        {
+          journey: {
+            type: "journey",
+            id: "54321"
+          },
+          updatedAt: 125
+        },
+        {
+          journey: {
+            type: "journey",
+            id: "12345"
+          },
+          updatedAt: 125
+        }
+      ]);
+  });
+
+  it("Should return journey variants with date as arrival.", async () => {
+    // Given
+    const journeyLocationFrom: JourneyStopStationIdDto = {
+      stopStationId: "5912"
+    };
+    const journeyLocationTo: JourneyStopStationIdDto = {
+      stopStationId: "5912"
+    };
+
+    const journeyParameters: PlanJourneyDto = {
+      from: journeyLocationFrom,
+      to: journeyLocationTo,
+      isArrivalDate: true
     };
 
     // When

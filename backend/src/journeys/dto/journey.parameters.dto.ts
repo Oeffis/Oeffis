@@ -27,4 +27,20 @@ export class PlanJourneyDto {
   })
   to!: (JourneyStopStationIdDto | JourneyUserLocationDto);
 
+  @ApiProperty({
+    description: "Date for the journey to take place.",
+    type: Date,
+    required: false,
+    default: "current point of time"
+  })
+  date?: Date;
+
+  @ApiProperty({
+    description: "If the specified date for the journey determines when to arrive at destination.",
+    type: Boolean,
+    required: false,
+    default: false
+  })
+  isArrivalDate?: boolean;
+
 }
