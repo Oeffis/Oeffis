@@ -84,8 +84,8 @@ jobs:
             platforms: linux/amd64
             push: true
             tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64
             cache-from: |
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
@@ -131,8 +131,8 @@ jobs:
             platforms: linux/amd64
             push: true
             tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64
             cache-from: |
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
@@ -204,8 +204,8 @@ jobs:
             platforms: linux/amd64
             push: true
             tags: |
-              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
-              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64
             cache-from: |
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
@@ -250,8 +250,8 @@ jobs:
             platforms: linux/arm64
             push: true
             tags: |
-              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested,
-              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64
             cache-from: |
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
@@ -285,11 +285,11 @@ jobs:
       runs-on: ubuntu-latest
       services:
         backend:
-          image: oeffis/backend:${{ github.sha }}-untested
+          image: oeffis/backend:${{ github.sha }}-untested-amd64
           ports:
             - 3000:3000
         frontend:
-          image: oeffis/frontend:${{ github.sha }}-untested
+          image: oeffis/frontend:${{ github.sha }}-untested-amd64
           ports:
             - 8000:80
       steps:
