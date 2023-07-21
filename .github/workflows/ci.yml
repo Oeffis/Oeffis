@@ -51,7 +51,7 @@ jobs:
             npm run build
 
     frontend_container:
-      name: Build and Push Frontend Container (amd64)
+      name: Build amd64 Frontend Container
       needs: frontend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
@@ -77,7 +77,7 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build and Push Container
+        - name: Build Container
           uses: docker/build-push-action@v4
           with:
             context: frontend
@@ -93,7 +93,7 @@ jobs:
           
 
     frontend_container_arm64:
-      name: Build and Push Frontend Container (arm64)
+      name: Build arm64 Frontend Container
       needs: frontend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
@@ -124,7 +124,7 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build and Push Container
+        - name: Build Container
           uses: docker/build-push-action@v4
           with:
             context: frontend
@@ -171,7 +171,7 @@ jobs:
               npm run build
 
     backend_container:
-      name: Build and Push Backend Container (amd64)
+      name: Build amd64 Backend Container
       needs: backend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
@@ -197,7 +197,7 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Container
+      - name: Build Container
         uses: docker/build-push-action@v4
         with:
             context: backend
@@ -212,7 +212,7 @@ jobs:
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
 
     backend_container_arm64:
-      name: Build and Push Backend Container (arm64)
+      name: Build arm64 Backend Container
       needs: backend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
@@ -243,7 +243,7 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Container
+      - name: Build Container
         uses: docker/build-push-action@v4
         with:
             context: backend
