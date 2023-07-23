@@ -8,7 +8,9 @@
     "dev": "vite --port 8000",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest",
+    "test.e2e": "cypress run",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint --fix ."
   },
   "dependencies": {
@@ -38,6 +40,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/hafas-client": "^6.0.0",
+    "@types/jest": "^29.5.3",
     "@types/leaflet": "^1.9.3",
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.0.10",
