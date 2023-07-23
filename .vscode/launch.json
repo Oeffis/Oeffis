@@ -5,20 +5,15 @@
             "type": "node",
             "request": "launch",
             "name": "Backend",
-            "args": [
-                "${workspaceFolder}/backend/src/main.ts"
-            ],
-            "runtimeArgs": [
-                "--nolazy",
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}/backend",
             "console": "integratedTerminal",
-            "protocol": "inspector"
+            "protocol": "inspector",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "start:dev"
+            ]
         },
         {
             "type": "chrome",
@@ -32,23 +27,20 @@
         {
             "type": "node",
             "request": "launch",
+            "runtimeExecutable": "npm",
             "name": "Backend Tests",
+            "autoAttachChildProcesses": true,
+            "cwd": "${workspaceFolder}/backend",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
             "args": [
-                "node_modules/.bin/jest",
-                "--watch",
-                "--runInBand",
+                "run-script",
+                "test"
             ],
-            "runtimeArgs": [
-                "--nolazy",
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
-            "sourceMaps": true,
-            "cwd": "${workspaceRoot}/backend",
-            "console": "integratedTerminal",
-            "protocol": "inspector",
+            "smartStep": true,
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -63,7 +55,7 @@
             ],
             "args": [
                 "run-script",
-                "test.unit"
+                "test"
             ],
             "smartStep": true,
             "console": "integratedTerminal"
