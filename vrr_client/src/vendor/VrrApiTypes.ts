@@ -1,444 +1,945 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Convert = exports.RealtimeTripStatus = exports.TurnDirection = exports.Manoeuvre = exports.GuidanceSignType = exports.Position = exports.FootPathElemType = exports.Level = exports.TravellerClass = exports.TimeValidity = exports.Person = exports.IsShortHaul = exports.CommType = exports.SystemMessageType = exports.Module = exports.Status = exports.SpecialFares = exports.LineDisplay = exports.LocationType = exports.RealtimeCallStatus = exports.ParkingTaxType = exports.GeometryObjectType = exports.Accessibility = exports.ParkingSpaceTypeType = exports.Occupancy = exports.CoordInfoDetailsType = exports.VehType = exports.MotorcycleClass = exports.Gearshift = exports.EXT = exports.Engine = exports.EbikeClass = exports.CarClass = exports.BikeFuncClass = exports.DataSource = void 0;
-var DataSource;
-(function (DataSource) {
-    DataSource["Profile"] = "PROFILE";
-    DataSource["Realtime"] = "REALTIME";
-    DataSource["Unknown"] = "UNKNOWN";
-})(DataSource || (exports.DataSource = DataSource = {}));
-var BikeFuncClass;
-(function (BikeFuncClass) {
-    BikeFuncClass["Bmx"] = "BMX";
-    BikeFuncClass["Cross"] = "CROSS";
-    BikeFuncClass["Cruiser"] = "CRUISER";
-    BikeFuncClass["Freight"] = "FREIGHT";
-    BikeFuncClass["Hybrid"] = "HYBRID";
-    BikeFuncClass["Motorized"] = "MOTORIZED";
-    BikeFuncClass["Mountain"] = "MOUNTAIN";
-    BikeFuncClass["Racing"] = "RACING";
-    BikeFuncClass["Road"] = "ROAD";
-    BikeFuncClass["Touring"] = "TOURING";
-    BikeFuncClass["Undefined"] = "UNDEFINED";
-    BikeFuncClass["Utility"] = "UTILITY";
-})(BikeFuncClass || (exports.BikeFuncClass = BikeFuncClass = {}));
-var CarClass;
-(function (CarClass) {
-    CarClass["Citycar"] = "CITYCAR";
-    CarClass["Executivecar"] = "EXECUTIVECAR";
-    CarClass["Largefamilycar"] = "LARGEFAMILYCAR";
-    CarClass["Luxurycar"] = "LUXURYCAR";
-    CarClass["Multipurposecars"] = "MULTIPURPOSECARS";
-    CarClass["Smallfamilycar"] = "SMALLFAMILYCAR";
-    CarClass["Sportcoupes"] = "SPORTCOUPES";
-    CarClass["Sportutility"] = "SPORTUTILITY";
-    CarClass["Supermini"] = "SUPERMINI";
-    CarClass["Undefined"] = "UNDEFINED";
-})(CarClass || (exports.CarClass = CarClass = {}));
-var EbikeClass;
-(function (EbikeClass) {
-    EbikeClass["Pedelec"] = "PEDELEC";
-    EbikeClass["PedelecS"] = "PEDELEC_S";
-    EbikeClass["PowerOnDemandOnly"] = "POWER_ON_DEMAND_ONLY";
-    EbikeClass["PowerOnDemandPedalAssist"] = "POWER_ON_DEMAND_PEDAL_ASSIST";
-    EbikeClass["Undefined"] = "UNDEFINED";
-})(EbikeClass || (exports.EbikeClass = EbikeClass = {}));
-var Engine;
-(function (Engine) {
-    Engine["Combustion"] = "COMBUSTION";
-    Engine["Electric"] = "ELECTRIC";
-    Engine["Hybrid"] = "HYBRID";
-    Engine["Undefined"] = "UNDEFINED";
-})(Engine || (exports.Engine = Engine = {}));
-var EXT;
-(function (EXT) {
-    EXT["Bad"] = "BAD";
-    EXT["Good"] = "GOOD";
-    EXT["Neutral"] = "NEUTRAL";
-    EXT["Unacceptable"] = "UNACCEPTABLE";
-    EXT["Undefined"] = "UNDEFINED";
-    EXT["Verybad"] = "VERYBAD";
-    EXT["Verygood"] = "VERYGOOD";
-})(EXT || (exports.EXT = EXT = {}));
-var Gearshift;
-(function (Gearshift) {
-    Gearshift["Automatic"] = "AUTOMATIC";
-    Gearshift["Manual"] = "MANUAL";
-    Gearshift["SemiManual"] = "SEMI_MANUAL";
-    Gearshift["Undefined"] = "UNDEFINED";
-})(Gearshift || (exports.Gearshift = Gearshift = {}));
-var MotorcycleClass;
-(function (MotorcycleClass) {
-    MotorcycleClass["CabinFullyenclosed"] = "CABIN_FULLYENCLOSED";
-    MotorcycleClass["CabinSemienclosed"] = "CABIN_SEMIENCLOSED";
-    MotorcycleClass["Cruiser"] = "CRUISER";
-    MotorcycleClass["Dualsport"] = "DUALSPORT";
-    MotorcycleClass["Moped"] = "MOPED";
-    MotorcycleClass["OffroadEnduro"] = "OFFROAD_ENDURO";
-    MotorcycleClass["OffroadMotocross"] = "OFFROAD_MOTOCROSS";
-    MotorcycleClass["OffroadRallyraid"] = "OFFROAD_RALLYRAID";
-    MotorcycleClass["OffroadTrackracing"] = "OFFROAD_TRACKRACING";
-    MotorcycleClass["OffroadTrail"] = "OFFROAD_TRAIL";
-    MotorcycleClass["Scooter"] = "SCOOTER";
-    MotorcycleClass["Sportbike"] = "SPORTBIKE";
-    MotorcycleClass["Sporttouring"] = "SPORTTOURING";
-    MotorcycleClass["Standard"] = "STANDARD";
-    MotorcycleClass["Touring"] = "TOURING";
-    MotorcycleClass["Tricycle"] = "TRICYCLE";
-    MotorcycleClass["Undefined"] = "UNDEFINED";
-    MotorcycleClass["Underbone"] = "UNDERBONE";
-})(MotorcycleClass || (exports.MotorcycleClass = MotorcycleClass = {}));
-var VehType;
-(function (VehType) {
-    VehType["Bike"] = "BIKE";
-    VehType["Car"] = "CAR";
-    VehType["Motorcycle"] = "MOTORCYCLE";
-    VehType["Undefined"] = "UNDEFINED";
-})(VehType || (exports.VehType = VehType = {}));
-var CoordInfoDetailsType;
-(function (CoordInfoDetailsType) {
-    CoordInfoDetailsType["Freefloater"] = "FREEFLOATER";
-    CoordInfoDetailsType["Parking"] = "PARKING";
-    CoordInfoDetailsType["Station"] = "STATION";
-    CoordInfoDetailsType["Unknown"] = "UNKNOWN";
-})(CoordInfoDetailsType || (exports.CoordInfoDetailsType = CoordInfoDetailsType = {}));
-var Occupancy;
-(function (Occupancy) {
-    Occupancy["CrushedStanding"] = "CRUSHED_STANDING";
-    Occupancy["Empty"] = "EMPTY";
-    Occupancy["FewSeats"] = "FEW_SEATS";
-    Occupancy["Full"] = "FULL";
-    Occupancy["ManySeats"] = "MANY_SEATS";
-    Occupancy["NotAcceptingPassengers"] = "NOT_ACCEPTING_PASSENGERS";
-    Occupancy["StandingOnly"] = "STANDING_ONLY";
-    Occupancy["Unknown"] = "UNKNOWN";
-})(Occupancy || (exports.Occupancy = Occupancy = {}));
-var ParkingSpaceTypeType;
-(function (ParkingSpaceTypeType) {
-    ParkingSpaceTypeType["Bicycle"] = "BICYCLE";
-    ParkingSpaceTypeType["BicycleBox"] = "BICYCLE_BOX";
-    ParkingSpaceTypeType["BicycleChargingStation"] = "BICYCLE_CHARGING_STATION";
-    ParkingSpaceTypeType["BicycleShelter"] = "BICYCLE_SHELTER";
-    ParkingSpaceTypeType["Bus"] = "BUS";
-    ParkingSpaceTypeType["CampingVan"] = "CAMPING_VAN";
-    ParkingSpaceTypeType["Car"] = "CAR";
-    ParkingSpaceTypeType["CarChargingStation"] = "CAR_CHARGING_STATION";
-    ParkingSpaceTypeType["CarFamily"] = "CAR_FAMILY";
-    ParkingSpaceTypeType["CarFemale"] = "CAR_FEMALE";
-    ParkingSpaceTypeType["CarHandicapped"] = "CAR_HANDICAPPED";
-    ParkingSpaceTypeType["Motorcycle"] = "MOTORCYCLE";
-    ParkingSpaceTypeType["Truck"] = "TRUCK";
-    ParkingSpaceTypeType["Unknown"] = "UNKNOWN";
-})(ParkingSpaceTypeType || (exports.ParkingSpaceTypeType = ParkingSpaceTypeType = {}));
-var Accessibility;
-(function (Accessibility) {
-    Accessibility["AccessibilityPublicAccess"] = "ACCESSIBILITY_PUBLIC_ACCESS";
-    Accessibility["AccessibilityRestrictedAccess"] = "ACCESSIBILITY_RESTRICTED_ACCESS";
-    Accessibility["AccessibilityUndefined"] = "ACCESSIBILITY_UNDEFINED";
-})(Accessibility || (exports.Accessibility = Accessibility = {}));
-var GeometryObjectType;
-(function (GeometryObjectType) {
-    GeometryObjectType["GeometryCollection"] = "GeometryCollection";
-    GeometryObjectType["LineString"] = "LineString";
-    GeometryObjectType["MultiLineString"] = "MultiLineString";
-    GeometryObjectType["MultiPoint"] = "MultiPoint";
-    GeometryObjectType["MultiPolygon"] = "MultiPolygon";
-    GeometryObjectType["Point"] = "Point";
-    GeometryObjectType["Polygon"] = "Polygon";
-})(GeometryObjectType || (exports.GeometryObjectType = GeometryObjectType = {}));
-var ParkingTaxType;
-(function (ParkingTaxType) {
-    ParkingTaxType["Day"] = "DAY";
-    ParkingTaxType["Hour"] = "HOUR";
-    ParkingTaxType["Month"] = "MONTH";
-    ParkingTaxType["Unknown"] = "UNKNOWN";
-})(ParkingTaxType || (exports.ParkingTaxType = ParkingTaxType = {}));
-var RealtimeCallStatus;
-(function (RealtimeCallStatus) {
-    RealtimeCallStatus["AreaChanged"] = "AREA_CHANGED";
-    RealtimeCallStatus["ArrivalCancelled"] = "ARRIVAL_CANCELLED";
-    RealtimeCallStatus["DepartureCancelled"] = "DEPARTURE_CANCELLED";
-    RealtimeCallStatus["DeviationFromLine"] = "DEVIATION_FROM_LINE";
-    RealtimeCallStatus["ExtraStop"] = "EXTRA_STOP";
-    RealtimeCallStatus["ExtraTrip"] = "EXTRA_TRIP";
-    RealtimeCallStatus["NoCallAtStop"] = "NO_CALL_AT_STOP";
-    RealtimeCallStatus["ScheduledTimeChanged"] = "SCHEDULED_TIME_CHANGED";
-    RealtimeCallStatus["TripCancelled"] = "TRIP_CANCELLED";
-})(RealtimeCallStatus || (exports.RealtimeCallStatus = RealtimeCallStatus = {}));
-var LocationType;
-(function (LocationType) {
-    LocationType["Address"] = "address";
-    LocationType["Crossing"] = "crossing";
-    LocationType["GIS"] = "gis";
-    LocationType["Locality"] = "locality";
-    LocationType["Parking"] = "parking";
-    LocationType["Platform"] = "platform";
-    LocationType["Poi"] = "poi";
-    LocationType["PoiHierarchy"] = "poiHierarchy";
-    LocationType["Sharing"] = "sharing";
-    LocationType["Stop"] = "stop";
-    LocationType["Street"] = "street";
-    LocationType["Suburb"] = "suburb";
-    LocationType["Unknown"] = "unknown";
-})(LocationType || (exports.LocationType = LocationType = {}));
-var LineDisplay;
-(function (LineDisplay) {
-    LineDisplay["Line"] = "LINE";
-    LineDisplay["Train"] = "TRAIN";
-    LineDisplay["Unknown"] = "UNKNOWN";
-})(LineDisplay || (exports.LineDisplay = LineDisplay = {}));
-var SpecialFares;
-(function (SpecialFares) {
-    SpecialFares["IceRoute"] = "ICE_ROUTE";
-    SpecialFares["RouteInTransportAuthorityArea"] = "ROUTE_IN_TRANSPORT_AUTHORITY_AREA";
-    SpecialFares["RouteInTransportAuthorityAreaNoFareCalculation"] = "ROUTE_IN_TRANSPORT_AUTHORITY_AREA_NO_FARE_CALCULATION";
-    SpecialFares["RouteOutsideOfTransportAuthorityArea"] = "ROUTE_OUTSIDE_OF_TRANSPORT_AUTHORITY_AREA";
-    SpecialFares["RouteWithSupplement"] = "ROUTE_WITH_SUPPLEMENT";
-    SpecialFares["RouteWithSupplementNoFareCalculation"] = "ROUTE_WITH_SUPPLEMENT_NO_FARE_CALCULATION";
-    SpecialFares["Unknown"] = "UNKNOWN";
-})(SpecialFares || (exports.SpecialFares = SpecialFares = {}));
-var Status;
-(function (Status) {
-    Status["AdditionalStop"] = "ADDITIONAL_STOP";
-    Status["Blocked"] = "BLOCKED";
-    Status["Delayed"] = "DELAYED";
-})(Status || (exports.Status = Status = {}));
-var Module;
-(function (Module) {
-    Module["Ahf"] = "AHF";
-    Module["Broker"] = "BROKER";
-    Module["Dispatcher"] = "DISPATCHER";
-    Module["Efapsched"] = "EFAPSCHED";
-    Module["ItKernel"] = "IT_KERNEL";
-    Module["ItpMonomodal"] = "itp-monomodal";
-    Module["MapKernel"] = "MAP_KERNEL";
-    Module["PDA"] = "PDA";
-    Module["Pprof"] = "PPROF";
-    Module["PtKernel"] = "PT_KERNEL";
-    Module["Rop"] = "ROP";
-    Module["Stt"] = "STT";
-    Module["Ttb"] = "TTB";
-    Module["Unknown"] = "UNKNOWN";
-})(Module || (exports.Module = Module = {}));
-var SystemMessageType;
-(function (SystemMessageType) {
-    SystemMessageType["Error"] = "error";
-    SystemMessageType["Message"] = "message";
-    SystemMessageType["Warning"] = "warning";
-})(SystemMessageType || (exports.SystemMessageType = SystemMessageType = {}));
-var CommType;
-(function (CommType) {
-    CommType["Fax"] = "FAX";
-    CommType["HTTP"] = "HTTP";
-    CommType["ISDN"] = "ISDN";
-    CommType["JSON"] = "JSON";
-    CommType["Tcpip"] = "TCPIP";
-    CommType["Unknown"] = "UNKNOWN";
-})(CommType || (exports.CommType = CommType = {}));
-var IsShortHaul;
-(function (IsShortHaul) {
-    IsShortHaul["No"] = "NO";
-    IsShortHaul["Unknown"] = "UNKNOWN";
-    IsShortHaul["Yes"] = "YES";
-})(IsShortHaul || (exports.IsShortHaul = IsShortHaul = {}));
-var Person;
-(function (Person) {
-    Person["Adult"] = "ADULT";
-    Person["Apprentice"] = "APPRENTICE";
-    Person["Child"] = "CHILD";
-    Person["Family"] = "FAMILY";
-    Person["Kindergarten"] = "KINDERGARTEN";
-    Person["Multiadults"] = "MULTIADULTS";
-    Person["Multichilds"] = "MULTICHILDS";
-    Person["Multipersons"] = "MULTIPERSONS";
-    Person["Other"] = "OTHER";
-    Person["Reduced"] = "REDUCED";
-    Person["Scholar"] = "SCHOLAR";
-    Person["Senior"] = "SENIOR";
-    Person["Student"] = "STUDENT";
-})(Person || (exports.Person = Person = {}));
-var TimeValidity;
-(function (TimeValidity) {
-    TimeValidity["Day"] = "DAY";
-    TimeValidity["Halfyear"] = "HALFYEAR";
-    TimeValidity["Month"] = "MONTH";
-    TimeValidity["Multiple"] = "MULTIPLE";
-    TimeValidity["OtherValiditytime"] = "OTHER_VALIDITYTIME";
-    TimeValidity["Single"] = "SINGLE";
-    TimeValidity["Week"] = "WEEK";
-    TimeValidity["Year"] = "YEAR";
-})(TimeValidity || (exports.TimeValidity = TimeValidity = {}));
-var TravellerClass;
-(function (TravellerClass) {
-    TravellerClass["Business"] = "BUSINESS";
-    TravellerClass["Economy"] = "ECONOMY";
-    TravellerClass["First"] = "FIRST";
-    TravellerClass["Other"] = "OTHER";
-    TravellerClass["Second"] = "SECOND";
-})(TravellerClass || (exports.TravellerClass = TravellerClass = {}));
-var Level;
-(function (Level) {
-    Level["Down"] = "DOWN";
-    Level["Level"] = "LEVEL";
-    Level["Up"] = "UP";
-})(Level || (Level = {}));
-var FootPathElemType;
-(function (FootPathElemType) {
-    FootPathElemType["Dangerous"] = "DANGEROUS";
-    FootPathElemType["Elevator"] = "ELEVATOR";
-    FootPathElemType["Escalator"] = "ESCALATOR";
-    FootPathElemType["Illuminated"] = "ILLUMINATED";
-    FootPathElemType["Level"] = "LEVEL";
-    FootPathElemType["Ramp"] = "RAMP";
-    FootPathElemType["Stairs"] = "STAIRS";
-})(FootPathElemType || (exports.FootPathElemType = FootPathElemType = {}));
-var Position;
-(function (Position) {
-    Position["After"] = "AFTER";
-    Position["Before"] = "BEFORE";
-    Position["Idest"] = "IDEST";
-    Position["Unknown"] = "unknown";
-})(Position || (exports.Position = Position = {}));
-var GuidanceSignType;
-(function (GuidanceSignType) {
-    GuidanceSignType["Direction"] = "DIRECTION";
-    GuidanceSignType["ExitNumber"] = "EXIT_NUMBER";
-    GuidanceSignType["RouteID"] = "ROUTE_ID";
-    GuidanceSignType["UnknownSignType"] = "UNKNOWN_SIGN_TYPE";
-})(GuidanceSignType || (exports.GuidanceSignType = GuidanceSignType = {}));
-var Manoeuvre;
-(function (Manoeuvre) {
-    Manoeuvre["Continue"] = "CONTINUE";
-    Manoeuvre["Destination"] = "DESTINATION";
-    Manoeuvre["Enter"] = "ENTER";
-    Manoeuvre["EnterBuiltuparea"] = "ENTER_BUILTUPAREA";
-    Manoeuvre["EnterRoundabout"] = "ENTER_ROUNDABOUT";
-    Manoeuvre["EnterToll"] = "ENTER_TOLL";
-    Manoeuvre["Keep"] = "KEEP";
-    Manoeuvre["Leave"] = "LEAVE";
-    Manoeuvre["LeaveBuiltuparea"] = "LEAVE_BUILTUPAREA";
-    Manoeuvre["LeaveRoundabout"] = "LEAVE_ROUNDABOUT";
-    Manoeuvre["LeaveToll"] = "LEAVE_TOLL";
-    Manoeuvre["OffRamp"] = "OFF_RAMP";
-    Manoeuvre["OnRamp"] = "ON_RAMP";
-    Manoeuvre["Origin"] = "ORIGIN";
-    Manoeuvre["Ramp"] = "RAMP";
-    Manoeuvre["StayRoundabout"] = "STAY_ROUNDABOUT";
-    Manoeuvre["TraverseCrossing"] = "TRAVERSE_CROSSING";
-    Manoeuvre["Turn"] = "TURN";
-    Manoeuvre["UTurn"] = "U_TURN";
-    Manoeuvre["Unknown"] = "UNKNOWN";
-})(Manoeuvre || (exports.Manoeuvre = Manoeuvre = {}));
-var TurnDirection;
-(function (TurnDirection) {
-    TurnDirection["Left"] = "LEFT";
-    TurnDirection["Right"] = "RIGHT";
-    TurnDirection["SharpLeft"] = "SHARP_LEFT";
-    TurnDirection["SharpRight"] = "SHARP_RIGHT";
-    TurnDirection["SlightLeft"] = "SLIGHT_LEFT";
-    TurnDirection["SlightRight"] = "SLIGHT_RIGHT";
-    TurnDirection["Straight"] = "STRAIGHT";
-    TurnDirection["UTurn"] = "U_TURN";
-    TurnDirection["Unknown"] = "UNKNOWN";
-})(TurnDirection || (exports.TurnDirection = TurnDirection = {}));
-var RealtimeTripStatus;
-(function (RealtimeTripStatus) {
-    RealtimeTripStatus["Deviation"] = "DEVIATION";
-    RealtimeTripStatus["ExtraStops"] = "EXTRA_STOPS";
-    RealtimeTripStatus["ExtraTrip"] = "EXTRA_TRIP";
-    RealtimeTripStatus["Monitored"] = "MONITORED";
-    RealtimeTripStatus["OutsideRealtimeWindow"] = "OUTSIDE_REALTIME_WINDOW";
-    RealtimeTripStatus["PrognosisImpossible"] = "PROGNOSIS_IMPOSSIBLE";
-    RealtimeTripStatus["RealtimeOnlyInformative"] = "REALTIME_ONLY_INFORMATIVE";
-    RealtimeTripStatus["TripCancelled"] = "TRIP_CANCELLED";
-})(RealtimeTripStatus || (exports.RealtimeTripStatus = RealtimeTripStatus = {}));
-class Convert {
-    static toLOCATIONSUGGESTSchema(json) {
+// To parse this data:
+//
+//   import { Convert, LOCATIONSUGGESTSchema, TICKETPRODUCTSchema } from "./file";
+//
+//   const lOCATIONSUGGESTSchema = Convert.toLOCATIONSUGGESTSchema(json);
+//   const tICKETPRODUCTSchema = Convert.toTICKETPRODUCTSchema(json);
+//
+// These functions will throw an error if the JSON doesn't
+// match the expected interface, even if the JSON is valid.
+
+/**
+ * stopFinder
+ */
+export interface LOCATIONSUGGESTSchema {
+    error?: Error;
+    /**
+     * points
+     */
+    locations?:      Location[];
+    properties?:     any;
+    serverInfo?:     ServerInfo;
+    systemMessages?: SystemMessage[];
+    version:         string;
+}
+
+export interface Error {
+    message?:  string;
+    versions?: Versions;
+    [property: string]: any;
+}
+
+export interface Versions {
+    controller?:   string;
+    interfaceMax?: string;
+    interfaceMin?: string;
+    [property: string]: any;
+}
+
+export interface JourneyLocation {
+    assignedStops?:              AssignedLocation[];
+    buildingNumber?:             string;
+    coord?:                      Array<any[] | CoordClass | number>;
+    disassembledName?:           string;
+    id?:                         string;
+    infos?:                      Info[];
+    isBest?:                     boolean;
+    isGlobalId?:                 boolean;
+    matchQuality?:               number;
+    name?:                       string;
+    niveau?:                     number;
+    parent?:                     Location;
+    productClasses?:             number[];
+    properties?:                 LocationProperties;
+    streetName?:                 string;
+    type?:                       LocationType;
+    arrivalTimeBaseTimetable?:   string;
+    arrivalTimeEstimated?:       string;
+    arrivalTimePlanned?:         string;
+    departureTimeBaseTimetable?: string;
+    departureTimeEstimated?:     string;
+    departureTimePlanned?:       string;
+    isRealtimeControlled?:       boolean;
+    [property: string]: any;
+}
+
+/**
+ * meansOfTransport
+ */
+export interface Transportation {
+    allCoords?:        Array<Array<Array<any[] | CoordClass | number>>>;
+    assignedStop?:     string;
+    assignedStopId?:   string;
+    coords?:           Array<Array<Array<any[] | CoordClass | number>>>;
+    description?:      string;
+    destination?:      Location;
+    disassembledName?: string;
+    /**
+     * statelessId aus motDivaParams
+     */
+    id?:               string;
+    index?:            string;
+    localitySequence?: Location[];
+    locationSequence?: JourneyLocation[];
+    name?:             string;
+    number?:           string;
+    operator?:         OperatorObject;
+    origin?:           Location;
+    product?:          Product;
+    properties?:       LineProperties;
+    trips?:            TransportationTrip[];
+}
+
+export interface Affected {
+    countys?: County[];
+    lines?:   Transportation[];
+    places?:  Location[];
+    stops?:   Location[];
+}
+
+export interface Info {
+    additionalText?: string;
+    affected?:       Affected;
+    blockingType?:   string;
+    content?:        string;
+    id?:             string;
+    image?:          string;
+    priority?:       string;
+    properties?:     InfoProperties;
+    providerCode?:   string;
+    subtitle?:       string;
+    timestamps?:     Timestamps;
+    title?:          string;
+    type?:           string;
+    url?:            string;
+    urlText?:        string;
+    version?:        number;
+}
+
+export interface AssignedLocation {
+    assignedStops?:    AssignedLocation[];
+    buildingNumber?:   string;
+    coord?:            Array<any[] | CoordClass | number>;
+    disassembledName?: string;
+    id?:               string;
+    infos?:            Info[];
+    isBest?:           boolean;
+    isGlobalId?:       boolean;
+    matchQuality?:     number;
+    name?:             string;
+    niveau?:           number;
+    parent?:           Location;
+    productClasses?:   number[];
+    properties?:       LocationProperties;
+    streetName?:       string;
+    type?:             LocationType;
+    assignedLocation?: string;
+    connectingMode?:   number;
+    distance?:         number;
+    duration?:         number;
+    [property: string]: any;
+}
+
+export interface Location {
+    assignedStops?:    AssignedLocation[];
+    buildingNumber?:   string;
+    coord?:            Array<any[] | CoordClass | number>;
+    disassembledName?: string;
+    id?:               string;
+    infos?:            Info[];
+    isBest?:           boolean;
+    isGlobalId?:       boolean;
+    matchQuality?:     number;
+    name?:             string;
+    niveau?:           number;
+    parent?:           Location;
+    productClasses?:   number[];
+    properties?:       LocationProperties;
+    streetName?:       string;
+    type?:             LocationType;
+    [property: string]: any;
+}
+
+export interface CoordClass {
+    /**
+     * distance
+     */
+    d?: number;
+    /**
+     * niveau
+     */
+    n?: number;
+    /**
+     * fractional part of niveau
+     */
+    nF?: number;
+    /**
+     * height
+     */
+    z?: number;
+}
+
+export interface LocationProperties {
+    areaGid?:             string;
+    businessHoursInfo?:   LanguageString[];
+    chargingStations?:    ChargingInfrastructure[];
+    coordInfoDetails?:    CoordInfoDetails;
+    dataSet?:             ParkingDataSet;
+    distance?:            number;
+    downloads?:           Download[];
+    occupancy?:           Occupancy;
+    parkingProfileInfo?:  ParkingProfileInfoClass;
+    parkingRealtimeInfo?: ParkingDataSet;
+    parkingSpaces?:       Array<any[] | boolean | ParkingSpaceTypeClass | number | number | null | string>;
+    parkingStaticInfo?:   ParkingStaticInfo;
+    parkingTax?:          ParkingTax;
+    realtimeStatus?:      RealtimeCallStatus[];
+    zone?:                string;
+    [property: string]: any;
+}
+
+export interface LanguageString {
+    langIso639?: string;
+    string?:     string;
+}
+
+export interface ChargingInfrastructure {
+    ChargerConnections?: ConnectorType[];
+    chargingOperator?:   ChargingOperator;
+    ConnectorTypes?:     ConnectorType[];
+    description?:        string;
+    id?:                 string;
+    properties?:         { [key: string]: any };
+    usageCosts?:         LanguageString[];
+}
+
+export interface ConnectorType {
+    id?:         string;
+    properties?: { [key: string]: any };
+}
+
+export interface ChargingOperator {
+    id?:         string;
+    name?:       string;
+    properties?: { [key: string]: any };
+    [property: string]: any;
+}
+
+export interface CoordInfoDetails {
+    operatingAreaId?: string;
+    parkingDataSet?:  ParkingDataSet;
+    providerId?:      number;
+    station?:         Station;
+    type?:            CoordInfoDetailsType;
+    vehicleDetails?:  Vehicle;
+}
+
+export interface ParkingDataSet {
+    additionalInformations?: string[];
+    dataSource?:             DataSource;
+    freePlaces?:             number;
+    measuredAt?:             string;
+    occ?:                    number;
+    occLevel?:               string;
+    occLOS?:                 number;
+    occTrend?:               number;
+}
+
+export enum DataSource {
+    Profile = "PROFILE",
+    Realtime = "REALTIME",
+    Unknown = "UNKNOWN",
+}
+
+export interface Station {
+    addr?:                      string;
+    bikeSlots?:                 Slots;
+    carCombustionSlots?:        Slots;
+    carElectricSlots?:          Slots;
+    carHybridSlots?:            Slots;
+    carSlots?:                  Slots;
+    combinedSlots?:             Slots;
+    coord?:                     Array<any[] | CoordClass | number>;
+    eBikeSlots?:                Slots;
+    id?:                        string;
+    lastUpdate?:                string;
+    motorcycleCombustionSlots?: Slots;
+    motorcycleElectricSlots?:   Slots;
+    motorcycleHybridSlots?:     Slots;
+    motorcycleSlots?:           Slots;
+    name?:                      string;
+    oOS?:                       boolean;
+    operatingAreaId?:           string;
+    operatingAreaName?:         string;
+    pos?:                       string;
+    providerId?:                number;
+    providerName?:              string;
+    stNum?:                     string;
+    vehicles?:                  Vehicle[];
+}
+
+export interface Slots {
+    emptySlots?:   number;
+    freeVehicles?: number;
+    totalSlots?:   number;
+    [property: string]: any;
+}
+
+export interface Vehicle {
+    addr?:              string;
+    availabilities?:    Availabilities;
+    bikeFuncClass?:     BikeFuncClass;
+    capacity?:          number;
+    carClass?:          CarClass;
+    catId?:             string;
+    catName?:           string;
+    charging?:          boolean;
+    coord?:             Array<any[] | CoordClass | number>;
+    dLAndroid?:         string;
+    dLIOS?:             string;
+    dLWindows?:         string;
+    ebikeClass?:        EbikeClass;
+    engine?:            Engine;
+    ext?:               EXT;
+    fuelLevel?:         number;
+    gearshift?:         Gearshift;
+    id?:                string;
+    int?:               EXT;
+    lastUpdate?:        string;
+    motorcycleClass?:   MotorcycleClass;
+    operatingAreaId?:   string;
+    operatingAreaName?: string;
+    phone?:             string;
+    plate?:             string;
+    pos?:               string;
+    providerId?:        number;
+    providerName?:      string;
+    rangeKm?:           string;
+    vehModel?:          string;
+    vehType?:           VehType;
+}
+
+export interface Availabilities {
+    avail?:   Intervall[];
+    oOO?:     Intervall[];
+    unavail?: Intervall[];
+}
+
+export interface Intervall {
+    from?: string;
+    to?:   string;
+}
+
+export enum BikeFuncClass {
+    Bmx = "BMX",
+    Cross = "CROSS",
+    Cruiser = "CRUISER",
+    Freight = "FREIGHT",
+    Hybrid = "HYBRID",
+    Motorized = "MOTORIZED",
+    Mountain = "MOUNTAIN",
+    Racing = "RACING",
+    Road = "ROAD",
+    Touring = "TOURING",
+    Undefined = "UNDEFINED",
+    Utility = "UTILITY",
+}
+
+export enum CarClass {
+    Citycar = "CITYCAR",
+    Executivecar = "EXECUTIVECAR",
+    Largefamilycar = "LARGEFAMILYCAR",
+    Luxurycar = "LUXURYCAR",
+    Multipurposecars = "MULTIPURPOSECARS",
+    Smallfamilycar = "SMALLFAMILYCAR",
+    Sportcoupes = "SPORTCOUPES",
+    Sportutility = "SPORTUTILITY",
+    Supermini = "SUPERMINI",
+    Undefined = "UNDEFINED",
+}
+
+export enum EbikeClass {
+    Pedelec = "PEDELEC",
+    PedelecS = "PEDELEC_S",
+    PowerOnDemandOnly = "POWER_ON_DEMAND_ONLY",
+    PowerOnDemandPedalAssist = "POWER_ON_DEMAND_PEDAL_ASSIST",
+    Undefined = "UNDEFINED",
+}
+
+export enum Engine {
+    Combustion = "COMBUSTION",
+    Electric = "ELECTRIC",
+    Hybrid = "HYBRID",
+    Undefined = "UNDEFINED",
+}
+
+export enum EXT {
+    Bad = "BAD",
+    Good = "GOOD",
+    Neutral = "NEUTRAL",
+    Unacceptable = "UNACCEPTABLE",
+    Undefined = "UNDEFINED",
+    Verybad = "VERYBAD",
+    Verygood = "VERYGOOD",
+}
+
+export enum Gearshift {
+    Automatic = "AUTOMATIC",
+    Manual = "MANUAL",
+    SemiManual = "SEMI_MANUAL",
+    Undefined = "UNDEFINED",
+}
+
+export enum MotorcycleClass {
+    CabinFullyenclosed = "CABIN_FULLYENCLOSED",
+    CabinSemienclosed = "CABIN_SEMIENCLOSED",
+    Cruiser = "CRUISER",
+    Dualsport = "DUALSPORT",
+    Moped = "MOPED",
+    OffroadEnduro = "OFFROAD_ENDURO",
+    OffroadMotocross = "OFFROAD_MOTOCROSS",
+    OffroadRallyraid = "OFFROAD_RALLYRAID",
+    OffroadTrackracing = "OFFROAD_TRACKRACING",
+    OffroadTrail = "OFFROAD_TRAIL",
+    Scooter = "SCOOTER",
+    Sportbike = "SPORTBIKE",
+    Sporttouring = "SPORTTOURING",
+    Standard = "STANDARD",
+    Touring = "TOURING",
+    Tricycle = "TRICYCLE",
+    Undefined = "UNDEFINED",
+    Underbone = "UNDERBONE",
+}
+
+export enum VehType {
+    Bike = "BIKE",
+    Car = "CAR",
+    Motorcycle = "MOTORCYCLE",
+    Undefined = "UNDEFINED",
+}
+
+export enum CoordInfoDetailsType {
+    Freefloater = "FREEFLOATER",
+    Parking = "PARKING",
+    Station = "STATION",
+    Unknown = "UNKNOWN",
+}
+
+export interface Download {
+    email?:      string;
+    properties?: any;
+    size?:       number;
+    type?:       string;
+    url?:        string;
+}
+
+export enum Occupancy {
+    CrushedStanding = "CRUSHED_STANDING",
+    Empty = "EMPTY",
+    FewSeats = "FEW_SEATS",
+    Full = "FULL",
+    ManySeats = "MANY_SEATS",
+    NotAcceptingPassengers = "NOT_ACCEPTING_PASSENGERS",
+    StandingOnly = "STANDING_ONLY",
+    Unknown = "UNKNOWN",
+}
+
+export interface ParkingProfileInfoClass {
+    currentDayIdx?:      number;
+    parkingProfileInfo?: ParkingProfileInfoObject;
+}
+
+export interface ParkingProfileInfoObject {
+    profileValueInfoArray?: ProfileValueInfo[];
+    [property: string]: any;
+}
+
+export interface ProfileValueInfo {
+    description?:     string;
+    parkingDataType?: string;
+    [property: string]: any;
+}
+
+export interface ParkingSpaceTypeClass {
+    capacity?:   number;
+    freeSpaces?: number;
+    type:        ParkingSpaceTypeType;
+}
+
+export enum ParkingSpaceTypeType {
+    Bicycle = "BICYCLE",
+    BicycleBox = "BICYCLE_BOX",
+    BicycleChargingStation = "BICYCLE_CHARGING_STATION",
+    BicycleShelter = "BICYCLE_SHELTER",
+    Bus = "BUS",
+    CampingVan = "CAMPING_VAN",
+    Car = "CAR",
+    CarChargingStation = "CAR_CHARGING_STATION",
+    CarFamily = "CAR_FAMILY",
+    CarFemale = "CAR_FEMALE",
+    CarHandicapped = "CAR_HANDICAPPED",
+    Motorcycle = "MOTORCYCLE",
+    Truck = "TRUCK",
+    Unknown = "UNKNOWN",
+}
+
+export interface ParkingStaticInfo {
+    accessibility?:        Accessibility;
+    address?:              Address;
+    email?:                string;
+    geometryObject?:       GeometryObject;
+    link?:                 string;
+    maxParkingTime?:       number;
+    maxVehicleDimensions?: MaxVehicleDimensions;
+    operator?:             OperatorClass;
+    properties?:           { [key: string]: any };
+    telephone?:            string;
+}
+
+export enum Accessibility {
+    AccessibilityPublicAccess = "ACCESSIBILITY_PUBLIC_ACCESS",
+    AccessibilityRestrictedAccess = "ACCESSIBILITY_RESTRICTED_ACCESS",
+    AccessibilityUndefined = "ACCESSIBILITY_UNDEFINED",
+}
+
+export interface Address {
+    address?:     string;
+    country?:     string;
+    housenumber?: string;
+    omc?:         number;
+    place?:       string;
+    placeId?:     number;
+    postalCode?:  string;
+    region?:      string;
+}
+
+export interface GeometryObject {
+    coordinates?: any[] | boolean | CoordinatesClass | number | number | null | string;
+    geometries?:  any[];
+    mapName?:     string;
+    type?:        GeometryObjectType;
+}
+
+export interface CoordinatesClass {
+}
+
+export enum GeometryObjectType {
+    GeometryCollection = "GeometryCollection",
+    LineString = "LineString",
+    MultiLineString = "MultiLineString",
+    MultiPoint = "MultiPoint",
+    MultiPolygon = "MultiPolygon",
+    Point = "Point",
+    Polygon = "Polygon",
+}
+
+export interface MaxVehicleDimensions {
+    height?: number;
+    length?: number;
+    weight?: number;
+    width?:  number;
+}
+
+export interface OperatorClass {
+    address?: Address;
+    name?:    string;
+    phone?:   string;
+}
+
+export interface ParkingTax {
+    currency?:        string;
+    fare?:            number;
+    languageStrings?: LanguageString[];
+    type?:            ParkingTaxType;
+}
+
+export enum ParkingTaxType {
+    Day = "DAY",
+    Hour = "HOUR",
+    Month = "MONTH",
+    Unknown = "UNKNOWN",
+}
+
+export enum RealtimeCallStatus {
+    AreaChanged = "AREA_CHANGED",
+    ArrivalCancelled = "ARRIVAL_CANCELLED",
+    DepartureCancelled = "DEPARTURE_CANCELLED",
+    DeviationFromLine = "DEVIATION_FROM_LINE",
+    ExtraStop = "EXTRA_STOP",
+    ExtraTrip = "EXTRA_TRIP",
+    NoCallAtStop = "NO_CALL_AT_STOP",
+    ScheduledTimeChanged = "SCHEDULED_TIME_CHANGED",
+    TripCancelled = "TRIP_CANCELLED",
+}
+
+export enum LocationType {
+    Address = "address",
+    Crossing = "crossing",
+    GIS = "gis",
+    Locality = "locality",
+    Parking = "parking",
+    Platform = "platform",
+    Poi = "poi",
+    PoiHierarchy = "poiHierarchy",
+    Sharing = "sharing",
+    Stop = "stop",
+    Street = "street",
+    Suburb = "suburb",
+    Unknown = "unknown",
+}
+
+export interface OperatorObject {
+    code?: string;
+    id?:   string;
+    name?: string;
+    [property: string]: any;
+}
+
+export interface Product {
+    class?:  number;
+    iconId?: number;
+    /**
+     * was available via transportation.iconId before.
+     */
+    id?:   number;
+    name?: string;
+    [property: string]: any;
+}
+
+export interface LineProperties {
+    globalId?:     string;
+    isROP?:        boolean;
+    isSTT?:        boolean;
+    isTTB?:        boolean;
+    lineDisplay?:  LineDisplay;
+    specialFares?: SpecialFares;
+    trainName?:    string;
+    trainType?:    string;
+    tripCode?:     number;
+    validity?:     TimePeriod;
+    version?:      string;
+    [property: string]: any;
+}
+
+export enum LineDisplay {
+    Line = "LINE",
+    Train = "TRAIN",
+    Unknown = "UNKNOWN",
+}
+
+export enum SpecialFares {
+    IceRoute = "ICE_ROUTE",
+    RouteInTransportAuthorityArea = "ROUTE_IN_TRANSPORT_AUTHORITY_AREA",
+    RouteInTransportAuthorityAreaNoFareCalculation = "ROUTE_IN_TRANSPORT_AUTHORITY_AREA_NO_FARE_CALCULATION",
+    RouteOutsideOfTransportAuthorityArea = "ROUTE_OUTSIDE_OF_TRANSPORT_AUTHORITY_AREA",
+    RouteWithSupplement = "ROUTE_WITH_SUPPLEMENT",
+    RouteWithSupplementNoFareCalculation = "ROUTE_WITH_SUPPLEMENT_NO_FARE_CALCULATION",
+    Unknown = "UNKNOWN",
+}
+
+export interface TimePeriod {
+    from?: string;
+    to?:   string;
+}
+
+export interface TransportationTrip {
+    arrivalTimePlannedJourneyDestination?: string;
+    departureTimePlannedJourneyOrigin?:    string;
+    status?:                               Status;
+    trainNumber?:                          string;
+    trainType?:                            any;
+    tripCode:                              number;
+}
+
+export enum Status {
+    AdditionalStop = "ADDITIONAL_STOP",
+    Blocked = "BLOCKED",
+    Delayed = "DELAYED",
+}
+
+export interface County {
+    communes?:  Commune[];
+    id:         string;
+    isSelected: boolean;
+    name:       string;
+}
+
+export interface Commune {
+    id:         number;
+    isSelected: boolean;
+    name:       string;
+}
+
+export interface InfoProperties {
+    additionalLinks?: AdditionalLink[];
+    htmlText?:        string;
+    smsText?:         string;
+    speechText?:      string;
+    wapText?:         string;
+    [property: string]: any;
+}
+
+export interface AdditionalLink {
+    fileName?:   string;
+    id?:         string;
+    linkTarget?: string;
+    linkText?:   string;
+    path?:       string;
+    size?:       number;
+    subtitle?:   string;
+    type?:       string;
+    url?:        string;
+    urlText?:    string;
+    virtPath?:   string;
+}
+
+export interface Timestamps {
+    availability?:     TimePeriod;
+    creation?:         string;
+    lastModification?: string;
+    validity?:         TimePeriod[];
+}
+
+export interface ServerInfo {
+    calcTime?:          number;
+    controllerVersion?: string;
+    serverID?:          string;
+    serverTime?:        string;
+    virtDir?:           string;
+}
+
+export interface SystemMessage {
+    code?:    number;
+    module?:  Module;
+    subType?: string;
+    text?:    string;
+    type?:    SystemMessageType;
+}
+
+export enum Module {
+    Ahf = "AHF",
+    Broker = "BROKER",
+    Dispatcher = "DISPATCHER",
+    Efapsched = "EFAPSCHED",
+    ItKernel = "IT_KERNEL",
+    ItpMonomodal = "itp-monomodal",
+    MapKernel = "MAP_KERNEL",
+    PDA = "PDA",
+    Pprof = "PPROF",
+    PtKernel = "PT_KERNEL",
+    Rop = "ROP",
+    Stt = "STT",
+    Ttb = "TTB",
+    Unknown = "UNKNOWN",
+}
+
+export enum SystemMessageType {
+    Error = "error",
+    Message = "message",
+    Warning = "warning",
+}
+
+/**
+ * TicketProduct-Request
+ */
+export interface TICKETPRODUCTSchema {
+    serverInfo?: ServerInfo;
+    tickets?:    Array<any[] | boolean | number | number | null | TicketObject | string>;
+    version?:    string;
+}
+
+export interface TicketObject {
+    accompany?:               Accompany;
+    comment?:                 string;
+    currency?:                string;
+    fromLeg?:                 number;
+    id?:                      string;
+    isShortHaul?:             IsShortHaul;
+    name?:                    string;
+    nameValidityArea?:        string;
+    net?:                     string;
+    numberOfChanges?:         number;
+    person?:                  Person;
+    priceBrutto?:             number;
+    priceLevel?:              string;
+    priceNetto?:              number;
+    properties?:              any[] | boolean | number | number | null | PropertiesProperties | string;
+    relationKeys?:            RelationKey[];
+    returnsAllowed?:          IsShortHaul;
+    targetGroups?:            string[];
+    taxPercent?:              number;
+    timeValidity?:            TimeValidity;
+    toLeg?:                   number;
+    travellerCard?:           string;
+    travellerClass?:          TravellerClass;
+    URL?:                     string;
+    validForOneJourneyOnly?:  IsShortHaul;
+    validForOneOperatorOnly?: IsShortHaul;
+    validFrom?:               string;
+    validMinutes?:            number;
+    validTo?:                 string;
+    [property: string]: any;
+}
+
+export interface Accompany {
+    adults:    number;
+    animals:   number;
+    bicycles:  number;
+    children:  number;
+    endTime:   number;
+    startTime: number;
+}
+
+export enum IsShortHaul {
+    No = "NO",
+    Unknown = "UNKNOWN",
+    Yes = "YES",
+}
+
+export enum Person {
+    Adult = "ADULT",
+    Apprentice = "APPRENTICE",
+    Child = "CHILD",
+    Family = "FAMILY",
+    Kindergarten = "KINDERGARTEN",
+    Multiadults = "MULTIADULTS",
+    Multichilds = "MULTICHILDS",
+    Multipersons = "MULTIPERSONS",
+    Other = "OTHER",
+    Reduced = "REDUCED",
+    Scholar = "SCHOLAR",
+    Senior = "SENIOR",
+    Student = "STUDENT",
+}
+
+export interface PropertiesProperties {
+    journeyDetail?:  string;
+    ticketLongName?: string;
+    [property: string]: any;
+}
+
+export interface RelationKey {
+    areas?:      TicketArea[];
+    code:        string;
+    id:          string;
+    name:        string;
+    scopeAreas?: number[];
+    sections?:   number[];
+}
+
+export interface TicketArea {
+    id:   number;
+    name: string;
+}
+
+export enum TimeValidity {
+    Day = "DAY",
+    Halfyear = "HALFYEAR",
+    Month = "MONTH",
+    Multiple = "MULTIPLE",
+    OtherValiditytime = "OTHER_VALIDITYTIME",
+    Single = "SINGLE",
+    Week = "WEEK",
+    Year = "YEAR",
+}
+
+export enum TravellerClass {
+    Business = "BUSINESS",
+    Economy = "ECONOMY",
+    First = "FIRST",
+    Other = "OTHER",
+    Second = "SECOND",
+}
+
+// Converts JSON strings to/from your types
+// and asserts the results of JSON.parse at runtime
+export class Convert {
+    public static toLOCATIONSUGGESTSchema(json: string): LOCATIONSUGGESTSchema {
         return cast(JSON.parse(json), r("LOCATIONSUGGESTSchema"));
     }
-    static lOCATIONSUGGESTSchemaToJson(value) {
+
+    public static lOCATIONSUGGESTSchemaToJson(value: LOCATIONSUGGESTSchema): string {
         return JSON.stringify(uncast(value, r("LOCATIONSUGGESTSchema")), null, 2);
     }
-    static toSERVINGLINESSchema(json) {
-        return cast(JSON.parse(json), r("SERVINGLINESSchema"));
+
+    public static toTICKETPRODUCTSchema(json: string): TICKETPRODUCTSchema {
+        return cast(JSON.parse(json), r("TICKETPRODUCTSchema"));
     }
-    static sERVINGLINESSchemaToJson(value) {
-        return JSON.stringify(uncast(value, r("SERVINGLINESSchema")), null, 2);
-    }
-    static toTRIPSchema(json) {
-        return cast(JSON.parse(json), r("TRIPSchema"));
-    }
-    static tRIPSchemaToJson(value) {
-        return JSON.stringify(uncast(value, r("TRIPSchema")), null, 2);
+
+    public static tICKETPRODUCTSchemaToJson(value: TICKETPRODUCTSchema): string {
+        return JSON.stringify(uncast(value, r("TICKETPRODUCTSchema")), null, 2);
     }
 }
-exports.Convert = Convert;
-function invalidValue(typ, val, key, parent = '') {
+
+function invalidValue(typ: any, val: any, key: any, parent: any = ''): never {
     const prettyTyp = prettyTypeName(typ);
     const parentText = parent ? ` on ${parent}` : '';
     const keyText = key ? ` for key "${key}"` : '';
     throw Error(`Invalid value${keyText}${parentText}. Expected ${prettyTyp} but got ${JSON.stringify(val)}`);
 }
-function prettyTypeName(typ) {
+
+function prettyTypeName(typ: any): string {
     if (Array.isArray(typ)) {
         if (typ.length === 2 && typ[0] === undefined) {
             return `an optional ${prettyTypeName(typ[1])}`;
-        }
-        else {
+        } else {
             return `one of [${typ.map(a => { return prettyTypeName(a); }).join(", ")}]`;
         }
-    }
-    else if (typeof typ === "object" && typ.literal !== undefined) {
+    } else if (typeof typ === "object" && typ.literal !== undefined) {
         return typ.literal;
-    }
-    else {
+    } else {
         return typeof typ;
     }
 }
-function jsonToJSProps(typ) {
+
+function jsonToJSProps(typ: any): any {
     if (typ.jsonToJS === undefined) {
-        const map = {};
-        typ.props.forEach((p) => map[p.json] = { key: p.js, typ: p.typ });
+        const map: any = {};
+        typ.props.forEach((p: any) => map[p.json] = { key: p.js, typ: p.typ });
         typ.jsonToJS = map;
     }
     return typ.jsonToJS;
 }
-function jsToJSONProps(typ) {
+
+function jsToJSONProps(typ: any): any {
     if (typ.jsToJSON === undefined) {
-        const map = {};
-        typ.props.forEach((p) => map[p.js] = { key: p.json, typ: p.typ });
+        const map: any = {};
+        typ.props.forEach((p: any) => map[p.js] = { key: p.json, typ: p.typ });
         typ.jsToJSON = map;
     }
     return typ.jsToJSON;
 }
-function transform(val, typ, getProps, key = '', parent = '') {
-    function transformPrimitive(typ, val) {
-        if (typeof typ === typeof val)
-            return val;
+
+function transform(val: any, typ: any, getProps: any, key: any = '', parent: any = ''): any {
+    function transformPrimitive(typ: string, val: any): any {
+        if (typeof typ === typeof val) return val;
         return invalidValue(typ, val, key, parent);
     }
-    function transformUnion(typs, val) {
+
+    function transformUnion(typs: any[], val: any): any {
+        // val must validate against one typ in typs
         const l = typs.length;
         for (let i = 0; i < l; i++) {
             const typ = typs[i];
             try {
                 return transform(val, typ, getProps);
-            }
-            catch (_) { }
+            } catch (_) {}
         }
         return invalidValue(typs, val, key, parent);
     }
-    function transformEnum(cases, val) {
-        if (cases.indexOf(val) !== -1)
-            return val;
+
+    function transformEnum(cases: string[], val: any): any {
+        if (cases.indexOf(val) !== -1) return val;
         return invalidValue(cases.map(a => { return l(a); }), val, key, parent);
     }
-    function transformArray(typ, val) {
-        if (!Array.isArray(val))
-            return invalidValue(l("array"), val, key, parent);
+
+    function transformArray(typ: any, val: any): any {
+        // val must be an array with no invalid elements
+        if (!Array.isArray(val)) return invalidValue(l("array"), val, key, parent);
         return val.map(el => transform(el, typ, getProps));
     }
-    function transformDate(val) {
+
+    function transformDate(val: any): any {
         if (val === null) {
             return null;
         }
@@ -448,11 +949,12 @@ function transform(val, typ, getProps, key = '', parent = '') {
         }
         return d;
     }
-    function transformObject(props, additional, val) {
+
+    function transformObject(props: { [k: string]: any }, additional: any, val: any): any {
         if (val === null || typeof val !== "object" || Array.isArray(val)) {
             return invalidValue(l(ref || "object"), val, key, parent);
         }
-        const result = {};
+        const result: any = {};
         Object.getOwnPropertyNames(props).forEach(key => {
             const prop = props[key];
             const v = Object.prototype.hasOwnProperty.call(val, key) ? val[key] : undefined;
@@ -465,57 +967,63 @@ function transform(val, typ, getProps, key = '', parent = '') {
         });
         return result;
     }
-    if (typ === "any")
-        return val;
+
+    if (typ === "any") return val;
     if (typ === null) {
-        if (val === null)
-            return val;
+        if (val === null) return val;
         return invalidValue(typ, val, key, parent);
     }
-    if (typ === false)
-        return invalidValue(typ, val, key, parent);
-    let ref = undefined;
+    if (typ === false) return invalidValue(typ, val, key, parent);
+    let ref: any = undefined;
     while (typeof typ === "object" && typ.ref !== undefined) {
         ref = typ.ref;
         typ = typeMap[typ.ref];
     }
-    if (Array.isArray(typ))
-        return transformEnum(typ, val);
+    if (Array.isArray(typ)) return transformEnum(typ, val);
     if (typeof typ === "object") {
         return typ.hasOwnProperty("unionMembers") ? transformUnion(typ.unionMembers, val)
-            : typ.hasOwnProperty("arrayItems") ? transformArray(typ.arrayItems, val)
-                : typ.hasOwnProperty("props") ? transformObject(getProps(typ), typ.additional, val)
-                    : invalidValue(typ, val, key, parent);
+            : typ.hasOwnProperty("arrayItems")    ? transformArray(typ.arrayItems, val)
+            : typ.hasOwnProperty("props")         ? transformObject(getProps(typ), typ.additional, val)
+            : invalidValue(typ, val, key, parent);
     }
-    if (typ === Date && typeof val !== "number")
-        return transformDate(val);
+    // Numbers can be parsed by Date but shouldn't be.
+    if (typ === Date && typeof val !== "number") return transformDate(val);
     return transformPrimitive(typ, val);
 }
-function cast(val, typ) {
+
+function cast<T>(val: any, typ: any): T {
     return transform(val, typ, jsonToJSProps);
 }
-function uncast(val, typ) {
+
+function uncast<T>(val: T, typ: any): any {
     return transform(val, typ, jsToJSONProps);
 }
-function l(typ) {
+
+function l(typ: any) {
     return { literal: typ };
 }
-function a(typ) {
+
+function a(typ: any) {
     return { arrayItems: typ };
 }
-function u(...typs) {
+
+function u(...typs: any[]) {
     return { unionMembers: typs };
 }
-function o(props, additional) {
+
+function o(props: any[], additional: any) {
     return { props, additional };
 }
-function m(additional) {
+
+function m(additional: any) {
     return { props: [], additional };
 }
-function r(name) {
+
+function r(name: string) {
     return { ref: name };
 }
-const typeMap = {
+
+const typeMap: any = {
     "LOCATIONSUGGESTSchema": o([
         { json: "error", js: "error", typ: u(undefined, r("Error")) },
         { json: "locations", js: "locations", typ: u(undefined, a(r("Location"))) },
@@ -533,7 +1041,7 @@ const typeMap = {
         { json: "interfaceMax", js: "interfaceMax", typ: u(undefined, "") },
         { json: "interfaceMin", js: "interfaceMin", typ: u(undefined, "") },
     ], "any"),
-    "JourneyLocationElement": o([
+    "JourneyLocation": o([
         { json: "assignedStops", js: "assignedStops", typ: u(undefined, a(r("AssignedLocation"))) },
         { json: "buildingNumber", js: "buildingNumber", typ: u(undefined, "") },
         { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
@@ -569,7 +1077,7 @@ const typeMap = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "index", js: "index", typ: u(undefined, "") },
         { json: "localitySequence", js: "localitySequence", typ: u(undefined, a(r("Location"))) },
-        { json: "locationSequence", js: "locationSequence", typ: u(undefined, a(r("JourneyLocationElement"))) },
+        { json: "locationSequence", js: "locationSequence", typ: u(undefined, a(r("JourneyLocation"))) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "number", js: "number", typ: u(undefined, "") },
         { json: "operator", js: "operator", typ: u(undefined, r("OperatorObject")) },
@@ -829,7 +1337,8 @@ const typeMap = {
         { json: "mapName", js: "mapName", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, r("GeometryObjectType")) },
     ], false),
-    "CoordinatesClass": o([], false),
+    "CoordinatesClass": o([
+    ], false),
     "MaxVehicleDimensions": o([
         { json: "height", js: "height", typ: u(undefined, 3.14) },
         { json: "length", js: "length", typ: u(undefined, 3.14) },
@@ -934,39 +1443,10 @@ const typeMap = {
         { json: "text", js: "text", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, r("SystemMessageType")) },
     ], false),
-    "SERVINGLINESSchema": o([
-        { json: "lines", js: "lines", typ: u(undefined, a(r("Transportation"))) },
+    "TICKETPRODUCTSchema": o([
         { json: "serverInfo", js: "serverInfo", typ: u(undefined, r("ServerInfo")) },
-        { json: "systemMessages", js: "systemMessages", typ: u(undefined, a(r("SystemMessage"))) },
-        { json: "version", js: "version", typ: u(undefined, "") },
-    ], false),
-    "TRIPSchema": o([
-        { json: "error", js: "error", typ: u(undefined, r("Error")) },
-        { json: "journeys", js: "journeys", typ: u(undefined, a(r("Journey"))) },
-        { json: "properties", js: "properties", typ: u(undefined, "any") },
-        { json: "serverInfo", js: "serverInfo", typ: u(undefined, r("ServerInfo")) },
-        { json: "systemMessages", js: "systemMessages", typ: u(undefined, a(r("SystemMessage"))) },
-        { json: "taxiOperators", js: "taxiOperators", typ: u(undefined, a(r("TaxiOperator"))) },
-        { json: "version", js: "version", typ: "" },
-    ], false),
-    "Journey": o([
-        { json: "booking", js: "booking", typ: u(undefined, a(r("Booking"))) },
-        { json: "fare", js: "fare", typ: u(undefined, r("JourneyFare")) },
-        { json: "interchanges", js: "interchanges", typ: u(undefined, 3.14) },
-        { json: "isAdditional", js: "isAdditional", typ: u(undefined, true) },
-        { json: "isRealtimeOnlyInformative", js: "isRealtimeOnlyInformative", typ: u(undefined, true) },
-        { json: "legs", js: "legs", typ: u(undefined, a(r("Leg"))) },
-        { json: "rating", js: "rating", typ: u(undefined, 3.14) },
-    ], false),
-    "Booking": o([
-        { json: "commType", js: "commType", typ: u(undefined, r("CommType")) },
-        { json: "fromLeg", js: "fromLeg", typ: u(undefined, 3.14) },
-        { json: "serverAddress", js: "serverAddress", typ: u(undefined, "") },
-        { json: "toLeg", js: "toLeg", typ: u(undefined, 3.14) },
-    ], false),
-    "JourneyFare": o([
         { json: "tickets", js: "tickets", typ: u(undefined, a(u(a("any"), true, 3.14, 0, null, r("TicketObject"), ""))) },
-        { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
+        { json: "version", js: "version", typ: u(undefined, "") },
     ], false),
     "TicketObject": o([
         { json: "accompany", js: "accompany", typ: u(undefined, r("Accompany")) },
@@ -983,7 +1463,7 @@ const typeMap = {
         { json: "priceBrutto", js: "priceBrutto", typ: u(undefined, 3.14) },
         { json: "priceLevel", js: "priceLevel", typ: u(undefined, "") },
         { json: "priceNetto", js: "priceNetto", typ: u(undefined, 3.14) },
-        { json: "properties", js: "properties", typ: u(undefined, u(a("any"), true, 3.14, 0, null, r("PurpleProperties"), "")) },
+        { json: "properties", js: "properties", typ: u(undefined, u(a("any"), true, 3.14, 0, null, r("PropertiesProperties"), "")) },
         { json: "relationKeys", js: "relationKeys", typ: u(undefined, a(r("RelationKey"))) },
         { json: "returnsAllowed", js: "returnsAllowed", typ: u(undefined, r("IsShortHaul")) },
         { json: "targetGroups", js: "targetGroups", typ: u(undefined, a("")) },
@@ -1007,7 +1487,7 @@ const typeMap = {
         { json: "endTime", js: "endTime", typ: 3.14 },
         { json: "startTime", js: "startTime", typ: 3.14 },
     ], false),
-    "PurpleProperties": o([
+    "PropertiesProperties": o([
         { json: "journeyDetail", js: "journeyDetail", typ: u(undefined, "") },
         { json: "ticketLongName", js: "ticketLongName", typ: u(undefined, "") },
     ], "any"),
@@ -1022,176 +1502,6 @@ const typeMap = {
     "TicketArea": o([
         { json: "id", js: "id", typ: 3.14 },
         { json: "name", js: "name", typ: "" },
-    ], false),
-    "Zone": o([
-        { json: "fromLeg", js: "fromLeg", typ: u(undefined, 3.14) },
-        { json: "net", js: "net", typ: u(undefined, "") },
-        { json: "neutralZone", js: "neutralZone", typ: u(undefined, "") },
-        { json: "toLeg", js: "toLeg", typ: u(undefined, 3.14) },
-        { json: "zones", js: "zones", typ: u(undefined, a(a(""))) },
-        { json: "zonesUnited", js: "zonesUnited", typ: u(undefined, a(a(""))) },
-    ], false),
-    "Leg": o([
-        { json: "coords", js: "coords", typ: u(undefined, a(a(u(a("any"), r("CoordClass"), 3.14)))) },
-        { json: "destination", js: "destination", typ: u(undefined, r("JourneyLocationElement")) },
-        { json: "distance", js: "distance", typ: u(undefined, 3.14) },
-        { json: "duration", js: "duration", typ: u(undefined, 3.14) },
-        { json: "elevationSummary", js: "elevationSummary", typ: u(undefined, r("ElevationSummary")) },
-        { json: "fare", js: "fare", typ: u(undefined, r("LegFare")) },
-        { json: "footPathInfo", js: "footPathInfo", typ: u(undefined, a(u(a("any"), true, r("FootPathInfoClass"), 3.14, 0, null, ""))) },
-        { json: "hints", js: "hints", typ: u(undefined, a(r("Info"))) },
-        { json: "infos", js: "infos", typ: u(undefined, a(r("Info"))) },
-        { json: "interchange", js: "interchange", typ: u(undefined, r("Interchange")) },
-        { json: "isRealtimeControlled", js: "isRealtimeControlled", typ: u(undefined, true) },
-        { json: "origin", js: "origin", typ: u(undefined, r("JourneyLocationElement")) },
-        { json: "pathDescriptions", js: "pathDescriptions", typ: u(undefined, a(u(a("any"), true, r("PathDescriptionClass"), 3.14, 0, null, ""))) },
-        { json: "properties", js: "properties", typ: u(undefined, u(a("any"), true, 3.14, 0, null, r("FluffyProperties"), "")) },
-        { json: "realtimeStatus", js: "realtimeStatus", typ: u(undefined, a(r("RealtimeTripStatus"))) },
-        { json: "stopSequence", js: "stopSequence", typ: u(undefined, a(r("JourneyLocationElement"))) },
-        { json: "transportation", js: "transportation", typ: u(undefined, r("Transportation")) },
-        { json: "vehicleAccess", js: "vehicleAccess", typ: u(undefined, u(a(""), "")) },
-    ], false),
-    "ElevationSummary": o([
-        { json: "altDiffDw", js: "altDiffDw", typ: u(undefined, 3.14) },
-        { json: "altDiffUp", js: "altDiffUp", typ: u(undefined, 3.14) },
-        { json: "DestHeightMeter", js: "DestHeightMeter", typ: u(undefined, 3.14) },
-        { json: "distDw", js: "distDw", typ: u(undefined, 3.14) },
-        { json: "distUp", js: "distUp", typ: u(undefined, 3.14) },
-        { json: "Length", js: "Length", typ: u(undefined, 3.14) },
-        { json: "maxAlt", js: "maxAlt", typ: u(undefined, 3.14) },
-        { json: "MaxDeclinePercent", js: "MaxDeclinePercent", typ: u(undefined, 3.14) },
-        { json: "maxGrad", js: "maxGrad", typ: u(undefined, 3.14) },
-        { json: "MaxHeightMeters", js: "MaxHeightMeters", typ: u(undefined, 3.14) },
-        { json: "MaxInclinePercent", js: "MaxInclinePercent", typ: u(undefined, 3.14) },
-        { json: "maxSlope", js: "maxSlope", typ: u(undefined, 3.14) },
-        { json: "minAlt", js: "minAlt", typ: u(undefined, 3.14) },
-        { json: "MinHeightMeters", js: "MinHeightMeters", typ: u(undefined, 3.14) },
-        { json: "OrigHeightMeter", js: "OrigHeightMeter", typ: u(undefined, 3.14) },
-        { json: "pixelHeight", js: "pixelHeight", typ: u(undefined, 3.14) },
-        { json: "pixelWidth", js: "pixelWidth", typ: u(undefined, 3.14) },
-        { json: "TotalDeclineMeters", js: "TotalDeclineMeters", typ: u(undefined, 3.14) },
-        { json: "TotalDownwardMeters", js: "TotalDownwardMeters", typ: u(undefined, 3.14) },
-        { json: "TotalInclineMeter", js: "TotalInclineMeter", typ: u(undefined, 3.14) },
-        { json: "TotalUpwardMeters", js: "TotalUpwardMeters", typ: u(undefined, 3.14) },
-    ], false),
-    "LegFare": o([
-        { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
-    ], false),
-    "FootPathInfoClass": o([
-        { json: "duration", js: "duration", typ: u(undefined, 3.14) },
-        { json: "footPathElem", js: "footPathElem", typ: u(undefined, a(u(a("any"), true, 3.14, 0, null, r("FootPathElemObject"), ""))) },
-        { json: "position", js: "position", typ: u(undefined, r("Position")) },
-    ], false),
-    "FootPathElemObject": o([
-        { json: "description", js: "description", typ: u(undefined, "") },
-        { json: "destination", js: "destination", typ: u(undefined, r("PurpleJourneyLocation")) },
-        { json: "level", js: "level", typ: u(undefined, r("Level")) },
-        { json: "levelFrom", js: "levelFrom", typ: u(undefined, 3.14) },
-        { json: "levelTo", js: "levelTo", typ: u(undefined, 3.14) },
-        { json: "origin", js: "origin", typ: u(undefined, r("FluffyJourneyLocation")) },
-        { json: "type", js: "type", typ: u(undefined, r("FootPathElemType")) },
-    ], "any"),
-    "PurpleJourneyLocation": o([
-        { json: "assignedStops", js: "assignedStops", typ: u(undefined, a(r("AssignedLocation"))) },
-        { json: "buildingNumber", js: "buildingNumber", typ: u(undefined, "") },
-        { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
-        { json: "disassembledName", js: "disassembledName", typ: u(undefined, "") },
-        { json: "id", js: "id", typ: u(undefined, "") },
-        { json: "infos", js: "infos", typ: u(undefined, a(r("Info"))) },
-        { json: "isBest", js: "isBest", typ: u(undefined, true) },
-        { json: "isGlobalId", js: "isGlobalId", typ: u(undefined, true) },
-        { json: "matchQuality", js: "matchQuality", typ: u(undefined, 3.14) },
-        { json: "name", js: "name", typ: u(undefined, "") },
-        { json: "niveau", js: "niveau", typ: u(undefined, 3.14) },
-        { json: "parent", js: "parent", typ: u(undefined, r("Location")) },
-        { json: "productClasses", js: "productClasses", typ: u(undefined, a(3.14)) },
-        { json: "properties", js: "properties", typ: u(undefined, r("LocationProperties")) },
-        { json: "streetName", js: "streetName", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, r("LocationType")) },
-        { json: "arrivalTimeBaseTimetable", js: "arrivalTimeBaseTimetable", typ: u(undefined, "") },
-        { json: "arrivalTimeEstimated", js: "arrivalTimeEstimated", typ: u(undefined, "") },
-        { json: "arrivalTimePlanned", js: "arrivalTimePlanned", typ: u(undefined, "") },
-        { json: "departureTimeBaseTimetable", js: "departureTimeBaseTimetable", typ: u(undefined, "") },
-        { json: "departureTimeEstimated", js: "departureTimeEstimated", typ: u(undefined, "") },
-        { json: "departureTimePlanned", js: "departureTimePlanned", typ: u(undefined, "") },
-        { json: "isRealtimeControlled", js: "isRealtimeControlled", typ: u(undefined, true) },
-    ], "any"),
-    "FluffyJourneyLocation": o([
-        { json: "assignedStops", js: "assignedStops", typ: u(undefined, a(r("AssignedLocation"))) },
-        { json: "buildingNumber", js: "buildingNumber", typ: u(undefined, "") },
-        { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
-        { json: "disassembledName", js: "disassembledName", typ: u(undefined, "") },
-        { json: "id", js: "id", typ: u(undefined, "") },
-        { json: "infos", js: "infos", typ: u(undefined, a(r("Info"))) },
-        { json: "isBest", js: "isBest", typ: u(undefined, true) },
-        { json: "isGlobalId", js: "isGlobalId", typ: u(undefined, true) },
-        { json: "matchQuality", js: "matchQuality", typ: u(undefined, 3.14) },
-        { json: "name", js: "name", typ: u(undefined, "") },
-        { json: "niveau", js: "niveau", typ: u(undefined, 3.14) },
-        { json: "parent", js: "parent", typ: u(undefined, r("Location")) },
-        { json: "productClasses", js: "productClasses", typ: u(undefined, a(3.14)) },
-        { json: "properties", js: "properties", typ: u(undefined, r("LocationProperties")) },
-        { json: "streetName", js: "streetName", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, r("LocationType")) },
-        { json: "arrivalTimeBaseTimetable", js: "arrivalTimeBaseTimetable", typ: u(undefined, "") },
-        { json: "arrivalTimeEstimated", js: "arrivalTimeEstimated", typ: u(undefined, "") },
-        { json: "arrivalTimePlanned", js: "arrivalTimePlanned", typ: u(undefined, "") },
-        { json: "departureTimeBaseTimetable", js: "departureTimeBaseTimetable", typ: u(undefined, "") },
-        { json: "departureTimeEstimated", js: "departureTimeEstimated", typ: u(undefined, "") },
-        { json: "departureTimePlanned", js: "departureTimePlanned", typ: u(undefined, "") },
-        { json: "isRealtimeControlled", js: "isRealtimeControlled", typ: u(undefined, true) },
-    ], "any"),
-    "Interchange": o([
-        { json: "coords", js: "coords", typ: u(undefined, a(a(u(a("any"), r("CoordClass"), 3.14)))) },
-        { json: "desc", js: "desc", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, 3.14) },
-    ], false),
-    "PathDescriptionClass": o([
-        { json: "addInfo", js: "addInfo", typ: u(undefined, a("")) },
-        { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
-        { json: "cumDistance", js: "cumDistance", typ: u(undefined, 3.14) },
-        { json: "cumDuration", js: "cumDuration", typ: u(undefined, 3.14) },
-        { json: "distance", js: "distance", typ: u(undefined, 3.14) },
-        { json: "distanceDown", js: "distanceDown", typ: u(undefined, 3.14) },
-        { json: "distanceUp", js: "distanceUp", typ: u(undefined, 3.14) },
-        { json: "duration", js: "duration", typ: u(undefined, 3.14) },
-        { json: "fromCoordsIndex", js: "fromCoordsIndex", typ: u(undefined, 3.14) },
-        { json: "guidanceSigns", js: "guidanceSigns", typ: u(undefined, a(r("GuidanceSign"))) },
-        { json: "manoeuvre", js: "manoeuvre", typ: u(undefined, r("Manoeuvre")) },
-        { json: "name", js: "name", typ: u(undefined, "") },
-        { json: "niveau", js: "niveau", typ: u(undefined, 3.14) },
-        { json: "properties", js: "properties", typ: u(undefined, m("any")) },
-        { json: "skyDirection", js: "skyDirection", typ: u(undefined, 3.14) },
-        { json: "toCoordsIndex", js: "toCoordsIndex", typ: u(undefined, 3.14) },
-        { json: "turnDirection", js: "turnDirection", typ: u(undefined, r("TurnDirection")) },
-    ], false),
-    "GuidanceSign": o([
-        { json: "skyDirection", js: "skyDirection", typ: u(undefined, "") },
-        { json: "text", js: "text", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, r("GuidanceSignType")) },
-        { json: "url", js: "url", typ: u(undefined, "") },
-    ], false),
-    "FluffyProperties": o([
-        { json: "frequency", js: "frequency", typ: u(undefined, r("Frequency")) },
-    ], "any"),
-    "Frequency": o([
-        { json: "avDuration", js: "avDuration", typ: 3.14 },
-        { json: "avTimeGap", js: "avTimeGap", typ: 3.14 },
-        { json: "maxDuration", js: "maxDuration", typ: 3.14 },
-        { json: "maxTimeGap", js: "maxTimeGap", typ: 3.14 },
-        { json: "minDuration", js: "minDuration", typ: 3.14 },
-        { json: "minTimeGap", js: "minTimeGap", typ: 3.14 },
-    ], false),
-    "TaxiOperator": o([
-        { json: "desc", js: "desc", typ: "" },
-        { json: "omc", js: "omc", typ: "" },
-        { json: "providers", js: "providers", typ: a(r("TaxiProvider")) },
-    ], false),
-    "TaxiProvider": o([
-        { json: "address", js: "address", typ: "" },
-        { json: "name", js: "name", typ: "" },
-        { json: "tel", js: "tel", typ: "" },
-        { json: "url", js: "url", typ: "" },
     ], false),
     "DataSource": [
         "PROFILE",
@@ -1396,14 +1706,6 @@ const typeMap = {
         "message",
         "warning",
     ],
-    "CommType": [
-        "FAX",
-        "HTTP",
-        "ISDN",
-        "JSON",
-        "TCPIP",
-        "UNKNOWN",
-    ],
     "IsShortHaul": [
         "NO",
         "UNKNOWN",
@@ -1441,74 +1743,4 @@ const typeMap = {
         "OTHER",
         "SECOND",
     ],
-    "Level": [
-        "DOWN",
-        "LEVEL",
-        "UP",
-    ],
-    "FootPathElemType": [
-        "DANGEROUS",
-        "ELEVATOR",
-        "ESCALATOR",
-        "ILLUMINATED",
-        "LEVEL",
-        "RAMP",
-        "STAIRS",
-    ],
-    "Position": [
-        "AFTER",
-        "BEFORE",
-        "IDEST",
-        "unknown",
-    ],
-    "GuidanceSignType": [
-        "DIRECTION",
-        "EXIT_NUMBER",
-        "ROUTE_ID",
-        "UNKNOWN_SIGN_TYPE",
-    ],
-    "Manoeuvre": [
-        "CONTINUE",
-        "DESTINATION",
-        "ENTER",
-        "ENTER_BUILTUPAREA",
-        "ENTER_ROUNDABOUT",
-        "ENTER_TOLL",
-        "KEEP",
-        "LEAVE",
-        "LEAVE_BUILTUPAREA",
-        "LEAVE_ROUNDABOUT",
-        "LEAVE_TOLL",
-        "OFF_RAMP",
-        "ON_RAMP",
-        "ORIGIN",
-        "RAMP",
-        "STAY_ROUNDABOUT",
-        "TRAVERSE_CROSSING",
-        "TURN",
-        "U_TURN",
-        "UNKNOWN",
-    ],
-    "TurnDirection": [
-        "LEFT",
-        "RIGHT",
-        "SHARP_LEFT",
-        "SHARP_RIGHT",
-        "SLIGHT_LEFT",
-        "SLIGHT_RIGHT",
-        "STRAIGHT",
-        "U_TURN",
-        "UNKNOWN",
-    ],
-    "RealtimeTripStatus": [
-        "DEVIATION",
-        "EXTRA_STOPS",
-        "EXTRA_TRIP",
-        "MONITORED",
-        "OUTSIDE_REALTIME_WINDOW",
-        "PROGNOSIS_IMPOSSIBLE",
-        "REALTIME_ONLY_INFORMATIVE",
-        "TRIP_CANCELLED",
-    ],
 };
-//# sourceMappingURL=VrrApiTypes.js.map

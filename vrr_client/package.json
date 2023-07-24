@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@types/node": "^16.18.39",
+    "node-fetch": "^3.3.1",
+    "quicktype": "^23.0.59"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
