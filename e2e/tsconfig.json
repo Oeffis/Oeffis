@@ -5,7 +5,10 @@
         "support.ts",
         "commands/index.ts",
         "features/**/*.ts",
-        "stepDefinitions/**/*.ts"
+        "stepDefinitions/**/*.ts",
+        "mocks/**/*.ts",
+        "mocks.config.ts",
+        "babel.config.js"
     ],
     "compilerOptions": {
         "target": "ESNext",
