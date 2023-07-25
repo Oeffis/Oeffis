@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JetClientState">
+    <option name="draftsState">
+      <draftsState>
+        <option name="requests">
+          <list>
+            <requestState>
+              <option name="id" value="87946c53-2f31-4953-b9f2-fc7ecc3bb395" />
+              <option name="method" value="GET" />
+              <option name="name" value="refreshJourney" />
+              <option name="pathVariables">
+                <list>
+                  <pathVariableState>
+                    <option name="key" value="token" />
+                    <option name="value" value="&quot;12345&quot;" />
+                  </pathVariableState>
+                </list>
+              </option>
+              <option name="queryParams">
+                <list>
+                  <queryParamState>
+                    <option name="disabled" value="true" />
+                    <option name="key" value="token" />
+                    <option name="value" value="12345" />
+                  </queryParamState>
+                </list>
+              </option>
+              <option name="url" value="http://localhost:3000/journeys/refresh/:token" />
+            </requestState>
+            <requestState>
+              <option name="id" value="8a5b6ed1-3976-4522-89f5-d07091af29cc" />
+              <option name="method" value="GET" />
+              <option name="name" value="searchLocations" />
+              <option name="pathVariables">
+                <list>
+                  <pathVariableState>
+                    <option name="key" value="query" />
+                    <option name="value" value="Wuppertal" />
+                  </pathVariableState>
+                </list>
+              </option>
+              <option name="url" value="http://localhost:3000/journeys/location/:query" />
+            </requestState>
+            <requestState>
+              <option name="body">
+                <bodyState>
+                  <option name="raw" value="{&#10;  &quot;from&quot;: {&#10;    &quot;stopStationId&quot;: &quot;8000266&quot;&#10;  },&#10;  &quot;to&quot;: {&#10;    &quot;address&quot;: &quot;Neidenburger Str. 43, 45897 Gelsenkirchen&quot;,&#10;    &quot;latitude&quot;: 51.574272755490284,&#10;    &quot;longitude&quot;: 7.027275510766967&#10;  },&#10;  &quot;date&quot;: &quot;2023-07-15T16:01:57.889Z&quot;,&#10;  &quot;isArrivalDate&quot;: true&#10;}" />
+                  <option name="type" value="JSON" />
+                </bodyState>
+              </option>
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="c52acf03-bc0f-4d16-98e7-40ad73b6e9f5" />
+              <option name="method" value="POST" />
+              <option name="name" value="planJourney" />
+              <option name="url" value="http://localhost:3000/journeys/" />
+            </requestState>
+          </list>
+        </option>
+      </draftsState>
+    </option>
+    <option name="folders">
+      <list>
+        <folderState>
+          <option name="description" value="Testing the backend." />
+          <option name="icon" value="TEST_ROOT" />
+          <option name="id" value="852b579a-4a31-4bca-85e0-e786467a00ae" />
+          <option name="name" value="Oeffis Backend" />
+          <option name="sortWeight" value="1000000" />
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="folderPath" value="D:\OneDrive - studmail.w-hs.de\Studium\Master\04_SoSe_23\MPIN - Master-Projekt Informatik\Code\Oeffis\.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+          <option name="testSuite" value="true" />
+        </folderState>
+      </list>
+    </option>
+    <option name="id" value="2baad7cd-30d0-4b71-ad7c-a40d27032c72" />
+  </component>
+</project>

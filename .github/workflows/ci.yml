@@ -10,13 +10,15 @@ on:
 
 env:
   GITHUB_REGISTRY: ghcr.io
+  FRONTEND_SIMPLE_IMAGE_NAME: oeffis/frontend
+  BACKEND_SIMPLE_IMAGE_NAME: oeffis/backend
   FRONTEND_GITHUB_IMAGE_NAME: oeffis/oeffis/frontend
   FRONTEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/frontend
   BACKEND_GITHUB_IMAGE_NAME: oeffis/oeffis/backend
   BACKEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/backend
 
 jobs:
-    frontend_ci:
+    frontend_lint_test_build:
       name: Lint, Test and Build Frontend
       runs-on: ubuntu-latest
       steps:
@@ -41,17 +43,58 @@ jobs:
         - name: Test
           working-directory: frontend
           run: |
-            npm run test.unit -- run
+            npm run test
 
         - name: Build
           working-directory: frontend
           run: |
             npm run build
 
-    
     frontend_container:
-      name: Build and Deploy Frontend Container
-      needs: frontend_ci
+      name: Build amd64 Frontend Container
+      needs: frontend_lint_test_build
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Build Container
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/amd64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
+          
+
+    frontend_container_arm64:
+      name: Build arm64 Frontend Container
+      needs: frontend_lint_test_build
       runs-on: ubuntu-latest
       permissions:
         contents: read
@@ -62,38 +105,40 @@ jobs:
 
         - name: Set up QEMU
           uses: docker/setup-qemu-action@v2
+          with:
+            platforms: arm64
 
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v2
 
         - name: Log in to the Container registry
           uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-          if: github.ref == 'refs/heads/main'
           with:
             username: ${{ secrets.DOCKER_HUB_USER }}
             password: ${{ secrets.DOCKER_HUB_PASS }}
 
         - name: Log in to the Container registry
           uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-          if: github.ref == 'refs/heads/main'
           with:
             registry: ${{ env.GITHUB_REGISTRY }}
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Build and Push
+        - name: Build Container
           uses: docker/build-push-action@v4
           with:
-            context: backend
-            platforms: linux/amd64,linux/arm64
-            push: ${{ github.ref == 'refs/heads/main' }}
+            context: frontend
+            platforms: linux/amd64
+            push: true
             tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest
-            cache-from: type=gha
-            cache-to: type=gha,mode=max
-
-    backend_ci:
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
+         
+    backend_lint_test_build:
       name: Lint, Test and Build Backend
       runs-on: ubuntu-latest
       steps:
@@ -126,45 +171,323 @@ jobs:
               npm run build
 
     backend_container:
-        name: Build and Deploy Backend Container
-        needs: backend_ci
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v3
+      name: Build amd64 Backend Container
+      needs: backend_lint_test_build
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-          - name: Set up QEMU
-            uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-          - name: Set up Docker Buildx
-            uses: docker/setup-buildx-action@v2
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
 
-          - name: Log in to the Container registry
-            uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-            if: github.ref == 'refs/heads/main'
-            with:
-                username: ${{ secrets.DOCKER_HUB_USER }}
-                password: ${{ secrets.DOCKER_HUB_PASS }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
-          - name: Log in to the Container registry
-            uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-            if: github.ref == 'refs/heads/main'
-            with:
-                registry: ${{ env.GITHUB_REGISTRY }}
-                username: ${{ github.actor }}
-                password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Container
+        uses: docker/build-push-action@v4
+        with:
+            context: backend
+            platforms: linux/amd64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-amd64
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
 
-          - name: Build and Push
-            uses: docker/build-push-action@v4
-            with:
-                context: backend
-                platforms: linux/amd64,linux/arm64
-                push: ${{ github.ref == 'refs/heads/main' }}
-                tags: |
-                  ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-                  ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
-                cache-from: type=gha
-                cache-to: type=gha,mode=max
+    backend_container_arm64:
+      name: Build arm64 Backend Container
+      needs: backend_lint_test_build
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            username: ${{ secrets.DOCKER_HUB_USER }}
+            password: ${{ secrets.DOCKER_HUB_PASS }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            registry: ${{ env.GITHUB_REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Container
+        uses: docker/build-push-action@v4
+        with:
+            context: backend
+            platforms: linux/arm64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
+        
+    e2e_lint:
+      name: Lint E2E
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
+
+        - name: Lint
+          working-directory: e2e
+          run: |
+            npm run lint -- --max-warnings 0 --no-fix
+
+    e2e_test:
+      name: Run E2E Tests
+      needs: [e2e_lint,frontend_container,backend_container]
+      runs-on: ubuntu-latest
+      services:
+        backend:
+          image: oeffis/backend:${{ github.sha }}-untested-amd64
+          ports:
+            - 3000:3000
+        frontend:
+          image: oeffis/frontend:${{ github.sha }}-untested-amd64
+          ports:
+            - 8000:80
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
+
+        - name: Install Dependencies
+          working-directory: e2e
+          run: |
+            npm ci
+
+        - name: Run Tests
+          uses: cypress-io/github-action@v5
+          with:
+            working-directory: e2e
+
+        - name: Upload Artifacts
+          if: always()
+          uses: actions/upload-artifact@v3
+          with:
+            name: cypress-report
+            path: |
+              e2e/cypress/screenshots
+              e2e/cypress/videos
+
+    publish_amd64:
+      name: Publish Images (amd64)
+      needs: [e2e_test]
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+          with:
+            platforms: arm64
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+              username: ${{ secrets.DOCKER_HUB_USER }}
+              password: ${{ secrets.DOCKER_HUB_PASS }}
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+              registry: ${{ env.GITHUB_REGISTRY }}
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Release Frontend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }},
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+        
+        - name: Release Backend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+
+        - name: Release Frontend Container (latest)
+          uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest,
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+      
+        - name: Release Backend Container (latest)
+          uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
+          with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+
+    publish_arm64:
+      name: Publish Images (arm64)
+      needs: [e2e_test,frontend_container_arm64,backend_container_arm64]
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+          with:
+            platforms: arm64
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+              username: ${{ secrets.DOCKER_HUB_USER }}
+              password: ${{ secrets.DOCKER_HUB_PASS }}
+
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+              registry: ${{ env.GITHUB_REGISTRY }}
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Release Frontend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }},
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+        
+        - name: Release Backend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+
+        - name: Release Frontend Container (latest)
+          uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
+          with:
+            context: frontend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest,
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+      
+        - name: Release Backend Container (latest)
+          uses: docker/build-push-action@v4
+          if: github.ref == 'refs/heads/main'
+          with:
+            context: backend
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
+              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend

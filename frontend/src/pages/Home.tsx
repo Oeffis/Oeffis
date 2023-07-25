@@ -1,9 +1,6 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
-import JourneysContainer from "../components/JourneysContainer";
-import JourneyDetail from "../components/JourneyDetail";
-import UserContainer from "../components/UserContainer";
-import "./Home.css";
+import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonPage } from "@ionic/react";
+import { analytics, menu, person } from "ionicons/icons";
+import LeafletMapContainer from "../components/LeafletMapContainer";
 import { IJourney } from "../interfaces/IJourney.interface";
 import JourneyListComponent from "../components/JourneyListComponent";
 
@@ -79,21 +76,22 @@ const journey2 : IJourney = {
 const journeys = [journey, journey2];
 const Home: React.FC = () => (
   <IonPage>
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle>Blank</IonTitle>
-      </IonToolbar>
-    </IonHeader>
     <IonContent fullscreen>
-      <IonHeader collapse="condense">
-        <IonToolbar>
-          <IonTitle size="large">Blank</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <ExploreContainer/>
-      <UserContainer/>
-      <JourneysContainer/>
-      <JourneyListComponent journeys={journeys}/>
+      <LeafletMapContainer />
+      <IonFab slot="fixed" vertical="top" horizontal="end">
+        <IonFabButton color="primary">
+          <IonIcon icon={menu} />
+        </IonFabButton>
+        <IonFabList side="bottom">
+          <IonFabButton color="secondary" href="/userDemo">
+            <IonIcon icon={person} />
+          </IonFabButton>
+          <IonFabButton color="secondary" href="/journeyDemo">
+            <IonIcon icon={analytics} />
+          </IonFabButton>
+        </IonFabList>
+      </IonFab>
+            <JourneyListComponent journeys={journeys}/>
     </IonContent>
   </IonPage>
 );
