@@ -1,5 +1,5 @@
 import { VrrClientBase } from "./VrrClientBase";
-import { LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
+import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
 
 export type FindStopAtCoordinatesParameters = {
   latitude: number;
@@ -22,14 +22,14 @@ export class StopFinderClient extends VrrClientBase {
     return this.executeFetchRequest('/static03/XML_STOPFINDER_REQUEST', {
       name_sf: formattedCoordinates,
       type_sf: 'coord',
-    });
+    }, Convert.toLOCATIONSUGGESTSchema);
   }
 
   public async findStopByName(query: FindStopByNameParameters): Promise<LOCATIONSUGGESTSchema> {
     return this.executeFetchRequest('/static03/XML_STOPFINDER_REQUEST', {
       name_sf: query.search,
       type_sf: 'any',
-    });
+    }, Convert.toLOCATIONSUGGESTSchema);
   }
 
   /**

@@ -1,6 +1,10 @@
 import fetch, { RequestInit } from 'node-fetch';
 import { SystemMessage, SystemMessageType } from './vendor/VrrApiTypes';
 
+export type BaseApiResponse = {
+  systemMessages?: SystemMessage[];
+}
+
 export class VrrClientBase {
 
   private readonly baseUrl: string;
@@ -9,7 +13,7 @@ export class VrrClientBase {
     this.baseUrl = baseUrl;
   }
 
-  protected async executeFetchRequest(path: string, parameters: Record<string, string>): Promise<any> {
+  protected async executeFetchRequest<T extends BaseApiResponse>(path: string, parameters: Record<string, string>, objectFactory: (json: string) => T): Promise<T> {
     const options: RequestInit = {
       headers: {},
       method: 'GET',
@@ -34,14 +38,14 @@ export class VrrClientBase {
       throw new Error(`Request failed with unhandled status ${status}: ${body}`);
     }
 
-    const jsonResult = JSON.parse(body);
+    const jsonResult = objectFactory(body);
 
     this.checkSystemMessagesForErrors(jsonResult.systemMessages);
 
     return JSON.parse(body);
   }
 
-  private checkSystemMessagesForErrors(systemMessages: SystemMessage[]): void {
+  private checkSystemMessagesForErrors(systemMessages: SystemMessage[] | undefined): void {
     if (!systemMessages) {
       return;
     }
