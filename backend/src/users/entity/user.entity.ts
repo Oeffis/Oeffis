@@ -5,15 +5,15 @@ export class User {
     description: "Name of a User",
     example: "John Smith",
   })
-  name!: string;
+    name!: string;
   @ApiProperty({
     description: "Age of a User",
     example: 45,
   })
-  age!: number;
+    age!: number;
   @ApiProperty({
     description: "City of a User",
     example: "New York",
   })
-  city!: string;
+    city!: string;
 }

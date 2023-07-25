@@ -6,12 +6,12 @@ export class RefreshJourneyNotAvailable {
     description: "Http status code",
     example: 400,
   })
-  statusCode = 400;
+    statusCode = 400;
 
   @ApiProperty({
     description: "Error message",
     example: "Refresh journey not available.",
   })
-  message = "Refresh journey not available.";
+    message = "Refresh journey not available.";
 
 }
