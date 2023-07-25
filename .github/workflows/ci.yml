@@ -128,7 +128,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             context: frontend
-            platforms: linux/amd64
+            platforms: linux/arm64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64,
