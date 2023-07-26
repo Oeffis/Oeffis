@@ -1,9 +1,10 @@
 // To parse this data:
 //
-//   import { Convert, LOCATIONSUGGESTSchema, TICKETPRODUCTSchema } from "./file";
+//   import { Convert, LOCATIONSUGGESTSchema, SERVINGLINESSchema, TRIPSchema } from "./file";
 //
 //   const lOCATIONSUGGESTSchema = Convert.toLOCATIONSUGGESTSchema(json);
-//   const tICKETPRODUCTSchema = Convert.toTICKETPRODUCTSchema(json);
+//   const sERVINGLINESSchema = Convert.toSERVINGLINESSchema(json);
+//   const tRIPSchema = Convert.toTRIPSchema(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -36,7 +37,7 @@ export interface Versions {
     [property: string]: any;
 }
 
-export interface JourneyLocation {
+export interface JourneyLocationElement {
     assignedStops?:              AssignedLocation[];
     buildingNumber?:             string;
     coord?:                      Array<any[] | CoordClass | number>;
@@ -80,7 +81,7 @@ export interface Transportation {
     id?:               string;
     index?:            string;
     localitySequence?: Location[];
-    locationSequence?: JourneyLocation[];
+    locationSequence?: JourneyLocationElement[];
     name?:             string;
     number?:           string;
     operator?:         OperatorObject;
@@ -740,12 +741,57 @@ export enum SystemMessageType {
 }
 
 /**
- * TicketProduct-Request
+ * ServingLines-Request
  */
-export interface TICKETPRODUCTSchema {
-    serverInfo?: ServerInfo;
-    tickets?:    Array<any[] | boolean | number | number | null | TicketObject | string>;
-    version?:    string;
+export interface SERVINGLINESSchema {
+    lines?:          Transportation[];
+    serverInfo?:     ServerInfo;
+    systemMessages?: SystemMessage[];
+    version?:        string;
+}
+
+/**
+ * tripRequest
+ */
+export interface TRIPSchema {
+    error?:          Error;
+    journeys?:       Journey[];
+    properties?:     any;
+    serverInfo?:     ServerInfo;
+    systemMessages?: SystemMessage[];
+    taxiOperators?:  TaxiOperator[];
+    version:         string;
+}
+
+export interface Journey {
+    booking?:                   Booking[];
+    fare?:                      JourneyFare;
+    interchanges?:              number;
+    isAdditional?:              boolean;
+    isRealtimeOnlyInformative?: boolean;
+    legs?:                      Leg[];
+    rating?:                    number;
+}
+
+export interface Booking {
+    commType?:      CommType;
+    fromLeg?:       number;
+    serverAddress?: string;
+    toLeg?:         number;
+}
+
+export enum CommType {
+    Fax = "FAX",
+    HTTP = "HTTP",
+    ISDN = "ISDN",
+    JSON = "JSON",
+    Tcpip = "TCPIP",
+    Unknown = "UNKNOWN",
+}
+
+export interface JourneyFare {
+    tickets?: Array<any[] | boolean | number | number | null | TicketObject | string>;
+    zones?:   Zone[];
 }
 
 export interface TicketObject {
@@ -763,7 +809,7 @@ export interface TicketObject {
     priceBrutto?:             number;
     priceLevel?:              string;
     priceNetto?:              number;
-    properties?:              any[] | boolean | number | number | null | PropertiesProperties | string;
+    properties?:              any[] | boolean | number | number | null | PurpleProperties | string;
     relationKeys?:            RelationKey[];
     returnsAllowed?:          IsShortHaul;
     targetGroups?:            string[];
@@ -812,7 +858,7 @@ export enum Person {
     Student = "STUDENT",
 }
 
-export interface PropertiesProperties {
+export interface PurpleProperties {
     journeyDetail?:  string;
     ticketLongName?: string;
     [property: string]: any;
@@ -851,6 +897,271 @@ export enum TravellerClass {
     Second = "SECOND",
 }
 
+export interface Zone {
+    fromLeg?:     number;
+    net?:         string;
+    neutralZone?: string;
+    toLeg?:       number;
+    zones?:       Array<string[]>;
+    zonesUnited?: Array<string[]>;
+}
+
+export interface Leg {
+    coords?:               Array<Array<any[] | CoordClass | number>>;
+    destination?:          JourneyLocationElement;
+    distance?:             number;
+    duration?:             number;
+    elevationSummary?:     ElevationSummary;
+    fare?:                 LegFare;
+    footPathInfo?:         Array<any[] | boolean | FootPathInfoClass | number | number | null | string>;
+    hints?:                Info[];
+    infos?:                Info[];
+    interchange?:          Interchange;
+    isRealtimeControlled?: boolean;
+    origin?:               JourneyLocationElement;
+    pathDescriptions?:     Array<any[] | boolean | PathDescriptionClass | number | number | null | string>;
+    properties?:           any[] | boolean | number | number | null | FluffyProperties | string;
+    realtimeStatus?:       RealtimeTripStatus[];
+    stopSequence?:         JourneyLocationElement[];
+    transportation?:       Transportation;
+    vehicleAccess?:        string[] | string;
+}
+
+export interface ElevationSummary {
+    altDiffDw?:           number;
+    altDiffUp?:           number;
+    DestHeightMeter?:     number;
+    distDw?:              number;
+    distUp?:              number;
+    Length?:              number;
+    maxAlt?:              number;
+    MaxDeclinePercent?:   number;
+    maxGrad?:             number;
+    MaxHeightMeters?:     number;
+    MaxInclinePercent?:   number;
+    maxSlope?:            number;
+    minAlt?:              number;
+    MinHeightMeters?:     number;
+    OrigHeightMeter?:     number;
+    pixelHeight?:         number;
+    pixelWidth?:          number;
+    TotalDeclineMeters?:  number;
+    TotalDownwardMeters?: number;
+    TotalInclineMeter?:   number;
+    TotalUpwardMeters?:   number;
+}
+
+export interface LegFare {
+    zones?: Zone[];
+}
+
+export interface FootPathInfoClass {
+    duration?:     number;
+    footPathElem?: Array<any[] | boolean | number | number | null | FootPathElemObject | string>;
+    position?:     Position;
+}
+
+export interface FootPathElemObject {
+    description?: string;
+    destination?: PurpleJourneyLocation;
+    level?:       Level;
+    levelFrom?:   number;
+    levelTo?:     number;
+    origin?:      FluffyJourneyLocation;
+    type?:        FootPathElemType;
+    [property: string]: any;
+}
+
+export interface PurpleJourneyLocation {
+    assignedStops?:              AssignedLocation[];
+    buildingNumber?:             string;
+    coord?:                      Array<any[] | CoordClass | number>;
+    disassembledName?:           string;
+    id?:                         string;
+    infos?:                      Info[];
+    isBest?:                     boolean;
+    isGlobalId?:                 boolean;
+    matchQuality?:               number;
+    name?:                       string;
+    niveau?:                     number;
+    parent?:                     Location;
+    productClasses?:             number[];
+    properties?:                 LocationProperties;
+    streetName?:                 string;
+    type?:                       LocationType;
+    arrivalTimeBaseTimetable?:   string;
+    arrivalTimeEstimated?:       string;
+    arrivalTimePlanned?:         string;
+    departureTimeBaseTimetable?: string;
+    departureTimeEstimated?:     string;
+    departureTimePlanned?:       string;
+    isRealtimeControlled?:       boolean;
+    [property: string]: any;
+}
+
+export enum Level {
+    Down = "DOWN",
+    Level = "LEVEL",
+    Up = "UP",
+}
+
+export interface FluffyJourneyLocation {
+    assignedStops?:              AssignedLocation[];
+    buildingNumber?:             string;
+    coord?:                      Array<any[] | CoordClass | number>;
+    disassembledName?:           string;
+    id?:                         string;
+    infos?:                      Info[];
+    isBest?:                     boolean;
+    isGlobalId?:                 boolean;
+    matchQuality?:               number;
+    name?:                       string;
+    niveau?:                     number;
+    parent?:                     Location;
+    productClasses?:             number[];
+    properties?:                 LocationProperties;
+    streetName?:                 string;
+    type?:                       LocationType;
+    arrivalTimeBaseTimetable?:   string;
+    arrivalTimeEstimated?:       string;
+    arrivalTimePlanned?:         string;
+    departureTimeBaseTimetable?: string;
+    departureTimeEstimated?:     string;
+    departureTimePlanned?:       string;
+    isRealtimeControlled?:       boolean;
+    [property: string]: any;
+}
+
+export enum FootPathElemType {
+    Dangerous = "DANGEROUS",
+    Elevator = "ELEVATOR",
+    Escalator = "ESCALATOR",
+    Illuminated = "ILLUMINATED",
+    Level = "LEVEL",
+    Ramp = "RAMP",
+    Stairs = "STAIRS",
+}
+
+export enum Position {
+    After = "AFTER",
+    Before = "BEFORE",
+    Idest = "IDEST",
+    Unknown = "unknown",
+}
+
+export interface Interchange {
+    coords?: Array<Array<any[] | CoordClass | number>>;
+    desc?:   string;
+    type?:   number;
+}
+
+export interface PathDescriptionClass {
+    addInfo?:         string[];
+    coord?:           Array<any[] | CoordClass | number>;
+    cumDistance?:     number;
+    cumDuration?:     number;
+    distance?:        number;
+    distanceDown?:    number;
+    distanceUp?:      number;
+    duration?:        number;
+    fromCoordsIndex?: number;
+    guidanceSigns?:   GuidanceSign[];
+    manoeuvre?:       Manoeuvre;
+    name?:            string;
+    niveau?:          number;
+    properties?:      { [key: string]: any };
+    skyDirection?:    number;
+    toCoordsIndex?:   number;
+    turnDirection?:   TurnDirection;
+}
+
+export interface GuidanceSign {
+    skyDirection?: string;
+    text?:         string;
+    type?:         GuidanceSignType;
+    url?:          string;
+}
+
+export enum GuidanceSignType {
+    Direction = "DIRECTION",
+    ExitNumber = "EXIT_NUMBER",
+    RouteID = "ROUTE_ID",
+    UnknownSignType = "UNKNOWN_SIGN_TYPE",
+}
+
+export enum Manoeuvre {
+    Continue = "CONTINUE",
+    Destination = "DESTINATION",
+    Enter = "ENTER",
+    EnterBuiltuparea = "ENTER_BUILTUPAREA",
+    EnterRoundabout = "ENTER_ROUNDABOUT",
+    EnterToll = "ENTER_TOLL",
+    Keep = "KEEP",
+    Leave = "LEAVE",
+    LeaveBuiltuparea = "LEAVE_BUILTUPAREA",
+    LeaveRoundabout = "LEAVE_ROUNDABOUT",
+    LeaveToll = "LEAVE_TOLL",
+    OffRamp = "OFF_RAMP",
+    OnRamp = "ON_RAMP",
+    Origin = "ORIGIN",
+    Ramp = "RAMP",
+    StayRoundabout = "STAY_ROUNDABOUT",
+    TraverseCrossing = "TRAVERSE_CROSSING",
+    Turn = "TURN",
+    UTurn = "U_TURN",
+    Unknown = "UNKNOWN",
+}
+
+export enum TurnDirection {
+    Left = "LEFT",
+    Right = "RIGHT",
+    SharpLeft = "SHARP_LEFT",
+    SharpRight = "SHARP_RIGHT",
+    SlightLeft = "SLIGHT_LEFT",
+    SlightRight = "SLIGHT_RIGHT",
+    Straight = "STRAIGHT",
+    UTurn = "U_TURN",
+    Unknown = "UNKNOWN",
+}
+
+export interface FluffyProperties {
+    frequency?: Frequency;
+    [property: string]: any;
+}
+
+export interface Frequency {
+    avDuration:  number;
+    avTimeGap:   number;
+    maxDuration: number;
+    maxTimeGap:  number;
+    minDuration: number;
+    minTimeGap:  number;
+}
+
+export enum RealtimeTripStatus {
+    Deviation = "DEVIATION",
+    ExtraStops = "EXTRA_STOPS",
+    ExtraTrip = "EXTRA_TRIP",
+    Monitored = "MONITORED",
+    OutsideRealtimeWindow = "OUTSIDE_REALTIME_WINDOW",
+    PrognosisImpossible = "PROGNOSIS_IMPOSSIBLE",
+    RealtimeOnlyInformative = "REALTIME_ONLY_INFORMATIVE",
+    TripCancelled = "TRIP_CANCELLED",
+}
+
+export interface TaxiOperator {
+    desc:      string;
+    omc:       string;
+    providers: TaxiProvider[];
+}
+
+export interface TaxiProvider {
+    address: string;
+    name:    string;
+    tel:     string;
+    url:     string;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -862,12 +1173,20 @@ export class Convert {
         return JSON.stringify(uncast(value, r("LOCATIONSUGGESTSchema")), null, 2);
     }
 
-    public static toTICKETPRODUCTSchema(json: string): TICKETPRODUCTSchema {
-        return cast(JSON.parse(json), r("TICKETPRODUCTSchema"));
+    public static toSERVINGLINESSchema(json: string): SERVINGLINESSchema {
+        return cast(JSON.parse(json), r("SERVINGLINESSchema"));
     }
 
-    public static tICKETPRODUCTSchemaToJson(value: TICKETPRODUCTSchema): string {
-        return JSON.stringify(uncast(value, r("TICKETPRODUCTSchema")), null, 2);
+    public static sERVINGLINESSchemaToJson(value: SERVINGLINESSchema): string {
+        return JSON.stringify(uncast(value, r("SERVINGLINESSchema")), null, 2);
+    }
+
+    public static toTRIPSchema(json: string): TRIPSchema {
+        return cast(JSON.parse(json), r("TRIPSchema"));
+    }
+
+    public static tRIPSchemaToJson(value: TRIPSchema): string {
+        return JSON.stringify(uncast(value, r("TRIPSchema")), null, 2);
     }
 }
 
@@ -1041,7 +1360,7 @@ const typeMap: any = {
         { json: "interfaceMax", js: "interfaceMax", typ: u(undefined, "") },
         { json: "interfaceMin", js: "interfaceMin", typ: u(undefined, "") },
     ], "any"),
-    "JourneyLocation": o([
+    "JourneyLocationElement": o([
         { json: "assignedStops", js: "assignedStops", typ: u(undefined, a(r("AssignedLocation"))) },
         { json: "buildingNumber", js: "buildingNumber", typ: u(undefined, "") },
         { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
@@ -1077,7 +1396,7 @@ const typeMap: any = {
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "index", js: "index", typ: u(undefined, "") },
         { json: "localitySequence", js: "localitySequence", typ: u(undefined, a(r("Location"))) },
-        { json: "locationSequence", js: "locationSequence", typ: u(undefined, a(r("JourneyLocation"))) },
+        { json: "locationSequence", js: "locationSequence", typ: u(undefined, a(r("JourneyLocationElement"))) },
         { json: "name", js: "name", typ: u(undefined, "") },
         { json: "number", js: "number", typ: u(undefined, "") },
         { json: "operator", js: "operator", typ: u(undefined, r("OperatorObject")) },
@@ -1443,10 +1762,39 @@ const typeMap: any = {
         { json: "text", js: "text", typ: u(undefined, "") },
         { json: "type", js: "type", typ: u(undefined, r("SystemMessageType")) },
     ], false),
-    "TICKETPRODUCTSchema": o([
+    "SERVINGLINESSchema": o([
+        { json: "lines", js: "lines", typ: u(undefined, a(r("Transportation"))) },
         { json: "serverInfo", js: "serverInfo", typ: u(undefined, r("ServerInfo")) },
-        { json: "tickets", js: "tickets", typ: u(undefined, a(u(a("any"), true, 3.14, 0, null, r("TicketObject"), ""))) },
+        { json: "systemMessages", js: "systemMessages", typ: u(undefined, a(r("SystemMessage"))) },
         { json: "version", js: "version", typ: u(undefined, "") },
+    ], false),
+    "TRIPSchema": o([
+        { json: "error", js: "error", typ: u(undefined, r("Error")) },
+        { json: "journeys", js: "journeys", typ: u(undefined, a(r("Journey"))) },
+        { json: "properties", js: "properties", typ: u(undefined, "any") },
+        { json: "serverInfo", js: "serverInfo", typ: u(undefined, r("ServerInfo")) },
+        { json: "systemMessages", js: "systemMessages", typ: u(undefined, a(r("SystemMessage"))) },
+        { json: "taxiOperators", js: "taxiOperators", typ: u(undefined, a(r("TaxiOperator"))) },
+        { json: "version", js: "version", typ: "" },
+    ], false),
+    "Journey": o([
+        { json: "booking", js: "booking", typ: u(undefined, a(r("Booking"))) },
+        { json: "fare", js: "fare", typ: u(undefined, r("JourneyFare")) },
+        { json: "interchanges", js: "interchanges", typ: u(undefined, 3.14) },
+        { json: "isAdditional", js: "isAdditional", typ: u(undefined, true) },
+        { json: "isRealtimeOnlyInformative", js: "isRealtimeOnlyInformative", typ: u(undefined, true) },
+        { json: "legs", js: "legs", typ: u(undefined, a(r("Leg"))) },
+        { json: "rating", js: "rating", typ: u(undefined, 3.14) },
+    ], false),
+    "Booking": o([
+        { json: "commType", js: "commType", typ: u(undefined, r("CommType")) },
+        { json: "fromLeg", js: "fromLeg", typ: u(undefined, 3.14) },
+        { json: "serverAddress", js: "serverAddress", typ: u(undefined, "") },
+        { json: "toLeg", js: "toLeg", typ: u(undefined, 3.14) },
+    ], false),
+    "JourneyFare": o([
+        { json: "tickets", js: "tickets", typ: u(undefined, a(u(a("any"), true, 3.14, 0, null, r("TicketObject"), ""))) },
+        { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
     ], false),
     "TicketObject": o([
         { json: "accompany", js: "accompany", typ: u(undefined, r("Accompany")) },
@@ -1463,7 +1811,7 @@ const typeMap: any = {
         { json: "priceBrutto", js: "priceBrutto", typ: u(undefined, 3.14) },
         { json: "priceLevel", js: "priceLevel", typ: u(undefined, "") },
         { json: "priceNetto", js: "priceNetto", typ: u(undefined, 3.14) },
-        { json: "properties", js: "properties", typ: u(undefined, u(a("any"), true, 3.14, 0, null, r("PropertiesProperties"), "")) },
+        { json: "properties", js: "properties", typ: u(undefined, u(a("any"), true, 3.14, 0, null, r("PurpleProperties"), "")) },
         { json: "relationKeys", js: "relationKeys", typ: u(undefined, a(r("RelationKey"))) },
         { json: "returnsAllowed", js: "returnsAllowed", typ: u(undefined, r("IsShortHaul")) },
         { json: "targetGroups", js: "targetGroups", typ: u(undefined, a("")) },
@@ -1487,7 +1835,7 @@ const typeMap: any = {
         { json: "endTime", js: "endTime", typ: 3.14 },
         { json: "startTime", js: "startTime", typ: 3.14 },
     ], false),
-    "PropertiesProperties": o([
+    "PurpleProperties": o([
         { json: "journeyDetail", js: "journeyDetail", typ: u(undefined, "") },
         { json: "ticketLongName", js: "ticketLongName", typ: u(undefined, "") },
     ], "any"),
@@ -1502,6 +1850,176 @@ const typeMap: any = {
     "TicketArea": o([
         { json: "id", js: "id", typ: 3.14 },
         { json: "name", js: "name", typ: "" },
+    ], false),
+    "Zone": o([
+        { json: "fromLeg", js: "fromLeg", typ: u(undefined, 3.14) },
+        { json: "net", js: "net", typ: u(undefined, "") },
+        { json: "neutralZone", js: "neutralZone", typ: u(undefined, "") },
+        { json: "toLeg", js: "toLeg", typ: u(undefined, 3.14) },
+        { json: "zones", js: "zones", typ: u(undefined, a(a(""))) },
+        { json: "zonesUnited", js: "zonesUnited", typ: u(undefined, a(a(""))) },
+    ], false),
+    "Leg": o([
+        { json: "coords", js: "coords", typ: u(undefined, a(a(u(a("any"), r("CoordClass"), 3.14)))) },
+        { json: "destination", js: "destination", typ: u(undefined, r("JourneyLocationElement")) },
+        { json: "distance", js: "distance", typ: u(undefined, 3.14) },
+        { json: "duration", js: "duration", typ: u(undefined, 3.14) },
+        { json: "elevationSummary", js: "elevationSummary", typ: u(undefined, r("ElevationSummary")) },
+        { json: "fare", js: "fare", typ: u(undefined, r("LegFare")) },
+        { json: "footPathInfo", js: "footPathInfo", typ: u(undefined, a(u(a("any"), true, r("FootPathInfoClass"), 3.14, 0, null, ""))) },
+        { json: "hints", js: "hints", typ: u(undefined, a(r("Info"))) },
+        { json: "infos", js: "infos", typ: u(undefined, a(r("Info"))) },
+        { json: "interchange", js: "interchange", typ: u(undefined, r("Interchange")) },
+        { json: "isRealtimeControlled", js: "isRealtimeControlled", typ: u(undefined, true) },
+        { json: "origin", js: "origin", typ: u(undefined, r("JourneyLocationElement")) },
+        { json: "pathDescriptions", js: "pathDescriptions", typ: u(undefined, a(u(a("any"), true, r("PathDescriptionClass"), 3.14, 0, null, ""))) },
+        { json: "properties", js: "properties", typ: u(undefined, u(a("any"), true, 3.14, 0, null, r("FluffyProperties"), "")) },
+        { json: "realtimeStatus", js: "realtimeStatus", typ: u(undefined, a(r("RealtimeTripStatus"))) },
+        { json: "stopSequence", js: "stopSequence", typ: u(undefined, a(r("JourneyLocationElement"))) },
+        { json: "transportation", js: "transportation", typ: u(undefined, r("Transportation")) },
+        { json: "vehicleAccess", js: "vehicleAccess", typ: u(undefined, u(a(""), "")) },
+    ], false),
+    "ElevationSummary": o([
+        { json: "altDiffDw", js: "altDiffDw", typ: u(undefined, 3.14) },
+        { json: "altDiffUp", js: "altDiffUp", typ: u(undefined, 3.14) },
+        { json: "DestHeightMeter", js: "DestHeightMeter", typ: u(undefined, 3.14) },
+        { json: "distDw", js: "distDw", typ: u(undefined, 3.14) },
+        { json: "distUp", js: "distUp", typ: u(undefined, 3.14) },
+        { json: "Length", js: "Length", typ: u(undefined, 3.14) },
+        { json: "maxAlt", js: "maxAlt", typ: u(undefined, 3.14) },
+        { json: "MaxDeclinePercent", js: "MaxDeclinePercent", typ: u(undefined, 3.14) },
+        { json: "maxGrad", js: "maxGrad", typ: u(undefined, 3.14) },
+        { json: "MaxHeightMeters", js: "MaxHeightMeters", typ: u(undefined, 3.14) },
+        { json: "MaxInclinePercent", js: "MaxInclinePercent", typ: u(undefined, 3.14) },
+        { json: "maxSlope", js: "maxSlope", typ: u(undefined, 3.14) },
+        { json: "minAlt", js: "minAlt", typ: u(undefined, 3.14) },
+        { json: "MinHeightMeters", js: "MinHeightMeters", typ: u(undefined, 3.14) },
+        { json: "OrigHeightMeter", js: "OrigHeightMeter", typ: u(undefined, 3.14) },
+        { json: "pixelHeight", js: "pixelHeight", typ: u(undefined, 3.14) },
+        { json: "pixelWidth", js: "pixelWidth", typ: u(undefined, 3.14) },
+        { json: "TotalDeclineMeters", js: "TotalDeclineMeters", typ: u(undefined, 3.14) },
+        { json: "TotalDownwardMeters", js: "TotalDownwardMeters", typ: u(undefined, 3.14) },
+        { json: "TotalInclineMeter", js: "TotalInclineMeter", typ: u(undefined, 3.14) },
+        { json: "TotalUpwardMeters", js: "TotalUpwardMeters", typ: u(undefined, 3.14) },
+    ], false),
+    "LegFare": o([
+        { json: "zones", js: "zones", typ: u(undefined, a(r("Zone"))) },
+    ], false),
+    "FootPathInfoClass": o([
+        { json: "duration", js: "duration", typ: u(undefined, 3.14) },
+        { json: "footPathElem", js: "footPathElem", typ: u(undefined, a(u(a("any"), true, 3.14, 0, null, r("FootPathElemObject"), ""))) },
+        { json: "position", js: "position", typ: u(undefined, r("Position")) },
+    ], false),
+    "FootPathElemObject": o([
+        { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "destination", js: "destination", typ: u(undefined, r("PurpleJourneyLocation")) },
+        { json: "level", js: "level", typ: u(undefined, r("Level")) },
+        { json: "levelFrom", js: "levelFrom", typ: u(undefined, 3.14) },
+        { json: "levelTo", js: "levelTo", typ: u(undefined, 3.14) },
+        { json: "origin", js: "origin", typ: u(undefined, r("FluffyJourneyLocation")) },
+        { json: "type", js: "type", typ: u(undefined, r("FootPathElemType")) },
+    ], "any"),
+    "PurpleJourneyLocation": o([
+        { json: "assignedStops", js: "assignedStops", typ: u(undefined, a(r("AssignedLocation"))) },
+        { json: "buildingNumber", js: "buildingNumber", typ: u(undefined, "") },
+        { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
+        { json: "disassembledName", js: "disassembledName", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: u(undefined, "") },
+        { json: "infos", js: "infos", typ: u(undefined, a(r("Info"))) },
+        { json: "isBest", js: "isBest", typ: u(undefined, true) },
+        { json: "isGlobalId", js: "isGlobalId", typ: u(undefined, true) },
+        { json: "matchQuality", js: "matchQuality", typ: u(undefined, 3.14) },
+        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "niveau", js: "niveau", typ: u(undefined, 3.14) },
+        { json: "parent", js: "parent", typ: u(undefined, r("Location")) },
+        { json: "productClasses", js: "productClasses", typ: u(undefined, a(3.14)) },
+        { json: "properties", js: "properties", typ: u(undefined, r("LocationProperties")) },
+        { json: "streetName", js: "streetName", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, r("LocationType")) },
+        { json: "arrivalTimeBaseTimetable", js: "arrivalTimeBaseTimetable", typ: u(undefined, "") },
+        { json: "arrivalTimeEstimated", js: "arrivalTimeEstimated", typ: u(undefined, "") },
+        { json: "arrivalTimePlanned", js: "arrivalTimePlanned", typ: u(undefined, "") },
+        { json: "departureTimeBaseTimetable", js: "departureTimeBaseTimetable", typ: u(undefined, "") },
+        { json: "departureTimeEstimated", js: "departureTimeEstimated", typ: u(undefined, "") },
+        { json: "departureTimePlanned", js: "departureTimePlanned", typ: u(undefined, "") },
+        { json: "isRealtimeControlled", js: "isRealtimeControlled", typ: u(undefined, true) },
+    ], "any"),
+    "FluffyJourneyLocation": o([
+        { json: "assignedStops", js: "assignedStops", typ: u(undefined, a(r("AssignedLocation"))) },
+        { json: "buildingNumber", js: "buildingNumber", typ: u(undefined, "") },
+        { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
+        { json: "disassembledName", js: "disassembledName", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: u(undefined, "") },
+        { json: "infos", js: "infos", typ: u(undefined, a(r("Info"))) },
+        { json: "isBest", js: "isBest", typ: u(undefined, true) },
+        { json: "isGlobalId", js: "isGlobalId", typ: u(undefined, true) },
+        { json: "matchQuality", js: "matchQuality", typ: u(undefined, 3.14) },
+        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "niveau", js: "niveau", typ: u(undefined, 3.14) },
+        { json: "parent", js: "parent", typ: u(undefined, r("Location")) },
+        { json: "productClasses", js: "productClasses", typ: u(undefined, a(3.14)) },
+        { json: "properties", js: "properties", typ: u(undefined, r("LocationProperties")) },
+        { json: "streetName", js: "streetName", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, r("LocationType")) },
+        { json: "arrivalTimeBaseTimetable", js: "arrivalTimeBaseTimetable", typ: u(undefined, "") },
+        { json: "arrivalTimeEstimated", js: "arrivalTimeEstimated", typ: u(undefined, "") },
+        { json: "arrivalTimePlanned", js: "arrivalTimePlanned", typ: u(undefined, "") },
+        { json: "departureTimeBaseTimetable", js: "departureTimeBaseTimetable", typ: u(undefined, "") },
+        { json: "departureTimeEstimated", js: "departureTimeEstimated", typ: u(undefined, "") },
+        { json: "departureTimePlanned", js: "departureTimePlanned", typ: u(undefined, "") },
+        { json: "isRealtimeControlled", js: "isRealtimeControlled", typ: u(undefined, true) },
+    ], "any"),
+    "Interchange": o([
+        { json: "coords", js: "coords", typ: u(undefined, a(a(u(a("any"), r("CoordClass"), 3.14)))) },
+        { json: "desc", js: "desc", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, 3.14) },
+    ], false),
+    "PathDescriptionClass": o([
+        { json: "addInfo", js: "addInfo", typ: u(undefined, a("")) },
+        { json: "coord", js: "coord", typ: u(undefined, a(u(a("any"), r("CoordClass"), 3.14))) },
+        { json: "cumDistance", js: "cumDistance", typ: u(undefined, 3.14) },
+        { json: "cumDuration", js: "cumDuration", typ: u(undefined, 3.14) },
+        { json: "distance", js: "distance", typ: u(undefined, 3.14) },
+        { json: "distanceDown", js: "distanceDown", typ: u(undefined, 3.14) },
+        { json: "distanceUp", js: "distanceUp", typ: u(undefined, 3.14) },
+        { json: "duration", js: "duration", typ: u(undefined, 3.14) },
+        { json: "fromCoordsIndex", js: "fromCoordsIndex", typ: u(undefined, 3.14) },
+        { json: "guidanceSigns", js: "guidanceSigns", typ: u(undefined, a(r("GuidanceSign"))) },
+        { json: "manoeuvre", js: "manoeuvre", typ: u(undefined, r("Manoeuvre")) },
+        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "niveau", js: "niveau", typ: u(undefined, 3.14) },
+        { json: "properties", js: "properties", typ: u(undefined, m("any")) },
+        { json: "skyDirection", js: "skyDirection", typ: u(undefined, 3.14) },
+        { json: "toCoordsIndex", js: "toCoordsIndex", typ: u(undefined, 3.14) },
+        { json: "turnDirection", js: "turnDirection", typ: u(undefined, r("TurnDirection")) },
+    ], false),
+    "GuidanceSign": o([
+        { json: "skyDirection", js: "skyDirection", typ: u(undefined, "") },
+        { json: "text", js: "text", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, r("GuidanceSignType")) },
+        { json: "url", js: "url", typ: u(undefined, "") },
+    ], false),
+    "FluffyProperties": o([
+        { json: "frequency", js: "frequency", typ: u(undefined, r("Frequency")) },
+    ], "any"),
+    "Frequency": o([
+        { json: "avDuration", js: "avDuration", typ: 3.14 },
+        { json: "avTimeGap", js: "avTimeGap", typ: 3.14 },
+        { json: "maxDuration", js: "maxDuration", typ: 3.14 },
+        { json: "maxTimeGap", js: "maxTimeGap", typ: 3.14 },
+        { json: "minDuration", js: "minDuration", typ: 3.14 },
+        { json: "minTimeGap", js: "minTimeGap", typ: 3.14 },
+    ], false),
+    "TaxiOperator": o([
+        { json: "desc", js: "desc", typ: "" },
+        { json: "omc", js: "omc", typ: "" },
+        { json: "providers", js: "providers", typ: a(r("TaxiProvider")) },
+    ], false),
+    "TaxiProvider": o([
+        { json: "address", js: "address", typ: "" },
+        { json: "name", js: "name", typ: "" },
+        { json: "tel", js: "tel", typ: "" },
+        { json: "url", js: "url", typ: "" },
     ], false),
     "DataSource": [
         "PROFILE",
@@ -1706,6 +2224,14 @@ const typeMap: any = {
         "message",
         "warning",
     ],
+    "CommType": [
+        "FAX",
+        "HTTP",
+        "ISDN",
+        "JSON",
+        "TCPIP",
+        "UNKNOWN",
+    ],
     "IsShortHaul": [
         "NO",
         "UNKNOWN",
@@ -1742,5 +2268,74 @@ const typeMap: any = {
         "FIRST",
         "OTHER",
         "SECOND",
+    ],
+    "Level": [
+        "DOWN",
+        "LEVEL",
+        "UP",
+    ],
+    "FootPathElemType": [
+        "DANGEROUS",
+        "ELEVATOR",
+        "ESCALATOR",
+        "ILLUMINATED",
+        "LEVEL",
+        "RAMP",
+        "STAIRS",
+    ],
+    "Position": [
+        "AFTER",
+        "BEFORE",
+        "IDEST",
+        "unknown",
+    ],
+    "GuidanceSignType": [
+        "DIRECTION",
+        "EXIT_NUMBER",
+        "ROUTE_ID",
+        "UNKNOWN_SIGN_TYPE",
+    ],
+    "Manoeuvre": [
+        "CONTINUE",
+        "DESTINATION",
+        "ENTER",
+        "ENTER_BUILTUPAREA",
+        "ENTER_ROUNDABOUT",
+        "ENTER_TOLL",
+        "KEEP",
+        "LEAVE",
+        "LEAVE_BUILTUPAREA",
+        "LEAVE_ROUNDABOUT",
+        "LEAVE_TOLL",
+        "OFF_RAMP",
+        "ON_RAMP",
+        "ORIGIN",
+        "RAMP",
+        "STAY_ROUNDABOUT",
+        "TRAVERSE_CROSSING",
+        "TURN",
+        "U_TURN",
+        "UNKNOWN",
+    ],
+    "TurnDirection": [
+        "LEFT",
+        "RIGHT",
+        "SHARP_LEFT",
+        "SHARP_RIGHT",
+        "SLIGHT_LEFT",
+        "SLIGHT_RIGHT",
+        "STRAIGHT",
+        "U_TURN",
+        "UNKNOWN",
+    ],
+    "RealtimeTripStatus": [
+        "DEVIATION",
+        "EXTRA_STOPS",
+        "EXTRA_TRIP",
+        "MONITORED",
+        "OUTSIDE_REALTIME_WINDOW",
+        "PROGNOSIS_IMPOSSIBLE",
+        "REALTIME_ONLY_INFORMATIVE",
+        "TRIP_CANCELLED",
     ],
 };

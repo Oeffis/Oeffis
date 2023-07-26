@@ -1,3 +1,4 @@
+import { VRR_TEST_API_BASE_URL } from "./Constants";
 import { VrrClientBase } from "./VrrClientBase";
 import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
 
@@ -11,10 +12,6 @@ export type FindStopByNameParameters = {
 };
 
 export class StopFinderClient extends VrrClientBase {
-
-  constructor() {
-    super('https://openservice-test.vrr.de/');
-  }
 
   public async findStopAtCoordinates(query: FindStopAtCoordinatesParameters): Promise<LOCATIONSUGGESTSchema> {
     const formattedCoordinates = this.formatCoordinates(query.latitude, query.longitude);
@@ -57,23 +54,3 @@ export class StopFinderClient extends VrrClientBase {
     return `${longitude.toFixed(5)}:${latitude.toFixed(5)}:WGS84[dd.ddddd]`;
   }
 }
-
-async function main() {
-  const client = new StopFinderClient();
-  const result = await client.findStopAtCoordinates({
-    latitude: 51.231000, // Breitengrad
-    longitude: 6.787835,  // Längengrad
-  });
-
-  console.log('Result:', result.locations?.map((location) => location.name));
-
-  const result2 = await client.findStopByName({
-    search: 'Düsseldorf Hbf',
-  });
-
-  console.log('Result2:', result2.locations?.map((location) => location.name));
-}
-
-main()
-  .then(console.log)
-  .catch(console.error);

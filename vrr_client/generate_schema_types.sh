@@ -14,7 +14,8 @@ rm -fr ./work/JSON_Schema/
 
 REQUIRED_TYPES=(
   "LOCATION_SUGGEST_Schema"
-  "TICKET_PRODUCT_Schema"
+  "SERVINGLINES_Schema"
+  "TRIP_Schema"
 )
 
 SRC_ARGS=""
@@ -30,4 +31,4 @@ done
   $SRC_ARGS \
   --out ./src/vendor/VrrApiTypes.ts
 
-# rm -fr ./work
+rm -fr ./work

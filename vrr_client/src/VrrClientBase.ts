@@ -5,6 +5,22 @@ export type BaseApiResponse = {
   systemMessages?: SystemMessage[];
 }
 
+export type SchemaConverter<T extends BaseApiResponse> = (json: string) => T;
+
+export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(schemaConverter: SchemaConverter<T>): SchemaConverter<T> {
+  return (json: string) => {
+    // In some cases the API will return json that does not conform to the schema.
+    // The best workaround is to just accept it as json. This will need to be
+    // reworked in the future.
+    try {
+      return schemaConverter(json);
+    } catch (e) {
+      console.error('Ignoring error while parsing response', e);
+      return JSON.parse(json);
+    }
+  };
+}
+
 export class VrrClientBase {
 
   private readonly baseUrl: string;
@@ -13,7 +29,7 @@ export class VrrClientBase {
     this.baseUrl = baseUrl;
   }
 
-  protected async executeFetchRequest<T extends BaseApiResponse>(path: string, parameters: Record<string, string>, objectFactory: (json: string) => T): Promise<T> {
+  protected async executeFetchRequest<T extends BaseApiResponse>(path: string, parameters: Record<string, string | number>, schemaConverter: SchemaConverter<T>): Promise<T> {
     const options: RequestInit = {
       headers: {},
       method: 'GET',
@@ -28,8 +44,6 @@ export class VrrClientBase {
 
     const url = urlWithParams.toString();
 
-    console.log(`Fetching ${url}`);
-
     const response = await fetch(url, options);
     const body = await response.text();
     const status = response.status;
@@ -38,11 +52,11 @@ export class VrrClientBase {
       throw new Error(`Request failed with unhandled status ${status}: ${body}`);
     }
 
-    const jsonResult = objectFactory(body);
+    const jsonResult = schemaConverter(body);
 
     this.checkSystemMessagesForErrors(jsonResult.systemMessages);
 
-    return JSON.parse(body);
+    return jsonResult;
   }
 
   private checkSystemMessagesForErrors(systemMessages: SystemMessage[] | undefined): void {
