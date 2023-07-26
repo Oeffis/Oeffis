@@ -9,13 +9,13 @@ When("the journey demo is opened", () => {
 });
 
 When("{string} is entered into the stop search", (input: string) => {
-    cy.get("[data-cy=\"stopQuery\"]").type(input);
+    cy.findByTestId("stopQuery").type(input);
 });
 
 When("the search button is clicked", () => {
-    cy.get("[data-cy=\"stopQuerySubmit\"]").click();
+    cy.findByTestId("stopQuerySubmit").click();
 });
 
 Then("one of the results is {string}", (result: string) => {
-    cy.get("[data-cy=\"locationName\"]").contains(result).should("exist");
+    cy.findAllByTestId("locationName").contains(result).should("exist");
 });
