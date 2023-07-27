@@ -3,11 +3,13 @@ import { SystemMessage, SystemMessageType } from './vendor/VrrApiTypes';
 
 export type BaseApiResponse = {
   systemMessages?: SystemMessage[];
-}
+};
 
 export type SchemaConverter<T extends BaseApiResponse> = (json: string) => T;
 
-export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(schemaConverter: SchemaConverter<T>): SchemaConverter<T> {
+export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(
+  schemaConverter: SchemaConverter<T>,
+): SchemaConverter<T> {
   return (json: string) => {
     // In some cases the API will return json that does not conform to the schema.
     // The best workaround is to just accept it as json. This will need to be
@@ -22,14 +24,17 @@ export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(schemaC
 }
 
 export class VrrClientBase {
-
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
-  protected async executeFetchRequest<T extends BaseApiResponse>(path: string, parameters: Record<string, string | number>, schemaConverter: SchemaConverter<T>): Promise<T> {
+  protected async executeFetchRequest<T extends BaseApiResponse>(
+    path: string,
+    parameters: Record<string, string | number>,
+    schemaConverter: SchemaConverter<T>,
+  ): Promise<T> {
     const options: RequestInit = {
       headers: {},
       method: 'GET',
@@ -49,7 +54,9 @@ export class VrrClientBase {
     const status = response.status;
 
     if (!response.ok) {
-      throw new Error(`Request failed with unhandled status ${status}: ${body}`);
+      throw new Error(
+        `Request failed with unhandled status ${status}: ${body}`,
+      );
     }
 
     const jsonResult = schemaConverter(body);
@@ -59,14 +66,21 @@ export class VrrClientBase {
     return jsonResult;
   }
 
-  private checkSystemMessagesForErrors(systemMessages: SystemMessage[] | undefined): void {
+  private checkSystemMessagesForErrors(
+    systemMessages: SystemMessage[] | undefined,
+  ): void {
     if (!systemMessages) {
       return;
     }
 
     const errors = systemMessages.filter((message) => {
       // The API sometimes returns errors that are not really errors...
-      if (message.type === SystemMessageType.Error && message.module === 'BROKER' && message.code === -8011 && message.text === '') {
+      if (
+        message.type === SystemMessageType.Error &&
+        message.module === 'BROKER' &&
+        message.code === -8011 &&
+        message.text === ''
+      ) {
         return false;
       }
 
@@ -74,9 +88,13 @@ export class VrrClientBase {
     });
 
     if (errors.length > 0) {
-      const formattedErrors = errors.map((error) => `${error.type} / ${error.subType} / ${error.code}: (from ${error.module}): ${error.text}`);
-      throw new Error(`Request failed with system messages: ${formattedErrors.join(', ')}`);
+      const formattedErrors = errors.map(
+        (error) =>
+          `${error.type} / ${error.subType} / ${error.code}: (from ${error.module}): ${error.text}`,
+      );
+      throw new Error(
+        `Request failed with system messages: ${formattedErrors.join(', ')}`,
+      );
     }
   }
-
 }

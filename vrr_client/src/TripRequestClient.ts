@@ -1,6 +1,5 @@
-import { VRR_TEST_API_BASE_URL } from "./Constants";
-import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
-import { Convert, TRIPSchema } from "./vendor/VrrApiTypes";
+import { VrrClientBase, warpAsFailSafeSchemaConverter } from './VrrClientBase';
+import { Convert, TRIPSchema } from './vendor/VrrApiTypes';
 
 export type QueryTripParameters = {
   originPointId: string;
@@ -13,22 +12,26 @@ export type FindStopByNameParameters = {
 };
 
 export class TripRequestClient extends VrrClientBase {
-
   public async queryTrip(query: QueryTripParameters): Promise<TRIPSchema> {
-    const viaOptions: Record<string, string> = query.viaPointId ?
+    const viaOptions: Record<string, string> = query.viaPointId
+      ? {
+          name_via: query.viaPointId,
+          type_via: 'any',
+        }
+      : {};
+
+    return this.executeFetchRequest(
+      '/static03/XML_TRIP_REQUEST2',
       {
-        name_via: query.viaPointId,
-        type_via: 'any',
-      } : {};
+        name_origin: query.originPointId,
+        type_origin: 'any',
 
-    return this.executeFetchRequest('/static03/XML_TRIP_REQUEST2', {
-      name_origin: query.originPointId,
-      type_origin: 'any',
+        name_destination: query.destinationPointId,
+        type_destination: 'any',
 
-      name_destination: query.destinationPointId,
-      type_destination: 'any',
-
-      ...viaOptions,
-    }, warpAsFailSafeSchemaConverter(Convert.toTRIPSchema));
+        ...viaOptions,
+      },
+      warpAsFailSafeSchemaConverter(Convert.toTRIPSchema),
+    );
   }
 }

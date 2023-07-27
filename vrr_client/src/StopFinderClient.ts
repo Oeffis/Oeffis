@@ -1,6 +1,5 @@
-import { VRR_TEST_API_BASE_URL } from "./Constants";
-import { VrrClientBase } from "./VrrClientBase";
-import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
+import { VrrClientBase } from './VrrClientBase';
+import { Convert, LOCATIONSUGGESTSchema } from './vendor/VrrApiTypes';
 
 export type FindStopAtCoordinatesParameters = {
   latitude: number;
@@ -12,21 +11,35 @@ export type FindStopByNameParameters = {
 };
 
 export class StopFinderClient extends VrrClientBase {
+  public async findStopAtCoordinates(
+    query: FindStopAtCoordinatesParameters,
+  ): Promise<LOCATIONSUGGESTSchema> {
+    const formattedCoordinates = this.formatCoordinates(
+      query.latitude,
+      query.longitude,
+    );
 
-  public async findStopAtCoordinates(query: FindStopAtCoordinatesParameters): Promise<LOCATIONSUGGESTSchema> {
-    const formattedCoordinates = this.formatCoordinates(query.latitude, query.longitude);
-
-    return this.executeFetchRequest('/static03/XML_STOPFINDER_REQUEST', {
-      name_sf: formattedCoordinates,
-      type_sf: 'coord',
-    }, Convert.toLOCATIONSUGGESTSchema);
+    return this.executeFetchRequest(
+      '/static03/XML_STOPFINDER_REQUEST',
+      {
+        name_sf: formattedCoordinates,
+        type_sf: 'coord',
+      },
+      Convert.toLOCATIONSUGGESTSchema,
+    );
   }
 
-  public async findStopByName(query: FindStopByNameParameters): Promise<LOCATIONSUGGESTSchema> {
-    return this.executeFetchRequest('/static03/XML_STOPFINDER_REQUEST', {
-      name_sf: query.search,
-      type_sf: 'any',
-    }, Convert.toLOCATIONSUGGESTSchema);
+  public async findStopByName(
+    query: FindStopByNameParameters,
+  ): Promise<LOCATIONSUGGESTSchema> {
+    return this.executeFetchRequest(
+      '/static03/XML_STOPFINDER_REQUEST',
+      {
+        name_sf: query.search,
+        type_sf: 'any',
+      },
+      Convert.toLOCATIONSUGGESTSchema,
+    );
   }
 
   /**
