@@ -1,5 +1,5 @@
-import { VrrClientBase, warpAsFailSafeSchemaConverter } from './VrrClientBase';
-import { Convert, SERVINGLINESSchema } from './vendor/VrrApiTypes';
+import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
+import { Convert, SERVINGLINESSchema } from "./vendor/VrrApiTypes";
 
 export type FindServingLinesByStopParameters = {
   pointId: string;
@@ -14,13 +14,13 @@ export class ServingLinesClient extends VrrClientBase {
     query: FindServingLinesByStopParameters,
   ): Promise<SERVINGLINESSchema> {
     return this.executeFetchRequest(
-      '/static03/XML_SERVINGLINES_REQUEST',
+      "/static03/XML_SERVINGLINES_REQUEST",
       {
         name_sl: query.pointId,
-        type_sl: 'any',
-        mode: 'odv',
+        type_sl: "any",
+        mode: "odv",
         // This will make the API ignore the type_sl parameter, because its not required but its presence is required.
-        typeInfo_sl: 'invalid',
+        typeInfo_sl: "invalid",
       },
       warpAsFailSafeSchemaConverter(Convert.toSERVINGLINESSchema),
     );
@@ -30,10 +30,10 @@ export class ServingLinesClient extends VrrClientBase {
     query: FindServingLinesByLineName,
   ): Promise<SERVINGLINESSchema> {
     return this.executeFetchRequest(
-      '/static03/XML_SERVINGLINES_REQUEST',
+      "/static03/XML_SERVINGLINES_REQUEST",
       {
         lineName: query.search,
-        mode: 'line',
+        mode: "line",
       },
       warpAsFailSafeSchemaConverter(Convert.toSERVINGLINESSchema),
     );

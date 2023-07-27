@@ -1,5 +1,5 @@
-import fetch, { RequestInit } from 'node-fetch';
-import { SystemMessage, SystemMessageType } from './vendor/VrrApiTypes';
+import fetch, { RequestInit } from "node-fetch";
+import { SystemMessage, SystemMessageType } from "./vendor/VrrApiTypes";
 
 export type BaseApiResponse = {
   systemMessages?: SystemMessage[];
@@ -17,7 +17,7 @@ export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(
     try {
       return schemaConverter(json);
     } catch (e) {
-      console.error('Ignoring error while parsing response', e);
+      console.error("Ignoring error while parsing response", e);
       return JSON.parse(json);
     }
   };
@@ -37,14 +37,14 @@ export class VrrClientBase {
   ): Promise<T> {
     const options: RequestInit = {
       headers: {},
-      method: 'GET',
+      method: "GET",
     };
 
     const urlWithParams = new URL(path, this.baseUrl);
     urlWithParams.search = new URLSearchParams({
       ...parameters,
-      outputFormat: 'rapidJSON',
-      version: '10.4.18.18',
+      outputFormat: "rapidJSON",
+      version: "10.4.18.18",
     }).toString();
 
     const url = urlWithParams.toString();
@@ -77,9 +77,9 @@ export class VrrClientBase {
       // The API sometimes returns errors that are not really errors...
       if (
         message.type === SystemMessageType.Error &&
-        message.module === 'BROKER' &&
+        message.module === "BROKER" &&
         message.code === -8011 &&
-        message.text === ''
+        message.text === ""
       ) {
         return false;
       }
@@ -93,7 +93,7 @@ export class VrrClientBase {
           `${error.type} / ${error.subType} / ${error.code}: (from ${error.module}): ${error.text}`,
       );
       throw new Error(
-        `Request failed with system messages: ${formattedErrors.join(', ')}`,
+        `Request failed with system messages: ${formattedErrors.join(", ")}`,
       );
     }
   }

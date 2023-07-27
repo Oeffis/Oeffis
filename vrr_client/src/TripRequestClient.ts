@@ -1,5 +1,5 @@
-import { VrrClientBase, warpAsFailSafeSchemaConverter } from './VrrClientBase';
-import { Convert, TRIPSchema } from './vendor/VrrApiTypes';
+import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
+import { Convert, TRIPSchema } from "./vendor/VrrApiTypes";
 
 export type QueryTripParameters = {
   originPointId: string;
@@ -16,18 +16,18 @@ export class TripRequestClient extends VrrClientBase {
     const viaOptions: Record<string, string> = query.viaPointId
       ? {
           name_via: query.viaPointId,
-          type_via: 'any',
+          type_via: "any",
         }
       : {};
 
     return this.executeFetchRequest(
-      '/static03/XML_TRIP_REQUEST2',
+      "/static03/XML_TRIP_REQUEST2",
       {
         name_origin: query.originPointId,
-        type_origin: 'any',
+        type_origin: "any",
 
         name_destination: query.destinationPointId,
-        type_destination: 'any',
+        type_destination: "any",
 
         ...viaOptions,
       },

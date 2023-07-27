@@ -1,5 +1,5 @@
-import { VrrClientBase } from './VrrClientBase';
-import { Convert, LOCATIONSUGGESTSchema } from './vendor/VrrApiTypes';
+import { VrrClientBase } from "./VrrClientBase";
+import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
 
 export type FindStopAtCoordinatesParameters = {
   latitude: number;
@@ -20,10 +20,10 @@ export class StopFinderClient extends VrrClientBase {
     );
 
     return this.executeFetchRequest(
-      '/static03/XML_STOPFINDER_REQUEST',
+      "/static03/XML_STOPFINDER_REQUEST",
       {
         name_sf: formattedCoordinates,
-        type_sf: 'coord',
+        type_sf: "coord",
       },
       Convert.toLOCATIONSUGGESTSchema,
     );
@@ -33,10 +33,10 @@ export class StopFinderClient extends VrrClientBase {
     query: FindStopByNameParameters,
   ): Promise<LOCATIONSUGGESTSchema> {
     return this.executeFetchRequest(
-      '/static03/XML_STOPFINDER_REQUEST',
+      "/static03/XML_STOPFINDER_REQUEST",
       {
         name_sf: query.search,
-        type_sf: 'any',
+        type_sf: "any",
       },
       Convert.toLOCATIONSUGGESTSchema,
     );
@@ -50,15 +50,15 @@ export class StopFinderClient extends VrrClientBase {
    */
   private formatCoordinates(latitude: number, longitude: number): string {
     if (latitude < 0 || longitude < 0) {
-      throw new Error('Coordinates must be positive');
+      throw new Error("Coordinates must be positive");
     }
 
     if (latitude > 90) {
-      throw new Error('Latitude must be less than 90');
+      throw new Error("Latitude must be less than 90");
     }
 
     if (longitude > 180) {
-      throw new Error('Longitude must be less than 180');
+      throw new Error("Longitude must be less than 180");
     }
 
     // If I am not mistaken, the VRR API expects the coordinates with the
