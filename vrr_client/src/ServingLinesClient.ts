@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
 import { Convert, SERVINGLINESSchema } from "./vendor/VrrApiTypes";
 

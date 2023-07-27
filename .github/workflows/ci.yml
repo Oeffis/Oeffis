@@ -138,9 +138,13 @@ jobs:
               type=gha,scope=${{github.base_ref}}-frontend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
 
-    backend_lint_test_build:
-      name: Lint, Test and Build Backend
+
+    vrr_client_lint_test_build:
+      name: Lint, Build and Publish VRR Client
       runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
       steps:
         - name: Checkout
           uses: actions/checkout@v3
@@ -149,6 +153,52 @@ jobs:
           uses: actions/setup-node@v3
           with:
               node-version: 18.x
+              registry-url: 'https://registry.npmjs.org'
+
+        - name: Install Dependencies
+          working-directory: vrr_client
+          run: |
+              npm ci
+
+        - name: Lint
+          working-directory: vrr_client
+          run: |
+              npm run lint -- --max-warnings 0 --no-fix
+
+        - name: Build
+          working-directory: vrr_client
+          run: |
+              npm run build
+
+        - name: Set version number
+          working-directory: vrr_client
+          run: |
+              npm version 0.0.${{ github.run_number }}-ci-${{ github.sha }}
+
+        - name: Publish
+          working-directory: vrr_client
+          run: npm publish --tag untested --access public
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_OEFFIS_PUBLISH_PACKAGES_GITHUB_CI }}
+
+    backend_lint_test_build:
+      name: Lint, Test and Build Backend
+      runs-on: ubuntu-latest
+      needs:
+        - vrr_client_lint_test_build
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install Node.js
+          uses: actions/setup-node@v3
+          with:
+              node-version: 18.x
+
+        - name: Install VRR Client
+          working-directory: backend
+          run: |
+              npm install @oeffis/vrr_client@0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
         - name: Install Dependencies
           working-directory: backend
@@ -210,6 +260,8 @@ jobs:
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
+            build-args: |
+              VRR_CLIENT_VERSION: 0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
     backend_container_arm64:
       name: Build arm64 Backend Container
@@ -256,47 +308,8 @@ jobs:
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
-
-    vrr_client_lint_test_build:
-      name: Lint, Test, Build and Publish VRR Client
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Install Node.js
-          uses: actions/setup-node@v3
-          with:
-              registry-url: 'https://npm.pkg.github.com'
-              node-version: 18.x
-
-        - name: Install Dependencies
-          working-directory: vrr_client
-          run: |
-              npm ci
-
-        - name: Lint
-          working-directory: vrr_client
-          run: |
-              npm run lint -- --max-warnings 0 --no-fix
-
-        - name: Test
-          working-directory: vrr_client
-          run: |
-              npm run test
-
-        - name: Build
-          working-directory: vrr_client
-          run: |
-              npm run build
-
-        - name: Publish
-          run: npm publish
-          env:
-            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            build-args: |
+              VRR_CLIENT_VERSION: 0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
     e2e_lint:
       name: Lint E2E

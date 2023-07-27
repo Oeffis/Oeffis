@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
 import { Convert, TRIPSchema } from "./vendor/VrrApiTypes";
 
@@ -15,9 +16,9 @@ export class TripRequestClient extends VrrClientBase {
   public async queryTrip(query: QueryTripParameters): Promise<TRIPSchema> {
     const viaOptions: Record<string, string> = query.viaPointId
       ? {
-          name_via: query.viaPointId,
-          type_via: "any",
-        }
+        name_via: query.viaPointId,
+        type_via: "any",
+      }
       : {};
 
     return this.executeFetchRequest(

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { VrrClientBase } from "./VrrClientBase";
 import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
 

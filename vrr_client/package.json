@@ -1,7 +1,6 @@
 {
-  "name": "oeffis_vrr_api_client",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@oeffis/vrr_client",
+  "version": "0.0.2",
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
