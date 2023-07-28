@@ -18,6 +18,7 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
+import { AppConfigProvider } from "./config/AppConfigContext";
 import JourneysPage from "./pages/JourneysPage";
 import UserPage from "./pages/UserPage";
 import "./theme/variables.css";
@@ -25,24 +26,26 @@ import "./theme/variables.css";
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route exact path="/userDemo">
-          <UserPage />
-        </Route>
-        <Route exact path="/journeyDemo">
-          <JourneysPage />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+  <AppConfigProvider>
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route exact path="/userDemo">
+            <UserPage />
+          </Route>
+          <Route exact path="/journeyDemo">
+            <JourneysPage />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  </AppConfigProvider>
 );
 
 export default App;

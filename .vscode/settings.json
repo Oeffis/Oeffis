@@ -11,13 +11,11 @@
     "git.pullBeforeCheckout": true,
     "git.mergeEditor": true,
     "files.insertFinalNewline": true,
-    "[typescript]": {
+    "editor.indentSize": "tabSize",
+    "editor.tabSize": 2,
+    "[typescript][typescriptreact][javascript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
     },
     "eslint.workingDirectories": [
         "./frontend",

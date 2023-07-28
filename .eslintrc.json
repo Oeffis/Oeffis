@@ -1,4 +1,6 @@
 {
+  // use eslint schema
+  "$schema": "http://json.schemastore.org/eslintrc",
   "root": true,
   "env": {
     "es6": true
@@ -11,7 +13,10 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "arrow-body-style": ["error", "as-needed"],
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
     "no-debugger": 2,
     "no-console": 0,
     "no-empty": "error",
@@ -22,19 +27,30 @@
       "error",
       {
         "selector": "default",
-        "format": ["camelCase"],
+        "format": [
+          "camelCase"
+        ],
         "leadingUnderscore": "allow",
         "trailingUnderscore": "allow"
       },
       {
-        "selector": "variable",
-        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
+        "selector": [
+          "function",
+          "variable"
+        ],
+        "format": [
+          "camelCase",
+          "UPPER_CASE",
+          "PascalCase"
+        ],
         "leadingUnderscore": "allow",
         "trailingUnderscore": "allow"
       },
       {
         "selector": "typeLike",
-        "format": ["PascalCase"]
+        "format": [
+          "PascalCase"
+        ]
       }
     ],
     "@typescript-eslint/semi": "error",
@@ -43,15 +59,15 @@
     "prefer-const": "warn",
     "semi": "off",
     "quotes": [
-        "warn",
-        "double",
-        {
-            "allowTemplateLiterals": true
-        }
+      "warn",
+      "double",
+      {
+        "allowTemplateLiterals": true
+      }
     ],
     "indent": [
-        "error",
-        2
+      "error",
+      2
     ]
   }
 }
