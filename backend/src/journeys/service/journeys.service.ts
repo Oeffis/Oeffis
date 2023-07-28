@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { HafasClient, JourneysOptions, Location, LocationsOptions, RefreshJourneyOptions } from "hafas-client";
+import { HafasClient, Location, LocationsOptions, RefreshJourneyOptions } from "hafas-client";
+import { ApiService } from "vrr/service/api.service";
 import { FPTFSupport } from "../../hafas/FPTFSupport";
 import { HAFAS_CLIENT, HAFAS_LANGUAGE } from "../../symbols";
 import { JourneyStopStationIdDto, JourneyUserLocationDto } from "../dto/journey.location.dto";
@@ -14,7 +15,8 @@ import { JourneyVariant } from "../entities/journey.variant.entity";
 export class JourneysService {
 
   constructor(
-    @Inject(HAFAS_CLIENT) private hafas: HafasClient
+    @Inject(HAFAS_CLIENT) private readonly hafas: HafasClient,
+    private readonly apiService: ApiService
   ) { }
 
   /**
@@ -23,24 +25,29 @@ export class JourneysService {
    * @param journeyParameters parameters for planning a journey
    * @return variants for the requested journey
    */
-  planJourney(journeyParameters: PlanJourneyDto): Promise<JourneyVariant[]> {
-    const hafasOptions: JourneysOptions = {
-      language: HAFAS_LANGUAGE,
-      results: 3,
-    };
-
+  async planJourney(journeyParameters: PlanJourneyDto): Promise<JourneyVariant[]> {
     const fromLocation = this.extractLocation(journeyParameters.from);
     const toLocation = this.extractLocation(journeyParameters.to);
 
-    if (journeyParameters.isArrivalDate) {
-      hafasOptions.arrival = journeyParameters.date ?? new Date();
-    } else {
-      hafasOptions.departure = journeyParameters.date ?? new Date();
-    }
+    const result = await this.apiService.tripRequestClient().queryTrip({
+      originPointId: fromLocation as string,
+      destinationPointId: toLocation as string
+    });
 
-    return this.hafas
-      .journeys(fromLocation, toLocation, hafasOptions)
-      .then(FPTFSupport.createJourneyVariantsFromFPTFJourneys);
+    return result.journeys?.map(j => ({
+      journey: {
+        legs: j.legs?.map(l => ({
+          walking: l.transportation?.product?.name === "footpath",
+          line: {
+            name: l.transportation?.name,
+            type: "line"
+          },
+          direction: l.destination?.name ?? ""
+        })) || [],
+        type: "journey",
+      },
+      updatedAt: Date.now()
+    })) || [];
   }
 
   private extractLocation(journeyLocation: (JourneyStopStationIdDto | JourneyUserLocationDto)): string | Location {
@@ -75,7 +82,16 @@ export class JourneysService {
    * @param locationQuery query for searching locations
    * @return locations matching the query
    */
-  searchLocations(locationQuery: string): Promise<JourneyLocation[]> {
+  async searchLocations(locationQuery: string): Promise<JourneyLocation[]> {
+    const result = await this.apiService.stopFinderClient().findStopByName({ search: locationQuery });
+    return result.locations?.map(l => ({
+      location: {
+        type: "stop",
+        id: l.id,
+        name: l.name
+      }
+    })) || [];
+
     const hafasOptions: LocationsOptions = {
       language: HAFAS_LANGUAGE,
       results: 5,
