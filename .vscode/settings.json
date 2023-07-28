@@ -20,7 +20,8 @@
     "eslint.workingDirectories": [
         "./frontend",
         "./backend",
-        "./e2e"
+        "./e2e",
+        "./vrr_client"
     ],
     "cSpell.words": [
         "Hafas"

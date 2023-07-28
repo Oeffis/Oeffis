@@ -2,11 +2,13 @@ FROM node:18 AS base
 
 # The builder layer will be used to build the application
 FROM base AS builder
+ARG VRR_CLIENT_PACKAGE=@oeffis/vrr_client
 
 WORKDIR /app
 
 # The dependencies will be cached unless package.json changes.
 COPY package*.json ./
+RUN npm install ${VRR_CLIENT_PACKAGE}
 RUN npm ci
 
 COPY . .
