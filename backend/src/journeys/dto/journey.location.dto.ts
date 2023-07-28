@@ -10,7 +10,7 @@ export class JourneyStopStationIdDto {
     type: String,
     required: true
   })
-  stopStationId!: string;
+    stopStationId!: string;
 
 }
 
@@ -24,20 +24,20 @@ export class JourneyUserLocationDto {
     type: String,
     required: true
   })
-  address!: string;
+    address!: string;
 
   @ApiProperty({
     description: "Latitude of the user location.",
     type: Number,
     required: true
   })
-  latitude!: number;
+    latitude!: number;
 
   @ApiProperty({
     description: "Longitude of the user location.",
     type: Number,
     required: true
   })
-  longitude!: number;
+    longitude!: number;
 
 }
