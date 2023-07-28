@@ -15,7 +15,7 @@ export class PlanJourneyDto {
     ],
     required: true
   })
-  from!: (JourneyStopStationIdDto | JourneyUserLocationDto);
+    from!: (JourneyStopStationIdDto | JourneyUserLocationDto);
 
   @ApiProperty({
     description: "Location where the journey ends.",
@@ -25,7 +25,7 @@ export class PlanJourneyDto {
     ],
     required: true
   })
-  to!: (JourneyStopStationIdDto | JourneyUserLocationDto);
+    to!: (JourneyStopStationIdDto | JourneyUserLocationDto);
 
   @ApiProperty({
     description: "Date for the journey to take place.",
@@ -33,7 +33,7 @@ export class PlanJourneyDto {
     required: false,
     default: "current point of time"
   })
-  date?: Date;
+    date?: Date;
 
   @ApiProperty({
     description: "If the specified date for the journey determines when to arrive at destination.",
@@ -41,6 +41,6 @@ export class PlanJourneyDto {
     required: false,
     default: false
   })
-  isArrivalDate?: boolean;
+    isArrivalDate?: boolean;
 
 }

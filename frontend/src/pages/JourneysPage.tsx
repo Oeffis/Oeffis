@@ -163,14 +163,14 @@ const JourneysPage: React.FC = () => {
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
-                        disabled={useLocationAsStart}
-                        label="Start (id)"
-                        placeholder="Enter start location (id)."/>
+                disabled={useLocationAsStart}
+                label="Start (id)"
+                placeholder="Enter start location (id)."/>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonCheckbox onIonChange={e => setUseLocationAsStart(e.detail.checked)}
-                           disabled={useLocationAsDestination}
-                           checked={useLocationAsStart}
-                           justify="end">USE LOCATION</IonCheckbox>
+                disabled={useLocationAsDestination}
+                checked={useLocationAsStart}
+                justify="end">USE LOCATION</IonCheckbox>
             </IonItem>
 
             {/* Input for destination location. */}
@@ -178,14 +178,14 @@ const JourneysPage: React.FC = () => {
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
-                        disabled={useLocationAsDestination}
-                        label="Destination (id)"
-                        placeholder="Enter destination location (id)."/>
+                disabled={useLocationAsDestination}
+                label="Destination (id)"
+                placeholder="Enter destination location (id)."/>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonCheckbox onIonChange={e => setUseLocationAsDestination(e.detail.checked)}
-                           disabled={useLocationAsStart}
-                           checked={useLocationAsDestination}
-                           justify="end">USE LOCATION</IonCheckbox>
+                disabled={useLocationAsStart}
+                checked={useLocationAsDestination}
+                justify="end">USE LOCATION</IonCheckbox>
             </IonItem>
 
             {/* Button to trigger planning the journey. */}

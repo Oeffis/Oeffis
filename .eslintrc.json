@@ -18,16 +18,40 @@
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "default",
+        "format": ["camelCase"],
+        "leadingUnderscore": "allow",
+        "trailingUnderscore": "allow"
+      },
+      {
+        "selector": "variable",
+        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
+        "leadingUnderscore": "allow",
+        "trailingUnderscore": "allow"
+      },
+      {
+        "selector": "typeLike",
+        "format": ["PascalCase"]
+      }
+    ],
+    "@typescript-eslint/semi": "error",
     "eqeqeq": "warn",
     "no-throw-literal": "warn",
     "prefer-const": "warn",
-    "semi": "error",
+    "semi": "off",
     "quotes": [
         "warn",
         "double",
         {
             "allowTemplateLiterals": true
         }
+    ],
+    "indent": [
+        "error",
+        2
     ]
   }
 }
