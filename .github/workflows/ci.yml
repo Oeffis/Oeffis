@@ -1,6 +1,6 @@
 name: CI
 
-on: 
+on:
   pull_request:
   merge_group:
   push:
@@ -90,7 +90,7 @@ jobs:
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
-          
+
 
     frontend_container_arm64:
       name: Build arm64 Frontend Container
@@ -128,7 +128,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             context: frontend
-            platforms: linux/amd64
+            platforms: linux/arm64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }}-untested-arm64,
@@ -137,7 +137,7 @@ jobs:
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
-         
+
     backend_lint_test_build:
       name: Lint, Test and Build Backend
       runs-on: ubuntu-latest
@@ -256,7 +256,7 @@ jobs:
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
-        
+
     e2e_lint:
       name: Lint E2E
       runs-on: ubuntu-latest
@@ -331,11 +331,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v3
 
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
-          with:
-            platforms: arm64
-
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v2
 
@@ -356,7 +351,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             context: frontend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/amd64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
@@ -364,12 +359,12 @@ jobs:
             cache-from: |
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
-        
+
         - name: Release Backend Container (branch)
           uses: docker/build-push-action@v4
           with:
             context: backend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/amd64
             push: true
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
@@ -383,7 +378,7 @@ jobs:
           if: github.ref == 'refs/heads/main'
           with:
             context: frontend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/amd64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
@@ -391,13 +386,13 @@ jobs:
             cache-from: |
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
-      
+
         - name: Release Backend Container (latest)
           uses: docker/build-push-action@v4
           if: github.ref == 'refs/heads/main'
           with:
             context: backend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/amd64
             push: true
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
@@ -442,7 +437,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             context: frontend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/arm64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
@@ -450,12 +445,12 @@ jobs:
             cache-from: |
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
-        
+
         - name: Release Backend Container (branch)
           uses: docker/build-push-action@v4
           with:
             context: backend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/arm64
             push: true
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
@@ -469,7 +464,7 @@ jobs:
           if: github.ref == 'refs/heads/main'
           with:
             context: frontend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/arm64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
@@ -477,13 +472,13 @@ jobs:
             cache-from: |
               type=gha,scope=${{github.ref_name}}-frontend
               type=gha,scope=${{github.base_ref}}-frontend
-      
+
         - name: Release Backend Container (latest)
           uses: docker/build-push-action@v4
           if: github.ref == 'refs/heads/main'
           with:
             context: backend
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/arm64
             push: true
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
