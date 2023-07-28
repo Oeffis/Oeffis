@@ -10,6 +10,6 @@ export class JourneyLocation {
     description: "One location that can be a FPTF station, stop or location (FPTF = Friendly Public Transport Format).",
     required: true
   })
-  location!: (Station | Stop | Location); // TODO Should not use 3rd party types.
+    location!: (Station | Stop | Location); // TODO Should not use 3rd party types.
 
 }

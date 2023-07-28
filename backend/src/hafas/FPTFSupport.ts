@@ -43,7 +43,7 @@ export class FPTFSupport {
    */
   static createJourneyVariantsFromFPTFJourneys(journeys: Journeys): JourneyVariant[] {
     return journeys.journeys
-        ?.map(journey =>
+      ?.map(journey =>
           <JourneyVariant>{
             journey: journey,
             updatedAt: journeys.realtimeDataUpdatedAt
