@@ -3,7 +3,7 @@ import {
   VRR_TEST_API_BASE_URL,
   StopFinderClient,
   TripRequestClient,
-} from "./";
+} from "..";
 
 async function demoTripRequestClient(): Promise<void> {
   const tripRequestClient = new TripRequestClient(VRR_TEST_API_BASE_URL);
