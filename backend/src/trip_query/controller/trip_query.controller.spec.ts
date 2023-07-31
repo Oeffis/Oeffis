@@ -1,5 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { TripQueryService } from "trip_query/service/trip_query.service";
+import { TripQueryService } from "../service/trip_query.service";
 import { TripQueryController } from "./trip_query.controller";
 
 let controller: TripQueryController;
@@ -7,7 +7,8 @@ let app: TestingModule;
 
 beforeEach(async () => {
   app = await Test.createTestingModule({
-    controllers: [TripQueryController]
+    controllers: [TripQueryController],
+    providers: [TripQueryService]
   }).compile();
 
   controller = app.get<TripQueryController>(TripQueryController);

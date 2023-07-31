@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TripRequestClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
-import { Stop } from "stop_finder/dto/stop";
 import { TripQueryResponseDto } from "trip_query/dto/tripQueryResponse";
+import { Stop } from "../../stop_finder/dto/stop";
 
 @Injectable()
 export class TripQueryService {
