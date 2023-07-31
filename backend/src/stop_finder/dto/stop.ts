@@ -36,7 +36,7 @@ export class Stop {
 export class StopFinderResponseDto {
   @ApiProperty({
     description: "Stops found.",
-    type: [String],
+    type: [Stop],
     required: true
   })
   stops!: Stop[];

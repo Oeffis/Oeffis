@@ -12,3 +12,4 @@ export type BadRequest = {
      */
     message: Record<string, any>;
 };
+

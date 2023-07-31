@@ -4,7 +4,7 @@ import { StopFinderResponseDto } from "./stop";
 export class StopFinderByNameParametersDto {
   @ApiProperty({
     description: "Latitude of the location to search.",
-    type: Number,
+    type: String,
     required: true,
     example: "Gelsen"
   })

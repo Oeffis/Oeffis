@@ -4,7 +4,7 @@ import { Trip } from "./trip";
 export class TripQueryResponseDto {
   @ApiProperty({
     description: "Trip alternatives found.",
-    type: [String],
+    type: [Trip],
     required: true
   })
   alternatives!: Trip[];

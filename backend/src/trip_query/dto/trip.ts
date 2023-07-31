@@ -4,7 +4,7 @@ import { Stop } from "stop_finder/dto/stop";
 export class Trip {
   @ApiProperty({
     description: "Legs of the alternative.",
-    type: Stop,
+    type: [Stop],
     required: true
   })
   legs!: TripLeg[];

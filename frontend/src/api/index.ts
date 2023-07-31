@@ -8,15 +8,18 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { BadRequest } from './models/BadRequest';
 export type { HelloWorld } from './models/HelloWorld';
-export type { JourneyLocation } from './models/JourneyLocation';
-export type { JourneyStopStationIdDto } from './models/JourneyStopStationIdDto';
-export type { JourneyUserLocationDto } from './models/JourneyUserLocationDto';
-export type { JourneyVariant } from './models/JourneyVariant';
-export type { PlanJourneyDto } from './models/PlanJourneyDto';
-export type { RefreshJourneyNotAvailable } from './models/RefreshJourneyNotAvailable';
+export type { Stop } from './models/Stop';
+export type { StopFinderAtCoordinatesParametersDto } from './models/StopFinderAtCoordinatesParametersDto';
+export type { StopFinderAtCoordinatesResponseDto } from './models/StopFinderAtCoordinatesResponseDto';
+export type { StopFinderByNameParametersDto } from './models/StopFinderByNameParametersDto';
+export type { StopFinderByNameResponseDto } from './models/StopFinderByNameResponseDto';
+export type { Trip } from './models/Trip';
+export type { TripQueryRequestDto } from './models/TripQueryRequestDto';
+export type { TripQueryResponseDto } from './models/TripQueryResponseDto';
 export type { User } from './models/User';
 export type { UserNotFound } from './models/UserNotFound';
 
 export { AppService } from './services/AppService';
-export { JourneysService } from './services/JourneysService';
+export { StopFinderService } from './services/StopFinderService';
+export { TripQueryService } from './services/TripQueryService';
 export { UsersService } from './services/UsersService';
