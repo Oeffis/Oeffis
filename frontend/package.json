@@ -20,6 +20,7 @@
     "@capacitor/keyboard": "5.0.4",
     "@capacitor/status-bar": "5.0.4",
     "@esbuild/win32-x64": "^0.17.19",
+    "@esbuild/linux-x64": "^0.17.19",    
     "@ionic/react": "^7.0.0",
     "@ionic/react-router": "^7.0.13",
     "@types/react-router": "^5.1.20",
