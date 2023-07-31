@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { StopFinderResponseDto } from "./stop";
 
 export class StopFinderByNameParametersDto {
   @ApiProperty({
@@ -10,11 +11,4 @@ export class StopFinderByNameParametersDto {
   name!: string;
 }
 
-export class StopFinderByNameResponseDto {
-  @ApiProperty({
-    description: "Stops found.",
-    type: [String],
-    required: true
-  })
-  stops!: string[];
-}
+export class StopFinderByNameResponseDto extends StopFinderResponseDto { }

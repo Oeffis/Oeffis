@@ -19,7 +19,12 @@ export class StopFinderService {
     });
 
     return {
-      stops: response.locations?.map((location) => location.id ?? "??") ?? []
+      stops: response.locations?.map(location => ({
+        id: location.id ?? "??",
+        name: location.name ?? "??",
+        latitude: location.latitude ?? 0,
+        longitude: location.longitude ?? 0
+      })) ?? []
     };
   }
 
@@ -29,7 +34,12 @@ export class StopFinderService {
     });
 
     return {
-      stops: response.locations?.map((location) => location.id ?? "??") ?? []
+      stops: response.locations?.map(location => ({
+        id: location.id ?? "??",
+        name: location.name ?? "??",
+        latitude: (location.coord?.[0] as number) ?? 0,
+        longitude: (location.coord?.[1] as number) ?? 0
+      })) ?? []
     };
   }
 }

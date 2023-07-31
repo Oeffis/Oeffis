@@ -17,7 +17,6 @@ export class StopFinderController {
   @ApiOkResponse({
     description: "Returns the found stops.",
     type: StopFinderAtCoordinatesResponseDto
-
   })
   @ApiBadRequestResponse({
     description: "Bad request.",
