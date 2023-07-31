@@ -17,7 +17,7 @@ export class TripRequestClient extends VrrClientBase {
     const viaOptions: Record<string, string> = query.viaPointId
       ? {
         name_via: query.viaPointId,
-        type_via: "any",
+        type_via: "any"
       }
       : {};
 
@@ -30,7 +30,7 @@ export class TripRequestClient extends VrrClientBase {
         name_destination: query.destinationPointId,
         type_destination: "any",
 
-        ...viaOptions,
+        ...viaOptions
       },
       warpAsFailSafeSchemaConverter(Convert.toTRIPSchema),
     );

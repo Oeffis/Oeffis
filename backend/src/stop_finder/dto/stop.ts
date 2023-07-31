@@ -24,6 +24,13 @@ export class Stop {
     type: Number
   })
   longitude!: number;
+
+  constructor(name: string, id: string, latitude: number, longitude: number) {
+    this.name = name;
+    this.id = id;
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
 }
 
 export class StopFinderResponseDto {
