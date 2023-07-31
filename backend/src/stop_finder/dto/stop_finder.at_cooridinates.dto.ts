@@ -8,7 +8,7 @@ export class StopFinderAtCoordinatesParametersDto {
     required: true,
     example: 51.50598042775682,
   })
-  latitude!: number;
+    latitude!: number;
 
   @ApiProperty({
     description: "Longitude of the location to search.",
@@ -16,7 +16,7 @@ export class StopFinderAtCoordinatesParametersDto {
     required: true,
     example: 7.101082448485377,
   })
-  longitude!: number;
+    longitude!: number;
 }
 
 export class StopFinderAtCoordinatesResponseDto {
@@ -25,5 +25,5 @@ export class StopFinderAtCoordinatesResponseDto {
     type: [String],
     required: true
   })
-  stops!: string[];
+    stops!: string[];
 }
