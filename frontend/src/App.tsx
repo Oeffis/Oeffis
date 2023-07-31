@@ -108,10 +108,11 @@ const App: React.FC = () => (
             <JourneysPage />
           </Route>
         </IonRouterOutlet>
+        <Route exact path="/journeyResults">
+          <JourneyListComponent journeys={journeys} />
+        </Route>
       </IonReactRouter>
-      <Route exact path="/journeyResults">
-        <JourneyListComponent journeys={journeys} />
-      </Route>
+
     </IonApp>
   </AppConfigProvider>
 );
