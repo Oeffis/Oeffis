@@ -23,7 +23,8 @@
     "@nestjs/swagger": "^6.3.0",
     "hafas-client": "^6.0.5",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "@oeffis/vrr_client": "file:../vrr_client"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

@@ -18,6 +18,7 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
+import { AppConfigProvider } from "./config/AppConfigContext";
 import JourneysPage from "./pages/JourneysPage";
 import UserPage from "./pages/UserPage";
 import "./theme/variables.css";
@@ -27,7 +28,7 @@ import { IJourney } from "./interfaces/IJourney.interface";
 setupIonicReact();
 
 //Following Journeys are examples and only for visualization and testing purpose
-const journey : IJourney = {
+const journey: IJourney = {
   startTime: "17:00",
   travelDuration: 90,
   arrivalTime: "19:30",
@@ -61,7 +62,7 @@ const journey : IJourney = {
   ]
 };
 
-const journey2 : IJourney = {
+const journey2: IJourney = {
   startTime: "17:00",
   travelDuration: 90,
   arrivalTime: "19:50",
@@ -90,27 +91,29 @@ const journeys = [journey, journey2, journey];
 
 
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route exact path="/userDemo">
-          <UserPage />
-        </Route>
-        <Route exact path="/journeyDemo">
-          <JourneysPage />
-        </Route>
-        <Route exact path="/journeyResults">
-          <JourneyListComponent journeys={journeys}/>
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+  <AppConfigProvider>
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route exact path="/userDemo">
+            <UserPage />
+          </Route>
+          <Route exact path="/journeyDemo">
+            <JourneysPage />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+      <Route exact path="/journeyResults">
+        <JourneyListComponent journeys={journeys} />
+      </Route>
+    </IonApp>
+  </AppConfigProvider>
 );
 
 export default App;
