@@ -6,11 +6,11 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [
     react(),
-    legacy(),
+    legacy()
   ],
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "./src/setupTests.ts",
+    setupFiles: "./src/setupTests.ts"
   }
 });

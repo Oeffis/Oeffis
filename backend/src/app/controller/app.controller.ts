@@ -16,11 +16,11 @@ export class AppController {
   })
   @ApiOkResponse({
     description: "Returns a \"Hello World!\" message.",
-    type: [HelloWorld],
+    type: [HelloWorld]
   })
   @ApiBadRequestResponse({
     description: "Bad request.",
-    type: BadRequest,
+    type: BadRequest
   })
   getHello(): string {
     return this.appService.getHello();

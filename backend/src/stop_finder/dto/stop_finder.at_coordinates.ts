@@ -6,7 +6,7 @@ export class StopFinderAtCoordinatesParametersDto {
     description: "Latitude of the location to search.",
     type: Number,
     required: true,
-    example: 51.50598042775682,
+    example: 51.50598042775682
   })
     latitude!: number;
 
@@ -14,7 +14,7 @@ export class StopFinderAtCoordinatesParametersDto {
     description: "Longitude of the location to search.",
     type: Number,
     required: true,
-    example: 7.101082448485377,
+    example: 7.101082448485377
   })
     longitude!: number;
 }

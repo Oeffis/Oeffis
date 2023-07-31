@@ -4,6 +4,6 @@ import { StopFinderService } from "./service/stop_finder.service";
 
 @Module({
   controllers: [StopFinderController],
-  providers: [StopFinderService],
+  providers: [StopFinderService]
 })
 export class StopFinderModule { }
