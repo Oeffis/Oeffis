@@ -97,7 +97,7 @@ const JourneysPage: React.FC = () => {
           <IonItem key={index}>
             <IonLabel>{index}</IonLabel>
             <IonLabel class="ion-text-wrap" data-testid="locationName">{location.name}</IonLabel>
-            <IonLabel>{location.type}</IonLabel>
+            <IonLabel>unsupported</IonLabel>
             <IonLabel>{location.id}</IonLabel>
           </IonItem>
         ))}
