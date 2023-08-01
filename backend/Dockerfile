@@ -1,9 +1,11 @@
+ARG VRR_CLIENT_PACKAGE=@oeffis/vrr_client
+ARG VRR_CLIENT_VERSION
 FROM node:18 AS base
 
 # The builder layer will be used to build the application
 FROM base AS builder
-ARG VRR_CLIENT_PACKAGE=@oeffis/vrr_client
-ARG VRR_CLIENT_VERSION=
+ARG VRR_CLIENT_PACKAGE
+ARG VRR_CLIENT_VERSION
 
 WORKDIR /app
 
