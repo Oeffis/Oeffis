@@ -6,24 +6,24 @@
 const USERS = [
   {
     id: 1,
-    name: "John Doe",
+    name: "John Doe"
   },
   {
     id: 2,
-    name: "Jane Doe",
-  },
+    name: "Jane Doe"
+  }
 ];
 
 const ALL_USERS = [
   ...USERS,
   {
     id: 3,
-    name: "Tommy",
+    name: "Tommy"
   },
   {
     id: 4,
-    name: "Timmy",
-  },
+    name: "Timmy"
+  }
 ];
 
 export default [
@@ -37,16 +37,16 @@ export default [
         type: "json", // variant handler id
         options: {
           status: 200, // status to send
-          body: USERS, // body to send
-        },
+          body: USERS // body to send
+        }
       },
       {
         id: "all", // variant id
         type: "json", // variant handler id
         options: {
           status: 200, // status to send
-          body: ALL_USERS, // body to send
-        },
+          body: ALL_USERS // body to send
+        }
       },
       {
         id: "error", // variant id
@@ -55,11 +55,11 @@ export default [
           status: 400, // status to send
           // body to send
           body: {
-            message: "Error",
-          },
-        },
-      },
-    ],
+            message: "Error"
+          }
+        }
+      }
+    ]
   },
   {
     id: "get-user", // route id
@@ -71,17 +71,17 @@ export default [
         type: "json", // variant handler id
         options: {
           status: 200, // status to send
-          body: USERS[0], // body to send
-        },
+          body: USERS[0] // body to send
+        }
       },
       {
         id: "id-3", // variant id
         type: "json", // variant handler id
         options: {
           status: 200, // status to send
-          body: ALL_USERS[2], // body to send
-        },
+          body: ALL_USERS[2] // body to send
+        }
       }
-    ],
-  },
+    ]
+  }
 ];

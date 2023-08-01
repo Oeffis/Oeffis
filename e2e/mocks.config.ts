@@ -5,9 +5,9 @@
 const config = {
   files: {
     babelRegister: {
-      enabled: true,
-    },
-  },
+      enabled: true
+    }
+  }
 };
 
 export default config;

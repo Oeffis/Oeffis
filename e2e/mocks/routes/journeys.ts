@@ -1,6 +1,6 @@
 export default [
     {
-        id: "location:query",
+        id: "location:query"
 
     }
 ];
