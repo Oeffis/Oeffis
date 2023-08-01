@@ -1,5 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Backend (Test)" type="NodeJSConfigurationType" application-parameters="node_modules/.bin/jest --watch --runInBand" node-parameters="--nolazy -r ts-node/register -r tsconfig-paths/register" working-dir="$PROJECT_DIR$/backend">
+  <configuration default="false" name="Backend (Test)" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/backend/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="test" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
     <method v="2" />
   </configuration>
 </component>
