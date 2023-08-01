@@ -352,7 +352,7 @@ jobs:
             - 3100:3100
             - 3110:3110
           volumes:
-            - ./e2e/:/input
+            - /e2e/:/input
       steps:
         - name: Checkout
           uses: actions/checkout@v3
