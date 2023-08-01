@@ -261,7 +261,7 @@ jobs:
               type=gha,scope=${{github.base_ref}}-backend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
             build-args: |
-              VRR_CLIENT_VERSION: 0.0.${{ github.run_number }}-ci-${{ github.sha }}
+              VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
     backend_container_arm64:
       name: Build arm64 Backend Container
