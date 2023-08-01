@@ -12,21 +12,21 @@ COPY package*.json ./
 RUN npm ci
 RUN npm install ${VRR_CLIENT_PACKAGE}@${VRR_CLIENT_VERSION}
 
-# COPY . .
+COPY . .
 
-# # And the release layer will be used to run the application.
-# # Only required files will be copied from the builder layer to the release layer.
-# RUN npm run build
+# And the release layer will be used to run the application.
+# Only required files will be copied from the builder layer to the release layer.
+RUN npm run build
 
-# FROM base AS release
+FROM base AS release
 
-# WORKDIR /app
+WORKDIR /app
 
-# # If additional files are required, they can be copied from the builder layer to the release layer.
-# COPY --from=builder /app/package*.json ./
-# COPY --from=builder /app/dist ./dist
-# COPY --from=builder /app/node_modules ./node_modules
+# If additional files are required, they can be copied from the builder layer to the release layer.
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
 
-# EXPOSE 3000
+EXPOSE 3000
 
-# CMD [ "node", "dist/main" ]
+CMD [ "node", "dist/main" ]
