@@ -16,3 +16,4 @@ export type User = {
      */
     city: string;
 };
+

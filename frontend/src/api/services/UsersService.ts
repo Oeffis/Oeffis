@@ -28,13 +28,13 @@ export class UsersService {
     /**
      * creates a new user, returns the created on
      * Create a new user.
-     * @param requestBody 
+     * @param requestBody
      * @returns User Returns the created user.
      * @throws ApiError
      */
     public static usersControllerCreate(
-requestBody: User,
-): CancelablePromise<User> {
+        requestBody: User,
+    ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/users',
@@ -54,8 +54,8 @@ requestBody: User,
      * @throws ApiError
      */
     public static usersControllerFindOne(
-index: string,
-): CancelablePromise<User> {
+        index: string,
+    ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/users/{index}',
@@ -72,14 +72,14 @@ index: string,
      * updates a specific user
      * Update a specific user.
      * @param index Users index
-     * @param requestBody 
+     * @param requestBody
      * @returns User Returns the updated user.
      * @throws ApiError
      */
     public static usersControllerUpdate(
-index: string,
-requestBody: User,
-): CancelablePromise<User> {
+        index: string,
+        requestBody: User,
+    ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/users/{index}',
@@ -102,8 +102,8 @@ requestBody: User,
      * @throws ApiError
      */
     public static usersControllerRemove(
-index: string,
-): CancelablePromise<User> {
+        index: string,
+    ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/users/{index}',

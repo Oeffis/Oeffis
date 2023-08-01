@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  Post
 } from "@nestjs/common";
 import {
   ApiCreatedResponse,
@@ -13,7 +13,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiTags,
+  ApiTags
 } from "@nestjs/swagger";
 import { User } from "users/entity/user.entity";
 import { UsersService } from "../service/users.service";
@@ -33,11 +33,11 @@ export class UsersController {
   })
   @ApiOkResponse({
     description: "Return all Users as JSON array.",
-    type: [User],
+    type: [User]
   })
   @ApiNotFoundResponse({
     description: "Bad request.",
-    type: BadRequest,
+    type: BadRequest
   })
   findAll(): unknown {
     return this.usersService.findAll();
@@ -51,7 +51,7 @@ export class UsersController {
   @ApiCreatedResponse({ description: "Returns the created user.", type: User })
   @ApiNotFoundResponse({
     description: "Bad request.",
-    type: BadRequest,
+    type: BadRequest
   })
   create(@Body() createUser: User): unknown {
     return this.usersService.create(createUser);
@@ -65,7 +65,7 @@ export class UsersController {
   @ApiOkResponse({ description: "Returns a User by index.", type: User })
   @ApiNotFoundResponse({
     description: "User not found.",
-    type: UserNotFound,
+    type: UserNotFound
   })
   @ApiParam({ description: "Users index", name: "index" })
   findOne(@Param("index") index: string): unknown {
@@ -80,7 +80,7 @@ export class UsersController {
   @ApiCreatedResponse({ description: "Returns the updated user.", type: User })
   @ApiNotFoundResponse({
     description: "User not found.",
-    type: UserNotFound,
+    type: UserNotFound
   })
   @ApiParam({ description: "Users index", name: "index" })
   update(@Param("index") index: string, @Body() updateUser: User): unknown {
@@ -95,7 +95,7 @@ export class UsersController {
   @ApiOkResponse({ description: "Returns the deleted user.", type: User })
   @ApiNotFoundResponse({
     description: "User not found.",
-    type: UserNotFound,
+    type: UserNotFound
   })
   @ApiParam({ description: "Users index", name: "index" })
   remove(@Param("index") index: string): unknown {

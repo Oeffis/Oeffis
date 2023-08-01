@@ -37,14 +37,14 @@ export class VrrClientBase {
   ): Promise<T> {
     const options: RequestInit = {
       headers: {},
-      method: "GET",
+      method: "GET"
     };
 
     const urlWithParams = new URL(path, this.baseUrl);
     urlWithParams.search = new URLSearchParams({
       ...parameters,
       outputFormat: "rapidJSON",
-      version: "10.4.18.18",
+      version: "10.4.18.18"
     }).toString();
 
     const url = urlWithParams.toString();

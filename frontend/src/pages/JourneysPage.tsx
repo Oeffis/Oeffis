@@ -11,24 +11,16 @@ import {
   IonLabel,
   IonList
 } from "@ionic/react";
-import { Journey, Location, Station, Stop } from "hafas-client";
 import React, { useState } from "react";
-import {
-  JourneyLocation,
-  JourneysService,
-  JourneyStopStationIdDto,
-  JourneyUserLocationDto,
-  JourneyVariant,
-  PlanJourneyDto
-} from "../api";
+import { Stop, StopFinderService, Trip, TripQueryService } from "../api";
 
 /**
  * Container of elements related to journeys.
  */
 const JourneysPage: React.FC = () => {
 
-  const [locations, setLocations] = useState<JourneyLocation[]>([]);
-  const [journeys, setJourneys] = useState<JourneyVariant[]>([]);
+  const [locations, setLocations] = useState<Stop[]>([]);
+  const [journeys, setJourneys] = useState<Trip[]>([]);
 
   const [searchLocationsQuery, setSearchLocationsQuery] = useState<string>("");
 
@@ -41,7 +33,7 @@ const JourneysPage: React.FC = () => {
    * Searches for locations with given query.
    */
   const searchLocations = async (): Promise<void> => {
-    setLocations(await JourneysService.journeysControllerSearchLocation(searchLocationsQuery));
+    setLocations((await StopFinderService.stopFinderControllerFindStopByName({ name: searchLocationsQuery })).stops);
     console.log(locations);
   };
 
@@ -51,27 +43,28 @@ const JourneysPage: React.FC = () => {
   const planJourney = async (): Promise<void> => {
     // Mock for the user location (uses "Westfälische Hochschule Gelsenkirchen" as user location).
     // TODO Determine real user location.
-    const userLocation: JourneyUserLocationDto = {
-      address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
-      latitude: 51.574272755490284,
-      longitude: 7.027275510766967
+    // const userLocation = {
+    //   address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
+    //   latitude: 51.574272755490284,
+    //   longitude: 7.027275510766967
+    // };
+
+    // const startLocation = !useLocationAsStart
+    //   ? planJourneyStart
+    //   : userLocation;
+    // const destinationLocation = !useLocationAsDestination
+    //   ? planJourneyDestination
+    //   : userLocation;
+
+    const journeyParameters = {
+      origin: planJourneyStart,
+      destination: planJourneyDestination,
+      departure: new Date().toISOString()
     };
 
-    const startLocation = !useLocationAsStart
-      ? { stopStationId: planJourneyStart } as JourneyStopStationIdDto
-      : userLocation;
-    const destinationLocation = !useLocationAsDestination
-      ? { stopStationId: planJourneyDestination } as JourneyStopStationIdDto
-      : userLocation;
-
-    const journeyParameters: PlanJourneyDto = {
-      from: startLocation,
-      to: destinationLocation
-    };
-
-    const journeyVariants: JourneyVariant[] =
-      await JourneysService.journeysControllerPlanJourney(journeyParameters);
-    setJourneys(journeyVariants);
+    const journeyVariants =
+      await TripQueryService.tripQueryControllerQueryTrip(journeyParameters);
+    setJourneys(journeyVariants.alternatives);
     console.log(journeyVariants);
   };
 
@@ -80,11 +73,10 @@ const JourneysPage: React.FC = () => {
    *
    * @param journey journey
    */
-  const getJourneyShortDescr = (journey: Journey): string => (
+  const getJourneyShortDescr = (journey: Trip): string => (
     journey.legs
-      .filter(leg => !leg.walking)
       .map(leg => (
-        leg.line?.name + " (" + leg.direction + ")"
+        leg.name
       ))
       .join(" -> ")
   );
@@ -101,12 +93,11 @@ const JourneysPage: React.FC = () => {
         <IonLabel>id</IonLabel>
       </IonItem>
       {locations
-        .map(journeyLocation => journeyLocation.location as (Station | Stop | Location))
         .map((location, index) => (
           <IonItem key={index}>
             <IonLabel>{index}</IonLabel>
             <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
-            <IonLabel>{location.type}</IonLabel>
+            <IonLabel>unsupported</IonLabel>
             <IonLabel>{location.id}</IonLabel>
           </IonItem>
         ))}
@@ -122,7 +113,7 @@ const JourneysPage: React.FC = () => {
       {journeys.map((journey, index) => (
         <IonItem key={index}>
           <IonLabel>{index}</IonLabel>
-          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey.journey as Journey)}</IonLabel>
+          <IonLabel class="ion-text-wrap">{getJourneyShortDescr(journey)}</IonLabel>
         </IonItem>
       ))}
     </IonList>
@@ -165,7 +156,7 @@ const JourneysPage: React.FC = () => {
               <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
                 disabled={useLocationAsStart}
                 label="Start (id)"
-                placeholder="Enter start location (id)."/>
+                placeholder="Enter start location (id)." />
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonCheckbox onIonChange={e => setUseLocationAsStart(e.detail.checked)}
                 disabled={useLocationAsDestination}
@@ -180,7 +171,7 @@ const JourneysPage: React.FC = () => {
               <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
                 disabled={useLocationAsDestination}
                 label="Destination (id)"
-                placeholder="Enter destination location (id)."/>
+                placeholder="Enter destination location (id)." />
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
               <IonCheckbox onIonChange={e => setUseLocationAsDestination(e.detail.checked)}
                 disabled={useLocationAsStart}
