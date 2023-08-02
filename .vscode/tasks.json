@@ -12,8 +12,8 @@
             "problemMatcher": {
                 "background": {
                     "activeOnStart": true,
-                    "beginsPattern": ".*",
-                    "endsPattern": ".*ready in.*"
+                    "beginsPattern": "###NOTHING###",
+                    "endsPattern": ".*"
                 },
                 "pattern": {
                     "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
@@ -67,7 +67,7 @@
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": ".*mocks-server.*",
-                    "endsPattern": ".*mocks-server.*"
+                    "endsPattern": ".*Select action:.*"
                 },
                 "pattern": {
                     "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
