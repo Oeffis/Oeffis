@@ -364,7 +364,7 @@ jobs:
             - 3100:3100
             - 3110:3110
           volumes:
-            - /e2e/:/input
+            - e2e/:/input
           options: >-
             --health-cmd "curl -L --fail http://mocks-server:3100"
             --health-interval 10s
