@@ -7,7 +7,7 @@
         "features/**/*.ts",
         "stepDefinitions/**/*.ts",
         "mocks/**/*.ts",
-        "mocks.config.ts",
+        "mocks.config.js",
         "babel.config.js"
     ],
     "compilerOptions": {

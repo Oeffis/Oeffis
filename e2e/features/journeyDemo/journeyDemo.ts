@@ -1,7 +1,7 @@
 import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 
 Given("the mock server returns a canned response for a location query of \"Gelsenkirchen\"", () => {
-    cy.mocksSetCollection("locationQuery-Gelsenkirchen");
+    cy.mocksSetCollection("Query for 'Gelsenkirchen Hbf'");
 });
 
 When("the journey demo is opened", () => {
