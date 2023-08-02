@@ -371,6 +371,8 @@ jobs:
 
         - name: Run Tests
           uses: cypress-io/github-action@v5
+          env:
+            DEBUG: '@cypress/github-action'
           with:
             working-directory: e2e
 
