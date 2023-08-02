@@ -2,35 +2,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Backend (watch)",
-            "type": "npm",
-            "script": "start:debug",
-            "path": "backend",
-            "group": {
-                "kind": "build"
-            },
-            "problemMatcher": [
-                "$tsc-watch",
-                {
-                    "background": {
-                        "activeOnStart": true,
-                        "beginsPattern": ".*File change detected.*",
-                        "endsPattern": ".*Nest application successfully started.*"
-                    },
-                    "pattern": {
-                        "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
-                        "file": 1,
-                        "location": 2,
-                        "message": 3
-                    }
-                }
-            ],
-            "isBackground": true,
-            "presentation": {
-                "group": "watchers"
-            }
-        },
-        {
             "label": "Frontend (watch)",
             "type": "npm",
             "script": "dev",
@@ -57,14 +28,10 @@
             }
         },
         {
-            "label": "End To End Test Development",
+            "label": "Open Cypress",
             "type": "npm",
             "script": "cypress:open",
             "path": "e2e",
-            "dependsOn": [
-                "Backend (watch)",
-                "Frontend (watch)"
-            ],
             "problemMatcher": {
                 "background": {
                     "activeOnStart": true,
@@ -78,7 +45,41 @@
                     "message": 3
                 }
             },
-            "isBackground": true
+            "isBackground": true,
+            "presentation": {
+                "group": "watchers"
+            }
+        },
+        {
+            "label": "Prepare E2E",
+            "dependsOn": [
+                "Start Mocks Server",
+                "Open Cypress",
+                "Frontend (watch)"
+            ]
+        },
+        {
+            "label": "Start Mocks Server",
+            "type": "npm",
+            "script": "mocks-server",
+            "path": "e2e",
+            "problemMatcher": {
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*mocks-server.*",
+                    "endsPattern": ".*mocks-server.*"
+                },
+                "pattern": {
+                    "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                }
+            },
+            "isBackground": true,
+            "presentation": {
+                "group": "watchers"
+            }
         }
     ]
 }

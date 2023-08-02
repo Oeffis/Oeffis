@@ -17,7 +17,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Backend (Mock Server)",
+            "name": "E2E",
             "sourceMaps": true,
             "cwd": "${workspaceRoot}/backend",
             "console": "integratedTerminal",
@@ -28,7 +28,8 @@
             ],
             "env": {
                 "VRR_BASE_URL": "http://127.0.0.1:3100"
-            }
+            },
+            "preLaunchTask": "Prepare E2E"
         },
         {
             "type": "chrome",
