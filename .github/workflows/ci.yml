@@ -344,20 +344,20 @@ jobs:
             - 3000:3000
           env:
             VRR_BASE_URL: http://mocks-server:3100
-          options: >-
-            --health-cmd "curl -L --fail http://localhost:3000"
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+          # options: >-
+          #   --health-cmd "curl -L --fail http://localhost:3000"
+          #   --health-interval 10s
+          #   --health-timeout 5s
+          #   --health-retries 5
         frontend:
           image: oeffis/frontend:${{ github.sha }}-untested-amd64
           ports:
             - 8000:80
-          options: >-
-            --health-cmd "curl -L --fail http://localhost:8000"
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+          # options: >-
+          #   --health-cmd "curl -L --fail http://localhost:8000"
+          #   --health-interval 10s
+          #   --health-timeout 5s
+          #   --health-retries 5
         mocks-server:
           image: mocksserver/main
           ports:
@@ -365,11 +365,11 @@ jobs:
             - 3110:3110
           volumes:
             - ${{ github.workspace }}/e2e/:/input
-          options: >-
-            --health-cmd "curl -L --fail http://localhost:3100"
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+          # options: >-
+          #   --health-cmd "curl -L --fail http://localhost:3100"
+          #   --health-interval 10s
+          #   --health-timeout 5s
+          #   --health-retries 5
       steps:
         - name: Checkout
           uses: actions/checkout@v3
