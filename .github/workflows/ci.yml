@@ -345,7 +345,7 @@ jobs:
           env:
             VRR_BASE_URL: http://mocks-server:3100
           options: >-
-            --health-cmd "curl http://backend:3000"
+            --health-cmd "curl -L --fail http://backend:3000"
             --health-interval 10s
             --health-timeout 5s
             --health-retries 5
@@ -354,7 +354,7 @@ jobs:
           ports:
             - 8000:80
           options: >-
-            --health-cmd "curl http://frontend:8000"
+            --health-cmd "curl -L --fail http://frontend:8000"
             --health-interval 10s
             --health-timeout 5s
             --health-retries 5
@@ -366,7 +366,7 @@ jobs:
           volumes:
             - /e2e/:/input
           options: >-
-            --health-cmd "curl http://mocks-server:3100"
+            --health-cmd "curl -L --fail http://mocks-server:3100"
             --health-interval 10s
             --health-timeout 5s
             --health-retries 5
