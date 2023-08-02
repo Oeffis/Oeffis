@@ -342,6 +342,8 @@ jobs:
           image: oeffis/backend:${{ github.sha }}-untested-amd64
           ports:
             - 3000:3000
+          env:
+            VRR_BASE_URL: http://127.0.0.1:3100
         frontend:
           image: oeffis/frontend:${{ github.sha }}-untested-amd64
           ports:
