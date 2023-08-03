@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { StopFinderResponseDto } from "./stop";
 
-export class StopFinderAtCoordinatesParametersDto {
+export class LocationCoordinatesDto {
 
   @ApiProperty({
     description: "Latitude of the location to search.",
@@ -18,6 +17,5 @@ export class StopFinderAtCoordinatesParametersDto {
     example: 7.101082448485377
   })
   longitude!: number;
-}
 
-export class StopFinderAtCoordinatesResponseDto extends StopFinderResponseDto { }
+}
