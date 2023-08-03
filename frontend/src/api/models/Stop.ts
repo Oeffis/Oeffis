@@ -20,4 +20,3 @@ export type Stop = {
      */
     longitude: number;
 };
-

@@ -10,4 +10,3 @@ export type Trip = {
      */
     legs: Array<Stop>;
 };
-

@@ -10,4 +10,3 @@ export type TripQueryResponseDto = {
      */
     alternatives: Array<Trip>;
 };
-

@@ -10,4 +10,3 @@ export type StopFinderAtCoordinatesResponseDto = {
      */
     stops: Array<Stop>;
 };
-

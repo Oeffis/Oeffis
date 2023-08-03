@@ -10,4 +10,3 @@ export type StopFinderByNameResponseDto = {
      */
     stops: Array<Stop>;
 };
-

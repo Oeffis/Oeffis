@@ -12,4 +12,3 @@ export type UserNotFound = {
      */
     message: Record<string, any>;
 };
-

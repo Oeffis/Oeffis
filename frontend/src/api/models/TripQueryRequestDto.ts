@@ -16,4 +16,3 @@ export type TripQueryRequestDto = {
      */
     departure: string;
 };
-
