@@ -1,24 +1,32 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class TripQueryRequestDto {
-  @ApiProperty({
-    description: "Origin of the trip.",
-    type: String,
-    required: true
-  })
-  origin!: string;
 
   @ApiProperty({
-    description: "Destination of the trip.",
+    description: "Origin (id) of the trip.",
     type: String,
     required: true
   })
-  destination!: string;
+  originId!: string; // TODO Is this working with location input?
 
   @ApiProperty({
-    description: "Date of the trip.",
+    description: "Destination (id) of the trip.",
     type: String,
     required: true
   })
-  departure?: string;
+  destinationId!: string;
+
+  @ApiProperty({
+    description: "Date of the trip to start (default: current date).",
+    type: Date
+  })
+  departure?: Date;
+
+  @ApiProperty({
+    description: "Use departure date as arrival.",
+    default: false,
+    type: Boolean
+  })
+  asArrival?: boolean;
+
 }
