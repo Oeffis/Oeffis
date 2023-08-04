@@ -9,20 +9,20 @@ import { request as __request } from '../core/request';
 
 export class AppService {
 
-    /**
-     * returns a "Hello World!" message
-     * Test enpoint to send a "Hello World!" message to frontend.
-     * @returns HelloWorld Returns a "Hello World!" message.
-     * @throws ApiError
-     */
-    public static appControllerGetHello(): CancelablePromise<Array<HelloWorld>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/app',
-            errors: {
-                400: `Bad request.`,
-            },
-        });
-    }
+  /**
+   * returns a "Hello World!" message
+   * Test enpoint to send a "Hello World!" message to frontend.
+   * @returns HelloWorld Returns a "Hello World!" message.
+   * @throws ApiError
+   */
+  public static appControllerGetHello(): CancelablePromise<Array<HelloWorld>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/app',
+      errors: {
+        400: `Bad request.`,
+      },
+    });
+  }
 
 }

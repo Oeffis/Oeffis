@@ -5,8 +5,8 @@
 import type { Stop } from './Stop';
 
 export type StopFinderAtCoordinatesResponseDto = {
-    /**
-     * Stops found.
-     */
-    stops: Array<Stop>;
+  /**
+   * Stops found.
+   */
+  stops: Array<Stop>;
 };

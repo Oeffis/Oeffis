@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type HelloWorld = {
-    message: string;
+  message: string;
 };
