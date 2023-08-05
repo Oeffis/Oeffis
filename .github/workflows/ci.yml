@@ -376,7 +376,7 @@ jobs:
 
         - name: Start Mocks Server Container
           run: |
-            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network github_network mocksserver/main
+            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} mocksserver/main
 
         - name: Install Node.js
           uses: actions/setup-node@v3
