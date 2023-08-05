@@ -393,6 +393,12 @@ jobs:
           with:
             working-directory: e2e
 
+        - name : Stop Mocks Server Container
+          if: always()
+          run: |
+            docker stop mocks-server
+            docker rm mocks-server
+
         - name: Upload Artifacts
           if: always()
           uses: actions/upload-artifact@v3
@@ -401,11 +407,6 @@ jobs:
             path: |
               e2e/cypress/screenshots
               e2e/cypress/videos
-
-        - name : Stop Mocks Server Container
-          run: |
-            docker stop mocks-server
-            docker rm mocks-server
 
     publish_amd64:
       name: Publish Images (amd64)
