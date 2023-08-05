@@ -299,6 +299,7 @@ jobs:
         - name : Stop Mocks Server Container
           if: always()
           run: |
+            docker logs --details mocks-server
             docker stop mocks-server
             docker rm mocks-server
 
