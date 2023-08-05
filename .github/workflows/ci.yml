@@ -358,13 +358,13 @@ jobs:
           #   --health-interval 10s
           #   --health-timeout 5s
           #   --health-retries 5
-        mocks-server:
-          image: mocksserver/main
-          ports:
-            - 3100:3100
-            - 3110:3110
-          volumes:
-            - ${{ github.workspace }}/e2e/:/input
+        # mocks-server:
+        #   image: mocksserver/main
+        #   ports:
+        #     - 3100:3100
+        #     - 3110:3110
+        #   volumes:
+        #     - ${{ github.workspace }}/e2e/:/input
           # options: >-
           #   --health-cmd "curl -L --fail http://localhost:3100"
           #   --health-interval 10s
@@ -373,6 +373,10 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@v3
+
+        - name: Start Mocks Server Container
+          run: |
+            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network github_network mocksserver/main
 
         - name: Install Node.js
           uses: actions/setup-node@v3
@@ -397,6 +401,11 @@ jobs:
             path: |
               e2e/cypress/screenshots
               e2e/cypress/videos
+
+        - name : Stop Mocks Server Container
+          run: |
+            docker stop mocks-server
+            docker rm mocks-server
 
     publish_amd64:
       name: Publish Images (amd64)
