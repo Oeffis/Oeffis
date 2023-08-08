@@ -14,8 +14,8 @@
           <CommitMessageValidationConfig>
             <option name="regexConfig">
               <RegexConfig>
-                <option name="expression" value="#\d+\w.*" />
-                <option name="testInput" value="#123 Fixes that behaviour" />
+                <option name="expression" value="\w.* \(#\d+\)" />
+                <option name="testInput" value="Fixes that behaviour (#123)" />
               </RegexConfig>
             </option>
           </CommitMessageValidationConfig>
