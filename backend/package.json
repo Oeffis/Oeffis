@@ -22,7 +22,6 @@
     "@nestjs/platform-express": "^9.4.3",
     "@nestjs/swagger": "^6.3.0",
     "@oeffis/vrr_client": "file:../vrr_client",
-    "hafas-client": "^6.0.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
   },
@@ -30,8 +29,8 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.4.3",
+    "@swc/core": "^1.3.72",
     "@types/express": "^4.17.13",
-    "@types/hafas-client": "^6.0.0",
     "@types/jest": "^29.5.3",
     "@types/node": "18.16.12",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -45,6 +44,7 @@
     "source-map-support": "^0.5.20",
     "tsconfig-paths": "4.2.0",
     "typescript": "^5.1.3",
+    "unplugin-swc": "^1.3.2",
     "vitest": "^0.33.0"
   }
 }

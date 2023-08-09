@@ -22,6 +22,6 @@ window.matchMedia = window.matchMedia || function (): MediaQueryList {
 // @ts-ignore
 window.Ionic = {
   config: {
-    _testing: true,
-  },
+    _testing: true
+  }
 };

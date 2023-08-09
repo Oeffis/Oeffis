@@ -24,7 +24,7 @@ export class StopFinderClient extends VrrClientBase {
       "/static03/XML_STOPFINDER_REQUEST",
       {
         name_sf: formattedCoordinates,
-        type_sf: "coord",
+        type_sf: "coord"
       },
       Convert.toLOCATIONSUGGESTSchema,
     );
@@ -37,7 +37,7 @@ export class StopFinderClient extends VrrClientBase {
       "/static03/XML_STOPFINDER_REQUEST",
       {
         name_sf: query.search,
-        type_sf: "any",
+        type_sf: "any"
       },
       Convert.toLOCATIONSUGGESTSchema,
     );

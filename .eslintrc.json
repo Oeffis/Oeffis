@@ -65,9 +65,10 @@
         "allowTemplateLiterals": true
       }
     ],
-    "indent": [
+    "indent": "off",
+    "comma-dangle": [
       "error",
-      2
+      "never"
     ]
   }
 }

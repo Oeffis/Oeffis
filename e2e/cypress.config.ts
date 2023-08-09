@@ -17,11 +17,11 @@ export default defineConfig({
       on(
         "file:preprocessor",
         createBundler({
-          plugins: [createEsbuildPlugin(config)],
+          plugins: [createEsbuildPlugin(config)]
         })
       );
 
       return config;
-    },
-  },
+    }
+  }
 });
