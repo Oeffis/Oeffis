@@ -1,32 +1,32 @@
 {
-    "search.exclude": {
-        "**/node_modules": true,
-        "**/dist": true,
-        "**/out": true
-    },
-    "git.branchProtection": [
-        "main"
-    ],
-    "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
-    "git.pullBeforeCheckout": true,
-    "git.mergeEditor": true,
-    "files.insertFinalNewline": true,
-    "editor.indentSize": "tabSize",
-    "editor.tabSize": 2,
-    "[typescript][typescriptreact][javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true,
-    },
-    "eslint.workingDirectories": [
-        "./frontend",
-        "./backend",
-        "./e2e",
-        "./vrr_client"
-    ],
-    "cSpell.words": [
-        "Hafas"
-    ],
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-    },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/out": true
+  },
+  "git.branchProtection": [
+    "main"
+  ],
+  "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
+  "git.pullBeforeCheckout": true,
+  "git.mergeEditor": true,
+  "files.insertFinalNewline": true,
+  "editor.indentSize": "tabSize",
+  "editor.tabSize": 2,
+  "[typescript][typescriptreact][javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.formatOnSave": true
+  },
+  "eslint.workingDirectories": [
+    "./frontend",
+    "./backend",
+    "./e2e",
+    "./vrr_client"
+  ],
+  "cSpell.words": [
+    "Hafas"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
 }
