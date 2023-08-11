@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Stop } from "stop_finder/dto/stop";
+import { Location } from "locationFinder/entity/location.entity";
 
 export class TripQualityInfos {
 
@@ -60,17 +60,17 @@ export class TripLeg {
 
   @ApiProperty({
     description: "Origin stop of the leg.",
-    type: Stop,
+    type: Location,
     required: true
   })
-  origin!: Stop;
+  origin!: Location;
 
   @ApiProperty({
     description: "Destination stop of the leg.",
-    type: Stop,
+    type: Location,
     required: true
   })
-  destination!: Stop;
+  destination!: Location;
 
   @ApiProperty({
     description: "Transportation that is used by the leg.",

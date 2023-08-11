@@ -7,7 +7,6 @@ import { LocationDetails } from "../entity/locationDetails.entity";
 export class VrrLocationWrapperService {
 
   wrap(vrrLocations: VrrLocation[]): Location[] {
-
     return vrrLocations?.map(this.wrapLocation);
   }
 

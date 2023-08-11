@@ -4,6 +4,7 @@ import { BadRequest } from "app/entity/badrequest.entity";
 import { TripQueryRequestDto } from "trip_query/dto/tripQueryRequest";
 import { TripQueryResponseDto } from "trip_query/dto/tripQueryResponse";
 import { TripQueryService } from "../service/trip_query.service";
+import { Journey } from "trip_query/entity/Journey.entity";
 
 @Controller("trip_query")
 @ApiTags("trip_query")
@@ -22,7 +23,7 @@ export class TripQueryController {
     description: "Bad request.",
     type: BadRequest
   })
-  public queryTrip(@Body() requestBody: TripQueryRequestDto): Promise<TripQueryResponseDto> {
-    return this.tripQueryService.queryTrip(requestBody.origin, requestBody.destination/*, requestBody.departure*/);
+  public queryTrip(@Body() requestBody: TripQueryRequestDto): Promise<Journey[]> {
+    return this.tripQueryService.queryTrip(requestBody.originId, requestBody.destinationId/*, requestBody.departure*/);
   }
 }
