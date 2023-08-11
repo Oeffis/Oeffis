@@ -28,7 +28,7 @@ export class LegDetails {
 
   @ApiProperty({
     description: "Quality how well the given location meets the related query (biggest number is the best result).",
-    type: Number
+    type: String
   })
   realtimeStatus?: string; // RealtimeTripStatus
 

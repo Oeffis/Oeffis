@@ -1,20 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { JourneyLocation } from "./JourneyLocation.entity";
-import { LegDetails } from "./LegDetails.entity";
-import { Transportation } from "./Transportation.entity";
-
+import { LegDetails } from "./legDetails.entity";
+import { Transportation } from "./transportation.entity";
+import { JourneyLocation } from "./journeyLocation.entity";
 
 export class Leg {
 
   @ApiProperty({
     description: "(Full) Name of the location.",
-    type: String
+    type: JourneyLocation
   })
   origin?: JourneyLocation;
 
   @ApiProperty({
     description: "Id of the location.",
-    type: String
+    type: JourneyLocation
   })
   destination?: JourneyLocation;
 

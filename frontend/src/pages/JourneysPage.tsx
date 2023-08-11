@@ -12,15 +12,15 @@ import {
   IonList
 } from "@ionic/react";
 import React, { useState } from "react";
-import { Stop, StopFinderService, Trip, TripQueryService } from "../api";
+import { Location, Journey, LocationFinderService, JourneyService, JourneyRequestDto } from "../api";
 
 /**
  * Container of elements related to journeys.
  */
 const JourneysPage: React.FC = () => {
 
-  const [locations, setLocations] = useState<Stop[]>([]);
-  const [journeys, setJourneys] = useState<Trip[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [journeys, setJourneys] = useState<Journey[]>([]);
 
   const [searchLocationsQuery, setSearchLocationsQuery] = useState<string>("");
 
@@ -33,7 +33,7 @@ const JourneysPage: React.FC = () => {
    * Searches for locations with given query.
    */
   const searchLocations = async (): Promise<void> => {
-    setLocations((await StopFinderService.stopFinderControllerFindStopByName({ name: searchLocationsQuery })).stops);
+    setLocations(await LocationFinderService.locationFinderControllerFindStopByName({ name: searchLocationsQuery }));
     console.log(locations);
   };
 
@@ -56,15 +56,16 @@ const JourneysPage: React.FC = () => {
     //   ? planJourneyDestination
     //   : userLocation;
 
-    const journeyParameters = {
-      origin: planJourneyStart,
-      destination: planJourneyDestination,
-      departure: new Date().toISOString()
+    const journeyParameters: JourneyRequestDto = {
+      originId: planJourneyStart,
+      destinationId: planJourneyDestination,
+      departure: new Date().toISOString(),
+      asArrival: false
     };
 
     const journeyVariants =
-      await TripQueryService.tripQueryControllerQueryTrip(journeyParameters);
-    setJourneys(journeyVariants.alternatives);
+      await JourneyService.journeyControllerQueryTrip(journeyParameters);
+    setJourneys(journeyVariants);
     console.log(journeyVariants);
   };
 
@@ -73,10 +74,10 @@ const JourneysPage: React.FC = () => {
    *
    * @param journey journey
    */
-  const getJourneyShortDescr = (journey: Trip): string => (
+  const getJourneyShortDescr = (journey: Journey): string => (
     journey.legs
       .map(leg => (
-        leg.name
+        leg.transportation.name + " " + leg.destination.name
       ))
       .join(" -> ")
   );

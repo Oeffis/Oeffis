@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import { Journey } from "trip_query/entity/Journey.entity";
+import { Journey } from "journey/entity/journey.entity";
 import { JourneyLocationElement, TransportationTrip, Journey as VrrJourney } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { Leg } from "trip_query/entity/Leg.entity";
+import { Leg } from "journey/entity/leg.entity";
 import { Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { LegDetails } from "trip_query/entity/LegDetails.entity";
-import { JourneyLocation } from "trip_query/entity/JourneyLocation.entity";
-import { Time } from "trip_query/entity/Time.entity";
+import { LegDetails } from "journey/entity/legDetails.entity";
+import { JourneyLocation } from "journey/entity/journeyLocation.entity";
+import { Time } from "journey/entity/time.entity";
 import { Location } from "locationFinder/entity/location.entity";
 import { LocationDetails } from "locationFinder/entity/locationDetails.entity";
-import { Transportation } from "trip_query/entity/Transportation.entity";
+import { Transportation } from "journey/entity/transportation.entity";
 import { Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { Trip } from "trip_query/entity/Trip.entity";
+import { Trip } from "journey/entity/trip.entity";
 import { Location as VrrLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { VrrLocationWrapperService } from "locationFinder/service/vrrLocationWrapper.service";
 
@@ -39,7 +39,7 @@ export class VrrJourneysWrapperService {
   private wrapTransportation(vrrTransportation: VrrTransportation): Transportation {
     return {
       name: vrrTransportation.name,
-      trips: vrrTransportation.trips?.map(this.wrapTransporationTrips) ?? []
+      trips: vrrTransportation.trips?.map((trip) => this.wrapTransporationTrips(trip)) ?? []
     };
   }
 

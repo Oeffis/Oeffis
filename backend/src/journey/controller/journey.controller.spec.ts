@@ -1,19 +1,17 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { VrrModule } from "vrr/vrr.module";
-import { TripQueryService } from "../service/trip_query.service";
-import { TripQueryController } from "./trip_query.controller";
+import { JourneyService } from "../service/journey.service";
+import { JourneyController } from "./journey.controller";
 
-let controller: TripQueryController;
+let controller: JourneyController;
 let app: TestingModule;
 
 beforeEach(async () => {
   app = await Test.createTestingModule({
-    controllers: [TripQueryController],
-    providers: [TripQueryService],
-    imports: [VrrModule]
+    controllers: [JourneyController],
+    providers: [JourneyService]
   }).compile();
 
-  controller = app.get<TripQueryController>(TripQueryController);
+  controller = app.get<JourneyController>(JourneyController);
 });
 
 /* it("should query trip", async () => {

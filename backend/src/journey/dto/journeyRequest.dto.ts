@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class TripQueryRequestDto {
+export class JourneyRequestDto {
 
   @ApiProperty({
     description: "Origin (id) of the trip.",
@@ -8,7 +8,7 @@ export class TripQueryRequestDto {
     type: String,
     required: true
   })
-  originId!: string; // TODO Is this working with location input?
+  originId!: string;
 
   @ApiProperty({
     description: "Destination (id) of the trip.",

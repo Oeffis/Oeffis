@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Leg } from "./Leg.entity";
+import { Leg } from "./leg.entity";
 
 export class Journey {
 
   @ApiProperty({
     description: "(Full) Name of the location.",
-    type: String
+    type: [Leg]
   })
   legs?: Leg[];
 

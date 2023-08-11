@@ -2,21 +2,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Trip = {
+export type Time = {
     /**
      * (Full) Name of the location.
      */
-    arrivalTimePlannedJourneyDestination: string;
+    timeBaseTimetable: string;
     /**
      * (Full) Name of the location.
      */
-    departureTimePlannedJourneyOrigin: string;
+    timeEstimated: string;
     /**
      * (Full) Name of the location.
      */
-    status: string;
-    /**
-     * (Full) Name of the location.
-     */
-    trainNumber: string;
+    timePlanned: string;
 };
