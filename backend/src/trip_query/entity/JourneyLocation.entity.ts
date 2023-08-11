@@ -1,34 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Location } from "locationFinder/entity/location.entity";
 import { LocationDetails } from "locationFinder/entity/locationDetails.entity";
 import { Time } from "./Time.entity";
 
 
-export class JourneyLocation {
-
-  @ApiProperty({
-    description: "Id of the location.",
-    type: String
-  })
-  id?: string;
-
-  @ApiProperty({
-    description: "(Full) Name of the location.",
-    type: String
-  })
-  name?: string;
-
-  @ApiProperty({
-    description: "Type of the location.",
-    type: String
-  })
-  type?: string;
-
-  @ApiProperty({
-    description: "Further details of the location.",
-    type: Location,
-    required: true
-  })
-  details!: LocationDetails;
+export class JourneyLocation extends Location {
 
   @ApiProperty({
     description: "Further details of the location.",
@@ -45,10 +21,7 @@ export class JourneyLocation {
   departure!: Time;
 
   constructor(name: string, id: string, type: string, details: LocationDetails, arrival: Time, departure: Time) {
-    this.id = id;
-    this.name = name;
-    this.type = type;
-    this.details = details;
+    super(name, id, type, details);
     this.arrival = arrival;
     this.departure = departure;
   }
