@@ -7,10 +7,10 @@ import { LocationDetails } from "../entity/locationDetails.entity";
 export class VrrLocationWrapperService {
 
   wrap(vrrLocations: VrrLocation[]): Location[] {
-    return vrrLocations?.map(this.wrapLocation);
+    return vrrLocations.map(location => this.wrapLocation(location));
   }
 
-  private wrapLocation(vrrLocation: VrrLocation): Location {
+  public wrapLocation(vrrLocation: VrrLocation): Location {
     const details: LocationDetails = {
       shortName: vrrLocation.disassembledName,
       matchQuality: vrrLocation.matchQuality,

@@ -6,6 +6,7 @@ import { Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { LegDetails } from "trip_query/entity/LegDetails.entity";
 import { JourneyLocation } from "trip_query/entity/JourneyLocation.entity";
 import { Time } from "trip_query/entity/Time.entity";
+import { Location } from "locationFinder/entity/location.entity";
 import { LocationDetails } from "locationFinder/entity/locationDetails.entity";
 import { Transportation } from "trip_query/entity/Transportation.entity";
 import { Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
@@ -23,7 +24,7 @@ export class VrrJourneysWrapperService {
   }
 
   wrap(vrrJourneys: VrrJourney[]): Journey[] {
-    return vrrJourneys?.map(this.wrapJourneys);
+    return vrrJourneys?.map((journey) => this.wrapJourneys(journey));
   }
 
   private wrapTransporationTrips(vrrTransporationTrip: TransportationTrip): Trip {
@@ -42,32 +43,13 @@ export class VrrJourneysWrapperService {
     };
   }
 
-  private wrapLocation(vrrLocation: VrrLocation): Location {
-    const details: LocationDetails = {
-      shortName: vrrLocation.disassembledName,
-      matchQuality: vrrLocation.matchQuality,
-      parent: vrrLocation.parent !== undefined
-        ? this.wrapLocation(vrrLocation.parent)
-        : undefined,
-      latitude: (vrrLocation.coord?.[0] as number) ?? undefined,
-      longitude: (vrrLocation.coord?.[1] as number) ?? undefined
-    };
-
-    return {
-      id: vrrLocation.id,
-      name: vrrLocation.name,
-      type: vrrLocation.type,
-      details: details
-    };
-  }
-
   private wrapJourneyLocatoinElement(journeyLocatoinElement: JourneyLocationElement): JourneyLocation {
 
     const details: LocationDetails = {
       shortName: journeyLocatoinElement.disassembledName,
       matchQuality: journeyLocatoinElement.matchQuality,
       parent: journeyLocatoinElement.parent !== undefined
-        ? this.wrapLocation(journeyLocatoinElement.parent)
+        ? this.locationWrapper.wrapLocation(journeyLocatoinElement.parent)
         : undefined,
       latitude: (journeyLocatoinElement.coord?.[0] as number) ?? undefined,
       longitude: (journeyLocatoinElement.coord?.[1] as number) ?? undefined
@@ -113,7 +95,7 @@ export class VrrJourneysWrapperService {
 
   private wrapJourneys(vrrJoruney: VrrJourney): Journey {
     return {
-      legs: vrrJoruney.legs?.map(this.wrapLegs)
+      legs: vrrJoruney.legs?.map((leg) => this.wrapLegs(leg))
     };
   }
 

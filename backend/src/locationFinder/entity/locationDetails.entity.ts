@@ -17,7 +17,7 @@ export class LocationDetails {
 
   @ApiProperty({
     description: "Parent location of this location.",
-    type: Location
+    type: () => Location
   })
   parent?: Location;
 

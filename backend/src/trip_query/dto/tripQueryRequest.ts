@@ -4,6 +4,7 @@ export class TripQueryRequestDto {
 
   @ApiProperty({
     description: "Origin (id) of the trip.",
+    example: "de:05513:5613",
     type: String,
     required: true
   })
@@ -11,6 +12,7 @@ export class TripQueryRequestDto {
 
   @ApiProperty({
     description: "Destination (id) of the trip.",
+    example: "de:05562:4982",
     type: String,
     required: true
   })
@@ -18,6 +20,7 @@ export class TripQueryRequestDto {
 
   @ApiProperty({
     description: "Date of the trip to start (default: current date).",
+    example: "15:00",
     type: Date
   })
   departure?: Date;
