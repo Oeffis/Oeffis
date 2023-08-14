@@ -1,5 +1,5 @@
 import React from "react";
-import { IonDatetime, IonDatetimeButton, IonModal, IonItem, IonLabel } from "@ionic/react";
+import { IonDatetime, IonDatetimeButton, IonModal } from "@ionic/react";
 
 const RouteInputContainer: React.FC = () => (
 
