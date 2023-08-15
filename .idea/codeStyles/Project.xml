@@ -1,5 +1,10 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <option name="DO_NOT_FORMAT">
+      <list>
+        <fileSet type="globPattern" pattern="/frontend/src/api/**" />
+      </list>
+    </option>
     <TypeScriptCodeStyleSettings version="0">
       <option name="FIELD_PREFIX" value="" />
       <option name="PREFER_EXPLICIT_TYPES_VARS_FIELDS" value="true" />
