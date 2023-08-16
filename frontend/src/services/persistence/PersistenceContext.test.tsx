@@ -17,7 +17,7 @@ test("renders children", () => {
 });
 
 test("Can use context to set and get data", () => {
-  const Test = () => {
+  const Test = (): JSX.Element => {
     const persistence = React.useContext(PersistenceContext);
     persistence.set("comp_test", "Hello world");
 

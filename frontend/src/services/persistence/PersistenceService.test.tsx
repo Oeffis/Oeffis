@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PersistenceService } from "./PersistenceService";
 
 test("can write to persistence service", () => {
