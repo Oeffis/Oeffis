@@ -289,7 +289,7 @@ jobs:
         
         - name: Start Mocks Server Container
           run: |
-            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} node:latest /bin/bash -c "cd /input && npm list asynckit && npm run mocks-server -- --no-plugins.inquirerCli.enabled"
+            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} node:latest /bin/bash -c "cd /input && npm run mocks-server -- --no-plugins.inquirerCli.enabled"
 
         - name: Run Tests
           uses: cypress-io/github-action@v5
