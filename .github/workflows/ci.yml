@@ -277,10 +277,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v3
 
-        - name: Start Mocks Server Container
-          run: |
-            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} mocksserver/main
-
         - name: Install Node.js
           uses: actions/setup-node@v3
           with:
@@ -290,6 +286,10 @@ jobs:
           working-directory: e2e
           run: |
             npm ci
+        
+        - name: Start Mocks Server Container
+          run: |
+            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} node:latest /bin/bash -c "cd /input && npm run mocks-server"
 
         - name: Run Tests
           uses: cypress-io/github-action@v5
