@@ -1,7 +1,10 @@
 const config = {
   files: {
     babelRegister: {
-      enabled: true
+      enabled: true,
+      options: {
+        presets: ["@babel/env", "@babel/preset-typescript"]
+      }
     }
   },
   mock: {
