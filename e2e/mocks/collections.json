@@ -1,0 +1,13 @@
+[
+  {
+    "id": "base",
+    "routes": []
+  },
+  {
+    "id": "Query for 'Gelsenkirchen Hbf'",
+    "from": "base",
+    "routes": [
+      "stop_finder:result for 'Gelsenkirchen Hbf'"
+    ]
+  }
+]

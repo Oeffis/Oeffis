@@ -96,7 +96,7 @@ const JourneysPage: React.FC = () => {
         .map((location, index) => (
           <IonItem key={index}>
             <IonLabel>{index}</IonLabel>
-            <IonLabel class="ion-text-wrap">{location.name}</IonLabel>
+            <IonLabel class="ion-text-wrap" data-testid="locationName">{location.name}</IonLabel>
             <IonLabel>unsupported</IonLabel>
             <IonLabel>{location.id}</IonLabel>
           </IonItem>
@@ -132,10 +132,13 @@ const JourneysPage: React.FC = () => {
             {/* Input for query string. */}
             <IonItem>
               {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-              <IonInput onIonChange={e => setSearchLocationsQuery(e.detail.value!)}
+              <IonInput onIonInput={e => setSearchLocationsQuery(e.detail.value!)}
                 label="Location query"
-                placeholder="Enter location query." />
-              <IonButton onClick={searchLocations}>SEARCH LOCATIONS</IonButton>
+                placeholder="Enter location query." data-testid="stopQuery" />
+              <IonButton onClick={searchLocations}
+                data-testid="stopQuerySubmit"
+                disabled={searchLocationsQuery.length === 0}
+              >SEARCH LOCATIONS</IonButton>
             </IonItem>
           </IonList>
           {/* Output of locations search. */}

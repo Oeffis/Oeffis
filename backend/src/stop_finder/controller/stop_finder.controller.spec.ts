@@ -1,5 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { Stop } from "stop_finder/dto/stop";
+import { VrrModule } from "vrr/vrr.module";
 import { StopFinderService } from "../service/stop_finder.service";
 import { StopFinderController } from "./stop_finder.controller";
 
@@ -9,7 +10,8 @@ let app: TestingModule;
 beforeEach(async () => {
   app = await Test.createTestingModule({
     controllers: [StopFinderController],
-    providers: [StopFinderService]
+    providers: [StopFinderService],
+    imports: [VrrModule]
   }).compile();
 
   stopFinderController = app.get<StopFinderController>(StopFinderController);
