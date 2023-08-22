@@ -8,12 +8,28 @@
             "sourceMaps": true,
             "cwd": "${workspaceRoot}/backend",
             "console": "integratedTerminal",
-            "protocol": "inspector",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run-script",
                 "start:dev"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "E2E",
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}/backend",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "start:dev"
+            ],
+            "env": {
+                "VRR_BASE_URL": "http://127.0.0.1:3100"
+            },
+            "preLaunchTask": "Prepare E2E"
         },
         {
             "type": "chrome",

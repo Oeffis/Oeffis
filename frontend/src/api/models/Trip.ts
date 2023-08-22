@@ -5,9 +5,8 @@
 import type { Stop } from './Stop';
 
 export type Trip = {
-    /**
-     * Legs of the alternative.
-     */
-    legs: Array<Stop>;
+  /**
+   * Legs of the alternative.
+   */
+  legs: Array<Stop>;
 };
-

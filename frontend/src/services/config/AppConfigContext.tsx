@@ -1,7 +1,7 @@
 
 import { createContext } from "react";
 import useSWR from "swr";
-import { OpenAPI } from "../api";
+import { OpenAPI } from "../../api";
 import { AppConfig } from "./appConfig";
 
 export const AppConfigContext = createContext<AppConfig>({} as AppConfig);

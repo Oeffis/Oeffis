@@ -18,12 +18,13 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
-import { AppConfigProvider } from "./config/AppConfigContext";
+import { AppConfigProvider } from "./services/config/AppConfigContext";
 import JourneysPage from "./pages/JourneysPage";
 import UserPage from "./pages/UserPage";
 import "./theme/variables.css";
 import JourneyListComponent from "./components/JourneyListComponent";
 import { IJourney } from "./interfaces/IJourney.interface";
+import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 
 setupIonicReact();
 
@@ -92,28 +93,26 @@ const journeys = [journey, journey2, journey];
 
 const App: React.FC = () => (
   <AppConfigProvider>
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
-          <Route exact path="/userDemo">
-            <UserPage />
-          </Route>
-          <Route exact path="/journeyDemo">
-            <JourneysPage />
-          </Route>
-        </IonRouterOutlet>
-        <Route exact path="/journeyResults">
-          <JourneyListComponent journeys={journeys} />
-        </Route>
-      </IonReactRouter>
-
-    </IonApp>
+    <PersistenceProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/home">
+              <Home />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <Route exact path="/userDemo">
+              <UserPage />
+            </Route>
+            <Route exact path="/journeyDemo">
+              <JourneysPage />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </PersistenceProvider>
   </AppConfigProvider>
 );
 
