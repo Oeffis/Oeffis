@@ -251,6 +251,15 @@ jobs:
           image: oeffis/frontend:${{ github.sha }}-untested-amd64
           ports:
             - 8000:80
+        # docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} node:latest /bin/bash -c "cd /input && npm run mocks-server -- --no-plugins.inquirerCli.enabled"
+        mocks-server:
+          image: mocksserver/main:4.1.0
+          ports:
+            - 3100:3100
+            - 3110:3110
+          volumes:
+            - ./e2e/:/input
+          options: --no-plugins.inquirerCli.enabled
       steps:
         - name: Checkout
           uses: actions/checkout@v3
@@ -264,22 +273,22 @@ jobs:
           working-directory: e2e
           run: |
             npm ci
-        
-        - name: Start Mocks Server Container
-          run: |
-            docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} node:latest /bin/bash -c "cd /input && npm run mocks-server -- --no-plugins.inquirerCli.enabled"
+
+        # - name: Start Mocks Server Container
+        #   run: |
+        #     docker run -d --name mocks-server -p 3100:3100 -p 3110:3110 -v ${{ github.workspace }}/e2e/:/input --network ${{ job.container.network }} node:latest /bin/bash -c "cd /input && npm run mocks-server -- --no-plugins.inquirerCli.enabled"
 
         - name: Run Tests
           uses: cypress-io/github-action@v5
           with:
             working-directory: e2e
 
-        - name : Stop Mocks Server Container
-          if: always()
-          run: |
-            docker logs --details mocks-server
-            docker stop mocks-server
-            docker rm mocks-server
+        # - name : Stop Mocks Server Container
+        #   if: always()
+        #   run: |
+        #     docker logs --details mocks-server
+        #     docker stop mocks-server
+        #     docker rm mocks-server
 
         - name: Upload Artifacts
           if: always()
