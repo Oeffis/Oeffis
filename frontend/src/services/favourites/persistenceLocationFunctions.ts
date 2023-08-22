@@ -1,8 +1,8 @@
 import { PersistedObject } from "../persistence/generatePersistedObjectStorage";
-import { CreateFavouriteStop } from "./FavouritesContext";
+import { CreateFavouriteLocation } from "./FavouritesContext";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseFavouriteStop(favourite: any): PersistedObject<CreateFavouriteStop> | null {
+function parseFavouriteLocation(favourite: any): PersistedObject<CreateFavouriteLocation> | null {
   if (typeof favourite !== "object" || favourite === null) {
     return null;
   }
@@ -20,7 +20,7 @@ function parseFavouriteStop(favourite: any): PersistedObject<CreateFavouriteStop
     return null;
   }
 
-  if (typeof favourite.stopId !== "string") {
+  if (typeof favourite.locationId !== "string") {
     return null;
   }
 
@@ -28,27 +28,27 @@ function parseFavouriteStop(favourite: any): PersistedObject<CreateFavouriteStop
     createdAt,
     id: favourite.id,
     nickname: favourite.nickname,
-    stopId: favourite.stopId
+    locationId: favourite.locationId
   };
 }
 
-export function parsePersistedFavouriteStops(persistedFavouriteTrips: string | null): PersistedObject<CreateFavouriteStop>[] {
-  if (!persistedFavouriteTrips) {
+export function parsePersistedFavouriteLocations(persistedFavouriteLocations: string | null): PersistedObject<CreateFavouriteLocation>[] {
+  if (!persistedFavouriteLocations) {
     return [];
   }
 
-  const parsedFromPersistence = JSON.parse(persistedFavouriteTrips);
+  const parsedFromPersistence = JSON.parse(persistedFavouriteLocations);
   if (!Array.isArray(parsedFromPersistence)) {
     return [];
   }
 
   const parsedFavourites = parsedFromPersistence
-    .map(parseFavouriteStop)
-    .filter((favourite): favourite is PersistedObject<CreateFavouriteStop> => favourite !== null);
+    .map(parseFavouriteLocation)
+    .filter((favourite): favourite is PersistedObject<CreateFavouriteLocation> => favourite !== null);
 
   return parsedFavourites;
 }
 
-export function stringifyFavouriteStops(favouriteTrips: PersistedObject<CreateFavouriteStop>[]): string {
+export function stringifyFavouriteLocations(favouriteTrips: PersistedObject<CreateFavouriteLocation>[]): string {
   return JSON.stringify(favouriteTrips);
 }

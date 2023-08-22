@@ -1,17 +1,17 @@
 import { generatePersistedObjectStorage } from "../persistence/generatePersistedObjectStorage";
-import { parsePersistedFavouriteStops, stringifyFavouriteStops } from "./persistenceStopFunctions";
+import { parsePersistedFavouriteLocations, stringifyFavouriteLocations } from "./persistenceLocationFunctions";
 import { parsePersistedFavouriteTrips, stringifyFavouriteTrips } from "./persistenceTripFunctions";
 
 const FAVOURITE_TRIPS_KEY = "favourite_trips";
 const FAVOURITE_STOPS_KEY = "favourite_stops";
 
 export type CreateFavouriteTrip = {
-  originStopId: string;
-  destinationStopId: string;
+  originLocationId: string;
+  destinationLocationId: string;
 };
 
-export type CreateFavouriteStop = {
-  stopId: string;
+export type CreateFavouriteLocation = {
+  locationId: string;
   nickname: string;
 };
 
@@ -22,17 +22,17 @@ const favouriteTrips = generatePersistedObjectStorage<CreateFavouriteTrip, "favo
   stringifyFavouriteTrips
 );
 
-const favouriteStops = generatePersistedObjectStorage<CreateFavouriteStop, "favouriteStop">(
-  "favouriteStop",
+const favouriteLocations = generatePersistedObjectStorage<CreateFavouriteLocation, "favouriteLocation">(
+  "favouriteLocation",
   FAVOURITE_STOPS_KEY,
-  parsePersistedFavouriteStops,
-  stringifyFavouriteStops
+  parsePersistedFavouriteLocations,
+  stringifyFavouriteLocations
 );
 
 export const FavouriteTripsContext = favouriteTrips.context;
 export const FavouriteTripsProvider = favouriteTrips.provider;
 export const useFavouriteTrips = favouriteTrips.useObjects;
 
-export const FavouriteStopsContext = favouriteStops.context;
-export const FavouriteStopsProvider = favouriteStops.provider;
-export const useFavouriteStops = favouriteStops.useObjects;
+export const FavouriteLocationsContext = favouriteLocations.context;
+export const FavouriteLocationsProvider = favouriteLocations.provider;
+export const useFavouriteLocations = favouriteLocations.useObjects;
