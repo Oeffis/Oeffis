@@ -1,5 +1,6 @@
 import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonPage } from "@ionic/react";
 import { analytics, menu, person } from "ionicons/icons";
+import LeafletMapContainer from "../components/LeafletMapContainer";
 import RoutePlanner from "../components/RoutePlanner";
 import "./Home.css";
 
@@ -8,6 +9,7 @@ const Home: React.FC = () => (
   <IonPage>
     <IonContent fullscreen>
       <RoutePlanner />
+      <LeafletMapContainer />
       <IonFab slot="fixed" vertical="top" horizontal="end">
         <IonFabButton color="primary">
           <IonIcon icon={menu} />
