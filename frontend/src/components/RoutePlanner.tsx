@@ -15,11 +15,11 @@ const RoutePlanner: React.FC = () => (
                 </IonItem>
                 <IonItem>
                     {/* Generic Input for Start-Position */}
-                    <IonInput name="start" label="Start position" labelPlacement="floating" placeholder="Enter start position" />
+                    <IonInput name="start" label="Start position" labelPlacement="floating" placeholder="Enter start position" data-testid="origin-input" />
                 </IonItem>
                 <IonItem>
                     {/* Generic Input for Destination */}
-                    <IonInput name="destination" label="Destination" labelPlacement="floating" placeholder="Enter destination" />
+                    <IonInput name="destination" label="Destination" labelPlacement="floating" placeholder="Enter destination" data-testid="destination-input" />
                 </IonItem>
                 <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
             </IonList>
