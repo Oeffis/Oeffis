@@ -25,5 +25,8 @@
     ],
     "cSpell.words": [
         "Hafas"
-    ]
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
 }
