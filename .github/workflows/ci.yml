@@ -404,6 +404,8 @@ jobs:
             cache-from: |
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
+            build-args: |
+              VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
     build_publish_arm64:
       name: Build And Publish Images (arm64)
@@ -492,3 +494,5 @@ jobs:
             cache-from: |
               type=gha,scope=${{github.ref_name}}-backend
               type=gha,scope=${{github.base_ref}}-backend
+            build-args: |
+              VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
