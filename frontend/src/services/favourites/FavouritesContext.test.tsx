@@ -1,13 +1,14 @@
 import { render } from "@testing-library/react";
 import { FavouritesProvider, useFavourites } from "./FavouritesContext";
 import { PersistenceProvider } from "../persistence/PersistenceContext";
+import { useEffect } from "react";
 
-test("renders without crashing", () => {
+it("renders without crashing", () => {
   const { baseElement } = render(<FavouritesProvider />);
   expect(baseElement).toBeDefined();
 });
 
-test("renders children", () => {
+it("renders children", () => {
   const { baseElement } = render(
     <PersistenceProvider>
       <FavouritesProvider>
@@ -18,17 +19,19 @@ test("renders children", () => {
   expect(baseElement).toBeDefined();
 });
 
-test("Can use context to add favourites", () => {
+it("Can use context to add favourites", () => {
 
   const Test = (): JSX.Element => {
-    const { addFavourite } = useFavourites();
+    const { addFavourite, favourites } = useFavourites();
 
-    const favourite = addFavourite({
-      origin: "test",
-      destination: "test"
-    });
+    useEffect(() => {
+      addFavourite({
+        origin: "test",
+        destination: "test"
+      });
+    }, []);
 
-    return <div>{favourite.origin}</div>;
+    return <div>{favourites.map(x => x.origin)}</div>;
   };
 
   const { baseElement } = render(
