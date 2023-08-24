@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: 40px;
+    position: relative;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.left {
+    display: flex;
+}
+
+.circle {
+    border-radius: 50%;
+    background: gray;
+    height: 24px;
+    width: 24px;
+}
+
+.line {
+    width: 4px;
+    height: 28px;
+    background: gray;
+    margin-top: 8px;
+}
+
+.timeline-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 24px;
+}
+
+.step-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 20px;
+}
+
+IonLabel {
+    text-align: left;
+}

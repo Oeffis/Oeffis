@@ -22,9 +22,74 @@ import { AppConfigProvider } from "./services/config/AppConfigContext";
 import JourneysPage from "./pages/JourneysPage";
 import UserPage from "./pages/UserPage";
 import "./theme/variables.css";
+import JourneyListComponent from "./components/JourneyListComponent";
+import { IJourney } from "./interfaces/IJourney.interface";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 
 setupIonicReact();
+
+//Following Journeys are examples and only for visualization and testing purpose
+const journey: IJourney = {
+  startTime: "17:00",
+  travelDuration: 90,
+  arrivalTime: "19:30",
+  startStation: "SE4",
+  arrivalStation: "SE9",
+  stops: [
+    {
+      stopName: "SE4",
+      stationName: "Gladbeck HBF",
+      track: "GL.3",
+      startTime: "17:00",
+      arrivalTime: "17:30",
+      travelDuration: 30
+    },
+    {
+      stopName: "RE14",
+      stationName: "Endstation HBF",
+      track: "GL.3",
+      startTime: "17:40",
+      arrivalTime: "18:20",
+      travelDuration: 50
+    },
+    {
+      stopName: "RE15",
+      stationName: "Endstation HBF",
+      track: "GL.3",
+      startTime: "18:25",
+      arrivalTime: "19:30",
+      travelDuration: 65
+    }
+  ]
+};
+
+const journey2: IJourney = {
+  startTime: "17:00",
+  travelDuration: 90,
+  arrivalTime: "19:50",
+  startStation: "SE4",
+  arrivalStation: "SE9",
+  stops: [
+    {
+      stopName: "SE4",
+      stationName: "Gladbeck HBF",
+      track: "GL.3",
+      startTime: "17:00",
+      arrivalTime: "17:30",
+      travelDuration: 30
+    },
+    {
+      stopName: "RE15",
+      stationName: "Endstation HBF",
+      track: "GL.3",
+      startTime: "18:25",
+      arrivalTime: "19:50",
+      travelDuration: 65
+    }
+  ]
+};
+const journeys = [journey, journey2, journey];
+
 
 const App: React.FC = () => (
   <AppConfigProvider>
@@ -43,6 +108,9 @@ const App: React.FC = () => (
             </Route>
             <Route exact path="/journeyDemo">
               <JourneysPage />
+            </Route>
+            <Route exact path="/journeyResults">
+              <JourneyListComponent journeys={journeys} />
             </Route>
           </IonRouterOutlet>
         </IonReactRouter>
