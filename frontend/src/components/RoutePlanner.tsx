@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonDatetime, IonDatetimeButton, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonDatetime, IonDatetimeButton, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
 import React, { useRef } from "react";
 
 const RoutePlanner: React.FC = () => {
@@ -35,6 +35,14 @@ const RoutePlanner: React.FC = () => {
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
+            <IonSearchbar animated={true} placeholder="Start" />
+            <IonContent>
+                <IonList>
+                    <IonItem>Test</IonItem>
+                    <IonItem>Test</IonItem>
+                    <IonItem>Test</IonItem>
+                </IonList>
+            </IonContent>
         </IonModal>
     </>);
 };
