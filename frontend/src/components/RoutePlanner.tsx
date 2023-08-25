@@ -1,8 +1,10 @@
-import { IonButton, IonDatetime, IonDatetimeButton, IonInput, IonItem, IonLabel, IonList, IonModal } from "@ionic/react";
-import React from "react";
+import { IonButton, IonButtons, IonDatetime, IonDatetimeButton, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import React, { useRef } from "react";
 
-const RoutePlanner: React.FC = () => (
-    <>
+const RoutePlanner: React.FC = () => {
+    const modal = useRef<HTMLIonModalElement>(null);
+
+    return (<>
         <form name="search_routes" onSubmit={submitInput} aria-label="route_planner_input">
             <IonList inset={true}>
                 <IonItem lines="inset">
@@ -15,7 +17,7 @@ const RoutePlanner: React.FC = () => (
                 </IonItem>
                 <IonItem>
                     {/* Generic Input for Start-Position */}
-                    <IonInput name="start" label="Start position" labelPlacement="floating" placeholder="Enter start position" data-testid="origin-input" />
+                    <IonInput name="start" id="start-input" label="Start position" labelPlacement="floating" placeholder="Enter start position" data-testid="origin-input" readonly={true} value={"test"} />
                 </IonItem>
                 <IonItem>
                     {/* Generic Input for Destination */}
@@ -24,9 +26,18 @@ const RoutePlanner: React.FC = () => (
                 <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
             </IonList>
         </form>
-    </>
-
-);
+        <IonModal trigger="start-input" ref={modal}>
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Start</IonTitle>
+                    <IonButtons slot="end">
+                        <IonButton onClick={(): Promise<boolean> | undefined => modal.current?.dismiss()}>Cancel</IonButton>
+                    </IonButtons>
+                </IonToolbar>
+            </IonHeader>
+        </IonModal>
+    </>);
+};
 
 {/* TODO later: As discussed in the design structure meeting, an input field is needed, which opens up a modal on focus, where the user can
                 input the text. There should then a list be shown (viable stations to the input text). Upon selecting a station from the list and confirming
