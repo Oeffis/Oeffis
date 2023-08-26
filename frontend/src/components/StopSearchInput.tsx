@@ -2,7 +2,7 @@ import { IonInput, IonItem, IonLabel, IonList, IonModal } from "@ionic/react";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Stop } from "../api";
-import { useStopSearchbyName } from "../hooks/useStopSearchbyName";
+import { useStopSearchByName } from "../hooks/useStopSearchbyName";
 
 export type StopSearchInputProps = {
   onSelectedStopChanged: (stop: Stop) => void;
@@ -26,7 +26,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
-  const foundStops = useStopSearchbyName(debouncedSearchInput);
+  const foundStops = useStopSearchByName(debouncedSearchInput);
 
   return (
     <>

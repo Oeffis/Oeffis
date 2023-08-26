@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CancelablePromise, StopFinderByNameResponseDto, StopFinderService } from "../api";
+import { StopFinderByNameResponseDto, StopFinderService } from "../api";
 
 export type UseStopSearchByNameResult = UseStopSearchByNameSuccess | UseStopSearchByNameError | UseStopSearchByNamePending;
 export type UseStopSearchByNameError = {
@@ -17,23 +17,17 @@ export type UseStopSearchByNamePending = {
   searchResults: null;
 };
 
-export const useStopSearchbyName = (searchInput: string): UseStopSearchByNameResult => {
+export const useStopSearchByName = (searchInput: string): UseStopSearchByNameResult => {
   const [searchResultsOrError, setSearchResultsOrError] = useState<UseStopSearchByNameResult>(({ type: "pending", searchResults: null }));
-  let pendingRequest: CancelablePromise<StopFinderByNameResponseDto> | null = null;
 
   useEffect(
     () => {
-      if (pendingRequest) {
-        pendingRequest.cancel();
-        pendingRequest = null;
-      }
-
       if (searchInput.length < 2) {
         setSearchResultsOrError({ type: "pending", searchResults: null });
         return;
       }
 
-      pendingRequest = StopFinderService.stopFinderControllerFindStopByName({ name: searchInput });
+      const pendingRequest = StopFinderService.stopFinderControllerFindStopByName({ name: searchInput });
       pendingRequest
         .then((searchResults) => {
           setSearchResultsOrError({ type: "success", searchResults });
@@ -41,6 +35,12 @@ export const useStopSearchbyName = (searchInput: string): UseStopSearchByNameRes
         .catch((error) => {
           setSearchResultsOrError({ "type": "error", error });
         });
+
+      return () => {
+        if (pendingRequest) {
+          pendingRequest.cancel();
+        }
+      };
     },
     [
       searchInput,
