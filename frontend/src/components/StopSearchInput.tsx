@@ -53,7 +53,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
             type="text"
             animated={true}
             placeholder={"Enter " + props.inputLabel}
-            data-testid={props.prefixDataTestId + "-search-input"}
+            data-testid={"location-search-input"}
           />
         </IonHeader>
         <IonContent>
