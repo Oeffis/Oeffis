@@ -1,50 +1,48 @@
-import { IonButton, IonButtons, IonContent, IonDatetime, IonDatetimeButton, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
-import React, { useRef } from "react";
+import {
+  IonButton,
+  IonDatetime,
+  IonDatetimeButton,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonModal
+} from "@ionic/react";
+import React from "react";
+import { Stop } from "../api";
+import { StopSearchInput } from "./StopSearchInput";
 
 const RoutePlanner: React.FC = () => {
-    const modal = useRef<HTMLIonModalElement>(null);
+  const [origin, setOrigin] = React.useState<Stop | null>(null);
+  const [destination, setDestination] = React.useState<Stop | null>(null);
 
-    return (<>
-        <form name="search_routes" onSubmit={submitInput} aria-label="route_planner_input">
-            <IonList inset={true}>
-                <IonItem lines="inset">
-                    {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
-                    <IonLabel>Date and Time</IonLabel>
-                    <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
-                    <IonModal keepContentsMounted={true}>
-                        <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
-                    </IonModal>
-                </IonItem>
-                <IonItem>
-                    {/* Generic Input for Start-Position */}
-                    <IonInput name="start" id="start-input" label="Start position" labelPlacement="floating" placeholder="Enter start position" data-testid="origin-input" readonly={true} value={"test"} />
-                </IonItem>
-                <IonItem>
-                    {/* Generic Input for Destination */}
-                    <IonInput name="destination" label="Destination" labelPlacement="floating" placeholder="Enter destination" data-testid="destination-input" />
-                </IonItem>
-                <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
-            </IonList>
-        </form>
-        <IonModal trigger="start-input" ref={modal}>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Start</IonTitle>
-                    <IonButtons slot="end">
-                        <IonButton onClick={(): Promise<boolean> | undefined => modal.current?.dismiss()}>Cancel</IonButton>
-                    </IonButtons>
-                </IonToolbar>
-            </IonHeader>
-            <IonSearchbar animated={true} placeholder="Start" />
-            <IonContent>
-                <IonList>
-                    <IonItem>Test</IonItem>
-                    <IonItem>Test</IonItem>
-                    <IonItem>Test</IonItem>
-                </IonList>
-            </IonContent>
+  return (
+    <IonList inset={true}>
+      <IonItem lines="inset">
+        {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
+        <IonLabel>Date and Time</IonLabel>
+        <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
+        <IonModal keepContentsMounted={true}>
+          <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
         </IonModal>
-    </>);
+      </IonItem>
+      <IonItem>
+        <StopSearchInput
+          inputLabel="Origin"
+          selectedStop={origin}
+          onSelectedStopChanged={(stop): void => setOrigin(stop)}
+        />
+      </IonItem>
+      <IonItem>
+        <StopSearchInput
+          inputLabel="Destination"
+          selectedStop={destination}
+          onSelectedStopChanged={(stop): void => setDestination(stop)}
+        />
+      </IonItem>
+      <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
+    </IonList>
+
+  );
 };
 
 {/* TODO later: As discussed in the design structure meeting, an input field is needed, which opens up a modal on focus, where the user can
@@ -52,7 +50,7 @@ const RoutePlanner: React.FC = () => {
                 the modal, the modal should close and transfer the chosen station to the original input field. */}
 
 function submitInput(): void {
-    {/* Empty dummy function to do something after submitting all inputs. */ }
+  {/* Empty dummy function to do something after submitting all inputs. */ }
 }
 
 export default RoutePlanner;
