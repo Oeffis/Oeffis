@@ -39,7 +39,7 @@ const RoutePlanner: React.FC = () => {
           onSelectedStopChanged={(stop): void => setDestination(stop)}
         />
       </IonItem>
-      <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
+      <IonButton type="submit" size="default" expand="block" onClick={submitInput}>Search routes</IonButton>
     </IonList>
 
   );
