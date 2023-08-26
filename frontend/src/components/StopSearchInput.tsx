@@ -56,8 +56,15 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
               {foundStops.type === "pending" && searchInput !== "" && <div>Searching...</div>}
               {foundStops.type === "success" &&
                 foundStops.searchResults.stops.map((stop) => (
-                  <IonItem key={stop.id} button onClick={(): void => setSelectedStopAndCloseModal(stop)}>
-                    <IonLabel>{stop.name}</IonLabel>
+                  <IonItem
+                    key={stop.id}
+                    button
+                    onClick={(): void => setSelectedStopAndCloseModal(stop)}>
+                    <IonLabel
+                      data-testid="locationName"
+                    >
+                      {stop.name}
+                    </IonLabel>
                   </IonItem>
                 ))
               }
