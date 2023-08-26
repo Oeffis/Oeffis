@@ -25,13 +25,14 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
 
   return (
     <>
-      <IonLabel position="floating">{props.inputLabel}</IonLabel>
       <IonInput
         id={props.inputLabel + "input"}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
         value={props.selectedStop?.name ?? ""}
+        label={props.inputLabel}
+        labelPlacement="floating"
       />
 
       <IonModal ref={modal} trigger={props.inputLabel + "input"}>
