@@ -3,19 +3,19 @@ import { ApiProperty } from "@nestjs/swagger";
 export class Time {
 
   @ApiProperty({
-    description: "(Full) Name of the location.",
+    description: "Time base.",
     type: String
   })
   timeBaseTimetable?: string;
 
   @ApiProperty({
-    description: "(Full) Name of the location.",
+    description: "Time estimated.",
     type: String
   })
   timeEstimated?: string;
 
   @ApiProperty({
-    description: "(Full) Name of the location.",
+    description: "Time planned.",
     type: String
   })
   timePlanned?: string;

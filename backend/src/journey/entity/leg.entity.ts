@@ -6,25 +6,25 @@ import { JourneyLocation } from "./journeyLocation.entity";
 export class Leg {
 
   @ApiProperty({
-    description: "(Full) Name of the location.",
+    description: "Leg origin",
     type: JourneyLocation
   })
   origin?: JourneyLocation;
 
   @ApiProperty({
-    description: "Id of the location.",
+    description: "Leg destination.",
     type: JourneyLocation
   })
   destination?: JourneyLocation;
 
   @ApiProperty({
-    description: "Longitude of a location.",
+    description: "Leg transportation.",
     type: Transportation
   })
   transportation?: Transportation;
 
   @ApiProperty({
-    description: "Type of the location.",
+    description: "Leg details.",
     type: LegDetails
   })
   details?: LegDetails;

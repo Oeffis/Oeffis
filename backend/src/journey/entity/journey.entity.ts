@@ -4,7 +4,7 @@ import { Leg } from "./leg.entity";
 export class Journey {
 
   @ApiProperty({
-    description: "(Full) Name of the location.",
+    description: "Legs of a journey.",
     type: [Leg]
   })
   legs?: Leg[];

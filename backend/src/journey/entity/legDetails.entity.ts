@@ -3,31 +3,31 @@ import { ApiProperty } from "@nestjs/swagger";
 export class LegDetails {
 
   @ApiProperty({
-    description: "Parent location of this location.",
+    description: "Distance.",
     type: Number
   })
   distance?: number;
 
   @ApiProperty({
-    description: "Parent location of this location.",
+    description: "Duration.",
     type: Number
   })
   duration?: number;
 
   @ApiProperty({
-    description: "Parent location of this location.",
+    description: "Leg information.",
     type: String
   })
   infos?: string; // Info[]
 
   @ApiProperty({
-    description: "Latitude of a location.",
+    description: "Leg hints.",
     type: String
   })
   hints?: string; // Info[]
 
   @ApiProperty({
-    description: "Quality how well the given location meets the related query (biggest number is the best result).",
+    description: "Leg real time status.",
     type: String
   })
   realtimeStatus?: string; // RealtimeTripStatus

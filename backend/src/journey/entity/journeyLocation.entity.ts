@@ -7,14 +7,14 @@ import { Time } from "./time.entity";
 export class JourneyLocation extends Location {
 
   @ApiProperty({
-    description: "Further details of the location.",
+    description: "Arrival time.",
     type: Time,
     required: true
   })
   arrival!: Time;
 
   @ApiProperty({
-    description: "Further details of the location.",
+    description: "Departure time.",
     type: Time,
     required: true
   })

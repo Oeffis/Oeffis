@@ -5,14 +5,14 @@ import { Trip } from "./trip.entity";
 export class Transportation {
 
   @ApiProperty({
-    description: "Further details of the location.",
+    description: "Name of transportation vehicle.",
     type: String,
     required: true
   })
   name?: string;
 
   @ApiProperty({
-    description: "Further details of the location.",
+    description: "Trips depending on this transportation.",
     type: [Trip],
     required: true
   })
