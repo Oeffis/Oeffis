@@ -30,6 +30,7 @@ const RoutePlanner: React.FC = () => {
           inputLabel="Origin"
           selectedStop={origin}
           onSelectedStopChanged={(stop): void => setOrigin(stop)}
+          prefixDataTestId="origin-input"
         />
       </IonItem>
       <IonItem>
@@ -37,6 +38,7 @@ const RoutePlanner: React.FC = () => {
           inputLabel="Destination"
           selectedStop={destination}
           onSelectedStopChanged={(stop): void => setDestination(stop)}
+          prefixDataTestId="destination-input"
         />
       </IonItem>
       <IonButton type="submit" size="default" expand="block" onClick={submitInput}>Search routes</IonButton>

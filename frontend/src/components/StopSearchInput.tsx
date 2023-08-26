@@ -8,6 +8,7 @@ export type StopSearchInputProps = {
   onSelectedStopChanged: (stop: Stop) => void;
   selectedStop: Stop | null;
   inputLabel: string;
+  prefixDataTestId?: string;
 };
 
 export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
@@ -32,6 +33,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
       <IonItem
         button
         onClick={(): void => openModal()}
+        data-testid={props.prefixDataTestId + "-clickable"}
       >
         <IonLabel>{props.inputLabel}: {props.selectedStop?.name}</IonLabel>
       </IonItem>
@@ -45,6 +47,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
           label={props.inputLabel}
           labelPlacement="floating"
           placeholder={"Enter " + props.inputLabel}
+          data-testid={props.prefixDataTestId + "-search-input"}
         />
         <IonList>
           {
