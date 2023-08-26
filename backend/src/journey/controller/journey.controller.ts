@@ -12,10 +12,10 @@ export class JourneyController {
 
   @Post()
   @ApiOperation({
-    summary: "queries a trip"
+    summary: "queries a journey"
   })
   @ApiOkResponse({
-    description: "Trip alternatives found.",
+    description: "Journeys.",
     type: [Journey]
   })
   @ApiBadRequestResponse({

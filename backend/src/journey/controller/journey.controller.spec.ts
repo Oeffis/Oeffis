@@ -2,7 +2,6 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { JourneyService } from "../service/journey.service";
 import { JourneyController } from "./journey.controller";
 
-let controller: JourneyController;
 let app: TestingModule;
 
 beforeEach(async () => {
@@ -11,7 +10,7 @@ beforeEach(async () => {
     providers: [JourneyService]
   }).compile();
 
-  controller = app.get<JourneyController>(JourneyController);
+  app.get<JourneyController>(JourneyController);
 });
 
 /* it("should query trip", async () => {
