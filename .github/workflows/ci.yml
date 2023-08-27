@@ -92,6 +92,35 @@ jobs:
               type=gha,scope=${{github.base_ref}}-frontend
             cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
 
+    frontend_container_arm64:
+      name: Build arm64 Frontend Container
+      needs: frontend_lint_test_build
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+          with:
+            platforms: arm64
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Build Frontend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: frontend
+            platforms: linux/arm64
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-frontend
+              type=gha,scope=${{github.base_ref}}-frontend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-frontend
+
     vrr_client_lint_test_build:
       name: Lint, Build and Publish VRR Client
       runs-on: ubuntu-latest
@@ -216,6 +245,37 @@ jobs:
             build-args: |
               VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
+    backend_container_arm64:
+      name: Build arm64 Backend Container
+      needs: backend_lint_test_build
+      runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+          with:
+            platforms: arm64
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Release Backend Container (branch)
+          uses: docker/build-push-action@v4
+          with:
+            context: backend
+            platforms: linux/arm64
+            cache-from: |
+              type=gha,scope=${{github.ref_name}}-backend
+              type=gha,scope=${{github.base_ref}}-backend
+            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-backend
+            build-args: |
+              VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
+
     e2e_lint:
       name: Lint E2E
       runs-on: ubuntu-latest
@@ -324,7 +384,10 @@ jobs:
 
     publish_amd64:
       name: Publish Images (amd64)
-      needs: [e2e_test]
+      needs:
+        - e2e_test
+        - frontend_container
+        - backend_container
       runs-on: ubuntu-latest
       permissions:
         contents: read
@@ -407,9 +470,12 @@ jobs:
             build-args: |
               VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
-    build_publish_arm64:
-      name: Build And Publish Images (arm64)
-      needs: [e2e_test]
+    publish_arm64:
+      name: Publish Images (arm64)
+      needs:
+        - e2e_test
+        - frontend_container_arm64
+        - backend_container_arm64
       runs-on: ubuntu-latest
       permissions:
         contents: read
