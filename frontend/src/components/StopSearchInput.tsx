@@ -1,8 +1,8 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Stop } from "../api";
-import { useStopSearchByName } from "../hooks/useStopSearchbyName";
+import { useStopSearchByName } from "../hooks/useStopSearchByName";
 
 export type StopSearchInputProps = {
   onSelectedStopChanged: (stop: Stop) => void;
@@ -12,12 +12,16 @@ export type StopSearchInputProps = {
 };
 
 export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
-  const modal = useRef<HTMLIonModalElement>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const setSelectedStopAndCloseModal = (stop: Stop): Promise<boolean> | undefined => {
+  const setSelectedStopAndCloseModal = (stop: Stop): void => {
     props.onSelectedStopChanged(stop);
-    return modal.current?.dismiss();
+    setModalOpen(false);
+  };
+
+  const closeModalWithoutSelection = (): void => {
+    setModalOpen(false);
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
@@ -26,7 +30,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
   return (
     <>
       <IonInput
-        id={props.inputLabel + "input"}
+        onClick={(): void => setModalOpen(true)}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
@@ -35,14 +39,14 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
         labelPlacement="floating"
       />
 
-      <IonModal ref={modal} trigger={props.inputLabel + "input"}>
+      <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
         <IonHeader>
           <IonToolbar>
             <IonTitle>Search for {props.inputLabel}</IonTitle>
             <IonButtons slot="end">
               <IonButton
                 color={"danger"}
-                onClick={() => modal.current?.dismiss()}
+                onClick={closeModalWithoutSelection}
               >
                 Cancel
               </IonButton>
@@ -68,7 +72,8 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
                     <IonItem
                       key={stop.id}
                       button
-                      onClick={(): Promise<boolean> | undefined => setSelectedStopAndCloseModal(stop)}>
+                      onClick={(): void => setSelectedStopAndCloseModal(stop)}
+                    >
                       <IonLabel
                         data-testid="locationName"
                       >
