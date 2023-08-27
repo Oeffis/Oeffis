@@ -20,7 +20,12 @@
     "no-debugger": 2,
     "no-console": 0,
     "no-empty": "error",
-    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true
+      }
+    ],
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/naming-convention": [
