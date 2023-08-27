@@ -10,6 +10,6 @@ before(() => {
       );
       error.name = "TestingLibraryElementError";
       return error;
-    },
+    }
   });
 });
