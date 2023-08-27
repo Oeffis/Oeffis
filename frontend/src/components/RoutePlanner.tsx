@@ -8,7 +8,8 @@ import {
   IonModal
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { Location, LocationFinderService } from "../api";
+import { Journey, Location, LocationFinderService } from "../api";
+import { useJourneyQuery } from "../hooks/useJourneyQuery";
 import { useStateParams } from "../hooks/useStateParams";
 import { LocationSearchInput } from "./LocationSearchInput";
 
@@ -55,18 +56,52 @@ const RoutePlanner: React.FC = () => {
           prefixDataTestId="destination-input"
         />
       </IonItem>
-      <IonButton type="submit" size="default" expand="block" onClick={submitInput}>Search routes</IonButton>
+      <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
+
+      {
+        originLocation !== null && destinationLocation !== null &&
+        <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
+      }
     </IonList>
   );
 
 };
 
-{/* TODO later: As discussed in the design structure meeting, an input field is needed, which opens up a modal on focus, where the user can
-                input the text. There should then a list be shown (viable stations to the input text). Upon selecting a station from the list and confirming
-                the modal, the modal should close and transfer the chosen station to the original input field. */}
+export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
+  const { origin, destination } = props;
 
-function submitInput(): void {
-  {/* Empty dummy function to do something after submitting all inputs. */ }
+  const journeys = useJourneyQuery(origin, destination);
+
+  return (
+    <>
+      {journeys.type === "error" && <div>Error: {journeys.error.message}</div>}
+      {journeys.type === "pending" && <div>Searching...</div>}
+      {journeys.type === "success" &&
+        journeys.journeyResults.map((journey, idx) => (
+          <RenderTrip key={idx} journey={journey} />
+        ))}
+    </>
+  );
+}
+
+export function RenderTrip(props: { journey: Journey }): JSX.Element {
+  const { journey } = props;
+
+  return (
+    <IonItem>
+      <IonLabel>
+        <ol>
+          {
+            journey.legs.map((leg, idx) => (
+              <li key={idx}>
+                {leg.transportation.name} {leg.details.duration}
+              </li>
+            ))
+          }
+        </ol>
+      </IonLabel>
+    </IonItem>
+  );
 }
 
 export default RoutePlanner;
