@@ -3,7 +3,7 @@ import { Location } from "../entity/location.entity";
 import { LocationFinderService } from "../service/locationFinder.service";
 import { LocationFinderController } from "./locationFinder.controller";
 
-let stopFinderController: LocationFinderController;
+let locationFinderController: LocationFinderController;
 let app: TestingModule;
 
 beforeEach(async () => {
@@ -12,7 +12,7 @@ beforeEach(async () => {
     providers: [LocationFinderService]
   }).compile();
 
-  stopFinderController = app.get<LocationFinderController>(LocationFinderController);
+  locationFinderController = app.get<LocationFinderController>(LocationFinderController);
 });
 
 it("finds stops by coordinates", async () => {
@@ -23,7 +23,7 @@ it("finds stops by coordinates", async () => {
     "longitude": 7.101082448485377
   };
 
-  const response = await stopFinderController.findStopsAtCoordinates(requestBody);
+  const response = await locationFinderController.findStopsAtCoordinates(requestBody);
 
   expect(response).toEqual(mockedLocations);
 });
@@ -42,7 +42,7 @@ it("finds stops by names", async () => {
     "name": "Gelsenkirchen Hbf"
   };
 
-  const response = await stopFinderController.findStopByName(requestBody);
+  const response = await locationFinderController.findStopByName(requestBody);
   expect(response).toEqual(mockedLocations);
 });
 
