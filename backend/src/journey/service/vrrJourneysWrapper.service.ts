@@ -1,17 +1,13 @@
 import { Injectable } from "@nestjs/common";
+import { JourneyLocationElement, TransportationTrip, Journey as VrrJourney, Leg as VrrLeg, Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { Journey } from "journey/entity/journey.entity";
-import { JourneyLocationElement, TransportationTrip, Journey as VrrJourney } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { Leg } from "journey/entity/leg.entity";
-import { Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { LegDetails } from "journey/entity/legDetails.entity";
 import { JourneyLocation } from "journey/entity/journeyLocation.entity";
+import { Leg } from "journey/entity/leg.entity";
+import { LegDetails } from "journey/entity/legDetails.entity";
 import { Time } from "journey/entity/time.entity";
-import { Location } from "locationFinder/entity/location.entity";
-import { LocationDetails } from "locationFinder/entity/locationDetails.entity";
 import { Transportation } from "journey/entity/transportation.entity";
-import { Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { Trip } from "journey/entity/trip.entity";
-import { Location as VrrLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { LocationDetails } from "locationFinder/entity/locationDetails.entity";
 import { VrrLocationWrapperService } from "locationFinder/service/vrrLocationWrapper.service";
 
 @Injectable()
