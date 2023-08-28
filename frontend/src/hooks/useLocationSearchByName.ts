@@ -33,7 +33,7 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
           setSearchResultsOrError({ type: "success", searchResults });
         })
         .catch((error) => {
-          setSearchResultsOrError({ "type": "error", error });
+          setSearchResultsOrError({ type: "error", error });
         });
 
       return () => {

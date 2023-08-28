@@ -1,4 +1,17 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonModal,
+  IonSearchbar,
+  IonTitle,
+  IonToolbar
+} from "@ionic/react";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Location } from "../api";
@@ -25,7 +38,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
-  const foundLocation = useLocationSearchByName(debouncedSearchInput);
+  const foundLocations = useLocationSearchByName(debouncedSearchInput);
 
   return (
     <>
@@ -65,10 +78,10 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           <IonList>
             {
               <>
-                {foundLocation.type === "error" && <div>Error: {foundLocation.error.message}</div>}
-                {foundLocation.type === "pending" && searchInput !== "" && <div>Searching...</div>}
-                {foundLocation.type === "success" &&
-                  foundLocation.searchResults.map((location) => (
+                {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
+                {foundLocations.type === "pending" && searchInput !== "" && <div>Searching...</div>}
+                {foundLocations.type === "success" &&
+                  foundLocations.searchResults.map((location) => (
                     <IonItem
                       key={location.id}
                       button

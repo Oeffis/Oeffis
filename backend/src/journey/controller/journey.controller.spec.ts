@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { VrrModule } from "vrr/vrr.module";
 import { JourneyService } from "../service/journey.service";
 import { JourneyController } from "./journey.controller";
 
@@ -7,7 +8,8 @@ let app: TestingModule;
 beforeEach(async () => {
   app = await Test.createTestingModule({
     controllers: [JourneyController],
-    providers: [JourneyService]
+    providers: [JourneyService],
+    imports: [VrrModule]
   }).compile();
 
   app.get<JourneyController>(JourneyController);
