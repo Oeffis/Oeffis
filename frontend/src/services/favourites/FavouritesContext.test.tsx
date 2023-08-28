@@ -1,5 +1,5 @@
-import { render } from "@testing-library/react";
-import { useEffect } from "react";
+import { render, renderHook } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import { PersistenceProvider } from "../persistence/PersistenceContext";
 import { FavouriteTripsProvider, useFavouriteTrips } from "./FavouritesContext";
 
@@ -19,29 +19,28 @@ it("renders children", () => {
   expect(baseElement).toBeDefined();
 });
 
-it("Can use context to add favourites", () => {
+test("Can use context to add favourites", async () => {
+  const { result } = renderHook(() => useFavouriteTrips(), {
+    wrapper: ({ children }) => (
+      <PersistenceProvider>
+        <FavouriteTripsProvider>
+          {children}
+        </FavouriteTripsProvider>
+      </PersistenceProvider>
+    )
+  });
 
-  const Test = (): JSX.Element => {
-    const { addFavouriteTrip, favouriteTrips } = useFavouriteTrips();
+  const { addFavouriteTrip } = result.current;
 
-    useEffect(() => {
-      addFavouriteTrip({
-        originStopId: "test",
-        destinationStopId: "test"
-      });
-    }, []);
-
-    return <div>{favouriteTrips.map(x => x.originStopId)}</div>;
+  const elementToAdd1 = {
+    originStopId: "testaa",
+    destinationStopId: "testbb"
   };
 
-  const { baseElement } = render(
-    <PersistenceProvider>
-      <FavouriteTripsProvider>
-        <Test />
-      </FavouriteTripsProvider>
-    </PersistenceProvider>
-  );
+  await act(() => addFavouriteTrip(elementToAdd1));
 
-  expect(baseElement).toBeDefined();
-  expect(baseElement.innerHTML).toContain("test");
+  expect(result.current.favouriteTrips).toHaveLength(1);
+  expect(result.current.favouriteTrips[0].destinationStopId).toBe("testbb");
+  expect(result.current.favouriteTrips[0].originStopId).toBe("testaa");
+
 });

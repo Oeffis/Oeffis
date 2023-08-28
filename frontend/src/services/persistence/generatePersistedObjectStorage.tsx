@@ -54,13 +54,20 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
 
     const addPersistedObject = useCallback(
       (createPersistedObject: TCreateObject): PersistedObject<TCreateObject> => {
+        console.log("addPersistedObject", createPersistedObject);
+
         const persistedObject = {
           ...createPersistedObject,
           createdAt: new Date(),
           id: uuidv4()
         };
 
+
+
         const newPersistedObjects = [...persistedObjects, persistedObject];
+
+        console.log("newPersistedObjects", newPersistedObjects);
+
         setPersistedObjectsAndPersist(newPersistedObjects);
         return persistedObject;
       },
@@ -107,7 +114,7 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
 
     const providerValue = {
       ["add" + objectNameCapitalized]: addPersistedObject,
-      ["remove " + objectNameCapitalized + " ById"]: removePersistedObjectById,
+      ["remove" + objectNameCapitalized + "ById"]: removePersistedObjectById,
       ["remove" + objectNameCapitalized]: removePersistedObject,
       [objectNameUncapitalized + "s"]: persistedObjects
     } as PersistedObjectService<TCreateObject, TObjectName>;
