@@ -61,7 +61,6 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
         };
 
         const newPersistedObjects = [...persistedObjects, persistedObject];
-
         setPersistedObjectsAndPersist(newPersistedObjects);
         return persistedObject;
       },
