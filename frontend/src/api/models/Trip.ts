@@ -3,20 +3,20 @@
 /* eslint-disable */
 
 export type Trip = {
-    /**
-     * (Full) Name of the location.
-     */
-    arrivalTimePlannedJourneyDestination: string;
-    /**
-     * (Full) Name of the location.
-     */
-    departureTimePlannedJourneyOrigin: string;
-    /**
-     * (Full) Name of the location.
-     */
-    status: string;
-    /**
-     * (Full) Name of the location.
-     */
-    trainNumber: string;
+  /**
+   * Planned arrival time at destination.
+   */
+  arrivalTimePlannedJourneyDestination: string;
+  /**
+   * Planned departure time at Origin.
+   */
+  departureTimePlannedJourneyOrigin: string;
+  /**
+   * Status information about trip.
+   */
+  status: string;
+  /**
+   * Train number.
+   */
+  trainNumber: string;
 };

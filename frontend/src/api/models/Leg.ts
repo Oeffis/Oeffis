@@ -7,20 +7,20 @@ import type { LegDetails } from './LegDetails';
 import type { Transportation } from './Transportation';
 
 export type Leg = {
-    /**
-     * (Full) Name of the location.
-     */
-    origin: JourneyLocation;
-    /**
-     * Id of the location.
-     */
-    destination: JourneyLocation;
-    /**
-     * Longitude of a location.
-     */
-    transportation: Transportation;
-    /**
-     * Type of the location.
-     */
-    details: LegDetails;
+  /**
+   * Leg origin
+   */
+  origin: JourneyLocation;
+  /**
+   * Leg destination.
+   */
+  destination: JourneyLocation;
+  /**
+   * Leg transportation.
+   */
+  transportation: Transportation;
+  /**
+   * Leg details.
+   */
+  details: LegDetails;
 };

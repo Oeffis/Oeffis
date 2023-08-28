@@ -5,8 +5,8 @@
 import type { Leg } from './Leg';
 
 export type Journey = {
-    /**
-     * (Full) Name of the location.
-     */
-    legs: Array<Leg>;
+  /**
+   * Legs of a journey.
+   */
+  legs: Array<Leg>;
 };

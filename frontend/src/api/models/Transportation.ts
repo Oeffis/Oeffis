@@ -5,12 +5,12 @@
 import type { Trip } from './Trip';
 
 export type Transportation = {
-    /**
-     * Further details of the location.
-     */
-    name: string;
-    /**
-     * Further details of the location.
-     */
-    trips: Array<Trip>;
+  /**
+   * Name of transportation vehicle.
+   */
+  name: string;
+  /**
+   * Trips depending on this transportation.
+   */
+  trips: Array<Trip>;
 };

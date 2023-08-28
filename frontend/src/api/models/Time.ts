@@ -3,16 +3,16 @@
 /* eslint-disable */
 
 export type Time = {
-    /**
-     * (Full) Name of the location.
-     */
-    timeBaseTimetable: string;
-    /**
-     * (Full) Name of the location.
-     */
-    timeEstimated: string;
-    /**
-     * (Full) Name of the location.
-     */
-    timePlanned: string;
+  /**
+   * Time base.
+   */
+  timeBaseTimetable: string;
+  /**
+   * Time estimated.
+   */
+  timeEstimated: string;
+  /**
+   * Time planned.
+   */
+  timePlanned: string;
 };

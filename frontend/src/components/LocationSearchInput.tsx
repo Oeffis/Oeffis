@@ -1,22 +1,22 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonSearchbar, IonTitle, IonToolbar } from "@ionic/react";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Stop } from "../api";
-import { useStopSearchByName } from "../hooks/useStopSearchByName";
+import { Location } from "../api";
+import { useLocationSearchByName } from "../hooks/useLocationSearchByName";
 
-export type StopSearchInputProps = {
-  onSelectedStopChanged: (stop: Stop) => void;
-  selectedStop: Stop | null;
+export type LocationSearchInputProps = {
+  onSelectedLocationChanged: (location: Location) => void;
+  selectedLocation: Location | null;
   inputLabel: string;
   prefixDataTestId?: string;
 };
 
-export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
+export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const setSelectedStopAndCloseModal = (stop: Stop): void => {
-    props.onSelectedStopChanged(stop);
+  const setSelectedLocationAndCloseModal = (location: Location): void => {
+    props.onSelectedLocationChanged(location);
     setModalOpen(false);
   };
 
@@ -25,7 +25,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
-  const foundStops = useStopSearchByName(debouncedSearchInput);
+  const foundLocation = useLocationSearchByName(debouncedSearchInput);
 
   return (
     <>
@@ -34,7 +34,7 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
-        value={props.selectedStop?.name ?? ""}
+        value={props.selectedLocation?.name ?? ""}
         label={props.inputLabel}
         labelPlacement="floating"
       />
@@ -65,19 +65,19 @@ export const StopSearchInput = (props: StopSearchInputProps): JSX.Element => {
           <IonList>
             {
               <>
-                {foundStops.type === "error" && <div>Error: {foundStops.error.message}</div>}
-                {foundStops.type === "pending" && searchInput !== "" && <div>Searching...</div>}
-                {foundStops.type === "success" &&
-                  foundStops.searchResults.stops.map((stop) => (
+                {foundLocation.type === "error" && <div>Error: {foundLocation.error.message}</div>}
+                {foundLocation.type === "pending" && searchInput !== "" && <div>Searching...</div>}
+                {foundLocation.type === "success" &&
+                  foundLocation.searchResults.map((location) => (
                     <IonItem
-                      key={stop.id}
+                      key={location.id}
                       button
-                      onClick={(): void => setSelectedStopAndCloseModal(stop)}
+                      onClick={(): void => setSelectedLocationAndCloseModal(location)}
                     >
                       <IonLabel
                         data-testid="locationName"
                       >
-                        {stop.name}
+                        {location.name}
                       </IonLabel>
                     </IonItem>
                   ))

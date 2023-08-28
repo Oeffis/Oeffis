@@ -8,25 +8,25 @@ import {
   IonModal
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { Stop, StopFinderService } from "../api";
+import { Location, LocationFinderService } from "../api";
 import { useStateParams } from "../hooks/useStateParams";
-import { StopSearchInput } from "./StopSearchInput";
+import { LocationSearchInput } from "./LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
-  const [originStopId, setOriginStopId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationStopId, setDestinationStopId] = useStateParams<string | null>(null, "destination", String, String);
+  const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationLocationId, setDestinationLocationId] = useStateParams<string | null>(null, "destination", String, String);
 
-  const [originStop, setOriginStop] = useInitialStopFromStopIdAndThenAsState(originStopId);
-  const [destinationStop, setDestinationStop] = useInitialStopFromStopIdAndThenAsState(destinationStopId);
+  const [originLocation, setOriginLocation] = useInitialLocationFromLocationIdAndThenAsState(originLocationId);
+  const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
 
-  const setOrigin = (stop: Stop | null): void => {
-    setOriginStop(stop);
-    setOriginStopId(stop?.id ?? null);
+  const setOrigin = (location: Location | null): void => {
+    setOriginLocation(location);
+    setOriginLocationId(location?.id ?? null);
   };
 
-  const setDestination = (stop: Stop | null): void => {
-    setDestinationStop(stop);
-    setDestinationStopId(stop?.id ?? null);
+  const setDestination = (location: Location | null): void => {
+    setDestinationLocation(location);
+    setDestinationLocationId(location?.id ?? null);
   };
 
   return (
@@ -40,25 +40,25 @@ const RoutePlanner: React.FC = () => {
         </IonModal>
       </IonItem>
       <IonItem>
-        <StopSearchInput
+        <LocationSearchInput
           inputLabel="Origin"
-          selectedStop={originStop}
-          onSelectedStopChanged={(stop): void => setOrigin(stop)}
+          selectedLocation={originLocation}
+          onSelectedLocationChanged={(location): void => setOrigin(location)}
           prefixDataTestId="origin-input"
         />
       </IonItem>
       <IonItem>
-        <StopSearchInput
+        <LocationSearchInput
           inputLabel="Destination"
-          selectedStop={destinationStop}
-          onSelectedStopChanged={(stop): void => setDestination(stop)}
+          selectedLocation={destinationLocation}
+          onSelectedLocationChanged={(location): void => setDestination(location)}
           prefixDataTestId="destination-input"
         />
       </IonItem>
       <IonButton type="submit" size="default" expand="block" onClick={submitInput}>Search routes</IonButton>
     </IonList>
-
   );
+
 };
 
 {/* TODO later: As discussed in the design structure meeting, an input field is needed, which opens up a modal on focus, where the user can
@@ -72,16 +72,16 @@ function submitInput(): void {
 export default RoutePlanner;
 
 
-export function useInitialStopFromStopIdAndThenAsState(stopId: string | null): [Stop | null, (stop: Stop | null) => void] {
-  const [stop, setStop] = useState<Stop | null>(null);
+export function useInitialLocationFromLocationIdAndThenAsState(locationId: string | null): [Location | null, (location: Location | null) => void] {
+  const [location, setLocation] = useState<Location | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    if (stopId !== null && stop === null && stopId !== "") {
-      StopFinderService.stopFinderControllerFindStopByName({ name: stopId })
-        .then(({ stops }) => {
-          if (stops.length > 0 && !cancelled) {
-            setStop(stops[0]);
+    if (locationId !== null && location === null && locationId !== "") {
+      LocationFinderService.locationFinderControllerFindStopByName({ name: locationId })
+        .then((locations) => {
+          if (locations.length > 0 && !cancelled) {
+            setLocation(locations[0]);
           }
         })
         .catch((error) => {
@@ -92,7 +92,7 @@ export function useInitialStopFromStopIdAndThenAsState(stopId: string | null): [
     return (): void => {
       cancelled = true;
     };
-  }, [stopId]);
+  }, [locationId]);
 
-  return [stop, setStop];
+  return [location, setLocation];
 }

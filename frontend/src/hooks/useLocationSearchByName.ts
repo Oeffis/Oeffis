@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { StopFinderByNameResponseDto, StopFinderService } from "../api";
+import { Location, LocationFinderService } from "../api";
 
-export type UseStopSearchByNameResult = UseStopSearchByNameSuccess | UseStopSearchByNameError | UseStopSearchByNamePending;
-export type UseStopSearchByNameError = {
+export type UseLocationSearchByNameResult = UseLocationSearchByNameSuccess | UseLocationSearchByNameError | UseLocationSearchByNamePending;
+export type UseLocationSearchByNameError = {
   type: "error";
   error: Error;
 };
 
-export type UseStopSearchByNameSuccess = {
+export type UseLocationSearchByNameSuccess = {
   type: "success";
-  searchResults: StopFinderByNameResponseDto;
+  searchResults: Location[];
 };
 
-export type UseStopSearchByNamePending = {
+export type UseLocationSearchByNamePending = {
   type: "pending";
   searchResults: null;
 };
 
-export const useStopSearchByName = (searchInput: string): UseStopSearchByNameResult => {
-  const [searchResultsOrError, setSearchResultsOrError] = useState<UseStopSearchByNameResult>(({ type: "pending", searchResults: null }));
+export const useLocationSearchByName = (searchInput: string): UseLocationSearchByNameResult => {
+  const [searchResultsOrError, setSearchResultsOrError] = useState<UseLocationSearchByNameResult>(({ type: "pending", searchResults: null }));
 
   useEffect(
     () => {
@@ -27,7 +27,7 @@ export const useStopSearchByName = (searchInput: string): UseStopSearchByNameRes
         return;
       }
 
-      const pendingRequest = StopFinderService.stopFinderControllerFindStopByName({ name: searchInput });
+      const pendingRequest = LocationFinderService.locationFinderControllerFindStopByName({ name: searchInput });
       pendingRequest
         .then((searchResults) => {
           setSearchResultsOrError({ type: "success", searchResults });
