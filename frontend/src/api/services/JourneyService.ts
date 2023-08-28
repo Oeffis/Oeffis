@@ -16,7 +16,7 @@ export class JourneyService {
    * @returns Journey Journeys.
    * @throws ApiError
    */
-  public static journeyControllerQueryTrip(
+  public static journeyControllerQueryJourney(
 requestBody: JourneyRequestDto,
 ): CancelablePromise<Array<Journey>> {
     return __request(OpenAPI, {

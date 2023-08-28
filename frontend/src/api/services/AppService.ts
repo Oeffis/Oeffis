@@ -11,7 +11,7 @@ export class AppService {
 
   /**
    * returns a "Hello World!" message
-   * Test enpoint to send a "Hello World!" message to frontend.
+   * Test endpoint to send a "Hello World!" message to frontend.
    * @returns HelloWorld Returns a "Hello World!" message.
    * @throws ApiError
    */

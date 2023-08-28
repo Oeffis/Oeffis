@@ -15,7 +15,7 @@ export class JourneyService {
     this.journeysWrapper = new VrrJourneysWrapperService();
   }
 
-  public async queryTrip(origin: string, destination: string): Promise<Journey[]> {
+  public async queryJourney(origin: string, destination: string): Promise<Journey[]> {
     const response = await this.client.queryTrip({
       originPointId: origin,
       destinationPointId: destination
