@@ -12,12 +12,12 @@ import { request as __request } from '../core/request';
 export class LocationFinderService {
 
   /**
-   * finds a stop at given coordinates
+   * finds locations at given coordinates
    * @param requestBody 
    * @returns Location Returns the found locations.
    * @throws ApiError
    */
-  public static locationFinderControllerFindStopsAtCoordinates(
+  public static locationFinderControllerFindLocationsAtCoordinates(
 requestBody: LocationCoordinatesDto,
 ): CancelablePromise<Array<Location>> {
     return __request(OpenAPI, {
@@ -32,12 +32,12 @@ requestBody: LocationCoordinatesDto,
   }
 
   /**
-   * finds a stop by name
+   * finds locations by name
    * @param requestBody 
    * @returns Location Returns the found locations.
    * @throws ApiError
    */
-  public static locationFinderControllerFindStopByName(
+  public static locationFinderControllerFindLocationsByName(
 requestBody: LocationNameDto,
 ): CancelablePromise<Array<Location>> {
     return __request(OpenAPI, {

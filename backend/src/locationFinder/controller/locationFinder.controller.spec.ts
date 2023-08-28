@@ -23,7 +23,7 @@ it("finds stops by coordinates", async () => {
     "longitude": 7.101082448485377
   };
 
-  const response = await locationFinderController.findStopsAtCoordinates(requestBody);
+  const response = await locationFinderController.findLocationsAtCoordinates(requestBody);
 
   expect(response).toEqual(mockedLocations);
 });
@@ -42,7 +42,7 @@ it("finds stops by names", async () => {
     "name": "Gelsenkirchen Hbf"
   };
 
-  const response = await locationFinderController.findStopByName(requestBody);
+  const response = await locationFinderController.findLocationsByName(requestBody);
   expect(response).toEqual(mockedLocations);
 });
 

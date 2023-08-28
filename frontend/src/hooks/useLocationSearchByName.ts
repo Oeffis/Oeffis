@@ -27,7 +27,7 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
         return;
       }
 
-      const pendingRequest = LocationFinderService.locationFinderControllerFindStopByName({ name: searchInput });
+      const pendingRequest = LocationFinderService.locationFinderControllerFindLocationsByName({ name: searchInput });
       pendingRequest
         .then((searchResults) => {
           setSearchResultsOrError({ type: "success", searchResults });

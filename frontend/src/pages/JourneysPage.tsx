@@ -12,7 +12,7 @@ import {
   IonList
 } from "@ionic/react";
 import React, { useState } from "react";
-import { Location, Journey, LocationFinderService, JourneyService, JourneyRequestDto } from "../api";
+import { Journey, JourneyRequestDto, JourneyService, Location, LocationFinderService } from "../api";
 
 /**
  * Container of elements related to journeys.
@@ -33,7 +33,7 @@ const JourneysPage: React.FC = () => {
    * Searches for locations with given query.
    */
   const searchLocations = async (): Promise<void> => {
-    setLocations(await LocationFinderService.locationFinderControllerFindStopByName({ name: searchLocationsQuery }));
+    setLocations(await LocationFinderService.locationFinderControllerFindLocationsByName({ name: searchLocationsQuery }));
     console.log(locations);
   };
 
@@ -64,7 +64,7 @@ const JourneysPage: React.FC = () => {
     };
 
     const journeyVariants =
-      await JourneyService.journeyControllerQueryTrip(journeyParameters);
+      await JourneyService.journeyControllerQueryJourney(journeyParameters);
     setJourneys(journeyVariants);
     console.log(journeyVariants);
   };

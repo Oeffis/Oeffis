@@ -13,7 +13,7 @@ export class LocationFinderController {
 
   @Post("at_coordinates")
   @ApiOperation({
-    summary: "finds a stop at given coordinates"
+    summary: "finds locations at given coordinates"
   })
   @ApiOkResponse({
     description: "Returns the found locations.",
@@ -23,13 +23,13 @@ export class LocationFinderController {
     description: "Bad request.",
     type: BadRequest
   })
-  async findStopsAtCoordinates(@Body() query: LocationCoordinatesDto): Promise<Location[]> {
+  async findLocationsAtCoordinates(@Body() query: LocationCoordinatesDto): Promise<Location[]> {
     return this.locationFinderService.findLocationsByCoordinates(query);
   }
 
   @Post("by_name")
   @ApiOperation({
-    summary: "finds a stop by name"
+    summary: "finds locations by name"
   })
   @ApiOkResponse({
     description: "Returns the found locations.",
@@ -39,7 +39,7 @@ export class LocationFinderController {
     description: "Bad request.",
     type: BadRequest
   })
-  async findStopByName(@Body() query: LocationNameDto): Promise<Location[]> {
+  async findLocationsByName(@Body() query: LocationNameDto): Promise<Location[]> {
     return this.locationFinderService.findLocationsByName(query);
   }
 }
