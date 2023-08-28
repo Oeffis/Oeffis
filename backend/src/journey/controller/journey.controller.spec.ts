@@ -3,6 +3,7 @@ import { VrrModule } from "vrr/vrr.module";
 import { JourneyService } from "../service/journey.service";
 import { JourneyController } from "./journey.controller";
 
+let controller: JourneyController;
 let app: TestingModule;
 
 beforeEach(async () => {
@@ -12,10 +13,11 @@ beforeEach(async () => {
     imports: [VrrModule]
   }).compile();
 
+  controller = app.get<JourneyController>(JourneyController);
   app.get<JourneyController>(JourneyController);
 });
 
-/* it("should query trip", async () => {
+it("should query trip", async () => {
   const mockAlternatives = {
     journeys: [{
       legs: [{
@@ -35,14 +37,14 @@ beforeEach(async () => {
       }]
     }]
   };
-  vi.spyOn(app.get(TripQueryService), "queryTrip").mockResolvedValue(mockAlternatives);
+  vi.spyOn(app.get(JourneyService), "queryJourney").mockResolvedValue(mockAlternatives);
   const requestBody = {
-    "origin": "de:02000:100513",
-    "destination": "de:11011:8089",
-    "departure": "2020-12-24T12:00:00.000Z"
+    "originId": "de:02000:100513",
+    "destinationId": "de:11011:8089",
+    "departure": new Date("2020-12-24T12:00:00.000Z")
   };
 
-  const response = await controller.queryTrip(requestBody);
+  const response = await controller.queryJourney(requestBody);
 
-  expect(response).toEqual(mockAlternatives); 
-}); */
+  expect(response).toEqual(mockAlternatives);
+});
