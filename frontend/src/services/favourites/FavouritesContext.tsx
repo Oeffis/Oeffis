@@ -1,120 +1,38 @@
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { usePersistence } from "../persistence/PersistenceContext";
-import { parsePersistedFavourites, stringifyFavourites } from "./persistenceFunctions";
+import { generatePersistedObjectStorage } from "../persistence/generatePersistedObjectStorage";
+import { parsePersistedFavouriteStops, stringifyFavouriteStops } from "./persistenceStopFunctions";
+import { parsePersistedFavouriteTrips, stringifyFavouriteTrips } from "./persistenceTripFunctions";
 
-const FAVOURITES_KEY = "favourites";
+const FAVOURITE_TRIPS_KEY = "favourite_trips";
+const FAVOURITE_STOPS_KEY = "favourite_stops";
 
-export type CreateFavourite = {
-  origin: string;
-  destination: string;
+export type CreateFavouriteTrip = {
+  originStopId: string;
+  destinationStopId: string;
 };
 
-export type Favourite = {
-  createdAt: Date;
-  id: string;
-} & CreateFavourite;
-
-export type FavouritesService = {
-  addFavourite: (createFavourite: CreateFavourite) => Favourite;
-  removeFavouriteById: (id: string) => boolean;
-  removeFavourite: (favourite: Favourite) => boolean;
-  favourites: Favourite[];
+export type CreateFavouriteStop = {
+  stopId: string;
+  nickname: string;
 };
 
-export const FavouritesContext = createContext<FavouritesService | null>(null);
+const favouriteTrips = generatePersistedObjectStorage<CreateFavouriteTrip, "favouriteTrip">(
+  "favouriteTrip",
+  FAVOURITE_TRIPS_KEY,
+  parsePersistedFavouriteTrips,
+  stringifyFavouriteTrips
+);
 
-export function FavouritesProvider(props: PropsWithChildren): JSX.Element {
-  const persistence = usePersistence();
-  const [favourites, setFavourites] = useState<Favourite[]>([]);
+const favouriteStops = generatePersistedObjectStorage<CreateFavouriteStop, "favouriteStop">(
+  "favouriteStop",
+  FAVOURITE_STOPS_KEY,
+  parsePersistedFavouriteStops,
+  stringifyFavouriteStops
+);
 
-  useEffect(() => {
-    const parsedFromPersistence = parsePersistedFavourites(persistence.get(FAVOURITES_KEY));
-    setFavourites(parsedFromPersistence);
-  }, [
-    persistence,
-    setFavourites
-  ]);
+export const FavouriteTripsContext = favouriteTrips.context;
+export const FavouriteTripsProvider = favouriteTrips.provider;
+export const useFavouriteTrips = favouriteTrips.useObjects;
 
-  const setFavouritesAndPersist = useCallback(
-    (newFavourites: Favourite[]): void => {
-      setFavourites(newFavourites);
-      persistence.set(FAVOURITES_KEY, stringifyFavourites(newFavourites));
-    },
-    [
-      persistence,
-      setFavourites
-    ]
-  );
-
-  const addFavourite = useCallback(
-    (createFavourite: CreateFavourite): Favourite => {
-      const favourite = {
-        ...createFavourite,
-        createdAt: new Date(),
-        id: uuidv4()
-      };
-
-      const newFavourites = [...favourites, favourite];
-      setFavouritesAndPersist(newFavourites);
-      return favourite;
-    },
-    [
-      favourites,
-      setFavouritesAndPersist
-    ]
-  );
-
-  const removeFavouriteById = useCallback(
-    (id: string): boolean => {
-      let found = false;
-      const newFavourites = favourites.filter(favourite => {
-        if (favourite.id === id) {
-          found = true;
-          return false;
-        }
-
-        return true;
-      });
-
-      if (!found) {
-        return false;
-      }
-
-      setFavouritesAndPersist(newFavourites);
-      return true;
-    },
-    [
-      favourites,
-      setFavouritesAndPersist
-    ]
-  );
-
-  const removeFavourite = useCallback(
-    (favourite: Favourite): boolean => removeFavouriteById(favourite.id),
-    [
-      removeFavouriteById
-    ]
-  );
-
-  return (
-    <FavouritesContext.Provider value={{
-      favourites,
-      addFavourite,
-      removeFavouriteById,
-      removeFavourite
-    }}>
-      {props.children}
-    </FavouritesContext.Provider>
-  );
-}
-
-export function useFavourites(): FavouritesService {
-  const favouritesService = useContext(FavouritesContext);
-
-  if (favouritesService === null) {
-    throw new Error("useFavourites must be used within a FavouritesContext");
-  }
-
-  return favouritesService;
-}
+export const FavouriteStopsContext = favouriteStops.context;
+export const FavouriteStopsProvider = favouriteStops.provider;
+export const useFavouriteStops = favouriteStops.useObjects;

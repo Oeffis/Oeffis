@@ -1,19 +1,19 @@
 import { render } from "@testing-library/react";
-import { FavouritesProvider, useFavourites } from "./FavouritesContext";
-import { PersistenceProvider } from "../persistence/PersistenceContext";
 import { useEffect } from "react";
+import { PersistenceProvider } from "../persistence/PersistenceContext";
+import { FavouriteTripsProvider, useFavouriteTrips } from "./FavouritesContext";
 
 it("renders without crashing", () => {
-  const { baseElement } = render(<FavouritesProvider />);
+  const { baseElement } = render(<FavouriteTripsProvider />);
   expect(baseElement).toBeDefined();
 });
 
 it("renders children", () => {
   const { baseElement } = render(
     <PersistenceProvider>
-      <FavouritesProvider>
+      <FavouriteTripsProvider>
         <div>test</div>
-      </FavouritesProvider>
+      </FavouriteTripsProvider>
     </PersistenceProvider>
   );
   expect(baseElement).toBeDefined();
@@ -22,23 +22,23 @@ it("renders children", () => {
 it("Can use context to add favourites", () => {
 
   const Test = (): JSX.Element => {
-    const { addFavourite, favourites } = useFavourites();
+    const { addFavouriteTrip, favouriteTrips } = useFavouriteTrips();
 
     useEffect(() => {
-      addFavourite({
-        origin: "test",
-        destination: "test"
+      addFavouriteTrip({
+        originStopId: "test",
+        destinationStopId: "test"
       });
     }, []);
 
-    return <div>{favourites.map(x => x.origin)}</div>;
+    return <div>{favouriteTrips.map(x => x.originStopId)}</div>;
   };
 
   const { baseElement } = render(
     <PersistenceProvider>
-      <FavouritesProvider>
+      <FavouriteTripsProvider>
         <Test />
-      </FavouritesProvider>
+      </FavouriteTripsProvider>
     </PersistenceProvider>
   );
 

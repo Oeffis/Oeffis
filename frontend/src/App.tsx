@@ -23,7 +23,7 @@ import { IJourney } from "./interfaces/IJourney.interface";
 import JourneysPage from "./pages/JourneysPage";
 import UserPage from "./pages/UserPage";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
-import { FavouritesProvider } from "./services/favourites/FavouritesContext";
+import { FavouriteStopsProvider, FavouriteTripsProvider } from "./services/favourites/FavouritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 import "./theme/variables.css";
 
@@ -95,31 +95,33 @@ const journeys = [journey, journey2, journey];
 const App: React.FC = () => (
   <AppConfigProvider>
     <PersistenceProvider>
-      <FavouritesProvider>
-        <IonApp>
-          <IonReactRouter>
-            <IonRouterOutlet>
-              <Route exact path="/home">
-                <Home />
-              </Route>
-              <Route exact path="/">
-                <Redirect to="/home" />
-              </Route>
-              <Route exact path="/userDemo">
-                <UserPage />
-              </Route>
-              <Route exact path="/journeyDemo">
-                <JourneysPage />
-              </Route>
-              <Route exact path="/journeyResults">
-                <JourneyListComponent journeys={journeys} />
-              </Route>
-            </IonRouterOutlet>
-          </IonReactRouter>
-        </IonApp>
-      </FavouritesProvider>
+      <FavouriteStopsProvider>
+        <FavouriteTripsProvider>
+          <IonApp>
+            <IonReactRouter>
+              <IonRouterOutlet>
+                <Route exact path="/home">
+                  <Home />
+                </Route>
+                <Route exact path="/">
+                  <Redirect to="/home" />
+                </Route>
+                <Route exact path="/userDemo">
+                  <UserPage />
+                </Route>
+                <Route exact path="/journeyDemo">
+                  <JourneysPage />
+                </Route>
+                <Route exact path="/journeyResults">
+                  <JourneyListComponent journeys={journeys} />
+                </Route>
+              </IonRouterOutlet>
+            </IonReactRouter>
+          </IonApp>
+        </FavouriteTripsProvider>
+      </FavouriteStopsProvider>
     </PersistenceProvider>
-  </AppConfigProvider>
+  </AppConfigProvider >
 );
 
 export default App;
