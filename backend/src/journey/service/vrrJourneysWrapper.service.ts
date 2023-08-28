@@ -23,50 +23,50 @@ export class VrrJourneysWrapperService {
     return vrrJourneys?.map((journey) => this.wrapJourneys(journey));
   }
 
-  private wrapTransporationTrips(vrrTransporationTrip: TransportationTrip): Trip {
+  private wrapTransportationTrips(vrrTransportationTrip: TransportationTrip): Trip {
     return {
-      arrivalTimePlannedJourneyDestination: vrrTransporationTrip.arrivalTimePlannedJourneyDestination,
-      departureTimePlannedJourneyOrigin: vrrTransporationTrip.departureTimePlannedJourneyOrigin,
-      status: vrrTransporationTrip.status,
-      trainNumber: vrrTransporationTrip.trainNumber
+      arrivalTimePlannedJourneyDestination: vrrTransportationTrip.arrivalTimePlannedJourneyDestination,
+      departureTimePlannedJourneyOrigin: vrrTransportationTrip.departureTimePlannedJourneyOrigin,
+      status: vrrTransportationTrip.status,
+      trainNumber: vrrTransportationTrip.trainNumber
     };
   }
 
   private wrapTransportation(vrrTransportation: VrrTransportation): Transportation {
     return {
       name: vrrTransportation.name,
-      trips: vrrTransportation.trips?.map((trip) => this.wrapTransporationTrips(trip)) ?? []
+      trips: vrrTransportation.trips?.map((trip) => this.wrapTransportationTrips(trip)) ?? []
     };
   }
 
-  private wrapJourneyLocatoinElement(journeyLocatoinElement: JourneyLocationElement): JourneyLocation {
+  private wrapJourneyLocationElement(journeyLocationElement: JourneyLocationElement): JourneyLocation {
 
     const details: LocationDetails = {
-      shortName: journeyLocatoinElement.disassembledName,
-      matchQuality: journeyLocatoinElement.matchQuality,
-      parent: journeyLocatoinElement.parent !== undefined
-        ? this.locationWrapper.wrapLocation(journeyLocatoinElement.parent)
+      shortName: journeyLocationElement.disassembledName,
+      matchQuality: journeyLocationElement.matchQuality,
+      parent: journeyLocationElement.parent !== undefined
+        ? this.locationWrapper.wrapLocation(journeyLocationElement.parent)
         : undefined,
-      latitude: (journeyLocatoinElement.coord?.[0] as number) ?? undefined,
-      longitude: (journeyLocatoinElement.coord?.[1] as number) ?? undefined
+      latitude: (journeyLocationElement.coord?.[0] as number) ?? undefined,
+      longitude: (journeyLocationElement.coord?.[1] as number) ?? undefined
     };
 
     const arrival: Time = {
-      timeBaseTimetable: journeyLocatoinElement.arrivalTimeBaseTimetable,
-      timeEstimated: journeyLocatoinElement.arrivalTimeEstimated,
-      timePlanned: journeyLocatoinElement.arrivalTimePlanned
+      timeBaseTimetable: journeyLocationElement.arrivalTimeBaseTimetable,
+      timeEstimated: journeyLocationElement.arrivalTimeEstimated,
+      timePlanned: journeyLocationElement.arrivalTimePlanned
     };
 
     const departure: Time = {
-      timeBaseTimetable: journeyLocatoinElement.departureTimeBaseTimetable,
-      timeEstimated: journeyLocatoinElement.departureTimeEstimated,
-      timePlanned: journeyLocatoinElement.departureTimePlanned
+      timeBaseTimetable: journeyLocationElement.departureTimeBaseTimetable,
+      timeEstimated: journeyLocationElement.departureTimeEstimated,
+      timePlanned: journeyLocationElement.departureTimePlanned
     };
 
     return {
-      id: journeyLocatoinElement.id,
-      name: journeyLocatoinElement.name,
-      type: journeyLocatoinElement.type,
+      id: journeyLocationElement.id,
+      name: journeyLocationElement.name,
+      type: journeyLocationElement.type,
       details: details,
       arrival: arrival,
       departure: departure
@@ -82,16 +82,16 @@ export class VrrJourneysWrapperService {
     };
 
     return {
-      origin: this.wrapJourneyLocatoinElement(vrrLeg.origin ?? {}),
-      destination: this.wrapJourneyLocatoinElement(vrrLeg.destination ?? {}),
+      origin: this.wrapJourneyLocationElement(vrrLeg.origin ?? {}),
+      destination: this.wrapJourneyLocationElement(vrrLeg.destination ?? {}),
       transportation: this.wrapTransportation(vrrLeg.transportation ?? {}),
       details: details
     };
   }
 
-  private wrapJourneys(vrrJoruney: VrrJourney): Journey {
+  private wrapJourneys(vrrJourney: VrrJourney): Journey {
     return {
-      legs: vrrJoruney.legs?.map((leg) => this.wrapLegs(leg))
+      legs: vrrJourney.legs?.map((leg) => this.wrapLegs(leg))
     };
   }
 
