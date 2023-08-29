@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Trip } from "./trip.entity";
 
-
 export class Transportation {
 
   @ApiProperty({

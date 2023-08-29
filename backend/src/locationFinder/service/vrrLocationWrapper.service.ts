@@ -7,27 +7,34 @@ import { LocationDetails } from "../entity/locationDetails.entity";
 export class VrrLocationWrapperService {
 
   wrap(vrrLocations: VrrLocation[]): Location[] {
-    return vrrLocations.map(location => this.wrapLocation(location));
+    return vrrLocations
+      .map(vrrLocation => this.wrapLocation(vrrLocation))
+      // Removing all "undefined" entries.
+      .filter(location => location !== undefined)
+      .map(location => location as Location);
   }
 
-  public wrapLocation(vrrLocation: VrrLocation): Location {
-    const details: LocationDetails = {
-      shortName: vrrLocation.disassembledName,
-      matchQuality: vrrLocation.matchQuality,
-      parent: vrrLocation.parent !== undefined
-        ? this.wrapLocation(vrrLocation.parent)
-        : undefined,
-      latitude: (vrrLocation.coord?.[0] as number) ?? undefined,
-      longitude: (vrrLocation.coord?.[1] as number) ?? undefined
-    };
+  public wrapLocation(vrrLocation: VrrLocation | undefined): (Location | undefined) {
+    if (vrrLocation === undefined) {
+      return undefined;
+    }
 
     return {
       id: vrrLocation.id,
       name: vrrLocation.name,
       type: vrrLocation.type,
-      details: details
+      details: this.wrapLocationDetails(vrrLocation)
     };
+  }
 
+  public wrapLocationDetails(vrrLocation: VrrLocation): LocationDetails {
+    return <LocationDetails>{
+      shortName: vrrLocation.disassembledName,
+      matchQuality: vrrLocation.matchQuality,
+      parent: this.wrapLocation(vrrLocation.parent),
+      latitude: (vrrLocation.coord?.[0] as number) ?? undefined,
+      longitude: (vrrLocation.coord?.[1] as number) ?? undefined
+    };
   }
 
 }

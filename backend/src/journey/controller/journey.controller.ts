@@ -8,6 +8,7 @@ import { JourneyService } from "../service/journey.service";
 @Controller("journey")
 @ApiTags("journey")
 export class JourneyController {
+
   constructor(private readonly journeyService: JourneyService) { }
 
   @Post()
@@ -25,4 +26,5 @@ export class JourneyController {
   public queryJourney(@Body() journeyRequest: JourneyRequestDto): Promise<Journey[]> {
     return this.journeyService.queryJourney(journeyRequest);
   }
+
 }
