@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { JourneyLocationElement, TransportationTrip, Journey as VrrJourney, Leg as VrrLeg, Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { Info, JourneyLocationElement, TransportationTrip, Journey as VrrJourney, Leg as VrrLeg, Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { Journey } from "journey/entity/journey.entity";
 import { JourneyLocation } from "journey/entity/journeyLocation.entity";
 import { Leg } from "journey/entity/leg.entity";
 import { LegDetails } from "journey/entity/legDetails.entity";
+import { LegInfo } from "journey/entity/legInfo.entity";
 import { Time } from "journey/entity/time.entity";
 import { Transportation } from "journey/entity/transportation.entity";
 import { Trip } from "journey/entity/trip.entity";
@@ -35,7 +36,9 @@ export class VrrJourneysWrapperService {
   private wrapTransportation(vrrTransportation: VrrTransportation): Transportation {
     return {
       name: vrrTransportation.name,
-      trips: vrrTransportation.trips?.map((trip) => this.wrapTransportationTrips(trip)) ?? []
+      trips: vrrTransportation !== undefined
+        ? vrrTransportation.trips?.map((trip) => this.wrapTransportationTrips(trip))
+        : undefined
     };
   }
 
@@ -52,15 +55,13 @@ export class VrrJourneysWrapperService {
     };
 
     const arrival: Time = {
-      timeBaseTimetable: journeyLocationElement.arrivalTimeBaseTimetable,
-      timeEstimated: journeyLocationElement.arrivalTimeEstimated,
-      timePlanned: journeyLocationElement.arrivalTimePlanned
+      estimated: journeyLocationElement.arrivalTimeEstimated !== undefined ? new Date(journeyLocationElement.arrivalTimeEstimated) : undefined,
+      planned: journeyLocationElement.arrivalTimePlanned !== undefined ? new Date(journeyLocationElement.arrivalTimePlanned) : undefined
     };
 
     const departure: Time = {
-      timeBaseTimetable: journeyLocationElement.departureTimeBaseTimetable,
-      timeEstimated: journeyLocationElement.departureTimeEstimated,
-      timePlanned: journeyLocationElement.departureTimePlanned
+      estimated: journeyLocationElement.departureTimeEstimated !== undefined ? new Date(journeyLocationElement.departureTimeEstimated) : undefined,
+      planned: journeyLocationElement.departureTimePlanned !== undefined ? new Date(journeyLocationElement.departureTimePlanned) : undefined
     };
 
     return {
@@ -73,18 +74,25 @@ export class VrrJourneysWrapperService {
     };
   }
 
+  private wrapLegInfos(infos: Info[]): LegInfo[] {
+    return infos
+      .filter(info => info.content !== undefined)
+      .map(info => new LegInfo(info.content as string));
+  }
+
   private wrapLegs(vrrLeg: VrrLeg): Leg {
 
     const details: LegDetails = {
       distance: vrrLeg.distance,
-      duration: vrrLeg.duration
-      // ???
+      duration: vrrLeg.duration,
+      infos: vrrLeg.infos !== undefined ? this.wrapLegInfos(vrrLeg.infos) : undefined,
+      hints: vrrLeg.hints !== undefined ? this.wrapLegInfos(vrrLeg.hints) : undefined
     };
 
     return {
-      origin: this.wrapJourneyLocationElement(vrrLeg.origin ?? {}),
-      destination: this.wrapJourneyLocationElement(vrrLeg.destination ?? {}),
-      transportation: this.wrapTransportation(vrrLeg.transportation ?? {}),
+      origin: vrrLeg.origin !== undefined ? this.wrapJourneyLocationElement(vrrLeg.origin) : undefined,
+      destination: vrrLeg.destination !== undefined ? this.wrapJourneyLocationElement(vrrLeg.destination) : undefined,
+      transportation: vrrLeg.transportation !== undefined ? this.wrapTransportation(vrrLeg.transportation) : undefined,
       details: details
     };
   }

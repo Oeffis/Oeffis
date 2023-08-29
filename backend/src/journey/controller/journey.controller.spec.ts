@@ -23,11 +23,11 @@ it("should query trip", async () => {
       "legs": [
         {
           "origin": {
-            "id": "de:05513:5613:91:7",
+            "id": "de:05513:5613:98:25",
             "name": "Gelsenkirchen Hbf",
             "type": "platform",
             "details": {
-              "shortName": "7",
+              "shortName": "25",
               "parent": {
                 "id": "de:05513:5613",
                 "name": "Gelsenkirchen Hbf",
@@ -43,21 +43,21 @@ it("should query trip", async () => {
                   "longitude": 790614
                 }
               },
-              "latitude": 5288910,
-              "longitude": 790718
+              "latitude": 5288935,
+              "longitude": 790736
             },
             "arrival": {},
             "departure": {
-              "timeEstimated": "2023-08-28T12:50:00Z",
-              "timePlanned": "2023-08-28T12:50:00Z"
+              "estimated": new Date("2023-08-29T09:16:00Z"),
+              "planned": new Date("2023-08-29T09:16:00Z")
             }
           },
           "destination": {
-            "id": "de:05916:7590:91:5",
+            "id": "de:05916:7590:90:7",
             "name": "Wanne-Eickel Hbf",
             "type": "platform",
             "details": {
-              "shortName": "2",
+              "shortName": "7",
               "parent": {
                 "id": "de:05916:7590",
                 "name": "Wanne-Eickel Hbf",
@@ -73,21 +73,32 @@ it("should query trip", async () => {
                   "longitude": 797691
                 }
               },
-              "latitude": 5284181,
-              "longitude": 797752
+              "latitude": 5284204,
+              "longitude": 797771
             },
             "arrival": {
-              "timeEstimated": "2023-08-28T12:54:00Z",
-              "timePlanned": "2023-08-28T12:54:00Z"
+              "estimated": new Date("2023-08-29T09:22:00Z"),
+              "planned": new Date("2023-08-29T09:22:00Z")
             },
             "departure": {}
           },
           "transportation": {
-            "name": "Regionalzug RE2",
-            "trips": []
+            "name": "Regionalzug RB46"
           },
           "details": {
-            "duration": 240
+            "duration": 360,
+            "infos": [],
+            "hints": [
+              {
+                "content": "Linie RB46: Fahrradmitnahme begrenzt möglich"
+              },
+              {
+                "content": "Linie RB46: rollstuhltaugliches WC"
+              },
+              {
+                "content": "Verspätung aus vorheriger Fahrt"
+              }
+            ]
           }
         }
       ]

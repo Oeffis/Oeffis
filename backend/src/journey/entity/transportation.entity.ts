@@ -16,7 +16,7 @@ export class Transportation {
     type: [Trip],
     required: true
   })
-  trips!: Trip[];
+  trips?: Trip[];
 
   constructor(name: string, trips: Trip[]) {
     this.name = name;

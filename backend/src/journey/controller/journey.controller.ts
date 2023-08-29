@@ -22,7 +22,7 @@ export class JourneyController {
     description: "Bad request.",
     type: BadRequest
   })
-  public queryJourney(@Body() requestBody: JourneyRequestDto): Promise<Journey[]> {
-    return this.journeyService.queryJourney(requestBody.originId, requestBody.destinationId/*, requestBody.departure*/);
+  public queryJourney(@Body() journeyRequest: JourneyRequestDto): Promise<Journey[]> {
+    return this.journeyService.queryJourney(journeyRequest);
   }
 }

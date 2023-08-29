@@ -3,28 +3,20 @@ import { ApiProperty } from "@nestjs/swagger";
 export class Time {
 
   @ApiProperty({
-    description: "Time base.",
-    type: String
-  })
-  timeBaseTimetable?: string;
-
-  @ApiProperty({
     description: "Time estimated.",
-    type: String
+    type: Date
   })
-  timeEstimated?: string;
+  estimated?: Date;
 
   @ApiProperty({
     description: "Time planned.",
-    type: String
+    type: Date
   })
-  timePlanned?: string;
+  planned?: Date;
 
-
-  constructor(timeBaseTimetable: string, timeEstimated: string, timePlanned: string) {
-    this.timeBaseTimetable = timeBaseTimetable;
-    this.timeEstimated = timeEstimated;
-    this.timePlanned = timePlanned;
+  constructor(estimated: Date, planned: Date) {
+    this.estimated = estimated;
+    this.planned = planned;
   }
 
 }

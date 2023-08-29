@@ -1,38 +1,39 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { LegInfo } from "./legInfo.entity";
 
 export class LegDetails {
 
   @ApiProperty({
-    description: "Distance.",
+    description: "Distance of leg in meter?",
     type: Number
   })
   distance?: number;
 
   @ApiProperty({
-    description: "Duration.",
+    description: "Duration of leg in seconds.",
     type: Number
   })
   duration?: number;
 
   @ApiProperty({
     description: "Leg information.",
-    type: String
+    type: [LegInfo]
   })
-  infos?: string; // Info[]
+  infos?: LegInfo[];
 
   @ApiProperty({
     description: "Leg hints.",
-    type: String
+    type: [LegInfo]
   })
-  hints?: string; // Info[]
+  hints?: LegInfo[];
 
   @ApiProperty({
     description: "Leg real time status.",
     type: String
   })
-  realtimeStatus?: string; // RealtimeTripStatus
+  realtimeStatus?: string;
 
-  constructor(distance: number, duration: number, infos: string, hints: string, realtimeStatus: string) {
+  constructor(distance: number, duration: number, infos: LegInfo[], hints: LegInfo[], realtimeStatus: string) {
     this.distance = distance;
     this.duration = duration;
     this.infos = infos;
