@@ -16,46 +16,8 @@ const RoutePlanner: React.FC = () => {
   const [originStopId, setOriginStopId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationStopId, setDestinationStopId] = useStateParams<string | null>(null, "destination", String, String);
 
-  const [originStop, setOriginStop] = useState<Stop | null>(null);
-  const [destinationStop, setDestinationStop] = useState<Stop | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    if (originStopId !== null && originStop === null && originStopId !== "") {
-      StopFinderService.stopFinderControllerFindStopByName({ name: originStopId })
-        .then(({ stops }) => {
-          if (stops.length > 0 && !cancelled) {
-            setOriginStop(stops[0]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return (): void => {
-      cancelled = true;
-    };
-  }, [originStopId]);
-
-  useEffect(() => {
-    let cancelled = false;
-    if (destinationStopId !== null && destinationStop === null && destinationStopId !== "") {
-      StopFinderService.stopFinderControllerFindStopByName({ name: destinationStopId })
-        .then(({ stops }) => {
-          if (stops.length > 0 && !cancelled) {
-            setDestinationStop(stops[0]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return (): void => {
-      cancelled = true;
-    };
-  }, [destinationStopId]);
+  const [originStop, setOriginStop] = useInitialStopFromStopIdAndThenAsState(originStopId);
+  const [destinationStop, setDestinationStop] = useInitialStopFromStopIdAndThenAsState(destinationStopId);
 
   const setOrigin = (stop: Stop | null): void => {
     setOriginStop(stop);
@@ -108,3 +70,29 @@ function submitInput(): void {
 }
 
 export default RoutePlanner;
+
+
+export function useInitialStopFromStopIdAndThenAsState(stopId: string | null): [Stop | null, (stop: Stop | null) => void] {
+  const [stop, setStop] = useState<Stop | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (stopId !== null && stop === null && stopId !== "") {
+      StopFinderService.stopFinderControllerFindStopByName({ name: stopId })
+        .then(({ stops }) => {
+          if (stops.length > 0 && !cancelled) {
+            setStop(stops[0]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return (): void => {
+      cancelled = true;
+    };
+  }, [stopId]);
+
+  return [stop, setStop];
+}
