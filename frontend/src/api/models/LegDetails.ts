@@ -24,5 +24,5 @@ export type LegDetails = {
   /**
    * Leg real time status.
    */
-  realtimeStatus: string;
+  realtimeStatus: Array<string>;
 };

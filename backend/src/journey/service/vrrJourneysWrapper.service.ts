@@ -1,5 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { Info, JourneyLocationElement, TransportationTrip, Journey as VrrJourney, Leg as VrrLeg, Transportation as VrrTransportation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import {
+  Info,
+  Journey as VrrJourney,
+  JourneyLocationElement,
+  Leg as VrrLeg,
+  Transportation as VrrTransportation,
+  TransportationTrip
+} from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { Journey } from "journey/entity/journey.entity";
 import { JourneyLocation } from "journey/entity/journeyLocation.entity";
 import { Leg } from "journey/entity/leg.entity";
@@ -36,8 +43,8 @@ export class VrrJourneysWrapperService {
   private wrapTransportation(vrrTransportation: VrrTransportation): Transportation {
     return {
       name: vrrTransportation.name,
-      trips: vrrTransportation !== undefined
-        ? vrrTransportation.trips?.map((trip) => this.wrapTransportationTrips(trip))
+      trips: vrrTransportation.trips !== undefined
+        ? vrrTransportation.trips.map((trip) => this.wrapTransportationTrips(trip))
         : undefined
     };
   }
@@ -85,6 +92,7 @@ export class VrrJourneysWrapperService {
     const details: LegDetails = {
       distance: vrrLeg.distance,
       duration: vrrLeg.duration,
+      realtimeStatus: vrrLeg.realtimeStatus,
       infos: vrrLeg.infos !== undefined ? this.wrapLegInfos(vrrLeg.infos) : undefined,
       hints: vrrLeg.hints !== undefined ? this.wrapLegInfos(vrrLeg.hints) : undefined
     };

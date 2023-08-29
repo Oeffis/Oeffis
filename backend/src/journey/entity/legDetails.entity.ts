@@ -29,11 +29,11 @@ export class LegDetails {
 
   @ApiProperty({
     description: "Leg real time status.",
-    type: String
+    type: [String]
   })
-  realtimeStatus?: string;
+  realtimeStatus?: string[];
 
-  constructor(distance: number, duration: number, infos: LegInfo[], hints: LegInfo[], realtimeStatus: string) {
+  constructor(distance: number, duration: number, infos: LegInfo[], hints: LegInfo[], realtimeStatus: string[]) {
     this.distance = distance;
     this.duration = duration;
     this.infos = infos;
@@ -41,15 +41,4 @@ export class LegDetails {
     this.realtimeStatus = realtimeStatus;
   }
 
-}
-
-export declare enum RealtimeTripStatus {
-  deviation = "DEVIATION",
-  extraStops = "EXTRA_STOPS",
-  extraTrip = "EXTRA_TRIP",
-  monitored = "MONITORED",
-  outsideRealtimeWindow = "OUTSIDE_REALTIME_WINDOW",
-  prognosisImpossible = "PROGNOSIS_IMPOSSIBLE",
-  realtimeOnlyInformative = "REALTIME_ONLY_INFORMATIVE",
-  tripCancelled = "TRIP_CANCELLED"
 }
