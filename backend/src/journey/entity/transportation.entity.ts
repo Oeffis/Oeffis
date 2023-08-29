@@ -24,30 +24,3 @@ export class Transportation {
   }
 
 }
-
-/*
-
-export interface Transportation {
-    allCoords?: Array<Array<Array<any[] | CoordClass | number>>>;
-    assignedStop?: string;
-    assignedStopId?: string;
-    coords?: Array<Array<Array<any[] | CoordClass | number>>>;
-    description?: string;
-    destination?: Location;
-    disassembledName?: string;
-    id?: string;
-    index?: string;
-    localitySequence?: Location[];
-    locationSequence?: JourneyLocationElement[];
-    name?: string;
-    number?: string;
-    operator?: OperatorObject;
-    origin?: Location;
-    product?: Product;
-    properties?: LineProperties;
-    trips?: TransportationTrip[];
-}
-
-
-
-*/

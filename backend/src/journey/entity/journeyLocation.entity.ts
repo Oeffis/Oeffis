@@ -27,31 +27,3 @@ export class JourneyLocation extends Location {
   }
 
 }
-
-/* 
-export interface JourneyLocationElement {
-  assignedStops?: AssignedLocation[];
-  buildingNumber?: string;
-  coord?: Array<any[] | CoordClass | number>;
-  disassembledName?: string;
-  id?: string;
-  infos?: Info[];
-  isBest?: boolean;
-  isGlobalId?: boolean;
-  matchQuality?: number;
-  name?: string;
-  niveau?: number;
-  parent?: Location;
-  productClasses?: number[];
-  properties?: LocationProperties;
-  streetName?: string;
-  type?: LocationType;
-  arrivalTimeBaseTimetable?: string;
-  arrivalTimeEstimated?: string;
-  arrivalTimePlanned?: string;
-  departureTimeBaseTimetable?: string;
-  departureTimeEstimated?: string;
-  departureTimePlanned?: string;
-  isRealtimeControlled?: boolean;
-  [property: string]: any;
-} */

@@ -35,12 +35,3 @@ export class Trip {
   }
 
 }
-
-/* export interface TransportationTrip {
-  arrivalTimePlannedJourneyDestination?: string;
-  departureTimePlannedJourneyOrigin?: string;
-  status?: Status;
-  trainNumber?: string;
-  trainType?: any;
-  tripCode: number;
-}  */
