@@ -9,11 +9,22 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { Stop } from "../api";
+import { useStateParams } from "../hooks/useStateParams";
 import { StopSearchInput } from "./StopSearchInput";
 
+const stopToString = (stop: Stop | null): string => JSON.stringify(stop);
+const stringToStop = (id: string): Stop | null => {
+  try {
+    return JSON.parse(id);
+  } catch (e) {
+    return null;
+  }
+};
+
+
 const RoutePlanner: React.FC = () => {
-  const [origin, setOrigin] = React.useState<Stop | null>(null);
-  const [destination, setDestination] = React.useState<Stop | null>(null);
+  const [origin, setOrigin] = useStateParams<Stop | null>(null, "origin", stopToString, stringToStop);
+  const [destination, setDestination] = useStateParams<Stop | null>(null, "destination", stopToString, stringToStop);
 
   return (
     <IonList inset={true}>
