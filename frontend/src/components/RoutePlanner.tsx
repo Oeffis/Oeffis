@@ -7,13 +7,27 @@ import {
   IonList,
   IonModal
 } from "@ionic/react";
-import React from "react";
-import { Stop } from "../api";
+import React, { useEffect, useState } from "react";
+import { Stop, StopFinderService } from "../api";
+import { useStateParams } from "../hooks/useStateParams";
 import { StopSearchInput } from "./StopSearchInput";
 
 const RoutePlanner: React.FC = () => {
-  const [origin, setOrigin] = React.useState<Stop | null>(null);
-  const [destination, setDestination] = React.useState<Stop | null>(null);
+  const [originStopId, setOriginStopId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationStopId, setDestinationStopId] = useStateParams<string | null>(null, "destination", String, String);
+
+  const [originStop, setOriginStop] = useInitialStopFromStopIdAndThenAsState(originStopId);
+  const [destinationStop, setDestinationStop] = useInitialStopFromStopIdAndThenAsState(destinationStopId);
+
+  const setOrigin = (stop: Stop | null): void => {
+    setOriginStop(stop);
+    setOriginStopId(stop?.id ?? null);
+  };
+
+  const setDestination = (stop: Stop | null): void => {
+    setDestinationStop(stop);
+    setDestinationStopId(stop?.id ?? null);
+  };
 
   return (
     <IonList inset={true}>
@@ -28,7 +42,7 @@ const RoutePlanner: React.FC = () => {
       <IonItem>
         <StopSearchInput
           inputLabel="Origin"
-          selectedStop={origin}
+          selectedStop={originStop}
           onSelectedStopChanged={(stop): void => setOrigin(stop)}
           prefixDataTestId="origin-input"
         />
@@ -36,7 +50,7 @@ const RoutePlanner: React.FC = () => {
       <IonItem>
         <StopSearchInput
           inputLabel="Destination"
-          selectedStop={destination}
+          selectedStop={destinationStop}
           onSelectedStopChanged={(stop): void => setDestination(stop)}
           prefixDataTestId="destination-input"
         />
@@ -56,3 +70,29 @@ function submitInput(): void {
 }
 
 export default RoutePlanner;
+
+
+export function useInitialStopFromStopIdAndThenAsState(stopId: string | null): [Stop | null, (stop: Stop | null) => void] {
+  const [stop, setStop] = useState<Stop | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (stopId !== null && stop === null && stopId !== "") {
+      StopFinderService.stopFinderControllerFindStopByName({ name: stopId })
+        .then(({ stops }) => {
+          if (stops.length > 0 && !cancelled) {
+            setStop(stops[0]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return (): void => {
+      cancelled = true;
+    };
+  }, [stopId]);
+
+  return [stop, setStop];
+}
