@@ -1,8 +1,9 @@
+import { add } from "date-fns";
 import {
   ServingLinesClient,
-  VRR_TEST_API_BASE_URL,
   StopFinderClient,
-  TripRequestClient
+  TripRequestClient,
+  VRR_TEST_API_BASE_URL
 } from "..";
 
 async function demoTripRequestClient(): Promise<void> {
@@ -11,7 +12,9 @@ async function demoTripRequestClient(): Promise<void> {
     destinationPointId:
       "coord:755620:5337741:MRCV:Stadtmitte (Düsseldorf), Jacobistraße 2:0",
     originPointId:
-      "poiID:2450:5513000:-1:Rathaus Buer:Gelsenkirchen:Rathaus Buer:ANY:POI:785651:5275982:MRCV:nrw"
+      "poiID:2450:5513000:-1:Rathaus Buer:Gelsenkirchen:Rathaus Buer:ANY:POI:785651:5275982:MRCV:nrw",
+    plannedTime: add(new Date(), { hours: 12 }),
+    plannedTimeIs: "departure"
   });
 
   console.log("Planed trip:", result);
