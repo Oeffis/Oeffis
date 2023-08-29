@@ -59,7 +59,7 @@ const JourneysPage: React.FC = () => {
     const journeyParameters: JourneyRequestDto = {
       originId: planJourneyStart,
       destinationId: planJourneyDestination,
-      departure: new Date().toISOString(),
+      departure: new Date(Date.now()).toISOString(),
       asArrival: false
     };
 

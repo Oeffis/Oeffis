@@ -589,7 +589,7 @@
             "format": "date-time",
             "type": "string",
             "description": "Date of the trip to start (default: current date).",
-            "example": "15:00"
+            "example": "2023-08-29T16:53:52.466Z"
           },
           "asArrival": {
             "type": "boolean",
