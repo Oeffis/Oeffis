@@ -19,8 +19,11 @@ export class JourneyService {
   public async queryJourney(journeyRequest: JourneyRequestDto): Promise<Journey[]> {
     const response = await this.client.queryTrip({
       originPointId: journeyRequest.originId,
-      destinationPointId: journeyRequest.destinationId
-      /* TODO: In TripRequestClient add departure and asArrival */
+      destinationPointId: journeyRequest.destinationId,
+      plannedTime: journeyRequest.departure,
+      plannedTimeIs: journeyRequest.asArrival
+        ? "arrival"
+        : "departure"
     });
 
     return this.journeysWrapper.wrap(response.journeys ?? []);
