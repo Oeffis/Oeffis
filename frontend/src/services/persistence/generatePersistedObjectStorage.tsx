@@ -62,8 +62,6 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
           id: uuidv4()
         };
 
-
-
         const newPersistedObjects = [...persistedObjects, persistedObject];
 
         console.log("newPersistedObjects", newPersistedObjects);
