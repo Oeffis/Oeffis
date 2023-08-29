@@ -7,24 +7,65 @@ import {
   IonList,
   IonModal
 } from "@ionic/react";
-import React from "react";
-import { Stop } from "../api";
+import React, { useEffect, useState } from "react";
+import { Stop, StopFinderService } from "../api";
 import { useStateParams } from "../hooks/useStateParams";
 import { StopSearchInput } from "./StopSearchInput";
 
-const stopToString = (stop: Stop | null): string => JSON.stringify(stop);
-const stringToStop = (id: string): Stop | null => {
-  try {
-    return JSON.parse(id);
-  } catch (e) {
-    return null;
-  }
-};
-
-
 const RoutePlanner: React.FC = () => {
-  const [origin, setOrigin] = useStateParams<Stop | null>(null, "origin", stopToString, stringToStop);
-  const [destination, setDestination] = useStateParams<Stop | null>(null, "destination", stopToString, stringToStop);
+  const [originStopId, setOriginStopId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationStopId, setDestinationStopId] = useStateParams<string | null>(null, "destination", String, String);
+
+  const [originStop, setOriginStop] = useState<Stop | null>(null);
+  const [destinationStop, setDestinationStop] = useState<Stop | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (originStopId !== null && originStop === null && originStopId !== "") {
+      StopFinderService.stopFinderControllerFindStopByName({ name: originStopId })
+        .then(({ stops }) => {
+          if (stops.length > 0 && !cancelled) {
+            setOriginStop(stops[0]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return (): void => {
+      cancelled = true;
+    };
+  }, [originStopId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (destinationStopId !== null && destinationStop === null && destinationStopId !== "") {
+      StopFinderService.stopFinderControllerFindStopByName({ name: destinationStopId })
+        .then(({ stops }) => {
+          if (stops.length > 0 && !cancelled) {
+            setDestinationStop(stops[0]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return (): void => {
+      cancelled = true;
+    };
+  }, [destinationStopId]);
+
+  const setOrigin = (stop: Stop | null): void => {
+    setOriginStop(stop);
+    setOriginStopId(stop?.id ?? null);
+  };
+
+  const setDestination = (stop: Stop | null): void => {
+    setDestinationStop(stop);
+    setDestinationStopId(stop?.id ?? null);
+  };
 
   return (
     <IonList inset={true}>
@@ -39,7 +80,7 @@ const RoutePlanner: React.FC = () => {
       <IonItem>
         <StopSearchInput
           inputLabel="Origin"
-          selectedStop={origin}
+          selectedStop={originStop}
           onSelectedStopChanged={(stop): void => setOrigin(stop)}
           prefixDataTestId="origin-input"
         />
@@ -47,7 +88,7 @@ const RoutePlanner: React.FC = () => {
       <IonItem>
         <StopSearchInput
           inputLabel="Destination"
-          selectedStop={destination}
+          selectedStop={destinationStop}
           onSelectedStopChanged={(stop): void => setDestination(stop)}
           prefixDataTestId="destination-input"
         />
