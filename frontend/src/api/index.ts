@@ -13,6 +13,7 @@ export type { JourneyLocation } from './models/JourneyLocation';
 export type { JourneyRequestDto } from './models/JourneyRequestDto';
 export type { Leg } from './models/Leg';
 export type { LegDetails } from './models/LegDetails';
+export type { LegInfo } from './models/LegInfo';
 export type { Location } from './models/Location';
 export type { LocationCoordinatesDto } from './models/LocationCoordinatesDto';
 export type { LocationDetails } from './models/LocationDetails';

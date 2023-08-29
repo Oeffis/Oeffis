@@ -4,15 +4,11 @@
 
 export type Time = {
   /**
-   * Time base.
-   */
-  timeBaseTimetable: string;
-  /**
    * Time estimated.
    */
-  timeEstimated: string;
+  estimated: string;
   /**
    * Time planned.
    */
-  timePlanned: string;
+  planned: string;
 };
