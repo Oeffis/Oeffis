@@ -42,3 +42,14 @@ export class LegDetails {
   }
 
 }
+
+export declare enum RealtimeTripStatus {
+  deviation = "DEVIATION",
+  extraStops = "EXTRA_STOPS",
+  extraTrip = "EXTRA_TRIP",
+  monitored = "MONITORED",
+  outsideRealtimeWindow = "OUTSIDE_REALTIME_WINDOW",
+  prognosisImpossible = "PROGNOSIS_IMPOSSIBLE",
+  realtimeOnlyInformative = "REALTIME_ONLY_INFORMATIVE",
+  tripCancelled = "TRIP_CANCELLED"
+}

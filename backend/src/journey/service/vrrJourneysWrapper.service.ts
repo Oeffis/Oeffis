@@ -102,5 +102,4 @@ export class VrrJourneysWrapperService {
       legs: vrrJourney.legs?.map((leg) => this.wrapLegs(leg))
     };
   }
-
 }

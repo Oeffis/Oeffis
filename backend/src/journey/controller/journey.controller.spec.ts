@@ -23,11 +23,11 @@ it("should query trip", async () => {
       "legs": [
         {
           "origin": {
-            "id": "de:05513:5613:98:25",
+            "id": "de:05513:5613:91:7",
             "name": "Gelsenkirchen Hbf",
             "type": "platform",
             "details": {
-              "shortName": "25",
+              "shortName": "7",
               "parent": {
                 "id": "de:05513:5613",
                 "name": "Gelsenkirchen Hbf",
@@ -43,21 +43,21 @@ it("should query trip", async () => {
                   "longitude": 790614
                 }
               },
-              "latitude": 5288935,
-              "longitude": 790736
+              "latitude": 5288910,
+              "longitude": 790718
             },
             "arrival": {},
             "departure": {
-              "estimated": new Date("2023-08-29T09:16:00Z"),
-              "planned": new Date("2023-08-29T09:16:00Z")
+              "estimated": new Date("2023-08-29T10:50:00.000Z"),
+              "planned": new Date("2023-08-29T10:50:00.000Z")
             }
           },
           "destination": {
-            "id": "de:05916:7590:90:7",
+            "id": "de:05916:7590:91:5",
             "name": "Wanne-Eickel Hbf",
             "type": "platform",
             "details": {
-              "shortName": "7",
+              "shortName": "2",
               "parent": {
                 "id": "de:05916:7590",
                 "name": "Wanne-Eickel Hbf",
@@ -73,30 +73,39 @@ it("should query trip", async () => {
                   "longitude": 797691
                 }
               },
-              "latitude": 5284204,
-              "longitude": 797771
+              "latitude": 5284181,
+              "longitude": 797752
             },
             "arrival": {
-              "estimated": new Date("2023-08-29T09:22:00Z"),
-              "planned": new Date("2023-08-29T09:22:00Z")
+              "estimated": new Date("2023-08-29T10:54:00.000Z"),
+              "planned": new Date("2023-08-29T10:54:00.000Z")
             },
             "departure": {}
           },
           "transportation": {
-            "name": "Regionalzug RB46"
+            "name": "Regionalzug RE2"
           },
           "details": {
-            "duration": 360,
+            "duration": 240,
             "infos": [],
             "hints": [
               {
-                "content": "Linie RB46: Fahrradmitnahme begrenzt möglich"
+                "content": "Linie RE2: Fahrradmitnahme begrenzt möglich"
               },
               {
-                "content": "Linie RB46: rollstuhltaugliches WC"
+                "content": "Linie RE2: Fahrzeuggebundene Einstiegshilfe vorhanden"
               },
               {
-                "content": "Verspätung aus vorheriger Fahrt"
+                "content": "Linie RE2: rollstuhltaugliches WC"
+              },
+              {
+                "content": "Linie RE2: Achtung! Baumaßnahmen. Infos: bauinfos.deutschebahn.com"
+              },
+              {
+                "content": "Reparatur an der Strecke"
+              },
+              {
+                "content": "Mehrere Wagen fehlen"
               }
             ]
           }
