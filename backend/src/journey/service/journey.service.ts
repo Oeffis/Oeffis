@@ -20,7 +20,9 @@ export class JourneyService {
     const response = await this.client.queryTrip({
       originPointId: journeyRequest.originId,
       destinationPointId: journeyRequest.destinationId,
-      plannedTime: journeyRequest.departure,
+      plannedTime: journeyRequest.departure !== undefined
+        ? new Date(journeyRequest.departure)
+        : undefined,
       plannedTimeIs: journeyRequest.asArrival
         ? "arrival"
         : "departure"
@@ -28,7 +30,5 @@ export class JourneyService {
 
     return this.journeysWrapper.wrap(response.journeys ?? []);
   }
-
-
 
 }

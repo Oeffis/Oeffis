@@ -20,7 +20,7 @@ export class JourneyRequestDto {
 
   @ApiProperty({
     description: "Date of the trip to start (default: current date).",
-    example: new Date(Date.now()).toISOString(),
+    example: new Date("2023-08-29T16:58:47.129Z"),
     type: Date
   })
   departure?: Date;
