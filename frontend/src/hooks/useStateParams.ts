@@ -1,5 +1,5 @@
-import { useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 
 export function useStateParams<T>(
   initialState: T,
@@ -7,8 +7,8 @@ export function useStateParams<T>(
   serialize: (state: T) => string,
   deserialize: (state: string) => T
 ): [T, (state: T) => void] {
-  const history = useIonRouter();
-  const search = new URLSearchParams(history.routeInfo.search);
+  const history = useHistory();
+  const search = new URLSearchParams(history.location.search);
 
   const existingValue = search.get(paramsName);
   const [state, setState] = useState<T>(
@@ -24,9 +24,9 @@ export function useStateParams<T>(
 
   const onChange = (s: T): void => {
     setState(s);
-    const searchParams = new URLSearchParams(history.routeInfo.search);
+    const searchParams = new URLSearchParams(history.location.search);
     searchParams.set(paramsName, serialize(s));
-    const pathname = history.routeInfo.pathname;
+    const pathname = history.location.pathname;
     history.push(pathname + "?" + searchParams.toString(), "forward");
   };
 
