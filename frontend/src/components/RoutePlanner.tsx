@@ -78,7 +78,7 @@ export function useInitialLocationFromLocationIdAndThenAsState(locationId: strin
   useEffect(() => {
     let cancelled = false;
     if (locationId !== null && location === null && locationId !== "") {
-      LocationFinderService.locationFinderControllerFindStopByName({ name: locationId })
+      LocationFinderService.locationFinderControllerFindLocationsByName({ name: locationId })
         .then((locations) => {
           if (locations.length > 0 && !cancelled) {
             setLocation(locations[0]);
