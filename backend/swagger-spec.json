@@ -1,1 +1,835 @@
-{"openapi":"3.0.0","paths":{"/app":{"get":{"operationId":"AppController_getHello","summary":"returns a \"Hello World!\" message","description":"Test enpoint to send a \"Hello World!\" message to frontend.","parameters":[],"responses":{"200":{"description":"Returns a \"Hello World!\" message.","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/HelloWorld"}}}}},"400":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["app"]}},"/users":{"get":{"operationId":"UsersController_findAll","summary":"returns all users","description":"Get all users.","parameters":[],"responses":{"200":{"description":"Return all Users as JSON array.","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/User"}}}}},"404":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["users"]},"post":{"operationId":"UsersController_create","summary":"creates a new user, returns the created on","description":"Create a new user.","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"responses":{"201":{"description":"Returns the created user.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["users"]}},"/users/{index}":{"get":{"operationId":"UsersController_findOne","summary":"returns a specific user","description":"Get a specific user.","parameters":[{"name":"index","required":true,"in":"path","description":"Users index","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns a User by index.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"User not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserNotFound"}}}}},"tags":["users"]},"patch":{"operationId":"UsersController_update","summary":"updates a specific user","description":"Update a specific user.","parameters":[{"name":"index","required":true,"in":"path","description":"Users index","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"responses":{"201":{"description":"Returns the updated user.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"User not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserNotFound"}}}}},"tags":["users"]},"delete":{"operationId":"UsersController_remove","summary":"deletes a specific user","description":"Delete a specific user.","parameters":[{"name":"index","required":true,"in":"path","description":"Users index","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the deleted user.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}},"404":{"description":"User not found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserNotFound"}}}}},"tags":["users"]}},"/stop_finder/at_coordinates":{"post":{"operationId":"StopFinderController_findStopsAtCoordinates","summary":"finds a stop at given coordinates","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/StopFinderAtCoordinatesParametersDto"}}}},"responses":{"200":{"description":"Returns the found stops.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/StopFinderAtCoordinatesResponseDto"}}}},"400":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["stop_finder"]}},"/stop_finder/by_name":{"post":{"operationId":"StopFinderController_findStopByName","summary":"finds a stop by name","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/StopFinderByNameParametersDto"}}}},"responses":{"200":{"description":"Returns the found stops.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/StopFinderByNameResponseDto"}}}},"400":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["stop_finder"]}},"/trip_query":{"post":{"operationId":"TripQueryController_queryTrip","summary":"queries a trip","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TripQueryRequestDto"}}}},"responses":{"200":{"description":"Trip alternatives found.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TripQueryResponseDto"}}}},"400":{"description":"Bad request.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BadRequest"}}}}},"tags":["trip_query"]}}},"info":{"title":"NestJS Swagger","description":"API description","version":"1.0","contact":{}},"tags":[],"servers":[{"url":"http://localhost:3000"}],"components":{"schemas":{"HelloWorld":{"type":"object","properties":{"message":{"type":"string"}},"required":["message"]},"BadRequest":{"type":"object","properties":{"statusCode":{"type":"object","description":"Http status code","example":400},"message":{"type":"object","description":"Error message","example":"Bad request."}},"required":["statusCode","message"]},"User":{"type":"object","properties":{"name":{"type":"string","description":"Name of a User","example":"John Smith"},"age":{"type":"number","description":"Age of a User","example":45},"city":{"type":"string","description":"City of a User","example":"New York"}},"required":["name","age","city"]},"UserNotFound":{"type":"object","properties":{"statusCode":{"type":"object","description":"Http status code","example":404},"message":{"type":"object","description":"Error message","example":"User not found."}},"required":["statusCode","message"]},"StopFinderAtCoordinatesParametersDto":{"type":"object","properties":{"latitude":{"type":"number","description":"Latitude of the location to search.","example":51.50598042775682},"longitude":{"type":"number","description":"Longitude of the location to search.","example":7.101082448485377}},"required":["latitude","longitude"]},"Stop":{"type":"object","properties":{"id":{"type":"string","description":"Id of the stop."},"name":{"type":"string","description":"Name of the stop."},"latitude":{"type":"number","description":"Latitude of the stop."},"longitude":{"type":"number","description":"Longitude of the stop."}},"required":["id","name","latitude","longitude"]},"StopFinderAtCoordinatesResponseDto":{"type":"object","properties":{"stops":{"description":"Stops found.","type":"array","items":{"$ref":"#/components/schemas/Stop"}}},"required":["stops"]},"StopFinderByNameParametersDto":{"type":"object","properties":{"name":{"type":"string","description":"Latitude of the location to search.","example":"Gelsen"}},"required":["name"]},"StopFinderByNameResponseDto":{"type":"object","properties":{"stops":{"description":"Stops found.","type":"array","items":{"$ref":"#/components/schemas/Stop"}}},"required":["stops"]},"TripQueryRequestDto":{"type":"object","properties":{"origin":{"type":"string","description":"Origin of the trip."},"destination":{"type":"string","description":"Destination of the trip."},"departure":{"type":"string","description":"Date of the trip."}},"required":["origin","destination","departure"]},"Trip":{"type":"object","properties":{"legs":{"description":"Legs of the alternative.","type":"array","items":{"$ref":"#/components/schemas/Stop"}}},"required":["legs"]},"TripQueryResponseDto":{"type":"object","properties":{"alternatives":{"description":"Trip alternatives found.","type":"array","items":{"$ref":"#/components/schemas/Trip"}}},"required":["alternatives"]}}}}
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/app": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "summary": "returns a \"Hello World!\" message",
+        "description": "Test endpoint to send a \"Hello World!\" message to frontend.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns a \"Hello World!\" message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HelloWorld"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "app"
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "operationId": "UsersController_findAll",
+        "summary": "returns all users",
+        "description": "Get all users.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Users as JSON array.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "UsersController_create",
+        "summary": "creates a new user, returns the created on",
+        "description": "Create a new user.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{index}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "summary": "returns a specific user",
+        "description": "Get a specific user.",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "Users index",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a User by index.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "summary": "updates a specific user",
+        "description": "Update a specific user.",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "Users index",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the updated user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "summary": "deletes a specific user",
+        "description": "Delete a specific user.",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "description": "Users index",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the deleted user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/location_finder/at_coordinates": {
+      "post": {
+        "operationId": "LocationFinderController_findLocationsAtCoordinates",
+        "summary": "finds locations at given coordinates",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationCoordinatesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the found locations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Location"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "location_finder"
+        ]
+      }
+    },
+    "/location_finder/by_name": {
+      "post": {
+        "operationId": "LocationFinderController_findLocationsByName",
+        "summary": "finds locations by name",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationNameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the found locations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Location"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "location_finder"
+        ]
+      }
+    },
+    "/journey": {
+      "post": {
+        "operationId": "JourneyController_queryJourney",
+        "summary": "queries a journey",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JourneyRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Journeys.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Journey"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "journey"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "NestJS Swagger",
+    "description": "API description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "HelloWorld": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "BadRequest": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 400
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "Bad request."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of a User",
+            "example": "John Smith"
+          },
+          "age": {
+            "type": "number",
+            "description": "Age of a User",
+            "example": 45
+          },
+          "city": {
+            "type": "string",
+            "description": "City of a User",
+            "example": "New York"
+          }
+        },
+        "required": [
+          "name",
+          "age",
+          "city"
+        ]
+      },
+      "UserNotFound": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "object",
+            "description": "Http status code",
+            "example": 404
+          },
+          "message": {
+            "type": "object",
+            "description": "Error message",
+            "example": "User not found."
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "LocationCoordinatesDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the location to search.",
+            "example": 51.50598042775682
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the location to search.",
+            "example": 7.101082448485377
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location."
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location."
+          },
+          "details": {
+            "description": "Further details of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDetails"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details"
+        ]
+      },
+      "LocationDetails": {
+        "type": "object",
+        "properties": {
+          "shortName": {
+            "type": "string",
+            "description": "Short name of the location."
+          },
+          "matchQuality": {
+            "type": "number",
+            "description": "Quality how well the given location meets the related query (biggest number is the best result)."
+          },
+          "parent": {
+            "description": "Parent location of this location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Location"
+              }
+            ]
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of a location."
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of a location."
+          }
+        },
+        "required": [
+          "shortName",
+          "matchQuality",
+          "parent",
+          "latitude",
+          "longitude"
+        ]
+      },
+      "LocationNameDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the location to search.",
+            "example": "Gelsen"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "JourneyRequestDto": {
+        "type": "object",
+        "properties": {
+          "originId": {
+            "type": "string",
+            "description": "Origin (id) of the trip.",
+            "example": "de:05513:5613"
+          },
+          "destinationId": {
+            "type": "string",
+            "description": "Destination (id) of the trip.",
+            "example": "de:05562:4982"
+          },
+          "departure": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date of the trip to start (default: current date).",
+            "example": "2023-08-29T16:58:47.129Z"
+          },
+          "asArrival": {
+            "type": "boolean",
+            "description": "Use departure date as arrival.",
+            "default": false
+          }
+        },
+        "required": [
+          "originId",
+          "destinationId",
+          "departure",
+          "asArrival"
+        ]
+      },
+      "Time": {
+        "type": "object",
+        "properties": {
+          "estimated": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Time estimated."
+          },
+          "planned": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Time planned."
+          }
+        },
+        "required": [
+          "estimated",
+          "planned"
+        ]
+      },
+      "JourneyLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location."
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location."
+          },
+          "details": {
+            "description": "Further details of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDetails"
+              }
+            ]
+          },
+          "arrival": {
+            "description": "Arrival time.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Time"
+              }
+            ]
+          },
+          "departure": {
+            "description": "Departure time.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Time"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "arrival",
+          "departure"
+        ]
+      },
+      "Trip": {
+        "type": "object",
+        "properties": {
+          "arrivalTimePlannedJourneyDestination": {
+            "type": "string",
+            "description": "Planned arrival time at destination."
+          },
+          "departureTimePlannedJourneyOrigin": {
+            "type": "string",
+            "description": "Planned departure time at Origin."
+          },
+          "status": {
+            "type": "string",
+            "description": "Status information about trip."
+          },
+          "trainNumber": {
+            "type": "string",
+            "description": "Train number."
+          }
+        },
+        "required": [
+          "arrivalTimePlannedJourneyDestination",
+          "departureTimePlannedJourneyOrigin",
+          "status",
+          "trainNumber"
+        ]
+      },
+      "Transportation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of transportation vehicle."
+          },
+          "trips": {
+            "description": "Trips depending on this transportation.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trip"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "trips"
+        ]
+      },
+      "LegInfo": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Leg origin"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "LegDetails": {
+        "type": "object",
+        "properties": {
+          "distance": {
+            "type": "number",
+            "description": "Distance of leg in meter?"
+          },
+          "duration": {
+            "type": "number",
+            "description": "Duration of leg in seconds."
+          },
+          "infos": {
+            "description": "Leg information.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegInfo"
+            }
+          },
+          "hints": {
+            "description": "Leg hints.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegInfo"
+            }
+          },
+          "realtimeStatus": {
+            "description": "Leg real time status.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "distance",
+          "duration",
+          "infos",
+          "hints",
+          "realtimeStatus"
+        ]
+      },
+      "Leg": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "Leg origin",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JourneyLocation"
+              }
+            ]
+          },
+          "destination": {
+            "description": "Leg destination.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JourneyLocation"
+              }
+            ]
+          },
+          "transportation": {
+            "description": "Leg transportation.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Transportation"
+              }
+            ]
+          },
+          "details": {
+            "description": "Leg details.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegDetails"
+              }
+            ]
+          }
+        },
+        "required": [
+          "origin",
+          "destination",
+          "transportation",
+          "details"
+        ]
+      },
+      "Journey": {
+        "type": "object",
+        "properties": {
+          "legs": {
+            "description": "Legs of a journey.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Leg"
+            }
+          }
+        },
+        "required": [
+          "legs"
+        ]
+      }
+    }
+  }
+}

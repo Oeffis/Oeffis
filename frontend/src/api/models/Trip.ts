@@ -2,11 +2,21 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Stop } from './Stop';
-
 export type Trip = {
   /**
-   * Legs of the alternative.
+   * Planned arrival time at destination.
    */
-  legs: Array<Stop>;
+  arrivalTimePlannedJourneyDestination: string;
+  /**
+   * Planned departure time at Origin.
+   */
+  departureTimePlannedJourneyOrigin: string;
+  /**
+   * Status information about trip.
+   */
+  status: string;
+  /**
+   * Train number.
+   */
+  trainNumber: string;
 };

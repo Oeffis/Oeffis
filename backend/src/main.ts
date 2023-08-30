@@ -17,7 +17,7 @@ async function bootstrap(): Promise<void> {
   fs.writeFileSync("./swagger-spec.json", JSON.stringify(document));
   SwaggerModule.setup("api-docs", app, document);
 
-  // Endabled for testing purpose
+  // Enabled for testing purpose
   app.enableCors();
 
   await app.listen(3000);

@@ -1,4 +1,4 @@
 export enum StepType {
-    stop = "stop",
+    location = "location",
     station = "station"
 }
