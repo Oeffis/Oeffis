@@ -1,0 +1,33 @@
+name: Automatic Rebase
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  rebase:
+    name: Rebase
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.issue.pull_request != '' &&
+      (
+        contains(github.event.comment.body, '/rebase') ||
+        contains(github.event.comment.body, '/autosquash')
+      )
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        with:
+          app_id: ${{ secrets.GH_OEFFIS_BOT_APP_ID }}
+          private_key: ${{ secrets.GH_OEFFIS_BOT_APP_PEM }}
+
+      - name: Checkout the latest code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+      - name: Automatic Rebase
+        uses: cirrus-actions/rebase@1.8
+        with:
+          autosquash: ${{ contains(github.event.comment.body, '/autosquash') || contains(github.event.comment.body, '/rebase-autosquash') }}
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
