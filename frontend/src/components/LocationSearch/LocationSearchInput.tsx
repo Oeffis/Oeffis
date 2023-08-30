@@ -4,8 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonInput,
-  IonItem,
-  IonLabel,
   IonList,
   IonModal,
   IonProgressBar,
@@ -15,9 +13,10 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Location } from "../../api";
+import { Location, LocationDetails } from "../../api";
 import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
-import { LocationIcon } from "./LocationIcon";
+import { useFavouriteLocations } from "../../services/favourites/FavouritesContext";
+import { LocationSearchList } from "./LocationSearchList";
 
 export type LocationSearchInputProps = {
   onSelectedLocationChanged: (location: Location) => void;
@@ -41,6 +40,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
   const foundLocations = useLocationSearchByName(debouncedSearchInput);
+  const { favouriteLocations } = useFavouriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;
   const showLoadingIndicator = foundLocations.type === "outdated" || inputStillInDebounce;
@@ -79,6 +79,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             placeholder={"Enter " + props.inputLabel}
             data-testid={"location-search-input"}
             autocomplete="street-address"
+            onIonClear={() => setSearchInput("")}
           />
           {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>
@@ -86,22 +87,21 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           <IonList>
             {
               <>
+                {foundLocations.type === "empty" &&
+                  <LocationSearchList
+                    locations={
+                      favouriteLocations
+                        .map(({ locationId: id, name, type }) => ({ id, name, type, details: {} as unknown as LocationDetails }))
+                    }
+                    onItemClicked={setSelectedLocationAndCloseModal}
+                  />
+                }
                 {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
                 {showResults &&
-                  foundLocations.searchResults.map((location) => (
-                    <IonItem
-                      key={location.id}
-                      button
-                      onClick={(): void => setSelectedLocationAndCloseModal(location)}
-                    >
-                      <LocationIcon type={location.type} />
-                      <IonLabel
-                        data-testid="locationName"
-                      >
-                        {location.name}
-                      </IonLabel>
-                    </IonItem>
-                  ))
+                  <LocationSearchList
+                    locations={foundLocations.searchResults}
+                    onItemClicked={setSelectedLocationAndCloseModal}
+                  />
                 }
               </>
             }

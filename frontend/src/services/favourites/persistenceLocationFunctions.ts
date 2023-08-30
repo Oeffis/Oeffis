@@ -16,28 +16,33 @@ function parseFavouriteLocation(favourite: any): PersistedObject<CreateFavourite
     return null;
   }
 
-  if (typeof favourite.nickname !== "string") {
+  if (typeof favourite.locationId !== "string") {
     return null;
   }
 
-  if (typeof favourite.locationId !== "string") {
+  if (typeof favourite.name !== "string") {
+    return null;
+  }
+
+  if (typeof favourite.type !== "string") {
     return null;
   }
 
   return {
     createdAt,
+    locationId: favourite.locationId,
     id: favourite.id,
-    nickname: favourite.nickname,
-    locationId: favourite.locationId
+    name: favourite.name,
+    type: favourite.type
   };
 }
 
-export function parsePersistedFavouriteLocations(persistedFavouriteLocations: string | null): PersistedObject<CreateFavouriteLocation>[] {
-  if (!persistedFavouriteLocations) {
+export function parsePersistedFavouriteLocations(persistedFavouriteTrips: string | null): PersistedObject<CreateFavouriteLocation>[] {
+  if (!persistedFavouriteTrips) {
     return [];
   }
 
-  const parsedFromPersistence = JSON.parse(persistedFavouriteLocations);
+  const parsedFromPersistence = JSON.parse(persistedFavouriteTrips);
   if (!Array.isArray(parsedFromPersistence)) {
     return [];
   }

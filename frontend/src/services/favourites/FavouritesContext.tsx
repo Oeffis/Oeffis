@@ -12,7 +12,8 @@ export type CreateFavouriteTrip = {
 
 export type CreateFavouriteLocation = {
   locationId: string;
-  nickname: string;
+  name: string;
+  type: string;
 };
 
 const favouriteTrips = generatePersistedObjectStorage<CreateFavouriteTrip, "favouriteTrip">(
