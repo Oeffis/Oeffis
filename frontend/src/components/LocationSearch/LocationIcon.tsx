@@ -24,11 +24,11 @@ export type LocationIconProps = {
   type: string;
 };
 
-export function LocationIcon({ type }: LocationIconProps): JSX.Element | string {
+export function LocationIcon({ type }: LocationIconProps): JSX.Element {
   const iconInfo = ICON_MAP[type];
 
   if (!iconInfo) {
-    return type;
+    return <>{type}</>;
   }
 
   return (
