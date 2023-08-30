@@ -9,6 +9,7 @@ export type FindStopAtCoordinatesParameters = {
 
 export type FindStopByNameParameters = {
   search: string;
+  disableProprietaryVrrParameters?: boolean;
 };
 
 export class StopFinderClient extends VrrClientBase {
@@ -33,11 +34,14 @@ export class StopFinderClient extends VrrClientBase {
   public async findStopByName(
     query: FindStopByNameParameters,
   ): Promise<LOCATIONSUGGESTSchema> {
+    const proprietaryVrrParameters = this.perpareDisableProprietaryVrrParametersOption(query);
+
     return this.executeFetchRequest(
       "/static03/XML_STOPFINDER_REQUEST",
       {
         name_sf: query.search,
-        type_sf: "any"
+        type_sf: "any",
+        ...proprietaryVrrParameters
       },
       Convert.toLOCATIONSUGGESTSchema,
     );
@@ -66,5 +70,27 @@ export class StopFinderClient extends VrrClientBase {
     // longitude first. Unlike the rest of the world, which uses latitude first.
 
     return `${longitude.toFixed(5)}:${latitude.toFixed(5)}:WGS84[dd.ddddd]`;
+  }
+
+  private perpareDisableProprietaryVrrParametersOption({ disableProprietaryVrrParameters }: FindStopByNameParameters): Record<string, string> {
+    if (disableProprietaryVrrParameters) {
+      return {};
+    }
+
+    return {
+      convertAddressesITKernel2LocationServer: "1",
+      convertCoord2LocationServer: "1",
+      convertCrossingsITKernel2LocationServer: "1",
+      convertPOIsITKernel2LocationServer: "1",
+      convertStopsPTKernel2LocationServer: "1",
+      coordOutputFormat: "WGS84[dd.ddddd]",
+      doNotSearchForStops_sf: "1",
+      language: "de",
+      locationInfoActive: "1",
+      locationServerActive: "1",
+      serverInfo: "1",
+      sl3plusStopFinderMacro: "trip",
+      vrrStopFinderMacro: "1"
+    };
   }
 }
