@@ -54,8 +54,6 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
 
     const addPersistedObject = useCallback(
       (createPersistedObject: TCreateObject): PersistedObject<TCreateObject> => {
-        console.log("addPersistedObject", createPersistedObject);
-
         const persistedObject = {
           ...createPersistedObject,
           createdAt: new Date(),
@@ -63,8 +61,6 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
         };
 
         const newPersistedObjects = [...persistedObjects, persistedObject];
-
-        console.log("newPersistedObjects", newPersistedObjects);
 
         setPersistedObjectsAndPersist(newPersistedObjects);
         return persistedObject;
