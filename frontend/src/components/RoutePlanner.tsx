@@ -12,7 +12,7 @@ import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
 import { useStateParams } from "../hooks/useStateParams";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
-import { LocationSearchInput } from "./LocationSearchInput";
+import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
   const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);

@@ -15,8 +15,9 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Location } from "../api";
-import { useLocationSearchByName } from "../hooks/useLocationSearchByName";
+import { Location } from "../../api";
+import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
+import { LocationIcon } from "./LocationIcon";
 
 export type LocationSearchInputProps = {
   onSelectedLocationChanged: (location: Location) => void;
@@ -77,6 +78,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             animated={true}
             placeholder={"Enter " + props.inputLabel}
             data-testid={"location-search-input"}
+            autocomplete="street-address"
           />
           {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>
@@ -92,6 +94,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
                       button
                       onClick={(): void => setSelectedLocationAndCloseModal(location)}
                     >
+                      <LocationIcon type={location.type} />
                       <IonLabel
                         data-testid="locationName"
                       >
