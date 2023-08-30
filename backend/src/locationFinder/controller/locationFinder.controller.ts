@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { BadRequest } from "app/entity/badrequest.entity";
+import { BadRequest } from "infrastructure/entity/badrequest.entity";
 import { LocationCoordinatesDto } from "locationFinder/dto/locationCoordinates.dto";
 import { LocationNameDto } from "locationFinder/dto/locationName.dto";
 import { Location } from "../entity/location.entity";
