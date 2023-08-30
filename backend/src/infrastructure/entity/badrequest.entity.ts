@@ -1,3 +1,4 @@
+
 import { ApiProperty } from "@nestjs/swagger";
 
 export class BadRequest {
@@ -5,10 +6,10 @@ export class BadRequest {
     description: "Http status code",
     example: 400
   })
-    statusCode = 400;
+  statusCode = 400;
   @ApiProperty({
     description: "Error message",
     example: "Bad request."
   })
-    message = "Bad Request.";
+  message = "Bad Request.";
 }
