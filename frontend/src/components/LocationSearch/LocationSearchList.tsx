@@ -9,14 +9,16 @@ export type LocationSearchListProps = {
   onItemClicked: (location: Location) => void;
 };
 
-export function LocationSearchList({ locations, onItemClicked }: LocationSearchListProps): JSX.Element[] {
-  return locations.map((location) => (
+export function LocationSearchList({ locations, onItemClicked }: LocationSearchListProps): JSX.Element {
+  const items = locations.map((location) => (
     <LocationSearchListItem
       key={location.id}
       location={location}
       onItemClicked={onItemClicked}
     />
   ));
+
+  return <>{items}</>;
 }
 
 type LocationSerarchListItemProps = {
