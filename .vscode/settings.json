@@ -9,7 +9,7 @@
   ],
   "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
   "git.pullBeforeCheckout": true,
-  "git.mergeEditor": true,
+  "git.mergeEditor": false,
   "files.insertFinalNewline": true,
   "editor.indentSize": "tabSize",
   "editor.tabSize": 2,
