@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { StopFinderClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
 import { LocationCoordinatesDto } from "locationFinder/dto/locationCoordinates.dto";
 import { LocationNameDto } from "locationFinder/dto/locationName.dto";
@@ -11,9 +11,11 @@ export class LocationFinderService {
   private readonly locationFinder: StopFinderClient;
   private readonly locationWrapper: VrrLocationWrapperService;
 
-  constructor() {
+  constructor(
+    @Inject(VrrLocationWrapperService) locationWrapper: VrrLocationWrapperService
+  ) {
     this.locationFinder = new StopFinderClient(VRR_TEST_API_BASE_URL);
-    this.locationWrapper = new VrrLocationWrapperService();
+    this.locationWrapper = locationWrapper;
   }
 
   async findLocationsByCoordinates(query: LocationCoordinatesDto): Promise<Location[]> {

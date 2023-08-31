@@ -1,4 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { Journey } from "journey/entity/journey.entity";
+import { VrrJourneysWrapperService } from "journey/service/vrrJourneysWrapper.service";
+import { LocationFinderModule } from "locationFinder/locationFinder.module";
+import { LocationType } from "vrr/entity/locationType.entity";
 import { VrrModule } from "vrr/vrr.module";
 import { JourneyService } from "../service/journey.service";
 import { JourneyController } from "./journey.controller";
@@ -8,9 +12,9 @@ let app: TestingModule;
 
 beforeEach(async () => {
   app = await Test.createTestingModule({
+    providers: [JourneyService, VrrJourneysWrapperService],
     controllers: [JourneyController],
-    providers: [JourneyService],
-    imports: [VrrModule]
+    imports: [VrrModule, LocationFinderModule]
   }).compile();
 
   controller = app.get<JourneyController>(JourneyController);
@@ -18,25 +22,25 @@ beforeEach(async () => {
 });
 
 it("should query trip", async () => {
-  const mockAlternatives = [
+  const mockAlternatives: Journey[] = [
     {
       "legs": [
         {
           "origin": {
             "id": "de:05513:5613:91:7",
             "name": "Gelsenkirchen Hbf",
-            "type": "platform",
+            "type": LocationType.platform,
             "details": {
               "shortName": "7",
               "parent": {
                 "id": "de:05513:5613",
                 "name": "Gelsenkirchen Hbf",
-                "type": "stop",
+                "type": LocationType.stop,
                 "details": {
                   "parent": {
                     "id": "placeID:5513000:9",
                     "name": "Gelsenkirchen",
-                    "type": "locality",
+                    "type": LocationType.locality,
                     "details": {}
                   },
                   "latitude": 5288900,
@@ -55,18 +59,18 @@ it("should query trip", async () => {
           "destination": {
             "id": "de:05916:7590:91:5",
             "name": "Wanne-Eickel Hbf",
-            "type": "platform",
+            "type": LocationType.platform,
             "details": {
               "shortName": "2",
               "parent": {
                 "id": "de:05916:7590",
                 "name": "Wanne-Eickel Hbf",
-                "type": "stop",
+                "type": LocationType.stop,
                 "details": {
                   "parent": {
                     "id": "placeID:5916000:5",
                     "name": "Herne",
-                    "type": "locality",
+                    "type": LocationType.locality,
                     "details": {}
                   },
                   "latitude": 5284190,

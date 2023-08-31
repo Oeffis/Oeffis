@@ -10,3 +10,4 @@ export type Journey = {
    */
   legs: Array<Leg>;
 };
+

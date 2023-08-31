@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import {
   Info,
-  Journey as VrrJourney,
   JourneyLocationElement,
+  TransportationTrip,
+  Journey as VrrJourney,
   Leg as VrrLeg,
-  Transportation as VrrTransportation,
-  TransportationTrip
+  Transportation as VrrTransportation
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { Journey } from "journey/entity/journey.entity";
 import { JourneyLocation } from "journey/entity/journeyLocation.entity";
@@ -16,14 +16,21 @@ import { Time } from "journey/entity/time.entity";
 import { Transportation } from "journey/entity/transportation.entity";
 import { Trip } from "journey/entity/trip.entity";
 import { VrrLocationWrapperService } from "locationFinder/service/vrrLocationWrapper.service";
+import { LegRealtimeTripStatus } from "vrr/entity/legRealtimeTripStatus.entity";
+import { ApiService } from "vrr/service/api.service";
 
 @Injectable()
 export class VrrJourneysWrapperService {
 
+  private readonly apiService: ApiService;
   private readonly locationWrapper: VrrLocationWrapperService;
 
-  constructor() {
-    this.locationWrapper = new VrrLocationWrapperService();
+  constructor(
+    @Inject(ApiService) apiService: ApiService,
+    @Inject(VrrLocationWrapperService) locationWrapper: VrrLocationWrapperService
+  ) {
+    this.apiService = apiService;
+    this.locationWrapper = locationWrapper;
   }
 
   wrap(vrrJourneys: VrrJourney[]): Journey[] {
@@ -72,7 +79,7 @@ export class VrrJourneysWrapperService {
     return {
       id: journeyLocationElement.id,
       name: journeyLocationElement.name,
-      type: journeyLocationElement.type,
+      type: this.apiService.mapLocationType(journeyLocationElement.type),
       details: this.locationWrapper.wrapLocationDetails(journeyLocationElement),
       arrival: arrival,
       departure: departure
@@ -96,11 +103,14 @@ export class VrrJourneysWrapperService {
   }
 
   private wrapLegs(vrrLeg: VrrLeg): Leg {
+    const realTimeTripStatus = vrrLeg?.realtimeStatus
+      ?.map((status) => this.apiService.mapRealTimeTripStatus(status))
+      .filter((status) => status !== undefined) as LegRealtimeTripStatus[];
 
     const details: LegDetails = {
       distance: vrrLeg.distance,
       duration: vrrLeg.duration,
-      realtimeStatus: vrrLeg.realtimeStatus,
+      realtimeTripStatus: realTimeTripStatus,
       infos: this.wrapLegInfos(vrrLeg.infos),
       hints: this.wrapLegInfos(vrrLeg.hints)
     };

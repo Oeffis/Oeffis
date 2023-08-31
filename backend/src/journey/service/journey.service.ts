@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { TripRequestClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
 
 import { JourneyRequestDto } from "journey/dto/journeyRequest.dto";
@@ -11,9 +11,11 @@ export class JourneyService {
   private readonly client: TripRequestClient;
   private readonly journeysWrapper: VrrJourneysWrapperService;
 
-  constructor() {
+  constructor(
+    @Inject(VrrJourneysWrapperService) journeysWrapper: VrrJourneysWrapperService
+  ) {
     this.client = new TripRequestClient(VRR_TEST_API_BASE_URL);
-    this.journeysWrapper = new VrrJourneysWrapperService();
+    this.journeysWrapper = journeysWrapper;
   }
 
   public async queryJourney(journeyRequest: JourneyRequestDto): Promise<Journey[]> {
