@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { LocationType } from "vrr/entity/locationType.entity";
 import { Location } from "../entity/location.entity";
 import { LocationFinderService } from "../service/locationFinder.service";
 import { LocationFinderController } from "./locationFinder.controller";
@@ -50,7 +51,7 @@ function location(id: string): Location {
   return {
     "id": id,
     "name": "Gelsenkirchen Hbf",
-    "type": "stop",
+    "type": LocationType.stop,
     "details": {
       "shortName": "Hbf",
       "parent": undefined,
