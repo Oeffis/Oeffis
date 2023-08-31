@@ -13,13 +13,13 @@ export class LocationFinderService {
 
   /**
    * finds locations at given coordinates
-   * @param requestBody 
+   * @param requestBody
    * @returns Location Returns the found locations.
    * @throws ApiError
    */
   public static locationFinderControllerFindLocationsAtCoordinates(
-requestBody: LocationCoordinatesDto,
-): CancelablePromise<Array<Location>> {
+    requestBody: LocationCoordinatesDto,
+  ): CancelablePromise<Array<Location>> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/location_finder/at_coordinates',
@@ -33,13 +33,13 @@ requestBody: LocationCoordinatesDto,
 
   /**
    * finds locations by name
-   * @param requestBody 
+   * @param requestBody
    * @returns Location Returns the found locations.
    * @throws ApiError
    */
   public static locationFinderControllerFindLocationsByName(
-requestBody: LocationNameDto,
-): CancelablePromise<Array<Location>> {
+    requestBody: LocationNameDto,
+  ): CancelablePromise<Array<Location>> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/location_finder/by_name',

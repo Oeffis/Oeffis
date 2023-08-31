@@ -31,3 +31,4 @@ export type JourneyLocation = {
    */
   departure: Time;
 };
+

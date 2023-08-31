@@ -22,3 +22,4 @@ export type Location = {
    */
   details: LocationDetails;
 };
+

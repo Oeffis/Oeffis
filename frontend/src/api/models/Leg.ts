@@ -24,3 +24,4 @@ export type Leg = {
    */
   details: LegDetails;
 };
+

@@ -24,5 +24,6 @@ export type LegDetails = {
   /**
    * Leg real time status.
    */
-  realtimeStatus: Array<string>;
+  realtimeTripStatus: Array<'DEVIATION' | 'EXTRA_STOPS' | 'EXTRA_TRIP' | 'MONITORED' | 'OUTSIDE_REALTIME_WINDOW' | 'PROGNOSIS_IMPOSSIBLE' | 'REALTIME_ONLY_INFORMATIVE' | 'TRIP_CANCELLED'>;
 };
+

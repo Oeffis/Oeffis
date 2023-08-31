@@ -12,3 +12,4 @@ export type LocationCoordinatesDto = {
    */
   longitude: number;
 };
+

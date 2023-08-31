@@ -14,3 +14,4 @@ export type Transportation = {
    */
   trips: Array<Trip>;
 };
+

@@ -12,13 +12,13 @@ export class JourneyService {
 
   /**
    * queries a journey
-   * @param requestBody 
+   * @param requestBody
    * @returns Journey Journeys.
    * @throws ApiError
    */
   public static journeyControllerQueryJourney(
-requestBody: JourneyRequestDto,
-): CancelablePromise<Array<Journey>> {
+    requestBody: JourneyRequestDto,
+  ): CancelablePromise<Array<Journey>> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/journey',

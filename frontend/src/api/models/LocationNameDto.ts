@@ -8,3 +8,4 @@ export type LocationNameDto = {
    */
   name: string;
 };
+
