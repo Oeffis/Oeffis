@@ -12,8 +12,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "generate-client": "openapi --input ./swagger-spec.json --output ../frontend/src/api --client axios --indent 2"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -39,7 +38,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "openapi-typescript-codegen": "^0.24.0",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
     "tsconfig-paths": "4.2.0",
