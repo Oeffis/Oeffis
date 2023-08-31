@@ -1,94 +1,95 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Backend",
-            "sourceMaps": true,
-            "cwd": "${workspaceRoot}/backend",
-            "console": "integratedTerminal",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "start:dev"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "E2E",
-            "sourceMaps": true,
-            "cwd": "${workspaceRoot}/backend",
-            "console": "integratedTerminal",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "start:dev"
-            ],
-            "env": {
-                "VRR_BASE_URL": "http://127.0.0.1:3100"
-            },
-            "preLaunchTask": "Prepare E2E"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Frontend",
-            "url": "http://localhost:8000",
-            "webRoot": "${workspaceRoot}/frontend/src",
-            "sourceMaps": true,
-            "preLaunchTask": "Frontend (watch)"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "runtimeExecutable": "npm",
-            "name": "Backend Tests",
-            "autoAttachChildProcesses": true,
-            "cwd": "${workspaceFolder}/backend",
-            "skipFiles": [
-                "<node_internals>/**",
-                "**/node_modules/**"
-            ],
-            "args": [
-                "run-script",
-                "test"
-            ],
-            "smartStep": true,
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "runtimeExecutable": "npm",
-            "name": "Frontend Tests",
-            "autoAttachChildProcesses": true,
-            "cwd": "${workspaceFolder}/frontend",
-            "skipFiles": [
-                "<node_internals>/**",
-                "**/node_modules/**"
-            ],
-            "args": [
-                "run-script",
-                "test"
-            ],
-            "smartStep": true,
-            "console": "integratedTerminal"
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Full Stack",
-            "configurations": [
-                "Backend",
-                "Frontend"
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "",
-                "order": 1
-            }
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Backend",
+      "sourceMaps": true,
+      "preLaunchTask": "Build vrr_client",
+      "cwd": "${workspaceRoot}/backend",
+      "console": "integratedTerminal",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "start:dev"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "E2E",
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}/backend",
+      "console": "integratedTerminal",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "start:dev"
+      ],
+      "env": {
+        "VRR_BASE_URL": "http://127.0.0.1:3100"
+      },
+      "preLaunchTask": "Prepare E2E"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Frontend",
+      "url": "http://localhost:8000",
+      "webRoot": "${workspaceRoot}/frontend/src",
+      "sourceMaps": true,
+      "preLaunchTask": "Frontend (watch)"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "name": "Backend Tests",
+      "autoAttachChildProcesses": true,
+      "cwd": "${workspaceFolder}/backend",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "args": [
+        "run-script",
+        "test"
+      ],
+      "smartStep": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "name": "Frontend Tests",
+      "autoAttachChildProcesses": true,
+      "cwd": "${workspaceFolder}/frontend",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "args": [
+        "run-script",
+        "test"
+      ],
+      "smartStep": true,
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack",
+      "configurations": [
+        "Backend",
+        "Frontend"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      }
+    }
+  ]
 }

@@ -4,13 +4,13 @@
 
 ## <p align="center"> [About](#about)&nbsp; • &nbsp;[Features](#features)&nbsp; • &nbsp;[Getting Started](#getting-started)&nbsp; • &nbsp;[Dependencies](#dependencies)&nbsp; • &nbsp;[Contact](#contact)&nbsp; • &nbsp;[Licence](#license)</p>
 
-</p>
-
 ---
 
 ## About
 
-Öffis is a hybrid app for Android iOS and web that provides help travelling with public transport. Therefore it offers more functions then a simple route planner. With this app travelling is as easy as by car. Enter the goal and get started.
+Öffis is a hybrid app for Android iOS and web that provides help travelling with public transport. Therefore, it offers
+more functions than a simple route planner. With this app travelling is as easy as by car. Enter the goal and get
+started.
 
 ## Features
 
@@ -22,8 +22,15 @@
 
          git clone https://github.com/Oeffis/Oeffis.git
 
-2.  Install NPM packages in Oeffis/frontend and Oeffis/backend:
+2. Install NPM packages (stick to the order because backend depends on vrr_client):
 
+        cd /vrr_client
+        npm install
+
+        cd /backend
+        npm install
+
+        cd /frontend
         npm install
 
 3.  Get Nest.js CLI:
