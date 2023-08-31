@@ -21,7 +21,6 @@ import "@ionic/react/css/text-transformation.css";
 import JourneyListComponent from "./components/JourneyListComponent";
 import { IJourney } from "./interfaces/IJourney.interface";
 import JourneysPage from "./pages/JourneysPage";
-import UserPage from "./pages/UserPage";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
 import { FavouriteStopsProvider, FavouriteTripsProvider } from "./services/favourites/FavouritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
@@ -105,9 +104,6 @@ const App: React.FC = () => (
                 </Route>
                 <Route exact path="/">
                   <Redirect to="/home" />
-                </Route>
-                <Route exact path="/userDemo">
-                  <UserPage />
                 </Route>
                 <Route exact path="/journeyDemo">
                   <JourneysPage />
