@@ -1,10 +1,10 @@
 import { IJourneyStep } from "./IJourneyStep.interface";
 
 export interface IJourney {
-    travelDuration: number;
-    startTime: string;
-    arrivalTime: string;
-    startStation: string;
-    arrivalStation: string;
-    stops: IJourneyStep[];
+  travelDurationInMinutes: number;
+  startTime: Date;
+  arrivalTime: Date;
+  startStation: string;
+  arrivalStation: string;
+  stops: IJourneyStep[];
 }
