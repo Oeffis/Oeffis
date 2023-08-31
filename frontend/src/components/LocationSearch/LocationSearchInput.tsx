@@ -85,8 +85,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         </IonHeader>
         <IonContent>
           <IonList>
-            {
-              searchInput === "" &&
+            {foundLocations.type === "empty" &&
               <LocationSearchList
                 locations={
                   favouriteLocations
