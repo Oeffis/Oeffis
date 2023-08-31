@@ -1,17 +1,20 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from "@nestjs/common";
 import {
   Info,
-  Journey as VrrJourney,
   JourneyLocationElement,
+  RealtimeTripStatus,
+  TransportationTrip,
+  Journey as VrrJourney,
   Leg as VrrLeg,
-  Transportation as VrrTransportation,
-  TransportationTrip
+  Transportation as VrrTransportation
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { Journey } from "journey/entity/journey.entity";
 import { JourneyLocation } from "journey/entity/journeyLocation.entity";
 import { Leg } from "journey/entity/leg.entity";
 import { LegDetails } from "journey/entity/legDetails.entity";
 import { LegInfo } from "journey/entity/legInfo.entity";
+import { LegRealtimeTripStatus } from "journey/entity/legRealtimeTripStatus.entity";
 import { Time } from "journey/entity/time.entity";
 import { Transportation } from "journey/entity/transportation.entity";
 import { Trip } from "journey/entity/trip.entity";
@@ -96,11 +99,21 @@ export class VrrJourneysWrapperService {
   }
 
   private wrapLegs(vrrLeg: VrrLeg): Leg {
+    const realtimeStatusMap: Record<RealtimeTripStatus, LegRealtimeTripStatus> = {
+      DEVIATION: LegRealtimeTripStatus.deviation,
+      TRIP_CANCELLED: LegRealtimeTripStatus.tripCancelled,
+      EXTRA_STOPS: LegRealtimeTripStatus.extraStops,
+      EXTRA_TRIP: LegRealtimeTripStatus.extraTrip,
+      MONITORED: LegRealtimeTripStatus.monitored,
+      OUTSIDE_REALTIME_WINDOW: LegRealtimeTripStatus.outsideRealtimeWindow,
+      PROGNOSIS_IMPOSSIBLE: LegRealtimeTripStatus.prognosisImpossible,
+      REALTIME_ONLY_INFORMATIVE: LegRealtimeTripStatus.realtimeOnlyInformative
+    };
 
     const details: LegDetails = {
       distance: vrrLeg.distance,
       duration: vrrLeg.duration,
-      realtimeStatus: vrrLeg.realtimeStatus,
+      realtimeTripStatus: vrrLeg?.realtimeStatus?.map((status) => realtimeStatusMap[status]),
       infos: this.wrapLegInfos(vrrLeg.infos),
       hints: this.wrapLegInfos(vrrLeg.hints)
     };
