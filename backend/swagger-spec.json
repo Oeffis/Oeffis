@@ -183,7 +183,23 @@
           },
           "type": {
             "type": "string",
-            "description": "Type of the location."
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ]
           },
           "details": {
             "description": "Further details of the location.",
@@ -333,7 +349,23 @@
           },
           "type": {
             "type": "string",
-            "description": "Type of the location."
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ]
           },
           "details": {
             "description": "Further details of the location.",
