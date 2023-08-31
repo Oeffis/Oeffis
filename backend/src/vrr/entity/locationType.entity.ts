@@ -1,0 +1,16 @@
+export enum LocationType {
+  address = "address",
+  crossing = "crossing",
+  gis = "gis",
+  locality = "locality",
+  parking = "parking",
+  platform = "platform",
+  poi = "poi",
+  poiHierarchy = "poiHierarchy",
+  sharing = "sharing",
+  stop = "stop",
+  street = "street",
+  suburb = "suburb",
+  unknown = "unknown",
+  singlehouse = "singlehouse",
+}

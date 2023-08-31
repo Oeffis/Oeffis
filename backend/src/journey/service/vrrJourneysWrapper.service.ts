@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import {
   Info,
   JourneyLocationElement,
@@ -19,14 +19,20 @@ import { Time } from "journey/entity/time.entity";
 import { Transportation } from "journey/entity/transportation.entity";
 import { Trip } from "journey/entity/trip.entity";
 import { VrrLocationWrapperService } from "locationFinder/service/vrrLocationWrapper.service";
+import { ApiService } from "vrr/service/api.service";
 
 @Injectable()
 export class VrrJourneysWrapperService {
 
+  private readonly apiService: ApiService;
   private readonly locationWrapper: VrrLocationWrapperService;
 
-  constructor() {
-    this.locationWrapper = new VrrLocationWrapperService();
+  constructor(
+    @Inject(ApiService) apiService: ApiService,
+    @Inject(VrrLocationWrapperService) locationWrapper: VrrLocationWrapperService
+  ) {
+    this.apiService = apiService;
+    this.locationWrapper = locationWrapper;
   }
 
   wrap(vrrJourneys: VrrJourney[]): Journey[] {
@@ -75,7 +81,7 @@ export class VrrJourneysWrapperService {
     return {
       id: journeyLocationElement.id,
       name: journeyLocationElement.name,
-      type: journeyLocationElement.type,
+      type: this.apiService.mapLocationType(journeyLocationElement.type),
       details: this.locationWrapper.wrapLocationDetails(journeyLocationElement),
       arrival: arrival,
       departure: departure

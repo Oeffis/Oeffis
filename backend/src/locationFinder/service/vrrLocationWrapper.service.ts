@@ -1,10 +1,19 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Location as VrrLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { ApiService } from "vrr/service/api.service";
 import { Location } from "../entity/location.entity";
 import { LocationDetails } from "../entity/locationDetails.entity";
 
 @Injectable()
 export class VrrLocationWrapperService {
+
+  private readonly apiService: ApiService;
+
+  constructor(
+    @Inject(ApiService) apiService: ApiService
+  ) {
+    this.apiService = apiService;
+  }
 
   wrap(vrrLocations: VrrLocation[]): Location[] {
     return vrrLocations
@@ -22,7 +31,7 @@ export class VrrLocationWrapperService {
     return {
       id: vrrLocation.id,
       name: vrrLocation.name,
-      type: vrrLocation.type,
+      type: this.apiService.mapLocationType(vrrLocation.type),
       details: this.wrapLocationDetails(vrrLocation)
     };
   }
