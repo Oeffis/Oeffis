@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { LegRealtimeTripStatus } from "../../vrr/entity/legRealtimeTripStatus.entity";
 import { LegInfo } from "./legInfo.entity";
-import { LegRealtimeTripStatus } from "./legRealtimeTripStatus.entity";
 
 export class LegDetails {
 

@@ -10,7 +10,7 @@ export class VrrLocationWrapperService {
   private readonly apiService: ApiService;
 
   constructor(
-    @Inject(ApiService) apiService: ApiService
+    @Inject() apiService: ApiService
   ) {
     this.apiService = apiService;
   }

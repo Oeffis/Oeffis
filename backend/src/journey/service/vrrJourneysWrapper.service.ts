@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Inject, Injectable } from "@nestjs/common";
 import {
   Info,
   JourneyLocationElement,
-  RealtimeTripStatus,
   TransportationTrip,
   Journey as VrrJourney,
   Leg as VrrLeg,
@@ -14,11 +12,11 @@ import { JourneyLocation } from "journey/entity/journeyLocation.entity";
 import { Leg } from "journey/entity/leg.entity";
 import { LegDetails } from "journey/entity/legDetails.entity";
 import { LegInfo } from "journey/entity/legInfo.entity";
-import { LegRealtimeTripStatus } from "journey/entity/legRealtimeTripStatus.entity";
 import { Time } from "journey/entity/time.entity";
 import { Transportation } from "journey/entity/transportation.entity";
 import { Trip } from "journey/entity/trip.entity";
 import { VrrLocationWrapperService } from "locationFinder/service/vrrLocationWrapper.service";
+import { LegRealtimeTripStatus } from "vrr/entity/legRealtimeTripStatus.entity";
 import { ApiService } from "vrr/service/api.service";
 
 @Injectable()
@@ -105,21 +103,14 @@ export class VrrJourneysWrapperService {
   }
 
   private wrapLegs(vrrLeg: VrrLeg): Leg {
-    const realtimeStatusMap: Record<RealtimeTripStatus, LegRealtimeTripStatus> = {
-      DEVIATION: LegRealtimeTripStatus.deviation,
-      TRIP_CANCELLED: LegRealtimeTripStatus.tripCancelled,
-      EXTRA_STOPS: LegRealtimeTripStatus.extraStops,
-      EXTRA_TRIP: LegRealtimeTripStatus.extraTrip,
-      MONITORED: LegRealtimeTripStatus.monitored,
-      OUTSIDE_REALTIME_WINDOW: LegRealtimeTripStatus.outsideRealtimeWindow,
-      PROGNOSIS_IMPOSSIBLE: LegRealtimeTripStatus.prognosisImpossible,
-      REALTIME_ONLY_INFORMATIVE: LegRealtimeTripStatus.realtimeOnlyInformative
-    };
+    const realTimeTripStatus = vrrLeg?.realtimeStatus
+      ?.map((status) => this.apiService.mapRealTimeTripStatus(status))
+      .filter((status) => status !== undefined) as LegRealtimeTripStatus[];
 
     const details: LegDetails = {
       distance: vrrLeg.distance,
       duration: vrrLeg.duration,
-      realtimeTripStatus: vrrLeg?.realtimeStatus?.map((status) => realtimeStatusMap[status]),
+      realtimeTripStatus: realTimeTripStatus,
       infos: this.wrapLegInfos(vrrLeg.infos),
       hints: this.wrapLegInfos(vrrLeg.hints)
     };

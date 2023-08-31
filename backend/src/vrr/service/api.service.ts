@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from "@nestjs/common";
 import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
 import { VrrClientBase } from "@oeffis/vrr_client/dist/VrrClientBase";
-import { LocationType as VrrLocationType } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { RealtimeTripStatus, LocationType as VrrLocationType } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { LegRealtimeTripStatus } from "vrr/entity/legRealtimeTripStatus.entity";
 import { LocationType } from "vrr/entity/locationType.entity";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,5 +38,22 @@ export class ApiService {
     const locationType = vrrLocationType ? locationTypeMap[vrrLocationType] ?? LocationType.unknown : LocationType.unknown;
 
     return locationType;
+  }
+
+  public mapRealTimeTripStatus(vrrRealTimeTripStatus: RealtimeTripStatus | undefined): LegRealtimeTripStatus | undefined {
+    const realtimeStatusMap: Record<RealtimeTripStatus, LegRealtimeTripStatus> = {
+      DEVIATION: LegRealtimeTripStatus.deviation,
+      TRIP_CANCELLED: LegRealtimeTripStatus.tripCancelled,
+      EXTRA_STOPS: LegRealtimeTripStatus.extraStops,
+      EXTRA_TRIP: LegRealtimeTripStatus.extraTrip,
+      MONITORED: LegRealtimeTripStatus.monitored,
+      OUTSIDE_REALTIME_WINDOW: LegRealtimeTripStatus.outsideRealtimeWindow,
+      PROGNOSIS_IMPOSSIBLE: LegRealtimeTripStatus.prognosisImpossible,
+      REALTIME_ONLY_INFORMATIVE: LegRealtimeTripStatus.realtimeOnlyInformative
+    };
+
+    const realtimeStatus = (vrrRealTimeTripStatus && realtimeStatusMap[vrrRealTimeTripStatus]) ?? undefined;
+
+    return realtimeStatus;
   }
 }
