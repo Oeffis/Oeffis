@@ -85,25 +85,22 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         </IonHeader>
         <IonContent>
           <IonList>
-            {
-              <>
-                {foundLocations.type === "empty" &&
-                  <LocationSearchList
-                    locations={
-                      favouriteLocations
-                        .map(({ locationId: id, name, type }) => ({ id, name, type, details: {} as unknown as LocationDetails }))
-                    }
-                    onItemClicked={setSelectedLocationAndCloseModal}
-                  />
+            {foundLocations.type === "empty" &&
+              <LocationSearchList
+                locations={
+                  favouriteLocations
+                    .map(({ locationId: id, name, type }) => ({ id, name, type, details: {} as unknown as LocationDetails }))
                 }
-                {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
-                {showResults &&
-                  <LocationSearchList
-                    locations={foundLocations.searchResults}
-                    onItemClicked={setSelectedLocationAndCloseModal}
-                  />
-                }
-              </>
+
+                onItemClicked={setSelectedLocationAndCloseModal}
+              />
+            }
+            {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
+            {showResults &&
+              <LocationSearchList
+                locations={foundLocations.searchResults}
+                onItemClicked={setSelectedLocationAndCloseModal}
+              />
             }
           </IonList>
         </IonContent>
