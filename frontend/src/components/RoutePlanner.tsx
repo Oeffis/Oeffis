@@ -11,7 +11,10 @@ import React, { useEffect, useState } from "react";
 import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
 import { useStateParams } from "../hooks/useStateParams";
+import { IJourney } from "../interfaces/IJourney.interface";
+import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
+import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
@@ -71,16 +74,36 @@ const RoutePlanner: React.FC = () => {
 export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
   const { origin, destination } = props;
 
-  const journeys = useJourneyQuery(origin, destination);
+  const result = useJourneyQuery(origin, destination);
+
+  const iJourneys: false | IJourney[] = result.type === "success" && result.journeyResults.map((journey): IJourney => {
+    const lastLeg = journey.legs[journey.legs.length - 1];
+    const firstLeg = journey.legs[0];
+
+    return {
+      startStation: firstLeg.origin.name,
+      startTime: firstLeg.origin.departure.estimated,
+      arrivalStation: lastLeg.destination.name,
+      arrivalTime: lastLeg.destination.arrival.estimated,
+      stops: journey.legs.map((leg): IJourneyStep => ({
+        arrivalTime: leg.destination.arrival.estimated,
+        startTime: leg.origin.departure.estimated,
+        stationName: leg.origin.name,
+        stopName: leg.destination.name,
+        track: "",
+        travelDurationInMinutes: leg.details.duration / 60
+      })),
+      travelDurationInMinutes: journey.legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
+    };
+  });
 
   return (
     <>
-      {journeys.type === "error" && <div>Error: {journeys.error.message}</div>}
-      {journeys.type === "pending" && <div>Searching...</div>}
-      {journeys.type === "success" &&
-        journeys.journeyResults.map((journey, idx) => (
-          <RenderTrip key={idx} journey={journey} />
-        ))}
+      {result.type === "error" && <div>Error: {result.error.message}</div>}
+      {result.type === "pending" && <div>Searching...</div>}
+      {iJourneys &&
+        <JourneyListComponent journeys={iJourneys} />
+      }
     </>
   );
 }
