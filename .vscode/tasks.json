@@ -67,6 +67,7 @@
     {
       "label": "Prepare E2E",
       "dependsOn": [
+        "Build vrr_client",
         "Start Mocks Server",
         "Open Cypress",
         "Frontend (watch)"
