@@ -1,3 +1,4 @@
+import { LocationTypeEnum } from "../../api";
 import { PersistedObject } from "../persistence/generatePersistedObjectStorage";
 import { CreateFavouriteLocation } from "./FavouritesContext";
 
@@ -28,12 +29,17 @@ function parseFavouriteLocation(favourite: any): PersistedObject<CreateFavourite
     return null;
   }
 
+  const locationType = Object.entries(LocationTypeEnum).some(([, value]) => value === favourite.type) ? favourite.type : undefined;
+  if (typeof locationType === "undefined") {
+    return null;
+  }
+
   return {
     createdAt,
     locationId: favourite.locationId,
     id: favourite.id,
     name: favourite.name,
-    type: favourite.type
+    type: locationType
   };
 }
 
