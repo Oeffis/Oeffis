@@ -18,7 +18,7 @@ export default async (): Promise<UserConfigExport> => {
         test: {
             globals: true,
             environment: "node",
-            root: process.cwd() + "/src",
+            root: "src",
             cache: {
                 dir: "../node_modules/.vitest"
             }
