@@ -43,8 +43,8 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const { favouriteLocations } = useFavouriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;
-  const showLoadingIndicator = foundLocations.type === "outdated" || inputStillInDebounce;
-  const showResults = foundLocations.type === "success" || foundLocations.type === "outdated";
+  const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);
+  const showResults = searchInput !== "" && (foundLocations.type === "success" || foundLocations.type === "outdated");
 
   return (
     <>
@@ -85,7 +85,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         </IonHeader>
         <IonContent>
           <IonList>
-            {foundLocations.type === "empty" &&
+            {searchInput === "" &&
               <LocationSearchList
                 locations={
                   favouriteLocations
