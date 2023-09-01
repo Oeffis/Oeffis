@@ -1,7 +1,9 @@
 [
   {
     "id": "base",
-    "routes": []
+    "routes": [
+      "pass-through:VRR-API"
+    ]
   },
   {
     "id": "Query for 'Gelsenkirchen Hbf'",

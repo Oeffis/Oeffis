@@ -1,8 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { TripRequestClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
+import { TripRequestClient } from "@oeffis/vrr_client";
 
 import { JourneyRequestDto } from "journey/dto/journeyRequest.dto";
 import { Journey } from "journey/entity/journey.entity";
+import { ApiService } from "vrr/service/api.service";
 import { VrrJourneysWrapperService } from "./vrrJourneysWrapper.service";
 
 @Injectable()
@@ -12,9 +13,10 @@ export class JourneyService {
   private readonly journeysWrapper: VrrJourneysWrapperService;
 
   constructor(
-    @Inject(VrrJourneysWrapperService) journeysWrapper: VrrJourneysWrapperService
+    @Inject(VrrJourneysWrapperService) journeysWrapper: VrrJourneysWrapperService,
+    @Inject(ApiService) apiService: ApiService
   ) {
-    this.client = new TripRequestClient(VRR_TEST_API_BASE_URL);
+    this.client = apiService.getInstanceOf(TripRequestClient);
     this.journeysWrapper = journeysWrapper;
   }
 

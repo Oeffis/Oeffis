@@ -6,20 +6,7 @@
       "request": "launch",
       "name": "Backend",
       "sourceMaps": true,
-      "preLaunchTask": "Build vrr_client",
-      "cwd": "${workspaceRoot}/backend",
-      "console": "integratedTerminal",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run-script",
-        "start:dev"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "E2E",
-      "sourceMaps": true,
+      "preLaunchTask": "Prepare Backend",
       "cwd": "${workspaceRoot}/backend",
       "console": "integratedTerminal",
       "runtimeExecutable": "npm",
@@ -29,8 +16,7 @@
       ],
       "env": {
         "VRR_BASE_URL": "http://127.0.0.1:3100"
-      },
-      "preLaunchTask": "Prepare E2E"
+      }
     },
     {
       "type": "chrome",
