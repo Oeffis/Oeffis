@@ -13,3 +13,7 @@ before(() => {
     }
   });
 });
+
+after(() => {
+  cy.mocksSetCollection("default");
+});

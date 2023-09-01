@@ -65,16 +65,14 @@
       }
     },
     {
-      "label": "Prepare E2E",
+      "label": "Prepare Backend",
       "dependsOn": [
         "Build vrr_client",
-        "Start Mocks Server",
-        "Open Cypress",
-        "Frontend (watch)"
+        "Mocks Server",
       ]
     },
     {
-      "label": "Start Mocks Server",
+      "label": "Mocks Server",
       "type": "npm",
       "script": "mocks-server",
       "path": "e2e",
