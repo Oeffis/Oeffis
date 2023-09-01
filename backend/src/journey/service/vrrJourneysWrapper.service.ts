@@ -7,17 +7,17 @@ import {
   Leg as VrrLeg,
   Transportation as VrrTransportation
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { Journey } from "../../journey/entity/journey.entity";
-import { JourneyLocation } from "../../journey/entity/journeyLocation.entity";
-import { Leg } from "../../journey/entity/leg.entity";
-import { LegDetails } from "../../journey/entity/legDetails.entity";
-import { LegInfo } from "../../journey/entity/legInfo.entity";
-import { Time } from "../../journey/entity/time.entity";
-import { Transportation } from "../../journey/entity/transportation.entity";
-import { Trip } from "../../journey/entity/trip.entity";
-import { VrrLocationWrapperService } from "../../locationFinder/service/vrrLocationWrapper.service";
-import { LegRealtimeTripStatus } from "../../vrr/entity/legRealtimeTripStatus.entity";
-import { ApiService } from "../../vrr/service/api.service";
+import { Journey } from "journey/entity/journey.entity";
+import { JourneyLocation } from "journey/entity/journeyLocation.entity";
+import { Leg } from "journey/entity/leg.entity";
+import { LegDetails } from "journey/entity/legDetails.entity";
+import { LegInfo } from "journey/entity/legInfo.entity";
+import { Time } from "journey/entity/time.entity";
+import { Transportation } from "journey/entity/transportation.entity";
+import { Trip } from "journey/entity/trip.entity";
+import { VrrLocationWrapperService } from "locationFinder/service/vrrLocationWrapper.service";
+import { LegRealtimeTripStatus } from "vrr/entity/legRealtimeTripStatus.entity";
+import { ApiService } from "vrr/service/api.service";
 
 @Injectable()
 export class VrrJourneysWrapperService {

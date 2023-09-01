@@ -1,11 +1,11 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { JourneyController } from "../../journey/controller/journey.controller";
-import { Journey } from "../../journey/entity/journey.entity";
-import { JourneyService } from "../../journey/service/journey.service";
-import { VrrJourneysWrapperService } from "../../journey/service/vrrJourneysWrapper.service";
-import { LocationFinderModule } from "../../locationFinder/locationFinder.module";
-import { LocationType } from "../../vrr/entity/locationType.entity";
-import { VrrModule } from "../../vrr/vrr.module";
+import { Journey } from "journey/entity/journey.entity";
+import { VrrJourneysWrapperService } from "journey/service/vrrJourneysWrapper.service";
+import { LocationFinderModule } from "locationFinder/locationFinder.module";
+import { LocationType } from "vrr/entity/locationType.entity";
+import { VrrModule } from "vrr/vrr.module";
+import { JourneyService } from "../service/journey.service";
+import { JourneyController } from "./journey.controller";
 
 let controller: JourneyController;
 let app: TestingModule;

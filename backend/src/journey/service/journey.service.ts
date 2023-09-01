@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { TripRequestClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
 
-import { JourneyRequestDto } from "../../journey/dto/journeyRequest.dto";
-import { Journey } from "../../journey/entity/journey.entity";
+import { JourneyRequestDto } from "journey/dto/journeyRequest.dto";
+import { Journey } from "journey/entity/journey.entity";
 import { VrrJourneysWrapperService } from "./vrrJourneysWrapper.service";
 
 @Injectable()

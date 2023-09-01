@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { StopFinderClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
-import { LocationCoordinatesDto } from "../../locationFinder/dto/locationCoordinates.dto";
-import { LocationNameDto } from "../../locationFinder/dto/locationName.dto";
-import { Location } from "../../locationFinder/entity/location.entity";
+import { LocationCoordinatesDto } from "locationFinder/dto/locationCoordinates.dto";
+import { LocationNameDto } from "locationFinder/dto/locationName.dto";
+import { Location } from "../entity/location.entity";
 import { VrrLocationWrapperService } from "./vrrLocationWrapper.service";
 
 @Injectable()

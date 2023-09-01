@@ -1,4 +1,5 @@
 import swc from "unplugin-swc";
+import tsconfigPaths from "vite-tsconfig-paths";
 import { vi as viImport } from "vitest";
 import { UserConfigExport } from "vitest/dist/config";
 
@@ -11,12 +12,13 @@ export default async (): Promise<UserConfigExport> => {
     return defineConfig({
         plugins: [
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            swc.vite() as any
+            swc.vite() as any,
+            tsconfigPaths()
         ],
         test: {
             globals: true,
             environment: "node",
-            root: "src",
+            root: process.cwd() + "/src",
             cache: {
                 dir: "../node_modules/.vitest"
             }
