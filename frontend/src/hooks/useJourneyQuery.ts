@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Journey, JourneyService, Location } from "../api";
+import { Journey, Location } from "../api";
+import { useJourneyApi } from "../services/apiClients/ApiClientsContext";
 
 export type UseJourneyQueryResult = UseJourneyQuerySuccess | UseJourneyQueryError | UseJourneyQueryPending;
 export type UseJourneyQueryError = {
@@ -18,17 +19,21 @@ export type UseJourneyQueryPending = {
 };
 
 export const useJourneyQuery = (origin: Location, destination: Location): UseJourneyQueryResult => {
+  const journeyApi = useJourneyApi();
+
   const [journeyResultsOrError, setJourneyResultsOrError] = useState<UseJourneyQueryResult>(({ type: "pending", journeyResults: null }));
 
   useEffect(
     () => {
-      const pendingRequest = JourneyService.journeyControllerQueryJourney({
+      const abortController = new AbortController();
+
+      journeyApi.journeyControllerQueryJourney({
         originId: origin.id,
         destinationId: destination.id,
-        departure: new Date().toISOString(),
+        departure: new Date(),
         asArrival: false
-      });
-      pendingRequest
+      }, { signal: abortController.signal })
+
         .then((journeyResults) => {
           setJourneyResultsOrError({ type: "success", journeyResults });
         })
@@ -37,9 +42,7 @@ export const useJourneyQuery = (origin: Location, destination: Location): UseJou
         });
 
       return () => {
-        if (pendingRequest) {
-          pendingRequest.cancel();
-        }
+        abortController.abort();
       };
     },
     [

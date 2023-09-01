@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Location, LocationFinderService } from "../api";
+import { Location } from "../api";
+import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 export type UseLocationSearchByNameResult = UseLocationSearchByNameSuccess | UseLocationSearchByNameError | UseLocationSearchByNamePending;
 export type UseLocationSearchByNameError = {
@@ -18,6 +19,7 @@ export type UseLocationSearchByNamePending = {
 };
 
 export const useLocationSearchByName = (searchInput: string): UseLocationSearchByNameResult => {
+  const locationFinderApi = useLocationFinderApi();
   const [searchResultsOrError, setSearchResultsOrError] = useState<UseLocationSearchByNameResult>(({ type: "pending", searchResults: null }));
 
   useEffect(
@@ -27,7 +29,8 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
         return;
       }
 
-      const pendingRequest = LocationFinderService.locationFinderControllerFindLocationsByName({ name: searchInput });
+      const abortController = new AbortController();
+      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationsByName({ name: searchInput }, { signal: abortController.signal });
       pendingRequest
         .then((searchResults) => {
           setSearchResultsOrError({ type: "success", searchResults });
@@ -37,9 +40,7 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
         });
 
       return () => {
-        if (pendingRequest) {
-          pendingRequest.cancel();
-        }
+        abortController.abort();
       };
     },
     [

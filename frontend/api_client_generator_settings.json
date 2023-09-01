@@ -1,0 +1,7 @@
+{
+  "npmName": "oeffis_backend_api_client",
+  "npmVersion": "1.0.0",
+  "snapshot" : false,
+  "supportsES6": true,
+  "useSingleRequestParameter": false
+}

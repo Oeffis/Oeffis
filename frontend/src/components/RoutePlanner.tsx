@@ -8,9 +8,10 @@ import {
   IonModal
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { Journey, Location, LocationFinderService } from "../api";
+import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
 import { useStateParams } from "../hooks/useStateParams";
+import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import { LocationSearchInput } from "./LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
@@ -108,12 +109,14 @@ export default RoutePlanner;
 
 
 export function useInitialLocationFromLocationIdAndThenAsState(locationId: string | null): [Location | null, (location: Location | null) => void] {
+  const locationFinderApi = useLocationFinderApi();
   const [location, setLocation] = useState<Location | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    const abortController = new AbortController();
     if (locationId !== null && location === null && locationId !== "") {
-      LocationFinderService.locationFinderControllerFindLocationsByName({ name: locationId })
+      locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId }, { signal: abortController.signal })
         .then((locations) => {
           if (locations.length > 0 && !cancelled) {
             setLocation(locations[0]);
@@ -125,6 +128,7 @@ export function useInitialLocationFromLocationIdAndThenAsState(locationId: strin
     }
 
     return (): void => {
+      abortController.abort();
       cancelled = true;
     };
   }, [locationId]);

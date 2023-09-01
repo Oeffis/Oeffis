@@ -12,12 +12,15 @@ import {
   IonList
 } from "@ionic/react";
 import React, { useState } from "react";
-import { Journey, JourneyRequestDto, JourneyService, Location, LocationFinderService } from "../api";
+import { Journey, JourneyRequestDto, Location } from "../api";
+import { useJourneyApi, useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 /**
  * Container of elements related to journeys.
  */
 const JourneysPage: React.FC = () => {
+  const locationFinderService = useLocationFinderApi();
+  const journeyService = useJourneyApi();
 
   const [locations, setLocations] = useState<Location[]>([]);
   const [journeys, setJourneys] = useState<Journey[]>([]);
@@ -33,7 +36,7 @@ const JourneysPage: React.FC = () => {
    * Searches for locations with given query.
    */
   const searchLocations = async (): Promise<void> => {
-    setLocations(await LocationFinderService.locationFinderControllerFindLocationsByName({ name: searchLocationsQuery }));
+    setLocations(await locationFinderService.locationFinderControllerFindLocationsByName({ name: searchLocationsQuery }));
     console.log(locations);
   };
 
@@ -59,12 +62,12 @@ const JourneysPage: React.FC = () => {
     const journeyParameters: JourneyRequestDto = {
       originId: planJourneyStart,
       destinationId: planJourneyDestination,
-      departure: new Date(Date.now()).toISOString(),
+      departure: new Date(Date.now()),
       asArrival: false
     };
 
     const journeyVariants =
-      await JourneyService.journeyControllerQueryJourney(journeyParameters);
+      await journeyService.journeyControllerQueryJourney(journeyParameters);
     setJourneys(journeyVariants);
     console.log(journeyVariants);
   };

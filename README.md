@@ -48,6 +48,21 @@ started.
 Needed dependencies will be listed here:
 
 -   install Node.js Version 18
+-   Docker
+
+
+## Updating the generated Client
+
+To update the frontends client for the backends api use the
+`./update_fronte_api_client.sh` script. This script will require
+you to have docker installed. It will use the `backend/swagger-spec.json`
+as input.
+
+```bash
+./update_fronte_api_client.sh
+```
+
+After that the client will be updated and you can commit the changes.
 
 ## Contact
 
