@@ -1,10 +1,10 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { BadRequest } from "infrastructure/entity/badrequest.entity";
-import { LocationCoordinatesDto } from "locationFinder/dto/locationCoordinates.dto";
-import { LocationNameDto } from "locationFinder/dto/locationName.dto";
-import { Location } from "../entity/location.entity";
-import { LocationFinderService } from "../service/locationFinder.service";
+import { BadRequest } from "../../infrastructure/entity/badrequest.entity";
+import { LocationCoordinatesDto } from "../../locationFinder/dto/locationCoordinates.dto";
+import { LocationNameDto } from "../../locationFinder/dto/locationName.dto";
+import { Location } from "../../locationFinder/entity/location.entity";
+import { LocationFinderService } from "../../locationFinder/service/locationFinder.service";
 
 @Controller("location_finder")
 @ApiTags("location_finder")

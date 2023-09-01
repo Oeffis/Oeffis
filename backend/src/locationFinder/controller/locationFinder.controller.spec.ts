@@ -1,8 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { LocationType } from "vrr/entity/locationType.entity";
-import { Location } from "../entity/location.entity";
-import { LocationFinderService } from "../service/locationFinder.service";
-import { LocationFinderController } from "./locationFinder.controller";
+import { LocationFinderController } from "../../locationFinder/controller/locationFinder.controller";
+import { Location } from "../../locationFinder/entity/location.entity";
+import { LocationFinderService } from "../../locationFinder/service/locationFinder.service";
+import { LocationType } from "../../vrr/entity/locationType.entity";
+import { VrrModule } from "../../vrr/vrr.module";
+import { VrrLocationWrapperService } from "../service/vrrLocationWrapper.service";
 
 let locationFinderController: LocationFinderController;
 let app: TestingModule;
@@ -10,7 +12,9 @@ let app: TestingModule;
 beforeEach(async () => {
   app = await Test.createTestingModule({
     controllers: [LocationFinderController],
-    providers: [LocationFinderService]
+    providers: [LocationFinderService, VrrLocationWrapperService],
+    imports: [VrrModule],
+    exports: [VrrLocationWrapperService]
   }).compile();
 
   locationFinderController = app.get<LocationFinderController>(LocationFinderController);

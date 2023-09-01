@@ -3,8 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
 import { VrrClientBase } from "@oeffis/vrr_client/dist/VrrClientBase";
 import { RealtimeTripStatus, LocationType as VrrLocationType } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { LegRealtimeTripStatus } from "vrr/entity/legRealtimeTripStatus.entity";
-import { LocationType } from "vrr/entity/locationType.entity";
+import { LegRealtimeTripStatus } from "../../vrr/entity/legRealtimeTripStatus.entity";
+import { LocationType } from "../../vrr/entity/locationType.entity";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UrlConstructorType<T extends VrrClientBase> = new (baseUrl: string, ...args: unknown[]) => T;

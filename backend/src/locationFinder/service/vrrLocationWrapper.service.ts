@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Location as VrrLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { ApiService } from "vrr/service/api.service";
-import { Location } from "../entity/location.entity";
-import { LocationDetails } from "../entity/locationDetails.entity";
+import { Location } from "../../locationFinder/entity/location.entity";
+import { LocationDetails } from "../../locationFinder/entity/locationDetails.entity";
+import { ApiService } from "../../vrr/service/api.service";
 
 @Injectable()
 export class VrrLocationWrapperService {

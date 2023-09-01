@@ -19,12 +19,6 @@ export default async (): Promise<UserConfigExport> => {
             root: "src",
             cache: {
                 dir: "../node_modules/.vitest"
-            },
-            deps: {
-                moduleDirectories: [
-                    "src",
-                    "node_modules"
-                ]
             }
         }
     });

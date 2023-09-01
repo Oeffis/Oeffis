@@ -11,6 +11,7 @@
   "git.pullBeforeCheckout": true,
   "git.mergeEditor": true,
   "files.insertFinalNewline": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
   "editor.indentSize": "tabSize",
   "editor.tabSize": 2,
   "[typescript][typescriptreact][javascript]": {

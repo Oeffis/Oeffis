@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { BadRequest } from "infrastructure/entity/badrequest.entity";
-import { JourneyRequestDto } from "journey/dto/journeyRequest.dto";
-import { Journey } from "journey/entity/journey.entity";
-import { JourneyService } from "../service/journey.service";
+import { BadRequest } from "../../infrastructure/entity/badrequest.entity";
+import { JourneyRequestDto } from "../../journey/dto/journeyRequest.dto";
+import { Journey } from "../../journey/entity/journey.entity";
+import { JourneyService } from "../../journey/service/journey.service";
 
 @Controller("journey")
 @ApiTags("journey")
