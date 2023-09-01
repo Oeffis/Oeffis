@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { StopFinderClient, VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
+import { StopFinderClient } from "@oeffis/vrr_client";
 import { LocationCoordinatesDto } from "locationFinder/dto/locationCoordinates.dto";
 import { LocationNameDto } from "locationFinder/dto/locationName.dto";
+import { ApiService } from "vrr/service/api.service";
 import { Location } from "../entity/location.entity";
 import { VrrLocationWrapperService } from "./vrrLocationWrapper.service";
 
@@ -12,9 +13,10 @@ export class LocationFinderService {
   private readonly locationWrapper: VrrLocationWrapperService;
 
   constructor(
-    @Inject(VrrLocationWrapperService) locationWrapper: VrrLocationWrapperService
+    @Inject(VrrLocationWrapperService) locationWrapper: VrrLocationWrapperService,
+    @Inject(ApiService) apiService: ApiService
   ) {
-    this.locationFinder = new StopFinderClient(VRR_TEST_API_BASE_URL);
+    this.locationFinder = apiService.getInstanceOf(StopFinderClient);
     this.locationWrapper = locationWrapper;
   }
 
