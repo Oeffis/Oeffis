@@ -13,7 +13,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Location } from "../api";
 import { useLocationSearchByName } from "../hooks/useLocationSearchByName";
@@ -26,14 +26,8 @@ export type LocationSearchInputProps = {
 };
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-
-  const updateQuery = (query: string): void => {
-    setSearchInput(query);
-    setLoading(true);
-  };
 
   const setSelectedLocationAndCloseModal = (location: Location): void => {
     props.onSelectedLocationChanged(location);
@@ -47,11 +41,9 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
   const foundLocations = useLocationSearchByName(debouncedSearchInput);
 
-  useEffect(() => {
-    if (foundLocations.type !== "pending") {
-      setLoading(false);
-    }
-  }, [foundLocations]);
+  const inputStillInDebounce = debouncedSearchInput !== searchInput;
+  const showLoadingIndicator = foundLocations.type === "outdated" || inputStillInDebounce;
+  const showResults = foundLocations.type === "success" || foundLocations.type === "outdated";
 
   return (
     <>
@@ -80,20 +72,20 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           </IonToolbar>
           <IonSearchbar
             value={searchInput}
-            onInput={(e) => updateQuery(e.currentTarget.value as string ?? "")}
+            onInput={(e) => setSearchInput(e.currentTarget.value as string ?? "")}
             type="text"
             animated={true}
             placeholder={"Enter " + props.inputLabel}
             data-testid={"location-search-input"}
           />
-          {loading && <IonProgressBar type="indeterminate" />}
+          {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>
         <IonContent>
           <IonList>
             {
               <>
                 {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
-                {foundLocations.type === "success" &&
+                {showResults &&
                   foundLocations.searchResults.map((location) => (
                     <IonItem
                       key={location.id}
