@@ -383,97 +383,11 @@ jobs:
               e2e/cypress/videos
 
     publish_amd64:
-      name: Publish Images (amd64)
+      name: Publish Images (amd64 + arm64)
       needs:
         - e2e_test
         - frontend_container
         - backend_container
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v2
-
-        - name: Log in to the Container registry
-          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-          with:
-              username: ${{ secrets.DOCKER_HUB_USER }}
-              password: ${{ secrets.DOCKER_HUB_PASS }}
-
-        - name: Log in to the Container registry
-          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-          with:
-              registry: ${{ env.GITHUB_REGISTRY }}
-              username: ${{ github.actor }}
-              password: ${{ secrets.GITHUB_TOKEN }}
-
-        - name: Release Frontend Container (branch)
-          uses: docker/build-push-action@v4
-          with:
-            context: frontend
-            platforms: linux/amd64
-            push: true
-            tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:${{ github.sha }},
-            cache-from: |
-              type=gha,scope=${{github.ref_name}}-frontend
-              type=gha,scope=${{github.base_ref}}-frontend
-
-        - name: Release Backend Container (branch)
-          uses: docker/build-push-action@v4
-          with:
-            context: backend
-            platforms: linux/amd64
-            push: true
-            tags: |
-              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
-              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:${{ github.sha }}
-            cache-from: |
-              type=gha,scope=${{github.ref_name}}-backend
-              type=gha,scope=${{github.base_ref}}-backend
-            build-args: |
-              VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
-
-        - name: Release Frontend Container (latest)
-          uses: docker/build-push-action@v4
-          if: github.ref == 'refs/heads/main'
-          with:
-            context: frontend
-            platforms: linux/amd64
-            push: true
-            tags: |
-              ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-              ${{env.GITHUB_REGISTRY}}/${{ env.FRONTEND_GITHUB_IMAGE_NAME }}:latest,
-            cache-from: |
-              type=gha,scope=${{github.ref_name}}-frontend
-              type=gha,scope=${{github.base_ref}}-frontend
-
-        - name: Release Backend Container (latest)
-          uses: docker/build-push-action@v4
-          if: github.ref == 'refs/heads/main'
-          with:
-            context: backend
-            platforms: linux/amd64
-            push: true
-            tags: |
-              ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
-              ${{env.GITHUB_REGISTRY}}/${{ env.BACKEND_GITHUB_IMAGE_NAME }}:latest
-            cache-from: |
-              type=gha,scope=${{github.ref_name}}-backend
-              type=gha,scope=${{github.base_ref}}-backend
-            build-args: |
-              VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
-
-    publish_arm64:
-      name: Publish Images (arm64)
-      needs:
-        - e2e_test
         - frontend_container_arm64
         - backend_container_arm64
       runs-on: ubuntu-latest
@@ -509,7 +423,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             context: frontend
-            platforms: linux/arm64
+            platforms: linux/amd64,linux/arm64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
@@ -522,7 +436,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             context: backend
-            platforms: linux/arm64
+            platforms: linux/amd64,linux/arm64
             push: true
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:${{ github.sha }},
@@ -538,7 +452,7 @@ jobs:
           if: github.ref == 'refs/heads/main'
           with:
             context: frontend
-            platforms: linux/arm64
+            platforms: linux/amd64,linux/arm64
             push: true
             tags: |
               ${{ env.FRONTEND_DOCKER_HUB_IMAGE_NAME }}:latest,
@@ -552,7 +466,7 @@ jobs:
           if: github.ref == 'refs/heads/main'
           with:
             context: backend
-            platforms: linux/arm64
+            platforms: linux/amd64,linux/arm64
             push: true
             tags: |
               ${{ env.BACKEND_DOCKER_HUB_IMAGE_NAME }}:latest,
