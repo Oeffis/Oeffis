@@ -84,6 +84,11 @@ const RoutePlanner: React.FC = () => {
     setDestination(trip.destinationLocation);
   };
 
+  const isFavoriteTrip = (trip: CreateFavouriteTrip): boolean => {
+    const existing = favouriteTrips.find((favouriteTrip) => favouriteTrip.originLocationId === trip.originLocationId && favouriteTrip.destinationLocationId === trip.destinationLocationId);
+    return existing !== undefined;
+  };
+
   return (
     <>
       <IonList inset={true}>
@@ -113,7 +118,7 @@ const RoutePlanner: React.FC = () => {
         </IonItem>
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
         <IonButton expand="block" color="warning"
-          disabled={originLocationId === null || destinationLocationId === null}
+          disabled={originLocationId === null || destinationLocationId === null || isFavoriteTrip({ originLocationId, destinationLocationId })}
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           onClick={() => addFavouriteTrip({ originLocationId: originLocationId!, destinationLocationId: destinationLocationId! })}
         >Add To Favorites</IonButton>
