@@ -21,7 +21,7 @@ const ICON_MAP: Record<string, { icon: string, text: string }> = {
 };
 
 export type LocationIconProps = {
-  type: string;
+  type: keyof typeof ICON_MAP;
 };
 
 export function LocationIcon({ type }: LocationIconProps): JSX.Element {
