@@ -43,6 +43,7 @@ const RoutePlanner: React.FC = () => {
   const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip } = useFavouriteTrips();
 
   const [saturatedFavoriteTrips, setSaturatedFavoriteTrips] = useState<LocationResult>({ state: "pending" });
+  const locationFinderApi = useLocationFinderApi();
 
   useEffect(() => {
     const locationsToFetch = new Set<string>();
@@ -50,7 +51,6 @@ const RoutePlanner: React.FC = () => {
       locationsToFetch.add(trip.originLocationId);
       locationsToFetch.add(trip.destinationLocationId);
     });
-    const locationFinderApi = useLocationFinderApi();
     const promises = Promise.all(Array.from(locationsToFetch).map(async locationId => {
       const locations = await locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId });
       return locations[0];
