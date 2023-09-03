@@ -11,7 +11,8 @@ export type PersistedObjectService<TCreateObject, TObjectName extends string> =
   Record<`${Uncapitalize<TObjectName>}s`, PersistedObject<TCreateObject>[]>
   & Record<`add${Capitalize<TObjectName>}`, (object: TCreateObject) => PersistedObject<TCreateObject>>
   & Record<`remove${Capitalize<TObjectName>}ById`, (id: string) => boolean>
-  & Record<`remove${Capitalize<TObjectName>}`, (object: PersistedObject<TCreateObject>) => boolean>;
+  & Record<`remove${Capitalize<TObjectName>}`, (object: PersistedObject<TCreateObject>) => boolean>
+  & Record<`set${Capitalize<TObjectName>}s`, (objects: PersistedObject<TCreateObject>[]) => void>;
 
 export function generatePersistedObjectStorage<TCreateObject, TObjectName extends string>(
   objectName: TObjectName,
@@ -110,6 +111,7 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
       ["add" + objectNameCapitalized]: addPersistedObject,
       ["remove" + objectNameCapitalized + "ById"]: removePersistedObjectById,
       ["remove" + objectNameCapitalized]: removePersistedObject,
+      ["set" + objectNameCapitalized + "s"]: setPersistedObjectsAndPersist,
       [objectNameUncapitalized + "s"]: persistedObjects
     } as PersistedObjectService<TCreateObject, TObjectName>;
 

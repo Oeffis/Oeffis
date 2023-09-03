@@ -6,7 +6,11 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonModal
+  IonModal,
+  IonReorder,
+  IonReorderGroup,
+  IonTitle,
+  ItemReorderEventDetail
 } from "@ionic/react";
 import { star } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
@@ -40,7 +44,7 @@ const RoutePlanner: React.FC = () => {
   const [originLocation, setOriginLocation] = useInitialLocationFromLocationIdAndThenAsState(originLocationId);
   const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
 
-  const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip } = useFavouriteTrips();
+  const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip, setFavouriteTrips } = useFavouriteTrips();
 
   const [saturatedFavoriteTrips, setSaturatedFavoriteTrips] = useState<LocationResult>({ state: "pending" });
   const locationFinderApi = useLocationFinderApi();
@@ -89,6 +93,11 @@ const RoutePlanner: React.FC = () => {
     return existing !== undefined;
   };
 
+  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
+    const newFavouriteTrips = event.detail.complete([...favouriteTrips]);
+    setFavouriteTrips(newFavouriteTrips);
+  };
+
   return (
     <>
       <IonList inset={true}>
@@ -123,21 +132,25 @@ const RoutePlanner: React.FC = () => {
           onClick={() => addFavouriteTrip({ originLocationId: originLocationId!, destinationLocationId: destinationLocationId! })}
         >Add To Favorites</IonButton>
       </IonList>
+      <IonTitle>Favorites</IonTitle>
       <IonList>
-        {saturatedFavoriteTrips.state === "done" && saturatedFavoriteTrips.locations.map((trip, idx) => (
-          <IonItem key={idx} onClick={() => setTrip(trip)}>
-            <IonLabel>
-              Origin: {trip.originLocation.name}<br />
-              Destination: {trip.destinationLocation.name}
-            </IonLabel>
-            <IonIcon
-              icon={star}
-              color="warning"
-              onClick={(): void => void removeFavouriteTrip(trip.persisted)}
-              title="Remove from favourites"
-            />
-          </IonItem>
-        ))}
+        <IonReorderGroup onIonItemReorder={handleReorder} disabled={false}>
+          {saturatedFavoriteTrips.state === "done" && saturatedFavoriteTrips.locations.map((trip, idx) => (
+            <IonItem key={idx} onClick={() => setTrip(trip)}>
+              <IonLabel>
+                Origin: {trip.originLocation.name}<br />
+                Destination: {trip.destinationLocation.name}
+              </IonLabel>
+              <IonIcon
+                icon={star}
+                color="warning"
+                onClick={(): void => void removeFavouriteTrip(trip.persisted)}
+                title="Remove from favourites"
+              />
+              <IonReorder slot="start" />
+            </IonItem>
+          ))}
+        </IonReorderGroup>
       </IonList>
     </>
   );
