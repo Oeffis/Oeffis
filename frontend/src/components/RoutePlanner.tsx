@@ -22,20 +22,7 @@ import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import JourneyListComponent from "./JourneyListComponent";
 import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
-import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
-
-interface SaturatedFavoriteTrip {
-  persisted: PersistedObject<CreateFavouriteTrip>;
-  originLocation: Location;
-  destinationLocation: Location;
-}
-
-type LocationResult = LocationsSuccessResult | LocationsPendingResult | LocationsErrorResult;
-interface LocationsSuccessResult { locations: SaturatedFavoriteTrip[]; state: "done" }
-interface LocationsPendingResult { state: "pending" }
-interface LocationsErrorResult { error: Error; state: "error" }
-
 
 const RoutePlanner: React.FC = () => {
   const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
@@ -45,33 +32,6 @@ const RoutePlanner: React.FC = () => {
   const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
 
   const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip, setFavouriteTrips } = useFavouriteTrips();
-
-  const [saturatedFavoriteTrips, setSaturatedFavoriteTrips] = useState<LocationResult>({ state: "pending" });
-  const locationFinderApi = useLocationFinderApi();
-
-  useEffect(() => {
-    const locationsToFetch = new Set<string>();
-    favouriteTrips.forEach((trip) => {
-      locationsToFetch.add(trip.originLocationId);
-      locationsToFetch.add(trip.destinationLocationId);
-    });
-    const promises = Promise.all(Array.from(locationsToFetch).map(async locationId => {
-      const locations = await locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId });
-      return locations[0];
-    }));
-    promises.then((locations) => {
-      const saturatedTrips = favouriteTrips.map((trip) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const originLocation = locations.find(location => location.id === trip.originLocationId)!;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const destinationLocation = locations.find(location => location.id === trip.destinationLocationId)!;
-        return { originLocation, destinationLocation, persisted: trip };
-      });
-      setSaturatedFavoriteTrips({ state: "done", locations: saturatedTrips });
-    }, error => {
-      setSaturatedFavoriteTrips({ state: "error", error });
-    });
-  }, [favouriteTrips]);
 
   const setOrigin = (location: Location | null): void => {
     setOriginLocation(location);
@@ -83,19 +43,35 @@ const RoutePlanner: React.FC = () => {
     setDestinationLocationId(location?.id ?? null);
   };
 
-  const setTrip = (trip: SaturatedFavoriteTrip): void => {
-    setOrigin(trip.originLocation);
-    setDestination(trip.destinationLocation);
+  const setTrip = (trip: CreateFavouriteTrip): void => {
+    setOrigin(trip.origin);
+    setDestinationLocation(trip.destination);
   };
 
-  const isFavoriteTrip = (trip: CreateFavouriteTrip): boolean => {
-    const existing = favouriteTrips.find((favouriteTrip) => favouriteTrip.originLocationId === trip.originLocationId && favouriteTrip.destinationLocationId === trip.destinationLocationId);
+  const currentIsFavoriteTrip = (): boolean => {
+    const existing = favouriteTrips.find(c =>
+      c.origin.id === originLocationId
+      && c.destination.id === destinationLocationId
+    );
     return existing !== undefined;
   };
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     const newFavouriteTrips = event.detail.complete([...favouriteTrips]);
     setFavouriteTrips(newFavouriteTrips);
+  };
+
+  const addToFavorites = (): void => {
+    if (originLocationId === null
+      || destinationLocationId === null
+      || originLocation === null
+      || destinationLocation === null) {
+      return;
+    }
+    addFavouriteTrip({
+      origin: originLocation,
+      destination: destinationLocation
+    });
   };
 
   return (
@@ -127,24 +103,23 @@ const RoutePlanner: React.FC = () => {
         </IonItem>
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
         <IonButton expand="block" color="warning"
-          disabled={originLocationId === null || destinationLocationId === null || isFavoriteTrip({ originLocationId, destinationLocationId })}
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          onClick={() => addFavouriteTrip({ originLocationId: originLocationId!, destinationLocationId: destinationLocationId! })}
+          disabled={originLocationId === null || destinationLocationId === null || currentIsFavoriteTrip()}
+          onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
-      </IonList>
+      </IonList >
       <IonTitle>Favorites</IonTitle>
       <IonList>
         <IonReorderGroup onIonItemReorder={handleReorder} disabled={false}>
-          {saturatedFavoriteTrips.state === "done" && saturatedFavoriteTrips.locations.map((trip, idx) => (
+          {favouriteTrips.map((trip, idx) => (
             <IonItem key={idx} onClick={() => setTrip(trip)}>
               <IonLabel>
-                Origin: {trip.originLocation.name}<br />
-                Destination: {trip.destinationLocation.name}
+                Origin: {trip.origin.name}<br />
+                Destination: {trip.destination.name}
               </IonLabel>
               <IonIcon
                 icon={star}
                 color="warning"
-                onClick={(): void => void removeFavouriteTrip(trip.persisted)}
+                onClick={(): void => void removeFavouriteTrip(trip)}
                 title="Remove from favourites"
               />
               <IonReorder slot="start" />
