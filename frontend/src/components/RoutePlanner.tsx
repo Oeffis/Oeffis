@@ -17,8 +17,21 @@ import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import JourneyListComponent from "./JourneyListComponent";
-import { useFavouriteTrips } from "../services/favourites/FavouritesContext";
+import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
+import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
+
+interface SaturatedFavoriteTrip {
+  persisted: PersistedObject<CreateFavouriteTrip>;
+  originLocation: Location;
+  destinationLocation: Location;
+}
+
+type LocationResult = LocationsSuccessResult | LocationsPendingResult | LocationsErrorResult;
+interface LocationsSuccessResult { locations: SaturatedFavoriteTrip[]; state: "done" }
+interface LocationsPendingResult { state: "pending" }
+interface LocationsErrorResult { error: Error; state: "error" }
+
 
 const RoutePlanner: React.FC = () => {
   const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
@@ -28,6 +41,33 @@ const RoutePlanner: React.FC = () => {
   const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
 
   const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip } = useFavouriteTrips();
+
+  const [saturatedFavoriteTrips, setSaturatedFavoriteTrips] = useState<LocationResult>({ state: "pending" });
+
+  useEffect(() => {
+    const locationsToFetch = new Set<string>();
+    favouriteTrips.forEach((trip) => {
+      locationsToFetch.add(trip.originLocationId);
+      locationsToFetch.add(trip.destinationLocationId);
+    });
+    const locationFinderApi = useLocationFinderApi();
+    const promises = Promise.all(Array.from(locationsToFetch).map(async locationId => {
+      const locations = await locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId });
+      return locations[0];
+    }));
+    promises.then((locations) => {
+      const saturatedTrips = favouriteTrips.map((trip) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const originLocation = locations.find(location => location.id === trip.originLocationId)!;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const destinationLocation = locations.find(location => location.id === trip.destinationLocationId)!;
+        return { originLocation, destinationLocation, persisted: trip };
+      });
+      setSaturatedFavoriteTrips({ state: "done", locations: saturatedTrips });
+    }, error => {
+      setSaturatedFavoriteTrips({ state: "error", error });
+    });
+  }, [favouriteTrips]);
 
   const setOrigin = (location: Location | null): void => {
     setOriginLocation(location);
@@ -74,16 +114,16 @@ const RoutePlanner: React.FC = () => {
         >Add To Favorites</IonButton>
       </IonList>
       <IonList>
-        {favouriteTrips.map((trip, idx) => (
+        {saturatedFavoriteTrips.state === "done" && saturatedFavoriteTrips.locations.map((trip, idx) => (
           <IonItem key={idx}>
             <IonLabel>
-              Origin: {trip.originLocationId}<br />
-              Destination: {trip.destinationLocationId}
+              Origin: {trip.originLocation.name}<br />
+              Destination: {trip.destinationLocation.name}
             </IonLabel>
             <IonIcon
               icon={star}
               color="warning"
-              onClick={(): void => void removeFavouriteTrip(trip)}
+              onClick={(): void => void removeFavouriteTrip(trip.persisted)}
               title="Remove from favourites"
             />
           </IonItem>

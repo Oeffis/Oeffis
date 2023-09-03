@@ -2,15 +2,15 @@
 import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
 import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
 
-export type FindStopAtCoordinatesParameters = {
+export interface FindStopAtCoordinatesParameters {
   latitude: number;
   longitude: number;
-};
+}
 
-export type FindStopByNameParameters = {
+export interface FindStopByNameOrIdParameters {
   search: string;
   disableProprietaryVrrParameters?: boolean;
-};
+}
 
 export class StopFinderClient extends VrrClientBase {
   public async findStopAtCoordinates(
@@ -31,8 +31,8 @@ export class StopFinderClient extends VrrClientBase {
     );
   }
 
-  public async findStopByName(
-    query: FindStopByNameParameters,
+  public async findStopByNameOrId(
+    query: FindStopByNameOrIdParameters,
   ): Promise<LOCATIONSUGGESTSchema> {
     const proprietaryVrrParameters = this.perpareDisableProprietaryVrrParametersOption(query);
 
@@ -72,7 +72,7 @@ export class StopFinderClient extends VrrClientBase {
     return `${longitude.toFixed(5)}:${latitude.toFixed(5)}:WGS84[dd.ddddd]`;
   }
 
-  private perpareDisableProprietaryVrrParametersOption({ disableProprietaryVrrParameters }: FindStopByNameParameters): Record<string, string> {
+  private perpareDisableProprietaryVrrParametersOption({ disableProprietaryVrrParameters }: FindStopByNameOrIdParameters): Record<string, string> {
     if (disableProprietaryVrrParameters) {
       return {};
     }

@@ -32,7 +32,7 @@ async function demoStopFinderClient(): Promise<void> {
     result.locations?.map((location) => location.id),
   );
 
-  const result2 = await stopFinderClient.findStopByName({
+  const result2 = await stopFinderClient.findStopByNameOrId({
     search: "Buer Rathaus"
   });
 
