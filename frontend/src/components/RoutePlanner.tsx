@@ -79,6 +79,11 @@ const RoutePlanner: React.FC = () => {
     setDestinationLocationId(location?.id ?? null);
   };
 
+  const setTrip = (trip: SaturatedFavoriteTrip): void => {
+    setOrigin(trip.originLocation);
+    setDestination(trip.destinationLocation);
+  };
+
   return (
     <>
       <IonList inset={true}>
@@ -115,7 +120,7 @@ const RoutePlanner: React.FC = () => {
       </IonList>
       <IonList>
         {saturatedFavoriteTrips.state === "done" && saturatedFavoriteTrips.locations.map((trip, idx) => (
-          <IonItem key={idx}>
+          <IonItem key={idx} onClick={() => setTrip(trip)}>
             <IonLabel>
               Origin: {trip.originLocation.name}<br />
               Destination: {trip.destinationLocation.name}
