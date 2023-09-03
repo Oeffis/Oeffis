@@ -2,11 +2,13 @@ import {
   IonButton,
   IonDatetime,
   IonDatetimeButton,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonModal
 } from "@ionic/react";
+import { star } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
@@ -15,6 +17,7 @@ import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import JourneyListComponent from "./JourneyListComponent";
+import { useFavouriteTrips } from "../services/favourites/FavouritesContext";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
@@ -23,6 +26,8 @@ const RoutePlanner: React.FC = () => {
 
   const [originLocation, setOriginLocation] = useInitialLocationFromLocationIdAndThenAsState(originLocationId);
   const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
+
+  const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip } = useFavouriteTrips();
 
   const setOrigin = (location: Location | null): void => {
     setOriginLocation(location);
@@ -35,40 +40,57 @@ const RoutePlanner: React.FC = () => {
   };
 
   return (
-    <IonList inset={true}>
-      <IonItem lines="inset">
-        {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
-        <IonLabel>Date and Time</IonLabel>
-        <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
-        <IonModal keepContentsMounted={true}>
-          <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
-        </IonModal>
-      </IonItem>
-      <IonItem>
-        <LocationSearchInput
-          inputLabel="Origin"
-          selectedLocation={originLocation}
-          onSelectedLocationChanged={(location): void => setOrigin(location)}
-          prefixDataTestId="origin-input"
-        />
-      </IonItem>
-      <IonItem>
-        <LocationSearchInput
-          inputLabel="Destination"
-          selectedLocation={destinationLocation}
-          onSelectedLocationChanged={(location): void => setDestination(location)}
-          prefixDataTestId="destination-input"
-        />
-      </IonItem>
-      <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
-
-      {
-        originLocation !== null && destinationLocation !== null &&
-        <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
-      }
-    </IonList>
+    <>
+      <IonList inset={true}>
+        <IonItem lines="inset">
+          {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
+          <IonLabel>Date and Time</IonLabel>
+          <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
+          <IonModal keepContentsMounted={true}>
+            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
+          </IonModal>
+        </IonItem>
+        <IonItem>
+          <LocationSearchInput
+            inputLabel="Origin"
+            selectedLocation={originLocation}
+            onSelectedLocationChanged={(location): void => setOrigin(location)}
+            prefixDataTestId="origin-input"
+          />
+        </IonItem>
+        <IonItem>
+          <LocationSearchInput
+            inputLabel="Destination"
+            selectedLocation={destinationLocation}
+            onSelectedLocationChanged={(location): void => setDestination(location)}
+            prefixDataTestId="destination-input"
+          />
+        </IonItem>
+        <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
+        <IonButton expand="block" color="warning"
+          disabled={originLocationId === null || destinationLocationId === null}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          onClick={() => addFavouriteTrip({ originLocationId: originLocationId!, destinationLocationId: destinationLocationId! })}
+        >Add To Favorites</IonButton>
+      </IonList>
+      <IonList>
+        {favouriteTrips.map((trip, idx) => (
+          <IonItem key={idx}>
+            <IonLabel>
+              Origin: {trip.originLocationId}<br />
+              Destination: {trip.destinationLocationId}
+            </IonLabel>
+            <IonIcon
+              icon={star}
+              color="warning"
+              onClick={(): void => void removeFavouriteTrip(trip)}
+              title="Remove from favourites"
+            />
+          </IonItem>
+        ))}
+      </IonList>
+    </>
   );
-
 };
 
 export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
