@@ -2,26 +2,21 @@ import {
   IonButton,
   IonDatetime,
   IonDatetimeButton,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonModal,
-  IonReorder,
-  IonReorderGroup,
-  IonTitle,
-  ItemReorderEventDetail
+  IonTitle
 } from "@ionic/react";
-import { star } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-import { Journey, Location } from "../api";
-import { useJourneyQuery } from "../hooks/useJourneyQuery";
+import { Location } from "../api";
 import { useStateParams } from "../hooks/useStateParams";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import JourneyListComponent from "./JourneyListComponent";
 import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
+import { FavouriteTripsComponent } from "./FavouriteTripsComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
@@ -31,7 +26,7 @@ const RoutePlanner: React.FC = () => {
   const [originLocation, setOriginLocation] = useInitialLocationFromLocationIdAndThenAsState(originLocationId);
   const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
 
-  const { favouriteTrips, addFavouriteTrip, removeFavouriteTrip, setFavouriteTrips } = useFavouriteTrips();
+  const { favouriteTrips, addFavouriteTrip } = useFavouriteTrips();
 
   const setOrigin = (location: Location | null): void => {
     setOriginLocation(location);
@@ -54,11 +49,6 @@ const RoutePlanner: React.FC = () => {
       && c.destination.id === destinationLocationId
     );
     return existing !== undefined;
-  };
-
-  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
-    const newFavouriteTrips = event.detail.complete([...favouriteTrips]);
-    setFavouriteTrips(newFavouriteTrips);
   };
 
   const addToFavorites = (): void => {
@@ -108,85 +98,10 @@ const RoutePlanner: React.FC = () => {
         >Add To Favorites</IonButton>
       </IonList >
       <IonTitle>Favorites</IonTitle>
-      <IonList>
-        <IonReorderGroup onIonItemReorder={handleReorder} disabled={false}>
-          {favouriteTrips.map((trip, idx) => (
-            <IonItem key={idx} onClick={() => setTrip(trip)}>
-              <IonLabel>
-                Origin: {trip.origin.name}<br />
-                Destination: {trip.destination.name}
-              </IonLabel>
-              <IonIcon
-                icon={star}
-                color="warning"
-                onClick={(): void => void removeFavouriteTrip(trip)}
-                title="Remove from favourites"
-              />
-              <IonReorder slot="start" />
-            </IonItem>
-          ))}
-        </IonReorderGroup>
-      </IonList>
+      <FavouriteTripsComponent onTripSelected={trip => setTrip(trip)} />
     </>
   );
 };
-
-export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
-  const { origin, destination } = props;
-
-  const result = useJourneyQuery(origin, destination);
-
-  const iJourneys: false | IJourney[] = result.type === "success" && result.journeyResults.map((journey): IJourney => {
-    const lastLeg = journey.legs[journey.legs.length - 1];
-    const firstLeg = journey.legs[0];
-
-    return {
-      startStation: firstLeg.origin.name,
-      startTime: firstLeg.origin.departure.estimated,
-      arrivalStation: lastLeg.destination.name,
-      arrivalTime: lastLeg.destination.arrival.estimated,
-      stops: journey.legs.map((leg): IJourneyStep => ({
-        arrivalTime: leg.destination.arrival.estimated,
-        startTime: leg.origin.departure.estimated,
-        stationName: leg.origin.name,
-        stopName: leg.destination.name,
-        track: "",
-        travelDurationInMinutes: leg.details.duration / 60
-      })),
-      travelDurationInMinutes: journey.legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
-    };
-  });
-
-  return (
-    <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
-      {iJourneys &&
-        <JourneyListComponent journeys={iJourneys} />
-      }
-    </>
-  );
-}
-
-export function RenderTrip(props: { journey: Journey }): JSX.Element {
-  const { journey } = props;
-
-  return (
-    <IonItem>
-      <IonLabel>
-        <ol>
-          {
-            journey.legs.map((leg, idx) => (
-              <li key={idx}>
-                {leg.transportation.name} {leg.details.duration}
-              </li>
-            ))
-          }
-        </ol>
-      </IonLabel>
-    </IonItem>
-  );
-}
 
 export default RoutePlanner;
 
