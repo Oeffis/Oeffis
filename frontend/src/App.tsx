@@ -23,7 +23,7 @@ import { IJourney } from "./interfaces/IJourney.interface";
 import JourneysPage from "./pages/JourneysPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
-import { FavouriteStopsProvider, FavouriteTripsProvider } from "./services/favourites/FavouritesContext";
+import { FavouriteLocationsProvider, FavouriteTripsProvider } from "./services/favourites/FavouritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 import "./theme/variables.css";
 
@@ -96,7 +96,7 @@ const App: React.FC = () => (
   <AppConfigProvider>
     <ApiClientsProvider>
       <PersistenceProvider>
-        <FavouriteStopsProvider>
+        <FavouriteLocationsProvider>
           <FavouriteTripsProvider>
             <IonApp>
               <IonReactRouter>
@@ -117,7 +117,7 @@ const App: React.FC = () => (
               </IonReactRouter>
             </IonApp>
           </FavouriteTripsProvider>
-        </FavouriteStopsProvider>
+        </FavouriteLocationsProvider>
       </PersistenceProvider>
     </ApiClientsProvider>
   </AppConfigProvider>

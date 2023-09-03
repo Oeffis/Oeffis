@@ -33,14 +33,14 @@ test("Can use context to add favourites", async () => {
   const { addFavouriteTrip } = result.current;
 
   const elementToAdd1 = {
-    originStopId: "testaa",
-    destinationStopId: "testbb"
+    originLocationId: "testaa",
+    destinationLocationId: "testbb"
   };
 
   await act(() => addFavouriteTrip(elementToAdd1));
 
   expect(result.current.favouriteTrips).toHaveLength(1);
-  expect(result.current.favouriteTrips[0].destinationStopId).toBe("testbb");
-  expect(result.current.favouriteTrips[0].originStopId).toBe("testaa");
+  expect(result.current.favouriteTrips[0].destinationLocationId).toBe("testbb");
+  expect(result.current.favouriteTrips[0].originLocationId).toBe("testaa");
 
 });

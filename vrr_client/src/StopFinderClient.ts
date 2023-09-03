@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { VrrClientBase } from "./VrrClientBase";
+import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
 import { Convert, LOCATIONSUGGESTSchema } from "./vendor/VrrApiTypes";
 
 export type FindStopAtCoordinatesParameters = {
@@ -27,7 +27,7 @@ export class StopFinderClient extends VrrClientBase {
         name_sf: formattedCoordinates,
         type_sf: "coord"
       },
-      Convert.toLOCATIONSUGGESTSchema,
+      warpAsFailSafeSchemaConverter(Convert.toLOCATIONSUGGESTSchema),
     );
   }
 
@@ -43,7 +43,7 @@ export class StopFinderClient extends VrrClientBase {
         type_sf: "any",
         ...proprietaryVrrParameters
       },
-      Convert.toLOCATIONSUGGESTSchema,
+      warpAsFailSafeSchemaConverter(Convert.toLOCATIONSUGGESTSchema),
     );
   }
 

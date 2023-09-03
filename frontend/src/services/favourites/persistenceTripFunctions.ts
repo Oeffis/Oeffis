@@ -27,8 +27,8 @@ function parseFavouriteTrip(favourite: any): PersistedObject<CreateFavouriteTrip
   return {
     createdAt,
     id: favourite.id,
-    originStopId: favourite.origin,
-    destinationStopId: favourite.destination
+    originLocationId: favourite.origin,
+    destinationLocationId: favourite.destination
   };
 }
 
