@@ -11,6 +11,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
+import { parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
@@ -30,6 +31,8 @@ const RoutePlanner: React.FC = () => {
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
+
+  const [departureTime, setDepartureTime] = useState<Date>(new Date());
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
 
@@ -63,11 +66,19 @@ const RoutePlanner: React.FC = () => {
     <>
       <IonList inset={true}>
         <IonItem lines="inset">
-          {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
+          {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
           <IonLabel>Date and Time</IonLabel>
-          <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
+          <IonDatetimeButton aria-label="Date and Time" datetime="datetime"/>
           <IonModal keepContentsMounted={true}>
-            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
+            <IonDatetime
+              name="date_time"
+              id="datetime"
+              min={new Date().toISOString()}
+              multiple={false} // Assures that value cannot be an array but a single string only.
+              data-testid={"datetime-journey-input"}
+              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+              onIonChange={e => setDepartureTime(parseISO(e.detail.value! as string))}
+            />
           </IonModal>
         </IonItem>
         <IonItem>
@@ -96,8 +107,8 @@ const RoutePlanner: React.FC = () => {
         >Show Favorites</IonButton>
       </IonList>
       {
-        originLocation !== null && destinationLocation !== null &&
-        <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
+        originLocation !== null && destinationLocation !== null && departureTime !== null &&
+        <TripOptionsDisplay origin={originLocation} destination={destinationLocation} departure={departureTime}/>
       }
 
       <IonModal
@@ -119,10 +130,15 @@ const RoutePlanner: React.FC = () => {
 
 export default RoutePlanner;
 
-export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
-  const { origin, destination } = props;
+export function TripOptionsDisplay(props: {
+  origin: Location,
+  destination: Location,
+  departure: Date
+}): JSX.Element {
+  const { origin, destination, departure } = props;
 
-  const result = useJourneyQuery(origin, destination);
+  // TODO Add user input if datetime should be interpreted as arrival time.
+  const result = useJourneyQuery(origin, destination, departure, false);
 
   const iJourneys: false | IJourney[] = result.type === "success" && result.journeyResults.map((journey): IJourney => {
     const lastLeg = journey.legs[journey.legs.length - 1];

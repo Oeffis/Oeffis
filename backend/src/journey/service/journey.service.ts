@@ -25,6 +25,8 @@ export class JourneyService {
       originPointId: journeyRequest.originId,
       destinationPointId: journeyRequest.destinationId,
       plannedTime: journeyRequest.departure !== undefined
+        // TODO new Date() uses backend time zone and not the one of the user on Frontend, right?
+        // TODO Field departure is still a string while Frontend is supplying a user's time zone aware Date object.
         ? new Date(journeyRequest.departure)
         : undefined,
       plannedTimeIs: journeyRequest.asArrival

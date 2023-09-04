@@ -18,7 +18,13 @@ export type UseJourneyQueryPending = {
   journeyResults: null;
 };
 
-export const useJourneyQuery = (origin: Location, destination: Location): UseJourneyQueryResult => {
+export const useJourneyQuery = (
+  origin: Location,
+  destination: Location,
+  departure: Date,
+  asArrival: boolean
+): UseJourneyQueryResult => {
+
   const journeyApi = useJourneyApi();
 
   const [journeyResultsOrError, setJourneyResultsOrError] = useState<UseJourneyQueryResult>(({ type: "pending", journeyResults: null }));
@@ -30,8 +36,8 @@ export const useJourneyQuery = (origin: Location, destination: Location): UseJou
       journeyApi.journeyControllerQueryJourney({
         originId: origin.id,
         destinationId: destination.id,
-        departure: new Date(),
-        asArrival: false
+        departure: departure,
+        asArrival: asArrival
       }, { signal: abortController.signal })
 
         .then((journeyResults) => {
@@ -48,6 +54,7 @@ export const useJourneyQuery = (origin: Location, destination: Location): UseJou
     [
       origin.id,
       destination.id,
+      departure.valueOf(),
       setJourneyResultsOrError
     ]
   );
