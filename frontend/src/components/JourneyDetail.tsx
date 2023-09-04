@@ -1,11 +1,14 @@
 import { IonButton, IonCard, IonIcon, IonImg, IonLabel } from "@ionic/react";
+import { format } from "date-fns";
 import { chevronDownOutline, chevronUpOutline } from "ionicons/icons";
-import "./JourneyDetail.css";
-import { IJourney } from "../interfaces/IJourney.interface";
-import JourneyStepComponent from "./JourneyStepComponent";
 import { useState } from "react";
+import { IJourney } from "../interfaces/IJourney.interface";
+import "./JourneyDetail.css";
+import JourneyStepComponent from "./JourneyStepComponent";
 
 export interface TravelProps { journey: IJourney }
+
+const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
 
 const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -23,7 +26,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
           </div>
           <div className="mid-section">
             <IonLabel>
-              {props.journey.startTime} - {props.journey.arrivalTime}
+              {formatDateShort(props.journey.startTime)} - {formatDateShort(props.journey.arrivalTime)}
             </IonLabel>
             <IonLabel>
               {props.journey.startStation} - {props.journey.arrivalStation}
@@ -31,7 +34,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
           </div>
           <div className="duration">
             <IonLabel>
-              {props.journey.travelDuration}
+              {props.journey.travelDurationInMinutes}
             </IonLabel>
             <IonLabel>
               Min
