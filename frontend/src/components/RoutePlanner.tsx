@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import { parseISO } from "date-fns";
+import { formatISO, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
@@ -73,9 +73,10 @@ const RoutePlanner: React.FC = () => {
             <IonDatetime
               name="date_time"
               id="datetime"
-              min={new Date().toISOString()}
+              min={formatISO(new Date())}
               multiple={false} // Assures that value cannot be an array but a single string only.
               data-testid={"datetime-journey-input"}
+              showDefaultButtons={true}
               /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
               onIonChange={e => setDepartureTime(parseISO(e.detail.value! as string))}
             />
