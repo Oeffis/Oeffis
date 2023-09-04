@@ -1,7 +1,7 @@
 import { render, renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { PersistenceProvider } from "../persistence/PersistenceContext";
-import { FavouriteTripsProvider, useFavouriteTrips } from "./FavouritesContext";
+import { CreateFavouriteTrip, FavouriteTripsProvider, useFavouriteTrips } from "./FavouritesContext";
 
 it("renders without crashing", () => {
   const { baseElement } = render(<FavouriteTripsProvider />);
@@ -33,14 +33,18 @@ test("Can use context to add favourites", async () => {
   const { addFavouriteTrip } = result.current;
 
   const elementToAdd1 = {
-    originLocationId: "testaa",
-    destinationLocationId: "testbb"
-  };
+    origin: {
+      id: "testaa"
+    },
+    destination: {
+      id: "testbb"
+    }
+  } as Partial<CreateFavouriteTrip> as CreateFavouriteTrip;
 
   await act(() => addFavouriteTrip(elementToAdd1));
 
   expect(result.current.favouriteTrips).toHaveLength(1);
-  expect(result.current.favouriteTrips[0].destinationLocationId).toBe("testbb");
-  expect(result.current.favouriteTrips[0].originLocationId).toBe("testaa");
+  expect(result.current.favouriteTrips[0].destination.id).toBe("testbb");
+  expect(result.current.favouriteTrips[0].origin.id).toBe("testaa");
 
 });
