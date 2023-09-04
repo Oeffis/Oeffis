@@ -16,19 +16,27 @@ function parseFavouriteTrip(favourite: any): PersistedObject<CreateFavouriteTrip
     return null;
   }
 
-  if (typeof favourite.originStopId !== "string") {
+  if (typeof favourite.origin.id !== "string") {
     return null;
   }
 
-  if (typeof favourite.destinationStopId !== "string") {
+  if (typeof favourite.origin.name !== "string") {
+    return null;
+  }
+
+  if (typeof favourite.destination.id !== "string") {
+    return null;
+  }
+
+  if (typeof favourite.destination.name !== "string") {
     return null;
   }
 
   return {
     createdAt,
     id: favourite.id,
-    originLocationId: favourite.origin,
-    destinationLocationId: favourite.destination
+    origin: favourite.origin,
+    destination: favourite.destination
   };
 }
 
