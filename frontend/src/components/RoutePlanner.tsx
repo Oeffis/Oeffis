@@ -8,49 +8,38 @@ import {
   IonModal,
   IonTitle
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
-import { Location } from "../api";
+import React from "react";
+import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../hooks/useStateParams";
-import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
 import { FavouriteTripsComponent } from "./FavouriteTripsComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
-  const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationLocationId, setDestinationLocationId] = useStateParams<string | null>(null, "destination", String, String);
+  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
 
-  const [originLocation, setOriginLocation] = useInitialLocationFromLocationIdAndThenAsState(originLocationId);
-  const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
+  const originLocation = useLocationByIdOrNull(originId);
+  const destinationLocation = useLocationByIdOrNull(destinationId);
 
   const { favouriteTrips, addFavouriteTrip } = useFavouriteTrips();
 
-  const setOrigin = (location: Location | null): void => {
-    setOriginLocation(location);
-    setOriginLocationId(location?.id ?? null);
-  };
-
-  const setDestination = (location: Location | null): void => {
-    setDestinationLocation(location);
-    setDestinationLocationId(location?.id ?? null);
-  };
-
   const setTrip = (trip: CreateFavouriteTrip): void => {
-    setOrigin(trip.origin);
-    setDestinationLocation(trip.destination);
+    setOriginId(trip.origin.id);
+    setDestinationId(trip.destination.id);
   };
 
   const currentIsFavoriteTrip = (): boolean => {
     const existing = favouriteTrips.find(c =>
-      c.origin.id === originLocationId
-      && c.destination.id === destinationLocationId
+      c.origin.id === originId
+      && c.destination.id === destinationId
     );
     return existing !== undefined;
   };
 
   const addToFavorites = (): void => {
-    if (originLocationId === null
-      || destinationLocationId === null
+    if (originId === null
+      || destinationId === null
       || originLocation === null
       || destinationLocation === null) {
       return;
@@ -76,7 +65,7 @@ const RoutePlanner: React.FC = () => {
           <LocationSearchInput
             inputLabel="Origin"
             selectedLocation={originLocation}
-            onSelectedLocationChanged={(location): void => setOrigin(location)}
+            onSelectedLocationChanged={(location): void => setOriginId(location.id)}
             prefixDataTestId="origin-input"
           />
         </IonItem>
@@ -84,13 +73,13 @@ const RoutePlanner: React.FC = () => {
           <LocationSearchInput
             inputLabel="Destination"
             selectedLocation={destinationLocation}
-            onSelectedLocationChanged={(location): void => setDestination(location)}
+            onSelectedLocationChanged={(location): void => setDestinationId(location.id)}
             prefixDataTestId="destination-input"
           />
         </IonItem>
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
         <IonButton expand="block" color="warning"
-          disabled={originLocationId === null || destinationLocationId === null || currentIsFavoriteTrip()}
+          disabled={originId === null || destinationId === null || currentIsFavoriteTrip()}
           onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
       </IonList >
@@ -101,32 +90,3 @@ const RoutePlanner: React.FC = () => {
 };
 
 export default RoutePlanner;
-
-
-export function useInitialLocationFromLocationIdAndThenAsState(locationId: string | null): [Location | null, (location: Location | null) => void] {
-  const locationFinderApi = useLocationFinderApi();
-  const [location, setLocation] = useState<Location | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const abortController = new AbortController();
-    if (locationId !== null && location === null && locationId !== "") {
-      locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId }, { signal: abortController.signal })
-        .then((locations) => {
-          if (locations.length > 0 && !cancelled) {
-            setLocation(locations[0]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return (): void => {
-      abortController.abort();
-      cancelled = true;
-    };
-  }, [locationId]);
-
-  return [location, setLocation];
-}

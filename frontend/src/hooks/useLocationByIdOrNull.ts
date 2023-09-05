@@ -4,15 +4,23 @@ import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 const locationCache = new Map<string, Location>();
 
-export function useLocationByIdOrNull(locationId: string): Location | null {
+export function useLocationByIdOrNull(locationId: string | null): Location | null {
   const locationFinderApi = useLocationFinderApi();
   const [location, setLocation] = useState<Location | null>(null);
   const abortController = new AbortController();
 
   useEffect(() => {
-    checkCache() || fetchLocation();
+    checkNull(locationId)
+      || checkCache(locationId)
+      || fetchLocation(locationId);
 
-    function checkCache(): boolean {
+    function checkNull(locationId: string | null): locationId is null {
+      if (locationId !== null) return false;
+      setLocation(null);
+      return true;
+    }
+
+    function checkCache(locationId: string): boolean {
       const cachedLocation = locationCache.get(locationId);
       if (cachedLocation) {
         setLocation(cachedLocation);
@@ -21,53 +29,51 @@ export function useLocationByIdOrNull(locationId: string): Location | null {
       return false;
     }
 
-    function fetchLocation(): void {
+    function fetchLocation(locationId: string): void {
       locationFinderApi
         .locationFinderControllerFindLocationsByName(
           { name: locationId },
           { signal: abortController.signal }
         )
         .then(processLocationResult, processLocationFailure);
-    }
 
-    function processLocationResult(matchingLocations: Location[]): void {
-      isAborted()
-        || checkNoLocationFound(matchingLocations)
-        || checkMultipleLocationsFound(matchingLocations)
-        || singleLocationFound(matchingLocations);
-    }
+      function processLocationResult(matchingLocations: Location[]): void {
+        isAborted()
+          || checkNoLocationFound(matchingLocations)
+          || checkMultipleLocationsFound(matchingLocations)
+          || singleLocationFound(matchingLocations);
+      }
 
-    function isAborted(): boolean {
-      return abortController.signal.aborted;
-    }
+      function isAborted(): boolean {
+        return abortController.signal.aborted;
+      }
 
-    function checkNoLocationFound(matchingLocations: Location[]): boolean {
-      console.error(`No location found with id ${locationId}`);
-      return matchingLocations.length === 0;
-    }
+      function checkNoLocationFound(matchingLocations: Location[]): boolean {
+        if (matchingLocations.length !== 0) return false;
+        console.error(`No location found with id ${locationId}`);
+        return true;
+      }
 
-    function checkMultipleLocationsFound(matchingLocations: Location[]): boolean {
-      console.log(`Multiple locations found with id ${locationId}`);
-      return matchingLocations.length > 1;
-    }
+      function checkMultipleLocationsFound(matchingLocations: Location[]): boolean {
+        if (matchingLocations.length >= 1) return false;
+        console.log(`Multiple locations found with id ${locationId}`);
+        return true;
+      }
 
-    function singleLocationFound(matchingLocations: Location[]): true {
-      console.log(`Single location found with id ${locationId}`);
-      locationCache.set(locationId, matchingLocations[0]);
-      setLocation(matchingLocations[0]);
-      return true;
-    }
+      function singleLocationFound(matchingLocations: Location[]): true {
+        console.log(`Single location found with id ${locationId}`);
+        locationCache.set(locationId, matchingLocations[0]);
+        setLocation(matchingLocations[0]);
+        return true;
+      }
 
-    function processLocationFailure(error: Error): void {
-      console.error(`Failed to find location with id ${locationId}`, error);
+      function processLocationFailure(error: Error): void {
+        console.error(`Failed to find location with id ${locationId}`, error);
+        error.cause && console.error(error.cause);
+      }
     }
-
     return () => abortController.abort();
-  }, [locationCache, locationId]);
+  }, [locationFinderApi, locationCache, locationId]);
 
   return location;
-}
-
-export function useLocationByNullableIdOrNull(locationId: string | null): Location | null {
-  return locationId ? useLocationByIdOrNull(locationId) : null;
 }
