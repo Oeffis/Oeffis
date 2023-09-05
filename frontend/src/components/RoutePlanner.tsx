@@ -25,29 +25,23 @@ const RoutePlanner: React.FC = () => {
   const { favouriteTrips, addFavouriteTrip } = useFavouriteTrips();
 
   const setTrip = (trip: CreateFavouriteTrip): void => {
-    setOriginId(trip.origin.id);
-    setDestinationId(trip.destination.id);
+    setOriginId(trip.originId);
+    setDestinationId(trip.destinationId);
   };
 
   const currentIsFavoriteTrip = (): boolean => {
     const existing = favouriteTrips.find(c =>
-      c.origin.id === originId
-      && c.destination.id === destinationId
+      c.originId === originId
+      && c.destinationId === destinationId
     );
     return existing !== undefined;
   };
 
+  const canCurrentBeFavorited = (): boolean => originLocation !== null && destinationLocation !== null && !currentIsFavoriteTrip();
+
   const addToFavorites = (): void => {
-    if (originId === null
-      || destinationId === null
-      || originLocation === null
-      || destinationLocation === null) {
-      return;
-    }
-    addFavouriteTrip({
-      origin: originLocation,
-      destination: destinationLocation
-    });
+    if (originId === null || destinationId === null) return;
+    addFavouriteTrip({ originId, destinationId });
   };
 
   return (
@@ -79,7 +73,7 @@ const RoutePlanner: React.FC = () => {
         </IonItem>
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
         <IonButton expand="block" color="warning"
-          disabled={originId === null || destinationId === null || currentIsFavoriteTrip()}
+          disabled={!canCurrentBeFavorited()}
           onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
       </IonList >
