@@ -81,3 +81,14 @@ export function useLocationById(locationId: string): LocationByIdResult {
 
   return location;
 }
+
+
+export type NullableLocationByIdResult = LocationByIdResult | LocationNullResult;
+interface LocationNullResult {
+  type: "success";
+  location: null;
+}
+
+export function useNullableLocationById(locationId: string | null): NullableLocationByIdResult {
+  return locationId ? useLocationById(locationId) : { type: "success", location: null };
+}
