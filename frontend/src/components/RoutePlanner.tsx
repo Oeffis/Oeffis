@@ -11,10 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Location } from "../api";
 import { useStateParams } from "../hooks/useStateParams";
-import { IJourney } from "../interfaces/IJourney.interface";
-import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
-import JourneyListComponent from "./JourneyListComponent";
 import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
 import { FavouriteTripsComponent } from "./FavouriteTripsComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
