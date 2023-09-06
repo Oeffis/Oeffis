@@ -77,7 +77,6 @@ const RoutePlanner: React.FC = () => {
           onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
       </IonList >
-      <IonTitle>Favorites</IonTitle>
       <FavouriteTripsComponent onTripSelected={trip => setTrip(trip)} />
     </>
   );

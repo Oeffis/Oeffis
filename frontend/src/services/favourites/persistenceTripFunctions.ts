@@ -1,8 +1,14 @@
 import { PersistedObject } from "../persistence/generatePersistedObjectStorage";
 import { CreateFavouriteTrip } from "./FavouritesContext";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseFavouriteTrip(favourite: any): PersistedObject<CreateFavouriteTrip> | null {
+interface PersistedTrip {
+  createdAt: string;
+  id: string;
+  originId: string;
+  destinationId: string;
+}
+
+function parseFavouriteTrip(favourite: PersistedTrip): PersistedObject<CreateFavouriteTrip> | null {
   if (typeof favourite !== "object" || favourite === null) {
     return null;
   }
@@ -16,27 +22,19 @@ function parseFavouriteTrip(favourite: any): PersistedObject<CreateFavouriteTrip
     return null;
   }
 
-  if (typeof favourite.origin.id !== "string") {
+  if (typeof favourite.originId !== "string") {
     return null;
   }
 
-  if (typeof favourite.origin.name !== "string") {
-    return null;
-  }
-
-  if (typeof favourite.destination.id !== "string") {
-    return null;
-  }
-
-  if (typeof favourite.destination.name !== "string") {
+  if (typeof favourite.destinationId !== "string") {
     return null;
   }
 
   return {
     createdAt,
     id: favourite.id,
-    origin: favourite.origin,
-    destination: favourite.destination
+    originId: favourite.originId,
+    destinationId: favourite.destinationId
   };
 }
 
