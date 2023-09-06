@@ -44,7 +44,7 @@ test("Can use context to add favorites", async () => {
   await act(() => addFavoriteTrip(elementToAdd1));
 
   expect(result.current.favoriteTrips).toHaveLength(1);
-  expect(result.current.favoriteTrips[0].destination.id).toBe("testbb");
-  expect(result.current.favoriteTrips[0].origin.id).toBe("testaa");
+  expect(result.current.favoriteTrips[0].destinationId).toBe("testbb");
+  expect(result.current.favoriteTrips[0].originId).toBe("testaa");
 
 });
