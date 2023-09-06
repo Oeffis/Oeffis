@@ -7,9 +7,10 @@ const locationCache = new Map<string, Location>();
 export function useLocationByIdOrNull(locationId: string | null): Location | null {
   const locationFinderApi = useLocationFinderApi();
   const [location, setLocation] = useState<Location | null>(null);
-  const abortController = new AbortController();
 
   useEffect(() => {
+    const abortController = new AbortController();
+
     checkNull(locationId)
       || checkCache(locationId)
       || fetchLocation(locationId);
@@ -50,24 +51,25 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
 
       function checkNoLocationFound(matchingLocations: Location[]): boolean {
         if (matchingLocations.length !== 0) return false;
-        console.error(`No location found with id ${locationId}`);
+        console.warn(`No location found with id ${locationId}`);
         return true;
       }
 
       function checkMultipleLocationsFound(matchingLocations: Location[]): boolean {
         if (matchingLocations.length >= 1) return false;
-        console.log(`Multiple locations found with id ${locationId}`);
+        console.warn(`Multiple locations found with id ${locationId}`);
         return true;
       }
 
       function singleLocationFound(matchingLocations: Location[]): true {
-        console.log(`Single location found with id ${locationId}`);
+        console.debug(`Single location found with id ${locationId}`);
         locationCache.set(locationId, matchingLocations[0]);
         setLocation(matchingLocations[0]);
         return true;
       }
 
       function processLocationFailure(error: Error): void {
+        if (abortController.signal.aborted) return;
         console.error(`Failed to find location with id ${locationId}`, error);
         error.cause && console.error(error.cause);
       }

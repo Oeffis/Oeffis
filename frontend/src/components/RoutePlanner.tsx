@@ -5,8 +5,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonModal,
-  IonTitle
+  IonModal
 } from "@ionic/react";
 import React from "react";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
