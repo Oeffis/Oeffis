@@ -10,8 +10,8 @@ import {
 import React from "react";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../hooks/useStateParams";
-import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
-import { FavouriteTripsComponent } from "./FavouriteTripsComponent";
+import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
+import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
@@ -21,15 +21,15 @@ const RoutePlanner: React.FC = () => {
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
 
-  const { favouriteTrips, addFavouriteTrip } = useFavouriteTrips();
+  const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
 
-  const setTrip = (trip: CreateFavouriteTrip): void => {
+  const setTrip = (trip: CreateFavoriteTrip): void => {
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
   };
 
   const currentIsFavoriteTrip = (): boolean => {
-    const existing = favouriteTrips.find(c =>
+    const existing = favoriteTrips.find(c =>
       c.originId === originId
       && c.destinationId === destinationId
     );
@@ -40,7 +40,7 @@ const RoutePlanner: React.FC = () => {
 
   const addToFavorites = (): void => {
     if (originId === null || destinationId === null) return;
-    addFavouriteTrip({ originId, destinationId });
+    addFavoriteTrip({ originId, destinationId });
   };
 
   return (
@@ -76,7 +76,7 @@ const RoutePlanner: React.FC = () => {
           onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
       </IonList >
-      <FavouriteTripsComponent onTripSelected={trip => setTrip(trip)} />
+      <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} />
     </>
   );
 };

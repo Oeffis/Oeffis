@@ -2,19 +2,19 @@ import { IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonReorder, IonReor
 import { star } from "ionicons/icons";
 import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
-import { CreateFavouriteTrip, useFavouriteTrips } from "../services/favourites/FavouritesContext";
+import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
 
-export interface FavouriteTripsComponentProps {
-  onTripSelected: (trip: CreateFavouriteTrip) => void;
+export interface FavoriteTripsComponentProps {
+  onTripSelected: (trip: CreateFavoriteTrip) => void;
 }
 
-export const FavouriteTripsComponent: React.FC<FavouriteTripsComponentProps> = (props) => {
-  const { favouriteTrips, setFavouriteTrips } = useFavouriteTrips();
+export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (props) => {
+  const { favoriteTrips, setFavoriteTrips } = useFavoriteTrips();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
-    const newFavouriteTrips = event.detail.complete([...favouriteTrips]);
-    setFavouriteTrips(newFavouriteTrips);
+    const newFavoriteTrips = event.detail.complete([...favoriteTrips]);
+    setFavoriteTrips(newFavoriteTrips);
   };
 
   return <>
@@ -23,8 +23,8 @@ export const FavouriteTripsComponent: React.FC<FavouriteTripsComponentProps> = (
     </IonListHeader>
     <IonList>
       <IonReorderGroup onIonItemReorder={handleReorder} disabled={false}>
-        {favouriteTrips.map((trip, idx) => (
-          <FavouriteTripEntryComponent
+        {favoriteTrips.map((trip, idx) => (
+          <FavoriteTripEntryComponent
             key={idx}
             onTripSelected={props.onTripSelected}
             trip={trip} />
@@ -33,28 +33,28 @@ export const FavouriteTripsComponent: React.FC<FavouriteTripsComponentProps> = (
     </IonList>
   </>;
 };
-export interface FavouriteTripEntryComponentProps {
-  onTripSelected: (trip: CreateFavouriteTrip) => void;
-  trip: PersistedObject<CreateFavouriteTrip>;
+export interface FavoriteTripEntryComponentProps {
+  onTripSelected: (trip: CreateFavoriteTrip) => void;
+  trip: PersistedObject<CreateFavoriteTrip>;
   key: number;
 }
 
-const FavouriteTripEntryComponent: React.FC<FavouriteTripEntryComponentProps> = (props) => {
+const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (props) => {
   const origin = useLocationByIdOrNull(props.trip.originId);
   const destination = useLocationByIdOrNull(props.trip.destinationId);
-  const { removeFavouriteTrip } = useFavouriteTrips();
+  const { removeFavoriteTrip } = useFavoriteTrips();
 
   const isReady = origin !== null && destination !== null;
 
   return <IonItem key={props.key} onClick={() => props.onTripSelected(props.trip)}>
     {
       isReady ?
-        LoadedFavouriteTripEntryComponent(origin, destination)
-        : PendingFavouriteTripEntry()
+        LoadedFavoriteTripEntryComponent(origin, destination)
+        : PendingFavoriteTripEntry()
     }
   </IonItem>;
 
-  function LoadedFavouriteTripEntryComponent(origin: Location, destination: Location): JSX.Element {
+  function LoadedFavoriteTripEntryComponent(origin: Location, destination: Location): JSX.Element {
     return <>
       <IonLabel>
         {origin.name} - {destination.name}
@@ -62,12 +62,12 @@ const FavouriteTripEntryComponent: React.FC<FavouriteTripEntryComponentProps> = 
       <IonIcon
         icon={star}
         color="warning"
-        onClick={(): void => void removeFavouriteTrip(props.trip)}
-        title="Remove from favourites" />
+        onClick={(): void => void removeFavoriteTrip(props.trip)}
+        title="Remove from favorites" />
       <IonReorder slot="start" />
     </>;
   }
-  function PendingFavouriteTripEntry(): JSX.Element {
+  function PendingFavoriteTripEntry(): JSX.Element {
     return <>
       <IonLabel>
         <IonSkeletonText animated={true} style={{ width: "50%" }} />
