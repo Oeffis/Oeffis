@@ -25,7 +25,7 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
       <IonReorderGroup onIonItemReorder={handleReorder} disabled={false}>
         {favoriteTrips.map((trip, idx) => (
           <FavoriteTripEntryComponent
-            key={idx}
+            identifier={idx}
             onTripSelected={props.onTripSelected}
             trip={trip} />
         ))}
@@ -36,7 +36,7 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
 export interface FavoriteTripEntryComponentProps {
   onTripSelected: (trip: CreateFavoriteTrip) => void;
   trip: PersistedObject<CreateFavoriteTrip>;
-  key: number;
+  identifier: number;
 }
 
 const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (props) => {
@@ -46,7 +46,7 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
 
   const isReady = origin !== null && destination !== null;
 
-  return <IonItem key={props.key} onClick={() => props.onTripSelected(props.trip)}>
+  return <IonItem key={props.identifier} onClick={() => props.onTripSelected(props.trip)}>
     {
       isReady ?
         LoadedFavoriteTripEntryComponent(origin, destination)
