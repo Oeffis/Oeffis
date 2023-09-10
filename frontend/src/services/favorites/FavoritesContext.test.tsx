@@ -33,12 +33,8 @@ test("Can use context to add favorites", async () => {
   const { addFavoriteTrip } = result.current;
 
   const elementToAdd1 = {
-    origin: {
-      id: "testaa"
-    },
-    destination: {
-      id: "testbb"
-    }
+    originId: "testaa",
+    destinationId: "testbb"
   } as Partial<CreateFavoriteTrip> as CreateFavoriteTrip;
 
   await act(() => addFavoriteTrip(elementToAdd1));
