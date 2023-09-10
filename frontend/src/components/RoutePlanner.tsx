@@ -75,7 +75,7 @@ const RoutePlanner: React.FC = () => {
           disabled={!canCurrentBeFavorited()}
           onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
-      </IonList >
+      </IonList>
       <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} />
     </>
   );
