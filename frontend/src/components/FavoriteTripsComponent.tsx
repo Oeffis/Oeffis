@@ -57,34 +57,41 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
   >
     {
       isReady ?
-        LoadedFavoriteTripEntryComponent(origin, destination)
-        : PendingFavoriteTripEntry()
+        <LoadedFavoriteTripEntryComponent
+          origin={origin}
+          destination={destination}
+          starClicked={() => removeFavoriteTrip(props.trip)}
+        />
+        : <PendingFavoriteTripEntry />
     }
   </IonItem>;
-
-  function LoadedFavoriteTripEntryComponent(origin: Location, destination: Location): JSX.Element {
-    return (
-      <>
-        <IonLabel>
-          {origin.name} - {destination.name}
-        </IonLabel>
-        <IonIcon
-          icon={star}
-          color="warning"
-          onClick={(): void => void removeFavoriteTrip(props.trip)}
-          title="Remove from favorites"
-        />
-        <IonReorder slot="start" />
-      </>
-    );
-  }
-  function PendingFavoriteTripEntry(): JSX.Element {
-    return <>
-      <IonLabel>
-        <IonSkeletonText animated={true} style={{ width: "50%" }} />
-      </IonLabel>
-      <IonIcon icon={star} />
-      <IonReorder slot="start" />
-    </>;
-  }
 };
+
+interface LoadedFavouriteTripEntryProps {
+  origin: Location;
+  destination: Location;
+  starClicked: () => void;
+}
+
+const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> = (props) => (
+  <>
+    <IonLabel>
+      {props.origin.name} - {props.destination.name}
+    </IonLabel>
+    <IonIcon
+      icon={star}
+      color="warning"
+      onClick={(): void => props.starClicked()}
+      title="Remove from favorites"
+    />
+    <IonReorder slot="start" />
+  </>
+);
+
+const PendingFavoriteTripEntry: React.FC = () => <>
+  <IonLabel>
+    <IonSkeletonText animated={true} style={{ width: "50%" }} />
+  </IonLabel>
+  <IonIcon icon={star} />
+  <IonReorder slot="start" />
+</>;
