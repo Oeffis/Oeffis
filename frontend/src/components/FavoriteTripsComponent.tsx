@@ -17,21 +17,26 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
     setFavoriteTrips(newFavoriteTrips);
   };
 
-  return <>
-    <IonListHeader>
-      <IonTitle>Favorites</IonTitle>
-    </IonListHeader>
-    <IonList>
-      <IonReorderGroup onIonItemReorder={handleReorder} disabled={false}>
-        {favoriteTrips.map((trip, idx) => (
-          <FavoriteTripEntryComponent
-            identifier={idx}
-            onTripSelected={props.onTripSelected}
-            trip={trip} />
-        ))}
-      </IonReorderGroup>
-    </IonList>
-  </>;
+  return (
+    <>
+      <IonListHeader>
+        <IonTitle>Favorites</IonTitle>
+      </IonListHeader>
+      <IonList>
+        <IonReorderGroup
+          onIonItemReorder={handleReorder}
+          disabled={false}
+        >
+          {favoriteTrips.map((trip, idx) => (
+            <FavoriteTripEntryComponent
+              identifier={idx}
+              onTripSelected={props.onTripSelected}
+              trip={trip} />
+          ))}
+        </IonReorderGroup>
+      </IonList>
+    </>
+  );
 };
 export interface FavoriteTripEntryComponentProps {
   onTripSelected: (trip: CreateFavoriteTrip) => void;
@@ -46,7 +51,10 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
 
   const isReady = origin !== null && destination !== null;
 
-  return <IonItem key={props.identifier} onClick={() => props.onTripSelected(props.trip)}>
+  return <IonItem
+    key={props.identifier}
+    onClick={() => props.onTripSelected(props.trip)}
+  >
     {
       isReady ?
         LoadedFavoriteTripEntryComponent(origin, destination)
@@ -55,17 +63,20 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
   </IonItem>;
 
   function LoadedFavoriteTripEntryComponent(origin: Location, destination: Location): JSX.Element {
-    return <>
-      <IonLabel>
-        {origin.name} - {destination.name}
-      </IonLabel>
-      <IonIcon
-        icon={star}
-        color="warning"
-        onClick={(): void => void removeFavoriteTrip(props.trip)}
-        title="Remove from favorites" />
-      <IonReorder slot="start" />
-    </>;
+    return (
+      <>
+        <IonLabel>
+          {origin.name} - {destination.name}
+        </IonLabel>
+        <IonIcon
+          icon={star}
+          color="warning"
+          onClick={(): void => void removeFavoriteTrip(props.trip)}
+          title="Remove from favorites"
+        />
+        <IonReorder slot="start" />
+      </>
+    );
   }
   function PendingFavoriteTripEntry(): JSX.Element {
     return <>
