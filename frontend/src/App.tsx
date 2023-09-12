@@ -1,7 +1,6 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -18,6 +17,7 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
+import JourneyPage from "./pages/JourneyPage";
 import JourneysPage from "./pages/JourneysPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
@@ -37,7 +37,7 @@ const App: React.FC = () => (
               <IonReactRouter>
                 <IonRouterOutlet>
                   <Route exact path="/home">
-                    <Home />
+                    <JourneyPage />
                   </Route>
                   <Route exact path="/">
                     <Redirect to="/home" />
