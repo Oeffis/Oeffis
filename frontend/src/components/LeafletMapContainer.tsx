@@ -14,10 +14,6 @@ const LeafletMapContainer = ({ locations, onItemClicked }: LocationSearchListPro
   const [center, setCenter] = useState<[number, number]>([51.5743061234828, 7.0272808779967315]);
   const [zoom, setZoom] = useState<number>();
 
-  const select = (): void => {
-    console.log("Selected");
-  };
-
   const renderMarker = (): ReactElement[] => {
 
     const marker: ReactElement[] = [];
