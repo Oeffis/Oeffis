@@ -1,4 +1,4 @@
-import { IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonReorder, IonReorderGroup, IonSkeletonText, IonTitle, ItemReorderEventDetail } from "@ionic/react";
+import { IonIcon, IonItem, IonLabel, IonList, IonReorder, IonReorderGroup, IonSkeletonText, ItemReorderEventDetail } from "@ionic/react";
 import { star } from "ionicons/icons";
 import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
@@ -19,9 +19,6 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
 
   return (
     <>
-      <IonListHeader>
-        <IonTitle>Favorites</IonTitle>
-      </IonListHeader>
       <IonList>
         <IonReorderGroup
           onIonItemReorder={handleReorder}
@@ -81,7 +78,7 @@ const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> 
     <IonIcon
       icon={star}
       color="warning"
-      onClick={(): void => props.starClicked()}
+      onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
       title="Remove from favorites"
     />
     <IonReorder slot="start" />
