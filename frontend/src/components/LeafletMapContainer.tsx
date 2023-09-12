@@ -18,17 +18,6 @@ const LeafletMapContainer = ({ locations, onItemClicked }: LocationSearchListPro
     console.log("Selected");
   };
 
-  const renderMap = (): ReactElement => (
-    <MapContainer id="map" center={center} zoom={zoom} >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {renderMarker()}
-    </MapContainer>
-  );
-
-
   const renderMarker = (): ReactElement[] => {
 
     const marker: ReactElement[] = [];
@@ -48,10 +37,7 @@ const LeafletMapContainer = ({ locations, onItemClicked }: LocationSearchListPro
 
   const calculateCenter = (): [number, number] => {
 
-    let la = 51.5743061234828;
-    let lo = 7.0272808779967315;
-
-    let result: [number, number] = [la, lo];
+    let result: [number, number] = [51.5743061234828, 7.0272808779967315];
 
     if (locations.length !== 0) {
       let latitude = 0;
