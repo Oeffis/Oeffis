@@ -11,11 +11,12 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Location } from "../../api";
-import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
-import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
+import { Location, LocationDetails } from "../../api";
+import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
+import { useFavouriteLocations } from "../../services/favourites/FavouritesContext";
+import LeafletMapContainer from "../LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
 export type LocationSearchInputProps = {
@@ -29,6 +30,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const LOCATIONS_LIMIT = 20;
   const [searchInput, setSearchInput] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [showMap, setShowMap] = useState<boolean>(false);
 
   const setSelectedLocationAndCloseModal = (location: Location): void => {
     props.onSelectedLocationChanged(location);
@@ -47,6 +49,23 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);
   const showResults = searchInput !== "" && (foundLocations.type === "success" || foundLocations.type === "outdated");
 
+  const displayMap = (): void => {
+    if (showMap) {
+      setShowMap(false);
+    } else {
+      setShowMap(true);
+    }
+  };
+
+  useEffect(() => {
+    if (searchInput !== "") {
+      document.getElementById("mapButton")?.setAttribute("disabled", "false");
+    } else {
+      document.getElementById("mapButton")?.setAttribute("disabled", "true");
+      setShowMap(false);
+    }
+  }, [searchInput]);
+
   return (
     <>
       <IonInput
@@ -64,6 +83,12 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           <IonToolbar>
             <IonTitle> Search for {props.inputLabel}</IonTitle>
             <IonButtons slot="end">
+              <IonButton
+                id="mapButton"
+                onClick={displayMap}
+              >
+                Show Map
+              </IonButton>
               <IonButton
                 color={"danger"}
                 onClick={closeModalWithoutSelection}
@@ -85,22 +110,28 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>
         <IonContent>
-          <IonList>
-            {searchInput === "" &&
-              <LocationSearchList
-                locations={favoriteLocations.map((favoriteLocation) => favoriteLocation.locationId)}
-                onItemClicked={setSelectedLocationAndCloseModal}
-              />
-            }
-            {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
-            {
-              showResults &&
-              <LocationSearchList
-                locations={foundLocations.searchResults}
-                onItemClicked={setSelectedLocationAndCloseModal}
-              />
-            }
-          </IonList >
+          {showResults && showMap
+            ? <LeafletMapContainer
+              locations={
+                foundLocations.searchResults}
+              onItemClicked={setSelectedLocationAndCloseModal}
+            />
+            : <IonList>
+              {searchInput === "" &&
+                <LocationSearchList
+                  locations={favouriteLocations.map((favoriteLocaiton) => favoriteLocation.locationId)}
+                  onItemClicked={setSelectedLocationAndCloseModal}
+                />
+              }
+              {foundLocations.type === "error" && <div>Error: {foundLocations.error.message}</div>}
+              {
+                showResults &&
+                <LocationSearchList
+                  locations={foundLocations.searchResults}
+                  onItemClicked={setSelectedLocationAndCloseModal}
+                />
+              }
+            </IonList >}
         </IonContent >
       </IonModal >
     </>
