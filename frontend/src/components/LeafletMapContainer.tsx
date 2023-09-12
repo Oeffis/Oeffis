@@ -51,7 +51,7 @@ const LeafletMapContainer = ({ locations, onItemClicked }: LocationSearchListPro
     let la = 51.5743061234828;
     let lo = 7.0272808779967315;
 
-    let result = [la, lo];
+    let result: [number, number] = [la, lo];
 
     if (locations.length !== 0) {
       let latitude = 0;
@@ -70,7 +70,7 @@ const LeafletMapContainer = ({ locations, onItemClicked }: LocationSearchListPro
   useEffect(() => {
     setCenter(calculateCenter());
     setZoom(15);
-  }, [center]);
+  }, []);
 
   return zoom && center.length > 0 ? (
     <MapContainer id="map" center={center} zoom={zoom} >
