@@ -1,3 +1,7 @@
+.popup {
+    width: fit-content;
+}
+
 #map {
     height: 100%;
     width: 100%;

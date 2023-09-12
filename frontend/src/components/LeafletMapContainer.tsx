@@ -22,7 +22,7 @@ const LeafletMapContainer = ({ locations, onItemClicked }: LocationSearchListPro
       marker.push(
         <Marker key={"m" + location.id} position={[location.details.latitude, location.details.longitude]}>
           <Popup key={"p" + location.id} className="popup">
-            <IonButton key={"ib" + location.id} onClick={() => onItemClicked(location)}>{location.name}</IonButton>
+            <IonButton key={"ib" + location.id} onClick={() => onItemClicked(location)}>{location.details.shortName}</IonButton>
           </Popup>
         </Marker>
       );
