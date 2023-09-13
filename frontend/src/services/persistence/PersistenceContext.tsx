@@ -4,7 +4,7 @@ import { PersistenceService } from "./PersistenceService";
 
 export const PersistenceContext = createContext<PersistenceService>(new PersistenceService());
 
-// After thinking about it this may need to restuctured to be more like the FavouritesContext.
+// After thinking about it this may need to restuctured to be more like the FavoritesContext.
 // But doing so would lead to a generic eventbus thou all parts of the app, which is something
 // we may want to avoid.
 export function PersistenceProvider(props: PropsWithChildren): JSX.Element {

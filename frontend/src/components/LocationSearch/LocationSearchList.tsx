@@ -1,7 +1,7 @@
 import { IonIcon, IonItem, IonLabel } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
 import { Location } from "../../api";
-import { useFavouriteLocations } from "../../services/favourites/FavouritesContext";
+import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import { LocationIcon } from "./LocationIcon";
 
 export type LocationSearchListProps = {
@@ -27,17 +27,17 @@ type LocationSerarchListItemProps = {
 };
 
 function LocationSearchListItem({ location, onItemClicked }: LocationSerarchListItemProps): JSX.Element {
-  const { favouriteLocations, addFavouriteLocation, removeFavouriteLocationById } = useFavouriteLocations();
+  const { favoriteLocations, addFavoriteLocation, removeFavoriteLocationById } = useFavoriteLocations();
 
-  const removeFavouriteStopByLocationId = (locationId: string): void => {
-    const favouriteStop = favouriteLocations.find((favouriteStop) => favouriteStop.locationId === locationId);
+  const removeFavoriteStopByLocationId = (locationId: string): void => {
+    const favoriteStop = favoriteLocations.find((favoriteStop) => favoriteStop.locationId === locationId);
 
-    if (favouriteStop) {
-      removeFavouriteLocationById(favouriteStop.id);
+    if (favoriteStop) {
+      removeFavoriteLocationById(favoriteStop.id);
     }
   };
 
-  const isFavouriteStop = favouriteLocations.some((favouriteStop) => favouriteStop.locationId === location.id);
+  const isFavoriteStop = favoriteLocations.some((favoriteStop) => favoriteStop.locationId === location.id);
 
   return (
     <IonItem
@@ -51,17 +51,17 @@ function LocationSearchListItem({ location, onItemClicked }: LocationSerarchList
         {location.name}
       </IonLabel>
       {
-        isFavouriteStop
+        isFavoriteStop
           ? <IonIcon
             icon={star}
             color="warning"
-            onClick={(): void => removeFavouriteStopByLocationId(location.id)}
-            title="Remove from favourites"
+            onClick={(): void => removeFavoriteStopByLocationId(location.id)}
+            title="Remove from favorites"
           />
           : <IonIcon
             icon={starOutline}
-            onClick={() => addFavouriteLocation({ locationId: location.id, name: location.name, type: location.type })}
-            title="Add to favourites"
+            onClick={() => addFavoriteLocation({ locationId: location.id, name: location.name, type: location.type })}
+            title="Add to favorites"
           />
       }
     </IonItem>

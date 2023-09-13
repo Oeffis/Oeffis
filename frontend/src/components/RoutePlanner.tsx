@@ -1,75 +1,123 @@
 import {
   IonButton,
+  IonContent,
   IonDatetime,
   IonDatetimeButton,
+  IonHeader,
   IonItem,
   IonLabel,
   IonList,
-  IonModal
+  IonModal,
+  IonTitle,
+  IonToolbar
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
+import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../hooks/useStateParams";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
+import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
+import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 const RoutePlanner: React.FC = () => {
-  const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationLocationId, setDestinationLocationId] = useStateParams<string | null>(null, "destination", String, String);
+  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
 
-  const [originLocation, setOriginLocation] = useInitialLocationFromLocationIdAndThenAsState(originLocationId);
-  const [destinationLocation, setDestinationLocation] = useInitialLocationFromLocationIdAndThenAsState(destinationLocationId);
+  const originLocation = useLocationByIdOrNull(originId);
+  const destinationLocation = useLocationByIdOrNull(destinationId);
 
-  const setOrigin = (location: Location | null): void => {
-    setOriginLocation(location);
-    setOriginLocationId(location?.id ?? null);
+  const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
+
+  const setTrip = (trip: CreateFavoriteTrip): void => {
+    setIsFavoritesModalOpen(false);
+    setOriginId(trip.originId);
+    setDestinationId(trip.destinationId);
   };
 
-  const setDestination = (location: Location | null): void => {
-    setDestinationLocation(location);
-    setDestinationLocationId(location?.id ?? null);
+  const currentIsFavoriteTrip = (): boolean => {
+    const existing = favoriteTrips.find(c =>
+      c.originId === originId
+      && c.destinationId === destinationId
+    );
+    return existing !== undefined;
+  };
+
+  const canCurrentBeFavorited = (): boolean => originLocation !== null && destinationLocation !== null && !currentIsFavoriteTrip();
+
+  const addToFavorites = (): void => {
+    if (originId === null || destinationId === null) return;
+    addFavoriteTrip({ originId, destinationId });
+  };
+
+  const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
+  const showFavorites = (): void => {
+    setIsFavoritesModalOpen(true);
   };
 
   return (
-    <IonList inset={true}>
-      <IonItem lines="inset">
-        {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
-        <IonLabel>Date and Time</IonLabel>
-        <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
-        <IonModal keepContentsMounted={true}>
-          <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
-        </IonModal>
-      </IonItem>
-      <IonItem>
-        <LocationSearchInput
-          inputLabel="Origin"
-          selectedLocation={originLocation}
-          onSelectedLocationChanged={(location): void => setOrigin(location)}
-          prefixDataTestId="origin-input"
-        />
-      </IonItem>
-      <IonItem>
-        <LocationSearchInput
-          inputLabel="Destination"
-          selectedLocation={destinationLocation}
-          onSelectedLocationChanged={(location): void => setDestination(location)}
-          prefixDataTestId="destination-input"
-        />
-      </IonItem>
-      <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
-
+    <>
+      <IonList inset={true}>
+        <IonItem lines="inset">
+          {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
+          <IonLabel>Date and Time</IonLabel>
+          <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
+          <IonModal keepContentsMounted={true}>
+            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
+          </IonModal>
+        </IonItem>
+        <IonItem>
+          <LocationSearchInput
+            inputLabel="Origin"
+            selectedLocation={originLocation}
+            onSelectedLocationChanged={(location): void => setOriginId(location.id)}
+            prefixDataTestId="origin-input"
+          />
+        </IonItem>
+        <IonItem>
+          <LocationSearchInput
+            inputLabel="Destination"
+            selectedLocation={destinationLocation}
+            onSelectedLocationChanged={(location): void => setDestinationId(location.id)}
+            prefixDataTestId="destination-input"
+          />
+        </IonItem>
+        <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
+        <IonButton expand="block" color="warning"
+          disabled={!canCurrentBeFavorited()}
+          onClick={() => addToFavorites()}
+        >Add To Favorites</IonButton>
+        <IonButton expand="block" color="warning"
+          onClick={() => showFavorites()}
+        >Show Favorites</IonButton>
+      </IonList>
       {
         originLocation !== null && destinationLocation !== null &&
         <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
       }
-    </IonList>
-  );
 
+      <IonModal
+        isOpen={isFavoritesModalOpen}
+        onDidDismiss={() => setIsFavoritesModalOpen(false)}
+      >
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Favorites</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} />
+        </IonContent>
+      </IonModal>
+    </>
+  );
 };
+
+export default RoutePlanner;
 
 export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
   const { origin, destination } = props;
@@ -127,8 +175,6 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
     </IonItem>
   );
 }
-
-export default RoutePlanner;
 
 
 export function useInitialLocationFromLocationIdAndThenAsState(locationId: string | null): [Location | null, (location: Location | null) => void] {

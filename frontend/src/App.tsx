@@ -21,7 +21,7 @@ import "@ionic/react/css/text-transformation.css";
 import JourneysPage from "./pages/JourneysPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
-import { FavouriteLocationsProvider, FavouriteTripsProvider } from "./services/favourites/FavouritesContext";
+import { FavoriteLocationsProvider, FavoriteTripsProvider } from "./services/favorites/FavoritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 import "./theme/variables.css";
 
@@ -31,8 +31,8 @@ const App: React.FC = () => (
   <AppConfigProvider>
     <ApiClientsProvider>
       <PersistenceProvider>
-        <FavouriteLocationsProvider>
-          <FavouriteTripsProvider>
+        <FavoriteLocationsProvider>
+          <FavoriteTripsProvider>
             <IonApp>
               <IonReactRouter>
                 <IonRouterOutlet>
@@ -48,8 +48,8 @@ const App: React.FC = () => (
                 </IonRouterOutlet>
               </IonReactRouter>
             </IonApp>
-          </FavouriteTripsProvider>
-        </FavouriteLocationsProvider>
+          </FavoriteTripsProvider>
+        </FavoriteLocationsProvider>
       </PersistenceProvider>
     </ApiClientsProvider>
   </AppConfigProvider>

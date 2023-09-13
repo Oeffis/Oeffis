@@ -5,6 +5,7 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
+    defaultCommandTimeout: process.env.GITHUB_ACTIONS ? 10000 : 4000,
     baseUrl: "http://localhost:8000",
     supportFile: "support.ts",
     specPattern: "**/*.feature",

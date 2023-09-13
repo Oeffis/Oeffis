@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Location, LocationDetails } from "../../api";
 import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
-import { useFavouriteLocations } from "../../services/favourites/FavouritesContext";
+import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import { LocationSearchList } from "./LocationSearchList";
 
 export type LocationSearchInputProps = {
@@ -40,7 +40,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
   const foundLocations = useLocationSearchByName(debouncedSearchInput);
-  const { favouriteLocations } = useFavouriteLocations();
+  const { favoriteLocations } = useFavoriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;
   const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);
@@ -88,7 +88,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             {searchInput === "" &&
               <LocationSearchList
                 locations={
-                  favouriteLocations
+                  favoriteLocations
                     .map(({ locationId: id, name, type }) => ({ id, name, type, details: {} as unknown as LocationDetails }))
                 }
                 onItemClicked={setSelectedLocationAndCloseModal}
