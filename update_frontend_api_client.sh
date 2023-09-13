@@ -29,5 +29,5 @@ docker run --rm -v //"$PWD":/work openapitools/openapi-generator-cli:v7.0.0 \
   --config //work/frontend/api_client_generator_settings.json \
   --output //work/frontend/src/api/
 
-cp -a frontend/src/api/src/ frontend/src/api/
+cp -a frontend/src/api/src/** frontend/src/api/
 rm -fr frontend/src/api/src/
