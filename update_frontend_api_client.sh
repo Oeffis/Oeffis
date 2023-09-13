@@ -22,6 +22,8 @@ tsconfig.esm.json
 
 echo "Generating code from swagger spec"
 
+# Use double slash as path prefix because Git Bash on Windows is doing some wrong auto-conversion otherwise
+# (leading to paths being resolved wrong - relative to Git (Bash) installation directory).
 docker run --rm -v //"$PWD":/work openapitools/openapi-generator-cli:v7.0.0 \
   generate \
   --input-spec //work/backend/swagger-spec.json \
