@@ -1,3 +1,4 @@
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as fs from "fs";
@@ -5,6 +6,10 @@ import { AppModule } from "./app.module";
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+
+  // Enable validation + transformation using ValidationPipe.
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  //app.useGlobalPipes(new ValidationPipe({ transform: true, disableErrorMessages: true }));
 
   const config = new DocumentBuilder()
     .setTitle("NestJS Swagger")

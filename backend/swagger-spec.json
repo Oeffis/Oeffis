@@ -301,13 +301,14 @@
           "departure": {
             "format": "date-time",
             "type": "string",
-            "description": "Date of the trip to start (default: current date).",
+            "description": "Date of the trip to start.",
             "example": "2023-08-29T16:58:47.129Z"
           },
           "asArrival": {
             "type": "boolean",
             "description": "Use departure date as arrival.",
-            "default": false
+            "default": false,
+            "example": false
           }
         },
         "required": [
