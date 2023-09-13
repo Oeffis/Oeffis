@@ -22,12 +22,12 @@ tsconfig.esm.json
 
 echo "Generating code from swagger spec"
 
-docker run --rm -v $PWD:/work openapitools/openapi-generator-cli:v7.0.0 \
+docker run --rm -v //"$PWD":/work openapitools/openapi-generator-cli:v7.0.0 \
   generate \
-  --input-spec /work/backend/swagger-spec.json \
+  --input-spec //work/backend/swagger-spec.json \
   --generator-name typescript-fetch \
-  --config /work/frontend/api_client_generator_settings.json \
-  --output /work/frontend/src/api/
+  --config //work/frontend/api_client_generator_settings.json \
+  --output //work/frontend/src/api/
 
 cp -a frontend/src/api/src/ frontend/src/api/
 rm -fr frontend/src/api/src/
