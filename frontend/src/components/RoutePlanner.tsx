@@ -1,9 +1,11 @@
 import {
   IonButton,
+  IonButtons,
   IonContent,
   IonDatetime,
   IonDatetimeButton,
   IonHeader,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -11,6 +13,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
+import { closeCircleOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { Journey, Location } from "../api";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
@@ -23,6 +26,7 @@ import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/Favo
 import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
+import "./RoutePlanner.css";
 
 const RoutePlanner: React.FC = () => {
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
@@ -33,7 +37,9 @@ const RoutePlanner: React.FC = () => {
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
 
+
   const setTrip = (trip: CreateFavoriteTrip): void => {
+    setIsFavoritesDialogueOpen(false);
     setIsFavoritesModalOpen(false);
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
@@ -49,10 +55,13 @@ const RoutePlanner: React.FC = () => {
 
   const canCurrentBeFavorited = (): boolean => originLocation !== null && destinationLocation !== null && !currentIsFavoriteTrip();
 
+
   const addToFavorites = (): void => {
     if (originId === null || destinationId === null) return;
-    addFavoriteTrip({ originId, destinationId });
+    setIsFavoritesDialogueOpen(true);
   };
+
+  const [isFavoriteDialogueOpen, setIsFavoritesDialogueOpen] = useState(false);
 
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
   const showFavorites = (): void => {
@@ -99,7 +108,28 @@ const RoutePlanner: React.FC = () => {
         originLocation !== null && destinationLocation !== null &&
         <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
       }
+      <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
+        <IonContent>
+          <IonToolbar>
+            <IonTitle>Zu Favoriten hinzufügen</IonTitle>
+            <IonButtons slot="end">
+              <IonButton color="light" onClick={() => setIsFavoritesDialogueOpen(false)}>
+                <IonIcon icon={closeCircleOutline} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+          <div id="content-section">
+            <div>
+              Willst du die Route mit oder ohne Zeit speichern?
+            </div>
+            <div id="buttons">
+              <IonButton onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Ohne Zeit</IonButton>
+              <IonButton onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Mit Zeit</IonButton>
+            </div>
+          </div>
 
+        </IonContent>
+      </IonModal>;
       <IonModal
         isOpen={isFavoritesModalOpen}
         onDidDismiss={() => setIsFavoritesModalOpen(false)}
