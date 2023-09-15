@@ -6,5 +6,6 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./.localdev/pgdata:/var/lib/postgresql/data
+      - ./schema:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
