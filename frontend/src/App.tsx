@@ -21,7 +21,7 @@ import "@ionic/react/css/text-transformation.css";
 import JourneysPage from "./pages/JourneysPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
-import { FavoriteLocationsProvider, FavoriteTripsProvider } from "./services/favorites/FavoritesContext";
+import { FavoriteLocationsProvider, FavoriteRoutesProvider, FavoriteTripsProvider } from "./services/favorites/FavoritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 import "./theme/variables.css";
 
@@ -33,21 +33,23 @@ const App: React.FC = () => (
       <PersistenceProvider>
         <FavoriteLocationsProvider>
           <FavoriteTripsProvider>
-            <IonApp>
-              <IonReactRouter>
-                <IonRouterOutlet>
-                  <Route exact path="/home">
-                    <Home />
-                  </Route>
-                  <Route exact path="/">
-                    <Redirect to="/home" />
-                  </Route>
-                  <Route exact path="/journeyDemo">
-                    <JourneysPage />
-                  </Route>
-                </IonRouterOutlet>
-              </IonReactRouter>
-            </IonApp>
+            <FavoriteRoutesProvider>
+              <IonApp>
+                <IonReactRouter>
+                  <IonRouterOutlet>
+                    <Route exact path="/home">
+                      <Home />
+                    </Route>
+                    <Route exact path="/">
+                      <Redirect to="/home" />
+                    </Route>
+                    <Route exact path="/journeyDemo">
+                      <JourneysPage />
+                    </Route>
+                  </IonRouterOutlet>
+                </IonReactRouter>
+              </IonApp>
+            </FavoriteRoutesProvider>
           </FavoriteTripsProvider>
         </FavoriteLocationsProvider>
       </PersistenceProvider>

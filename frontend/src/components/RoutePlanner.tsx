@@ -22,7 +22,7 @@ import { useStateParams } from "../hooks/useStateParams";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
-import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
+import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../services/favorites/FavoritesContext";
 import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
@@ -31,30 +31,48 @@ import "./RoutePlanner.css";
 const RoutePlanner: React.FC = () => {
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
+  const [tripTime, setTripTime] = useStateParams<string>(new Date().toISOString(), "tripTime", String, String);
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
-
+  const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
 
   const setTrip = (trip: CreateFavoriteTrip): void => {
     setIsFavoritesDialogueOpen(false);
     setIsFavoritesModalOpen(false);
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
+    setTripTime(trip.tripTime);
+  };
+
+  const setRoute = (route: CreateFavoriteRoute): void => {
+    setIsFavoritesDialogueOpen(false);
+    setIsFavoritesModalOpen(false);
+    setOriginId(route.originId);
+    setDestinationId(route.destinationId);
   };
 
   const currentIsFavoriteTrip = (): boolean => {
     const existing = favoriteTrips.find(c =>
       c.originId === originId
       && c.destinationId === destinationId
+      && c.tripTime === tripTime
     );
     return existing !== undefined;
   };
 
-  const canCurrentBeFavorited = (): boolean => originLocation !== null && destinationLocation !== null && !currentIsFavoriteTrip();
+  const currentIsFavoriteRoute = (): boolean => {
+    const existing = favoriteRoutes.find(c =>
+      c.originId === originId
+      && c.destinationId === destinationId
+    );
+    return existing !== undefined;
+  };
 
+  const canCurrentTripBeFavorited = (): boolean => originLocation !== null && destinationLocation !== null && !currentIsFavoriteTrip();
+  const canCurrentRouteBeFavorited = (): boolean => originLocation !== null && destinationLocation !== null && !currentIsFavoriteRoute();
 
   const addToFavorites = (): void => {
     if (originId === null || destinationId === null) return;
@@ -76,7 +94,7 @@ const RoutePlanner: React.FC = () => {
           <IonLabel>Date and Time</IonLabel>
           <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
           <IonModal keepContentsMounted={true}>
-            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
+            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} onIonChange={(e: CustomEvent) => { setTripTime(e.detail.value); }} />
           </IonModal>
         </IonItem>
         <IonItem>
@@ -97,7 +115,7 @@ const RoutePlanner: React.FC = () => {
         </IonItem>
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
         <IonButton expand="block" color="warning"
-          disabled={!canCurrentBeFavorited()}
+
           onClick={() => addToFavorites()}
         >Add To Favorites</IonButton>
         <IonButton expand="block" color="warning"
@@ -120,11 +138,11 @@ const RoutePlanner: React.FC = () => {
           </IonToolbar>
           <div id="content-section">
             <div>
-              Willst du die Route mit oder ohne Zeit speichern?
+              Willst du die Route mit oder ohne Uhrzeit speichern?
             </div>
             <div id="buttons">
-              <IonButton onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Ohne Zeit</IonButton>
-              <IonButton onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Mit Zeit</IonButton>
+              <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Ohne Uhrzeit</IonButton>
+              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, tripTime }); setIsFavoritesDialogueOpen(false); } }}>Mit Uhrzeit</IonButton>
             </div>
           </div>
 
@@ -140,7 +158,7 @@ const RoutePlanner: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} />
+          <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} onRouteSelected={route => setRoute(route)} />
         </IonContent>
       </IonModal>
     </>

@@ -1,15 +1,14 @@
 import { PersistedObject } from "../persistence/generatePersistedObjectStorage";
-import { CreateFavoriteTrip } from "./FavoritesContext";
+import { CreateFavoriteRoute } from "./FavoritesContext";
 
-interface PersistedTrip {
+interface PersistedRoute {
   createdAt: string;
   id: string;
   originId: string;
   destinationId: string;
-  tripTime: string;
 }
 
-function parseFavoriteTrip(favorite: PersistedTrip): PersistedObject<CreateFavoriteTrip> | null {
+function parseFavoriteRoute(favorite: PersistedRoute): PersistedObject<CreateFavoriteRoute> | null {
   if (typeof favorite !== "object" || favorite === null) {
     return null;
   }
@@ -35,28 +34,27 @@ function parseFavoriteTrip(favorite: PersistedTrip): PersistedObject<CreateFavor
     createdAt,
     id: favorite.id,
     originId: favorite.originId,
-    destinationId: favorite.destinationId,
-    tripTime: favorite.tripTime
+    destinationId: favorite.destinationId
   };
 }
 
-export function parsePersistedFavoriteTrips(persistedFavoriteTrips: string | null): PersistedObject<CreateFavoriteTrip>[] {
-  if (!persistedFavoriteTrips) {
+export function parsePersistedFavoriteRoutes(persistedFavoriteRoutes: string | null): PersistedObject<CreateFavoriteRoute>[] {
+  if (!persistedFavoriteRoutes) {
     return [];
   }
 
-  const parsedFromPersistence = JSON.parse(persistedFavoriteTrips);
+  const parsedFromPersistence = JSON.parse(persistedFavoriteRoutes);
   if (!Array.isArray(parsedFromPersistence)) {
     return [];
   }
 
   const parsedFavorites = parsedFromPersistence
-    .map(parseFavoriteTrip)
-    .filter((favorite): favorite is PersistedObject<CreateFavoriteTrip> => favorite !== null);
+    .map(parseFavoriteRoute)
+    .filter((favorite): favorite is PersistedObject<CreateFavoriteRoute> => favorite !== null);
 
   return parsedFavorites;
 }
 
-export function stringifyFavoriteTrips(favoriteTrips: PersistedObject<CreateFavoriteTrip>[]): string {
-  return JSON.stringify(favoriteTrips);
+export function stringifyFavoriteRoutes(favoriteRoutes: PersistedObject<CreateFavoriteRoute>[]): string {
+  return JSON.stringify(favoriteRoutes);
 }
