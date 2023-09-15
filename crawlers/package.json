@@ -1,0 +1,41 @@
+{
+  "name": "@oeffis/crawlers",
+  "private": true,
+  "version": "0.0.1",
+  "license": "AGPL-3.0-or-later",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oeffis/oeffis.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix"
+  },
+  "dependencies": {
+    "@types/node": "^16.18.39",
+    "date-fns": "^2.30.0",
+    "node-fetch": "^2.6.12",
+    "papaparse": "^5.4.1",
+    "pg": "^8.11.3",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.6.4",
+    "@types/papaparse": "^5.3.8",
+    "@types/pg": "^8.10.2",
+    "@types/yargs": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.59.11",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.3.2",
+    "quicktype": "^23.0.59",
+    "typescript": "^5.1.6"
+  }
+}
