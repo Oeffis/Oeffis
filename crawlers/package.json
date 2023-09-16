@@ -17,6 +17,7 @@
     "test": "echo \"No test specified\""
   },
   "dependencies": {
+    "@oeffis/vrr_client": "file:../vrr_client",
     "@types/node": "^16.18.39",
     "date-fns": "^2.30.0",
     "node-fetch": "^2.6.12",
