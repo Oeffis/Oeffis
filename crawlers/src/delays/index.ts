@@ -1,5 +1,5 @@
-import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client/src/Constants";
-import { DeparturesClient } from "@oeffis/vrr_client/src/DeparturesClient";
+import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client/dist/Constants";
+import { DeparturesClient } from "@oeffis/vrr_client/dist/DeparturesClient";
 import { createPgPool } from "../postgres/createPgPool";
 
 export async function run(args: { stopId: string, limit: number }): Promise<void> {
@@ -14,6 +14,7 @@ export async function run(args: { stopId: string, limit: number }): Promise<void
 
   const pgPool = await createPgPool({
     host: process.env.pgHost,
+    port: parseInt(process.env.pgPort || "5432"),
     database: process.env.pgDatabase,
     user: process.env.pgUser,
     password: process.env.pgPassword

@@ -62,6 +62,27 @@
       ],
       "smartStep": true,
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run delay crawler",
+      "program": "${workspaceFolder}/crawlers/dist/",
+      "preLaunchTask": "Crawlers (watch)",
+      "args": [
+        "delays",
+        "--stopId",
+        "${input:stopId}",
+        "--limit",
+        "${input:limit}"
+      ],
+      "env": {
+        "pgHost": "localhost",
+        "pgPort": "5432",
+        "pgUser": "postgres",
+        "pgPassword": "postgres",
+        "pgDatabase": "delays"
+      }
     }
   ],
   "compounds": [
@@ -76,6 +97,20 @@
         "group": "",
         "order": 1
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "stopId",
+      "type": "promptString",
+      "description": "Stop ID",
+      "default": "de:05513:5613"
+    },
+    {
+      "id": "limit",
+      "type": "promptString",
+      "description": "Limit",
+      "default": "100"
     }
   ]
 }
