@@ -20,7 +20,8 @@
     "./frontend",
     "./backend",
     "./e2e",
-    "./vrr_client"
+    "./vrr_client",
+    "./crawlers"
   ],
   "cSpell.words": [
     "Hafas"
