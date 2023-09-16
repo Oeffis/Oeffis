@@ -1,0 +1,33 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "DestinationToStop-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo"
+		},
+		"version": {
+			"type": "string"
+		},
+		"systemMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/systemMessage"
+			}
+		},
+		"stops": {
+			"type": "array",
+			"items": {
+				"$ref": "Definitions.json#/definitions/location"
+			}
+		},
+		"localities": {
+			"type": "array",
+			"items": {
+				"$ref": "Definitions.json#/definitions/location"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"version": "10.4.15.5"
+}

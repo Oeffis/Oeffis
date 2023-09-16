@@ -1,0 +1,21 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "Operator-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo"
+		},
+		"version": {
+			"type": "string"
+		},
+		"operators": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/operator"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"version": "10.4.15.5"
+}

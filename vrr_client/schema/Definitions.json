@@ -1,0 +1,3962 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "definitions",
+	"definitions": {
+		"systemMessage": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"warning",
+						"error",
+						"message"
+					],
+					"version": "10.2.2.48"
+				},
+				"module": {
+					"type": "string",
+					"enum": [
+						"PT_KERNEL",
+						"IT_KERNEL",
+						"MAP_KERNEL",
+						"DISPATCHER",
+						"BROKER",
+						"PPROF",
+						"AHF",
+						"EFAPSCHED",
+						"PDA",
+						"STT",
+						"ROP",
+						"TTB",
+						"itp-monomodal",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"code": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"text": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"subType": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"error": {
+			"type": "object",
+			"properties": {
+				"message": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"versions": {
+					"type": "object",
+					"properties": {
+						"controller": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"interfaceMax": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"interfaceMin": {
+							"type": "string",
+							"version": "10.2.2.48"
+						}
+					},
+					"version": "10.2.2.48"
+				}
+			},
+			"version": "10.2.2.48"
+		},
+		"journeyLocation": {
+			"type": "object",
+			"allOf": [
+				{
+					"$ref": "#/definitions/location",
+					"version": "10.2.2.48"
+				},
+				{
+					"type": "object",
+					"properties": {
+						"departureTimeEstimated": {
+							"$ref": "#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"departureTimePlanned": {
+							"$ref": "#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"departureTimeBaseTimetable": {
+							"$ref": "#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"arrivalTimeEstimated": {
+							"$ref": "#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"arrivalTimePlanned": {
+							"$ref": "#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"arrivalTimeBaseTimetable": {
+							"$ref": "#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"isRealtimeControlled": {
+							"type": "boolean",
+							"version": "10.2.2.48"
+						}
+					}
+				}
+			],
+			"version": "10.2.2.48"
+		},
+		"assignedLocation": {
+			"type": "object",
+			"allOf": [
+				{
+					"$ref": "#/definitions/location",
+					"version": "10.2.2.48"
+				},
+				{
+					"type": "object",
+					"properties": {
+						"assignedLocation": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"connectingMode": {
+							"type": "number",
+							"version": "10.2.2.48"
+						},
+						"distance": {
+							"type": "number",
+							"version": "10.2.2.48"
+						},
+						"duration": {
+							"type": "number",
+							"version": "10.2.2.48"
+						}
+					}
+				}
+			],
+			"version": "10.2.2.48"
+		},
+		"location": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"isGlobalId": {
+					"type": "boolean",
+					"version": "10.2.2.48"
+				},
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"disassembledName": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"address",
+						"crossing",
+						"gis",
+						"locality",
+						"platform",
+						"poi",
+						"suburb",
+						"stop",
+						"street",
+						"poiHierarchy",
+						"sharing",
+						"parking",
+						"unknown"
+					],
+					"default": "unknown",
+					"version": "10.2.2.48"
+				},
+				"streetName": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"buildingNumber": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"matchQuality": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"isBest": {
+					"type": "boolean"
+				},
+				"productClasses": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/productClass",
+						"version": "10.2.2.48"
+					},
+					"version": "10.2.2.48"
+				},
+				"coord": {
+					"$ref": "#/definitions/coord",
+					"version": "10.2.2.48"
+				},
+				"infos": {
+					"$ref": "#/definitions/infos",
+					"version": "10.2.2.48"
+				},
+				"parent": {
+					"$ref": "#/definitions/location",
+					"version": "10.2.2.48"
+				},
+				"assignedStops": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/assignedLocation"
+					},
+					"version": "10.2.2.48"
+				},
+				"niveau": {
+					"type": "number"
+				},
+				"properties": {
+					"type": "object",
+					"properties": {
+						"distance": {
+							"type": "number",
+							"version": "10.2.2.48"
+						},
+						"occupancy": {
+							"type": "string",
+							"enum": [
+								"EMPTY",
+								"MANY_SEATS",
+								"FEW_SEATS",
+								"STANDING_ONLY",
+								"CRUSHED_STANDING",
+								"FULL",
+								"NOT_ACCEPTING_PASSENGERS",
+								"UNKNOWN"
+							],
+							"version": "10.2.8.6"
+						},
+						"coordInfoDetails": {
+							"type": "object",
+							"properties": {
+								"type": {
+									"type": "string",
+									"enum": [
+										"PARKING",
+										"STATION",
+										"FREEFLOATER",
+										"UNKNOWN"
+									],
+									"version": "10.2.8.6"
+								},
+								"providerId": {
+									"type": "number",
+									"version": "10.2.8.6"
+								},
+								"operatingAreaId": {
+									"type": "string",
+									"version": "10.2.8.6"
+								},
+								"parkingDataSet": {
+									"$ref": "#/definitions/parkingDataSet"
+								},
+								"station": {
+									"$ref": "Definitions.json#/definitions/station"
+								},
+								"vehicleDetails": {
+									"$ref": "Definitions.json#/definitions/vehicle",
+									"version": "10.2.2.48"
+								}
+							},
+							"additionalProperties": false,
+							"version": "10.2.8.6"
+						},
+						"realtimeStatus": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/realtimeCallStatus"
+							},
+							"version": "10.4.15.5"
+						},
+						"areaGid": {
+							"type": "string"
+						},
+						"dataSet": {
+							"$ref": "#/definitions/parkingDataSet"
+						},
+						"parkingStaticInfo": {
+							"$ref": "#/definitions/parkingStaticInfo"
+						},
+						"parkingTax": {
+							"$ref": "#/definitions/parkingTax"
+						},
+						"businessHoursInfo": {
+							"$ref": "#/definitions/businessHoursInfo"
+						},
+						"chargingStations": {
+							"$ref": "#/definitions/chargingStations"
+						},
+						"parkingProfileInfo": {
+							"$ref": "#/definitions/parkingProfileInfo"
+						},
+						"parkingRealtimeInfo": {
+							"$ref": "#/definitions/parkingRealtimeInfo"
+						},
+						"parkingSpaces": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/parkingSpaceType"
+							}
+						},
+						"downloads": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/download"
+							}
+						},
+						"zone": {
+							"type": "string"
+						}
+					},
+					"version": "10.2.2.48"
+				}
+			},
+			"version": "10.2.2.48"
+		},
+		"infos": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/info",
+				"version": "10.2.2.48"
+			},
+			"version": "10.2.2.48"
+		},
+		"dateTime": {
+			"type": "string",
+			"pattern": "^([0-9]{4}-[01]{1}[0-9]{1}-[0-3]{1}[0-9]{1}T[0-2]{1}[0-9]{1}:[0-6]{1}[0-9]{1}:[0-6]{1}[0-9]{1}Z$)",
+			"version": "10.2.2.48"
+		},
+		"date": {
+			"type": "string",
+			"pattern": "^([0-9]{4}-[01]{1}[0-9]{1}-[0-3]{1}[0-9]{1}$)",
+			"version": "10.4.15.5"
+		},
+		"coord": {
+			"type": "array",
+			"items": {
+				"anyOf": [
+					{
+						"description": "latitude, longitude",
+						"type": [
+							"array",
+							"number"
+						]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"z": {
+								"description": "height",
+								"type": "number"
+							},
+							"n": {
+								"description": "niveau",
+								"type": "number"
+							},
+							"nF": {
+								"description": "fractional part of niveau",
+								"type": "number"
+							},
+							"d": {
+								"description": "distance",
+								"type": "number"
+							}
+						},
+						"additionalProperties": false
+					}
+				]
+			},
+			"version": "10.2.2.48"
+		},
+		"journey": {
+			"type": "object",
+			"properties": {
+				"rating": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"isAdditional": {
+					"type": "boolean",
+					"version": "10.2.2.48"
+				},
+				"isRealtimeOnlyInformative": {
+					"type": "boolean",
+					"version": "10.2.2.48"
+				},
+				"legs": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/leg"
+					},
+					"version": "10.2.2.48"
+				},
+				"fare": {
+					"type": "object",
+					"properties": {
+						"tickets": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/ticket",
+								"version": "10.2.2.48"
+							},
+							"additionalProperties": false,
+							"version": "10.2.2.48"
+						},
+						"zones": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/zone",
+								"version": "10.2.2.48"
+							},
+							"additionalProperties": false,
+							"version": "10.2.2.48"
+						}
+					},
+					"additionalProperties": false,
+					"version": "10.2.2.48"
+				},
+				"interchanges": {
+					"type": "number",
+					"version": "10.2.8.6"
+				},
+				"booking": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/booking"
+					},
+					"version": "10.4.15.5"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"leg": {
+			"type": "object",
+			"properties": {
+				"duration": {
+					"$ref": "#/definitions/duration",
+					"version": "10.2.2.48"
+				},
+				"distance": {
+					"$ref": "#/definitions/distance",
+					"version": "10.2.2.48"
+				},
+				"isRealtimeControlled": {
+					"type": "boolean",
+					"version": "10.2.2.48"
+				},
+				"realtimeStatus": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/realtimeTripStatus"
+					},
+					"version": "10.4.15.5"
+				},
+				"origin": {
+					"$ref": "#/definitions/journeyLocation",
+					"version": "10.2.2.48"
+				},
+				"destination": {
+					"$ref": "#/definitions/journeyLocation",
+					"version": "10.2.2.48"
+				},
+				"transportation": {
+					"$ref": "#/definitions/transportation",
+					"version": "10.2.2.48"
+				},
+				"infos": {
+					"$ref": "#/definitions/infos",
+					"version": "10.2.2.48"
+				},
+				"hints": {
+					"$ref": "#/definitions/infos",
+					"version": "10.2.2.48"
+				},
+				"stopSequence": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/journeyLocation"
+					},
+					"version": "10.2.2.48"
+				},
+				"footPathInfo": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/footPathInfo"
+					},
+					"version": "10.2.2.48"
+				},
+				"coords": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/coord"
+					},
+					"version": "10.2.2.48"
+				},
+				"pathDescriptions": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/pathDescription"
+					},
+					"version": "10.2.2.48"
+				},
+				"interchange": {
+					"type": "object",
+					"properties": {
+						"desc": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"type": {
+							"type": "number",
+							"version": "10.2.2.48"
+						},
+						"coords": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/coord"
+							},
+							"version": "10.2.2.48"
+						}
+					},
+					"additionalProperties": false,
+					"version": "10.2.2.48"
+				},
+				"vehicleAccess": {
+					"oneOf": [
+						{
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string",
+								"additionalProperties": false,
+								"version": "10.2.2.48"
+							},
+							"version": "10.2.2.48"
+						}
+					],
+					"version": "10.2.2.48"
+				},
+				"properties": {
+					"properties": {
+						"frequency": {
+							"$ref": "#/definitions/frequency"
+						}
+					}
+				},
+				"fare": {
+					"type": "object",
+					"properties": {
+						"zones": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/zone",
+								"version": "10.2.2.48"
+							},
+							"additionalProperties": false,
+							"version": "10.2.2.48"
+						}
+					},
+					"additionalProperties": false
+				},
+				"elevationSummary": {
+					"type": "object",
+					"properties": {
+						"minAlt": {
+							"type": "number"
+						},
+						"maxAlt": {
+							"type": "number"
+						},
+						"maxGrad": {
+							"type": "number"
+						},
+						"maxSlope": {
+							"type": "number"
+						},
+						"altDiffUp": {
+							"type": "number"
+						},
+						"distUp": {
+							"type": "number"
+						},
+						"altDiffDw": {
+							"type": "number"
+						},
+						"distDw": {
+							"type": "number"
+						},
+						"pixelWidth": {
+							"type": "number"
+						},
+						"pixelHeight": {
+							"type": "number"
+						},
+						"Length": {
+							"type": "number"
+						},
+						"TotalUpwardMeters": {
+							"type": "number"
+						},
+						"TotalDownwardMeters": {
+							"type": "number"
+						},
+						"MaxHeightMeters": {
+							"type": "number"
+						},
+						"MinHeightMeters": {
+							"type": "number"
+						},
+						"MaxInclinePercent": {
+							"type": "number"
+						},
+						"MaxDeclinePercent": {
+							"type": "number"
+						},
+						"OrigHeightMeter": {
+							"type": "number"
+						},
+						"DestHeightMeter": {
+							"type": "number"
+						},
+						"TotalInclineMeter": {
+							"type": "number"
+						},
+						"TotalDeclineMeters": {
+							"type": "number"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"duration": {
+			"type": "number",
+			"minimum": 0,
+			"version": "10.2.2.48"
+		},
+		"distance": {
+			"type": "number",
+			"minimum": 0,
+			"version": "10.2.2.48"
+		},
+		"delay": {
+			"type": "number",
+			"minimum": 0,
+			"version": "10.2.2.48"
+		},
+		"transportation": {
+			"description": "meansOfTransport",
+			"type": "object",
+			"properties": {
+				"allCoords": {
+					"type": "array",
+					"items": {
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/coord"
+						}
+					},
+					"version": "10.2.2.48"
+				},
+				"coords": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/coordArray"
+					},
+					"version": "10.2.2.48"
+				},
+				"description": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"destination": {
+					"$ref": "#/definitions/location",
+					"version": "10.2.2.48"
+				},
+				"disassembledName": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"id": {
+					"description": "statelessId aus motDivaParams",
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"locationSequence": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/journeyLocation"
+					},
+					"version": "10.2.2.48"
+				},
+				"localitySequence": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/location"
+					},
+					"version": "10.2.2.48"
+				},
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"number": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"operator": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"name": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"code": {
+							"type": "string",
+							"version": "10.2.2.48"
+						}
+					},
+					"version": "10.2.2.48"
+				},
+				"origin": {
+					"$ref": "#/definitions/location",
+					"version": "10.2.2.48"
+				},
+				"product": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"description": "was available via transportation.iconId before.",
+							"type": "number",
+							"version": "10.2.8.6"
+						},
+						"iconId": {
+							"type": "number",
+							"version": "10.2.2.48"
+						},
+						"name": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"class": {
+							"type": "number",
+							"version": "10.2.2.48"
+						}
+					},
+					"version": "10.2.2.48"
+				},
+				"properties": {
+					"type": "object",
+					"properties": {
+						"trainName": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"trainType": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"isTTB": {
+							"type": "boolean",
+							"version": "10.2.2.48"
+						},
+						"isSTT": {
+							"type": "boolean",
+							"version": "10.2.2.48"
+						},
+						"isROP": {
+							"type": "boolean",
+							"version": "10.2.2.48"
+						},
+						"tripCode": {
+							"type": "number",
+							"version": "10.2.2.48"
+						},
+						"validity": {
+							"$ref": "Definitions.json#/definitions/timePeriod",
+							"version": "10.2.2.48"
+						},
+						"version": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"specialFares": {
+							"type": "string",
+							"enum": [
+								"ROUTE_OUTSIDE_OF_TRANSPORT_AUTHORITY_AREA",
+								"ROUTE_IN_TRANSPORT_AUTHORITY_AREA",
+								"ICE_ROUTE",
+								"ROUTE_WITH_SUPPLEMENT",
+								"ROUTE_WITH_SUPPLEMENT_NO_FARE_CALCULATION",
+								"ROUTE_IN_TRANSPORT_AUTHORITY_AREA_NO_FARE_CALCULATION",
+								"UNKNOWN"
+							],
+							"version": "10.2.8.6"
+						},
+						"lineDisplay": {
+							"type": "string",
+							"enum": [
+								"LINE",
+								"TRAIN",
+								"UNKNOWN"
+							],
+							"version": "10.2.8.6"
+						},
+						"globalId": {
+							"type": "string"
+						}
+					},
+					"version": "10.2.2.48"
+				},
+				"assignedStop": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"assignedStopId": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"index": {
+					"type": "string"
+				},
+				"trips": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/transportationTrip"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"calory": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"walk": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"bike": {
+					"type": "number",
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"co2": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"from": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"to": {
+					"type": "number",
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"carCost": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"currency": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"depreciation": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"fuel": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"operational": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"parking": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"toll": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"sum": {
+					"type": "number",
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"zone": {
+			"type": "object",
+			"properties": {
+				"net": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"fromLeg": {
+					"type": "number",
+					"minimum": 0,
+					"version": "10.2.2.48"
+				},
+				"toLeg": {
+					"type": "number",
+					"minimum": 0,
+					"version": "10.2.2.48"
+				},
+				"neutralZone": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"zones": {
+					"$ref": "#/definitions/zoneElem"
+				},
+				"zonesUnited": {
+					"$ref": "#/definitions/zoneElem"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"zoneElem": {
+			"type": "array",
+			"items": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"version": "10.2.2.48"
+			},
+			"version": "10.2.2.48"
+		},
+		"footPathElem": {
+			"properties": {
+				"description": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"STAIRS",
+						"RAMP",
+						"ESCALATOR",
+						"ELEVATOR",
+						"ILLUMINATED",
+						"DANGEROUS",
+						"LEVEL"
+					],
+					"version": "10.2.2.48"
+				},
+				"levelFrom": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"levelTo": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"level": {
+					"type": "string",
+					"enum": [
+						"LEVEL",
+						"UP",
+						"DOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"origin": {
+					"type": "object",
+					"$ref": "#/definitions/journeyLocation",
+					"version": "10.2.2.48"
+				},
+				"destination": {
+					"type": "object",
+					"$ref": "#/definitions/journeyLocation",
+					"version": "10.2.2.48"
+				}
+			}
+		},
+		"pathDescription": {
+			"properties": {
+				"coord": {
+					"$ref": "#/definitions/coord",
+					"version": "10.2.2.48"
+				},
+				"distanceUp": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"distanceDown": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"turnDirection": {
+					"type": "string",
+					"enum": [
+						"STRAIGHT",
+						"LEFT",
+						"SLIGHT_LEFT",
+						"SHARP_LEFT",
+						"RIGHT",
+						"SLIGHT_RIGHT",
+						"SHARP_RIGHT",
+						"U_TURN",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"manoeuvre": {
+					"type": "string",
+					"enum": [
+						"ORIGIN",
+						"DESTINATION",
+						"CONTINUE",
+						"KEEP",
+						"TURN",
+						"U_TURN",
+						"ENTER",
+						"LEAVE",
+						"ENTER_ROUNDABOUT",
+						"STAY_ROUNDABOUT",
+						"LEAVE_ROUNDABOUT",
+						"TRAVERSE_CROSSING",
+						"ENTER_BUILTUPAREA",
+						"LEAVE_BUILTUPAREA",
+						"ENTER_TOLL",
+						"LEAVE_TOLL",
+						"RAMP",
+						"ON_RAMP",
+						"OFF_RAMP",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"fromCoordsIndex": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"toCoordsIndex": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"skyDirection": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"duration": {
+					"$ref": "#/definitions/duration",
+					"version": "10.2.2.48"
+				},
+				"cumDuration": {
+					"$ref": "#/definitions/duration",
+					"version": "10.2.2.48"
+				},
+				"distance": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"cumDistance": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"addInfo": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"version": "10.2.2.48"
+					}
+				},
+				"guidanceSigns": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/guidanceSign"
+					},
+					"version": "10.2.2.48"
+				},
+				"niveau": {
+					"type": "number"
+				},
+				"properties": {
+					"type": "object"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"productClass": {
+			"description": "MOT",
+			"type": "number",
+			"enum": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21
+			],
+			"version": "10.2.2.48"
+		},
+		"stopEvent": {
+			"description": "departure/arrival",
+			"type": "object",
+			"properties": {
+				"location": {
+					"$ref": "#/definitions/location",
+					"version": "10.2.2.48"
+				},
+				"departureTimePlanned": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.2.48"
+				},
+				"departureTimeBaseTimetable": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.11.46"
+				},
+				"departureTimeEstimated": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.2.48"
+				},
+				"arrivalTimePlanned": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.11.46"
+				},
+				"arrivalTimeBaseTimetable": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.11.46"
+				},
+				"arrivalTimeEstimated": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.11.46"
+				},
+				"isRealtimeControlled": {
+					"type": "boolean",
+					"version": "10.2.2.48"
+				},
+				"realtimeStatus": {
+					"$ref": "#/definitions/realtimeTripStatus",
+					"version": "10.4.15.5"
+				},
+				"infos": {
+					"$ref": "#/definitions/infos",
+					"version": "10.2.2.48"
+				},
+				"transportation": {
+					"$ref": "#/definitions/transportation",
+					"version": "10.2.2.48"
+				},
+				"previousLocations": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/location"
+					},
+					"version": "10.2.8.6"
+				},
+				"onwardLocations": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/location"
+					},
+					"version": "10.2.8.6"
+				},
+				"hiddenLines": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/hiddenLine"
+					},
+					"version": "10.4.15.5"
+				},
+				"hints": {
+					"$ref": "#/definitions/infos",
+					"version": "10.2.2.48"
+				}
+			},
+			"required": [
+				"transportation"
+			],
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"ticket": {
+			"properties": {
+				"id": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"name": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"comment": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"URL": {
+					"type": "string"
+				},
+				"currency": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"priceLevel": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"priceBrutto": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"priceNetto": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"taxPercent": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"fromLeg": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"toLeg": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"net": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"person": {
+					"type": "string",
+					"enum": [
+						"ADULT",
+						"CHILD",
+						"APPRENTICE",
+						"SCHOLAR",
+						"STUDENT",
+						"SENIOR",
+						"KINDERGARTEN",
+						"MULTIADULTS",
+						"MULTICHILDS",
+						"MULTIPERSONS",
+						"FAMILY",
+						"REDUCED",
+						"OTHER"
+					],
+					"version": "10.2.2.48"
+				},
+				"travellerClass": {
+					"type": "string",
+					"enum": [
+						"FIRST",
+						"SECOND",
+						"BUSINESS",
+						"ECONOMY",
+						"OTHER"
+					],
+					"version": "10.2.2.48"
+				},
+				"travellerCard": {
+					"type": "string",
+					"version": "10.4.15.5"
+				},
+				"timeValidity": {
+					"type": "string",
+					"enum": [
+						"SINGLE",
+						"MULTIPLE",
+						"DAY",
+						"WEEK",
+						"MONTH",
+						"HALFYEAR",
+						"YEAR",
+						"OTHER_VALIDITYTIME"
+					],
+					"version": "10.2.2.48"
+				},
+				"validMinutes": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"isShortHaul": {
+					"type": "string",
+					"enum": [
+						"YES",
+						"NO",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"returnsAllowed": {
+					"type": "string",
+					"enum": [
+						"YES",
+						"NO",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"validForOneJourneyOnly": {
+					"type": "string",
+					"enum": [
+						"YES",
+						"NO",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"validForOneOperatorOnly": {
+					"type": "string",
+					"enum": [
+						"YES",
+						"NO",
+						"UNKNOWN"
+					],
+					"version": "10.2.2.48"
+				},
+				"numberOfChanges": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"nameValidityArea": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"accompany": {
+					"$ref": "Definitions.json#/definitions/accompany"
+				},
+				"relationKeys": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/relationKey"
+					}
+				},
+				"targetGroups": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/targetGroup"
+					}
+				},
+				"validFrom": {
+					"$ref": "Definitions.json#/definitions/dateTime"
+				},
+				"validTo": {
+					"$ref": "Definitions.json#/definitions/dateTime"
+				},
+				"properties": {
+					"properties": {
+						"ticketLongName": {
+							"type": "string"
+						},
+						"journeyDetail": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"version": "10.2.2.48"
+		},
+		"footPathInfo": {
+			"properties": {
+				"position": {
+					"type": "string",
+					"enum": [
+						"BEFORE",
+						"IDEST",
+						"AFTER",
+						"unknown"
+					],
+					"version": "10.2.2.48"
+				},
+				"duration": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"footPathElem": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/footPathElem"
+					},
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"timePeriod": {
+			"type": "object",
+			"properties": {
+				"from": {
+					"$ref": "Definitions.json#/definitions/dateTime",
+					"version": "10.2.2.48"
+				},
+				"to": {
+					"$ref": "Definitions.json#/definitions/dateTime",
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"datePeriod": {
+			"type": "object",
+			"properties": {
+				"from": {
+					"$ref": "Definitions.json#/definitions/date"
+				},
+				"to": {
+					"$ref": "Definitions.json#/definitions/date"
+				}
+			},
+			"required": [
+				"from",
+				"to"
+			],
+			"additionalProperties": false,
+			"version": "10.4.15.5"
+		},
+		"info": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"providerCode": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"id": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"version": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"priority": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"blockingType": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"timestamps": {
+					"type": "object",
+					"properties": {
+						"creation": {
+							"$ref": "Definitions.json#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"lastModification": {
+							"$ref": "Definitions.json#/definitions/dateTime",
+							"version": "10.2.2.48"
+						},
+						"availability": {
+							"$ref": "Definitions.json#/definitions/timePeriod",
+							"version": "10.2.2.48"
+						},
+						"validity": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/timePeriod",
+								"version": "10.2.2.48"
+							},
+							"version": "10.2.2.48"
+						}
+					},
+					"additionalProperties": false,
+					"version": "10.2.2.48"
+				},
+				"urlText": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"url": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"content": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"subtitle": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"title": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"additionalText": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"image": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"affected": {
+					"type": "object",
+					"properties": {
+						"lines": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/transportation"
+							},
+							"version": "10.2.2.48"
+						},
+						"stops": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/location"
+							},
+							"version": "10.2.2.48"
+						},
+						"places": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/location"
+							},
+							"version": "10.2.2.48"
+						},
+						"countys": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/county"
+							}
+						}
+					},
+					"additionalProperties": false,
+					"version": "10.2.2.48"
+				},
+				"properties": {
+					"type": "object",
+					"properties": {
+						"htmlText": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"speechText": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"smsText": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"wapText": {
+							"type": "string",
+							"version": "10.2.2.48"
+						},
+						"additionalLinks": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string"
+									},
+									"urlText": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"url": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"subtitle": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"type": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"path": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"fileName": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"virtPath": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"linkText": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"linkTarget": {
+										"type": "string",
+										"version": "10.2.2.48"
+									},
+									"size": {
+										"type": "number",
+										"version": "10.2.2.48"
+									}
+								},
+								"additionalProperties": false,
+								"version": "10.2.2.48"
+							},
+							"version": "10.2.2.48"
+						}
+					},
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"serverInfo": {
+			"type": "object",
+			"properties": {
+				"controllerVersion": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"serverID": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"virtDir": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"serverTime": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"calcTime": {
+					"type": "number",
+					"version": "10.2.8.6"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.8.6"
+		},
+		"download": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"url": {
+					"type": "string",
+					"version": "10.2.2.48"
+				},
+				"size": {
+					"type": "number",
+					"version": "10.2.2.48"
+				},
+				"type": {
+					"type": "string"
+				},
+				"properties": {}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"slots": {
+			"type": "object",
+			"properties": {
+				"totalSlots": {
+					"type": "number",
+					"version": "10.2.8.6"
+				},
+				"emptySlots": {
+					"type": "number",
+					"version": "10.2.8.6"
+				},
+				"freeVehicles": {
+					"type": "number",
+					"version": "10.2.8.6"
+				}
+			},
+			"version": "10.2.8.6"
+		},
+		"vehicle": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"vehType": {
+					"type": "string",
+					"enum": [
+						"BIKE",
+						"MOTORCYCLE",
+						"CAR",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"bikeFuncClass": {
+					"type": "string",
+					"enum": [
+						"ROAD",
+						"TOURING",
+						"HYBRID",
+						"CROSS",
+						"UTILITY",
+						"FREIGHT",
+						"MOUNTAIN",
+						"RACING",
+						"BMX",
+						"CRUISER",
+						"MOTORIZED",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"ebikeClass": {
+					"type": "string",
+					"enum": [
+						"PEDELEC",
+						"PEDELEC_S",
+						"POWER_ON_DEMAND_PEDAL_ASSIST",
+						"POWER_ON_DEMAND_ONLY",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"motorcycleClass": {
+					"type": "string",
+					"enum": [
+						"STANDARD",
+						"CRUISER",
+						"SPORTBIKE",
+						"TOURING",
+						"SPORTTOURING",
+						"DUALSPORT",
+						"SCOOTER",
+						"UNDERBONE",
+						"MOPED",
+						"OFFROAD_MOTOCROSS",
+						"OFFROAD_ENDURO",
+						"OFFROAD_RALLYRAID",
+						"OFFROAD_TRAIL",
+						"OFFROAD_TRACKRACING",
+						"CABIN_FULLYENCLOSED",
+						"CABIN_SEMIENCLOSED",
+						"TRICYCLE",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"carClass": {
+					"type": "string",
+					"enum": [
+						"CITYCAR",
+						"SUPERMINI",
+						"SMALLFAMILYCAR",
+						"LARGEFAMILYCAR",
+						"EXECUTIVECAR",
+						"LUXURYCAR",
+						"SPORTCOUPES",
+						"MULTIPURPOSECARS",
+						"SPORTUTILITY",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"capacity": {
+					"type": "number",
+					"version": "10.2.8.6"
+				},
+				"vehModel": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"addr": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"pos": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"lastUpdate": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.8.6"
+				},
+				"catId": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"catName": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"dLAndroid": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"dLIOS": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"dLWindows": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"phone": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"plate": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"engine": {
+					"type": "string",
+					"enum": [
+						"COMBUSTION",
+						"ELECTRIC",
+						"HYBRID",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"charging": {
+					"type": "boolean",
+					"version": "10.2.8.6"
+				},
+				"fuelLevel": {
+					"type": "number",
+					"version": "10.2.8.6"
+				},
+				"rangeKm": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"int": {
+					"type": "string",
+					"enum": [
+						"VERYGOOD",
+						"GOOD",
+						"NEUTRAL",
+						"BAD",
+						"VERYBAD",
+						"UNACCEPTABLE",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"ext": {
+					"type": "string",
+					"enum": [
+						"VERYGOOD",
+						"GOOD",
+						"NEUTRAL",
+						"BAD",
+						"VERYBAD",
+						"UNACCEPTABLE",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"gearshift": {
+					"type": "string",
+					"enum": [
+						"MANUAL",
+						"SEMI_MANUAL",
+						"AUTOMATIC",
+						"UNDEFINED"
+					],
+					"version": "10.2.8.6"
+				},
+				"availabilities": {
+					"type": "object",
+					"properties": {
+						"oOO": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/intervall"
+							},
+							"version": "10.2.8.6"
+						},
+						"unavail": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/intervall"
+							},
+							"version": "10.2.8.6"
+						},
+						"avail": {
+							"type": "array",
+							"items": {
+								"$ref": "Definitions.json#/definitions/intervall"
+							},
+							"version": "10.2.8.6"
+						}
+					},
+					"additionalProperties": false
+				},
+				"coord": {
+					"$ref": "Definitions.json#/definitions/coord"
+				},
+				"providerId": {
+					"type": "number"
+				},
+				"providerName": {
+					"type": "string"
+				},
+				"operatingAreaId": {
+					"type": "string"
+				},
+				"operatingAreaName": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.8.6"
+		},
+		"intervall": {
+			"type": "object",
+			"properties": {
+				"from": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.8.6"
+				},
+				"to": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.8.6"
+				}
+			},
+			"additionalProperties": false
+		},
+		"booking": {
+			"type": "object",
+			"properties": {
+				"fromLeg": {
+					"type": "number"
+				},
+				"toLeg": {
+					"type": "number"
+				},
+				"commType": {
+					"type": "string",
+					"enum": [
+						"TCPIP",
+						"ISDN",
+						"FAX",
+						"HTTP",
+						"JSON",
+						"UNKNOWN"
+					]
+				},
+				"serverAddress": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.4.15.5"
+		},
+		"stopZoneInfo": {
+			"type": "object",
+			"properties": {
+				"stop": {
+					"type": "number"
+				},
+				"network": {
+					"type": "string"
+				},
+				"zoneInfos": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/zoneInfo"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"zoneInfo": {
+			"type": "object",
+			"properties": {
+				"authority": {
+					"type": "string"
+				},
+				"zones": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"realtimeTripStatus": {
+			"type": "string",
+			"enum": [
+				"TRIP_CANCELLED",
+				"EXTRA_TRIP",
+				"EXTRA_STOPS",
+				"DEVIATION",
+				"MONITORED",
+				"PROGNOSIS_IMPOSSIBLE",
+				"OUTSIDE_REALTIME_WINDOW",
+				"REALTIME_ONLY_INFORMATIVE"
+			],
+			"version": "10.4.15.5"
+		},
+		"realtimeCallStatus": {
+			"type": "string",
+			"enum": [
+				"TRIP_CANCELLED",
+				"EXTRA_TRIP",
+				"EXTRA_STOP",
+				"ARRIVAL_CANCELLED",
+				"DEPARTURE_CANCELLED",
+				"NO_CALL_AT_STOP",
+				"DEVIATION_FROM_LINE",
+				"AREA_CHANGED",
+				"SCHEDULED_TIME_CHANGED"
+			],
+			"version": "10.4.15.5"
+		},
+		"hiddenLine": {
+			"type": "object",
+			"properties": {
+				"origin": {
+					"$ref": "#/definitions/location"
+				},
+				"destination": {
+					"$ref": "#/definitions/location"
+				},
+				"transportation": {
+					"$ref": "#/definitions/transportation"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.4.15.5"
+		},
+		"footpaths": {
+			"type": "array",
+			"items": {
+				"properties": {
+					"description": {
+						"type": "string",
+						"version": "10.2.2.48"
+					},
+					"type": {
+						"type": "string",
+						"enum": [
+							"STAIRS",
+							"RAMP",
+							"ESCALATOR",
+							"ELEVATOR",
+							"ILLUMINATED",
+							"DANGEROUS",
+							"LEVEL"
+						],
+						"version": "10.2.2.48"
+					},
+					"levelFrom": {
+						"type": "number",
+						"version": "10.2.2.48"
+					},
+					"levelTo": {
+						"type": "number",
+						"version": "10.2.2.48"
+					},
+					"level": {
+						"type": "string",
+						"enum": [
+							"LEVEL",
+							"UP",
+							"DOWN"
+						],
+						"version": "10.2.2.48"
+					},
+					"origin": {
+						"type": "object",
+						"$ref": "Definitions.json#/definitions/journeyLocation",
+						"version": "10.2.2.48"
+					},
+					"destination": {
+						"type": "object",
+						"$ref": "Definitions.json#/definitions/journeyLocation",
+						"version": "10.2.2.48"
+					}
+				}
+			},
+			"version": "10.2.2.48"
+		},
+		"operatingArea": {
+			"version": "10.4.15.5",
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"station",
+						"freefloating",
+						"private",
+						"unknown"
+					]
+				},
+				"product": {
+					"type": "string",
+					"enum": [
+						"car",
+						"motorcycle",
+						"bike",
+						"taxi",
+						"unknown"
+					]
+				},
+				"operator": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "number"
+						},
+						"name": {
+							"type": "string"
+						}
+					}
+				},
+				"id": {
+					"type": "number"
+				},
+				"name": {
+					"type": "string"
+				},
+				"properties": {
+					"type": "object",
+					"properties": {
+						"defaultLanguage": {
+							"type": "string"
+						},
+						"countryCode": {
+							"type": "string"
+						},
+						"timeZone": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						},
+						"urlMobile": {
+							"type": "string"
+						},
+						"androidApp": {
+							"type": "string"
+						},
+						"iosApp": {
+							"type": "string"
+						},
+						"windows": {
+							"type": "string"
+						},
+						"phone": {
+							"type": "string"
+						}
+					}
+				},
+				"vehicleEngineTypes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vehicleEngineType"
+					},
+					"version": "10.4.15.5"
+				},
+				"vehicleTypes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vehicleType"
+					},
+					"version": "10.4.15.5"
+				},
+				"sharingTypes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vehicleType"
+					},
+					"version": "10.4.15.5"
+				},
+				"operatingZone": {
+					"type": "object",
+					"$ref": "#/definitions/geometry"
+				},
+				"coverageArea": {
+					"type": "object",
+					"$ref": "#/definitions/geometry"
+				}
+			},
+			"additionalProperties": false
+		},
+		"vehicleEngineType": {
+			"type": "string",
+			"enum": [
+				"COMBUSTION",
+				"ELECTRIC",
+				"HYBRID",
+				"UNKNOWN"
+			]
+		},
+		"vehicleType": {
+			"type": "string",
+			"enum": [
+				"COMBUSTION",
+				"ELECTRIC",
+				"HYBRID",
+				"UNKNOWN"
+			]
+		},
+		"sharingType": {
+			"type": "string",
+			"enum": [
+				"CLASSIC",
+				"FREEFLOATING",
+				"UNKNOWN"
+			]
+		},
+		"geometry": {
+			"type": "object",
+			"oneOf": [
+				{
+					"title": "Point",
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"Point"
+							]
+						},
+						"coordinates": {
+							"$ref": "#/definitions/position"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"title": "MultiPoint",
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"MultiPoint"
+							]
+						},
+						"coordinates": {
+							"$ref": "#/definitions/positionArray"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"title": "LineString",
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"LineString"
+							]
+						},
+						"coordinates": {
+							"$ref": "#/definitions/lineString"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"title": "MultiLineString",
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"MultiLineString"
+							]
+						},
+						"coordinates": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/lineString"
+							}
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"title": "Polygon",
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"Polygon"
+							]
+						},
+						"coordinates": {
+							"$ref": "#/definitions/polygon"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"title": "MultiPolygon",
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"MultiPolygon"
+							]
+						},
+						"coordinates": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/polygon"
+							}
+						}
+					},
+					"additionalProperties": false
+				}
+			]
+		},
+		"position": {
+			"description": "A single position",
+			"type": "array",
+			"minItems": 2,
+			"items": [
+				{
+					"type": "number"
+				},
+				{
+					"type": "number"
+				}
+			],
+			"additionalItems": false
+		},
+		"positionArray": {
+			"description": "An array of positions",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/position"
+			}
+		},
+		"lineString": {
+			"description": "An array of two or more positions",
+			"allOf": [
+				{
+					"$ref": "#/definitions/positionArray"
+				},
+				{
+					"minItems": 2
+				}
+			]
+		},
+		"linearRing": {
+			"description": "An array of four positions where the first equals the last",
+			"allOf": [
+				{
+					"$ref": "#/definitions/positionArray"
+				},
+				{
+					"minItems": 4
+				}
+			]
+		},
+		"polygon": {
+			"description": "An array of linear rings",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/linearRing"
+			}
+		},
+		"route": {
+			"description": "Route of a line consisting of a stopsequence and days of service",
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"name": {
+					"type": "string"
+				},
+				"count": {
+					"type": "number"
+				},
+				"locations": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/location"
+					}
+				},
+				"trips": {
+					"$ref": "#/definitions/lineTrip"
+				},
+				"daysOfService": {
+					"type": "object",
+					"properties": {
+						"rvb": {
+							"type": "string"
+						},
+						"texts": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"ticketGroup": {
+			"description": "Group of passengers travelling",
+			"type": "object",
+			"properties": {
+				"adult": {
+					"type": "number"
+				},
+				"child": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"adult",
+				"child"
+			],
+			"additionalProperties": false
+		},
+		"ticketOption": {
+			"description": "Possible tickets",
+			"type": "object",
+			"properties": {
+				"tripId": {
+					"type": "number"
+				},
+				"tickets": {
+					"type": "array",
+					"items": {
+						"$ref": "./Definitions.json#/definitions/ticketCount"
+					}
+				}
+			},
+			"required": [
+				"tripId"
+			],
+			"additionalProperties": false
+		},
+		"ticketCount": {
+			"type": "object",
+			"properties": {
+				"count": {
+					"type": "number"
+				},
+				"ticket": {
+					"$ref": "./Definitions.json#/definitions/ticket"
+				}
+			},
+			"required": [
+				"count",
+				"ticket"
+			],
+			"additionalProperties": false
+		},
+		"relationKey": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"code": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"areas": {
+					"type": "array",
+					"items": {
+						"$ref": "./Definitions.json#/definitions/ticketArea"
+					}
+				},
+				"scopeAreas": {
+					"type": "array",
+					"items": {
+						"type": "number"
+					}
+				},
+				"sections": {
+					"type": "array",
+					"items": {
+						"type": "number"
+					}
+				}
+			},
+			"required": [
+				"id",
+				"code",
+				"name"
+			],
+			"additionalProperties": false
+		},
+		"targetGroup": {
+			"type": "string"
+		},
+		"ptKernel": {
+			"type": "object",
+			"properties": {
+				"appVersion": {
+					"type": "string"
+				},
+				"dataFormat": {
+					"type": "string"
+				},
+				"dataBuild": {
+					"$ref": "#/definitions/dateTime"
+				}
+			},
+			"required": [
+				"appVersion",
+				"dataFormat",
+				"dataBuild"
+			],
+			"additionalProperties": false
+		},
+		"frequency": {
+			"type": "object",
+			"properties": {
+				"minTimeGap": {
+					"type": "number"
+				},
+				"maxTimeGap": {
+					"type": "number"
+				},
+				"avTimeGap": {
+					"type": "number"
+				},
+				"minDuration": {
+					"type": "number"
+				},
+				"maxDuration": {
+					"type": "number"
+				},
+				"avDuration": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"minTimeGap",
+				"maxTimeGap",
+				"avTimeGap",
+				"minDuration",
+				"maxDuration",
+				"avDuration"
+			],
+			"additionalProperties": false
+		},
+		"tariffRegion": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"key": {
+					"type": "string"
+				},
+				"layer": {
+					"type": "string"
+				},
+				"properties": {}
+			},
+			"required": [
+				"id",
+				"name",
+				"type",
+				"key",
+				"layer"
+			],
+			"additionalProperties": false
+		},
+		"relationId": {
+			"type": "string"
+		},
+		"productInstance": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"pricelevel": {
+					"type": "string"
+				},
+				"areaNumber": {
+					"type": "string"
+				},
+				"validUntil": {
+					"$ref": "#/definitions/dateTime"
+				}
+			},
+			"required": [
+				"id",
+				"name",
+				"pricelevel",
+				"areaNumber"
+			],
+			"additionalProperties": false
+		},
+		"userinfo": {
+			"type": "object",
+			"properties": {
+				"wheelchair": {
+					"type": "boolean"
+				},
+				"walkingStick": {
+					"type": "boolean"
+				},
+				"walkingFrame": {
+					"type": "boolean"
+				},
+				"walkingImpaired": {
+					"type": "boolean"
+				},
+				"pram": {
+					"type": "boolean"
+				},
+				"hearingImpaired": {
+					"type": "boolean"
+				},
+				"visuallyImpaired": {
+					"type": "boolean"
+				},
+				"bikeTransport": {
+					"type": "boolean"
+				},
+				"readingImpaired": {
+					"type": "boolean"
+				},
+				"boardingAssistance": {
+					"type": "boolean"
+				},
+				"alightingAssistance": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"wheelchair",
+				"walkingStick",
+				"walkingFrame",
+				"walkingImpaired",
+				"pram",
+				"hearingImpaired",
+				"visuallyImpaired",
+				"bikeTransport",
+				"readingImpaired",
+				"boardingAssistance",
+				"alightingAssistance"
+			],
+			"additionalProperties": false,
+			"version": "10.4.15.5"
+		},
+		"customerdetail": {
+			"type": "object",
+			"properties": {
+				"userRef": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"userRef"
+			],
+			"additionalProperties": false,
+			"version": "10.4.15.5"
+		},
+		"taxiOperator": {
+			"type": "object",
+			"properties": {
+				"omc": {
+					"type": "string"
+				},
+				"desc": {
+					"type": "string"
+				},
+				"providers": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/taxiProvider"
+					}
+				}
+			},
+			"required": [
+				"omc",
+				"desc",
+				"providers"
+			],
+			"additionalProperties": false
+		},
+		"taxiProvider": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"address": {
+					"type": "string"
+				},
+				"tel": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name",
+				"url",
+				"address",
+				"tel"
+			],
+			"additionalProperties": false
+		},
+		"tripInformation": {
+			"type": "object",
+			"properties": {
+				"transportation": {
+					"$ref": "Definitions.json#/definitions/transportation"
+				},
+				"requestedPart": {
+					"$ref": "Definitions.json#/definitions/tripPart"
+				},
+				"parts": {
+					"description": "details per one (or more) sub-part of part",
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/tripPart"
+					}
+				},
+				"stops": {
+					"description": "details per stop of part",
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/stopInformation"
+					}
+				}
+			},
+			"required": [
+				"transportation"
+			],
+			"additionalProperties": false
+		},
+		"tripPart": {
+			"type": "object",
+			"properties": {
+				"origin": {
+					"$ref": "Definitions.json#/definitions/journeyLocation"
+				},
+				"destination": {
+					"$ref": "Definitions.json#/definitions/journeyLocation"
+				},
+				"coupledTrips": {
+					"description": "(at least one) all trips that run together on this part",
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/coupledTrip"
+					}
+				}
+			},
+			"required": [
+				"origin",
+				"destination"
+			],
+			"additionalProperties": false
+		},
+		"coupledTrip": {
+			"type": "object",
+			"properties": {
+				"transportation": {
+					"$ref": "Definitions.json#/definitions/transportation"
+				},
+				"position": {
+					"description": "Position of this trip within the couple of trips, starting with 1 (0 means unknown). Position is valid for stop where passenger boards (when used in trip request context)",
+					"type": "number"
+				},
+				"vehicles": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfTrip"
+					}
+				}
+			},
+			"required": [
+				"transportation",
+				"position",
+				"vehicles"
+			],
+			"additionalProperties": false
+		},
+		"vehicleOfTrip": {
+			"type": "object",
+			"properties": {
+				"positionOverall": {
+					"description": "Sequential number of this vehicle over all CoupledTrips (1 = first vehicle in front)",
+					"type": "number"
+				},
+				"positionInCoupledTrip": {
+					"description": "Sequential number of this vehicle within the CoupledTrip (1 = first vehicle in front)",
+					"type": "number"
+				},
+				"vehicleNumber": {
+					"description": "Published vehicle number (f.e. for  reservations)",
+					"type": "number"
+				},
+				"passage": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfTripPassage"
+					}
+				},
+				"function": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfTripFunction"
+					}
+				},
+				"length": {
+					"description": "Vehicle length(milli meter)",
+					"type": "number"
+				},
+				"facilities": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfTripFacilities"
+					}
+				},
+				"type": {
+					"description": "Type, f.e. \"ET 423\"",
+					"type": "string"
+				}
+			},
+			"required": [
+				"positionOverall",
+				"positionInCoupledTrip",
+				"vehicleNumber",
+				"passage"
+			],
+			"additionalProperties": false
+		},
+		"stopInformation": {
+			"type": "object",
+			"properties": {
+				"location": {
+					"$ref": "Definitions.json#/definitions/location"
+				},
+				"stopEventType": {
+					"description": "applies for departure, arrival or both",
+					"type": "string"
+				},
+				"boardingAlightingVehicles": {
+					"description": "List of vehicles at stop",
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfStop"
+					}
+				},
+				"continuousVehicles": {
+					"description": "List of vehicles where boarding at origin of requested part and alighting at this stop is possible",
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfTrip"
+					}
+				}
+			},
+			"required": [
+				"location"
+			],
+			"additionalProperties": false
+		},
+		"vehicleOfStop": {
+			"type": "object",
+			"properties": {
+				"vehicle": {
+					"$ref": "Definitions.json#/definitions/vehicleOfTrip"
+				},
+				"vehiclePosition": {
+					"type": "object",
+					"properties": {
+						"start": {
+							"description": "Start of vehicle position (in millimeters in relation to a reference point at the platform)",
+							"type": "number"
+						},
+						"end": {
+							"description": "End of vehicle position (in millimeters in relation to a reference point at the platform)",
+							"type": "number"
+						}
+					},
+					"required": [
+						"start",
+						"end"
+					],
+					"additionalProperties": false
+				},
+				"platformSector": {
+					"description": "Platform sector, e.g. \"A\"",
+					"type": "string"
+				},
+				"information": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/vehicleOfStopInformation"
+					}
+				}
+			},
+			"required": [
+				"vehiclePosition"
+			],
+			"additionalProperties": false
+		},
+		"vehicleOfStopInformation": {
+			"type": "string",
+			"enum": [
+				"INVERSEDIRECTION",
+				"CLOSED_ARR",
+				"CLOSED_DEP",
+				"UNKNOWN"
+			]
+		},
+		"vehicleOfTripFacilities": {
+			"type": "string",
+			"enum": [
+				"1CL",
+				"2CL",
+				"BUSINESS",
+				"BIKE",
+				"BABY",
+				"WHEELCHAIR",
+				"RELAX",
+				"SLEEP",
+				"STANDING",
+				"PLAYAREA",
+				"LAVATORY",
+				"LAVATORY_WHEELCHAIR",
+				"AIRCOND",
+				"WIFI",
+				"RESTAURANT",
+				"BISTRO",
+				"SNACKS",
+				"UNKNOWN"
+			]
+		},
+		"vehicleOfTripFunction": {
+			"type": "string",
+			"enum": [
+				"LOCOMOTIVE",
+				"CONTROLCAR",
+				"COMPARTMENT",
+				"SALOON",
+				"SLEEPER",
+				"RESTAURANT",
+				"BISTRO",
+				"CARTRANSPORT",
+				"TRAILER",
+				"UNKNOWN"
+			]
+		},
+		"vehicleOfTripPassage": {
+			"type": "string",
+			"enum": [
+				"CLOSED",
+				"PASSAGETOLOWER",
+				"PASSAGETOHIGHER",
+				"UNKNOWN"
+			]
+		},
+		"ticketArea": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"name"
+			],
+			"additionalProperties": false
+		},
+		"commune": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"name": {
+					"type": "string"
+				},
+				"isSelected": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"id",
+				"name",
+				"isSelected"
+			],
+			"additionalProperties": false
+		},
+		"county": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"isSelected": {
+					"type": "boolean"
+				},
+				"communes": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/commune"
+					}
+				}
+			},
+			"required": [
+				"id",
+				"name",
+				"isSelected"
+			],
+			"additionalProperties": false
+		},
+		"reducedJourney": {
+			"type": "object",
+			"properties": {
+				"bufferTime": {
+					"type": "number"
+				},
+				"transportation": {
+					"$ref": "#/definitions/transportation"
+				},
+				"stopSequence": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/journeyLocation"
+					},
+					"version": "10.2.2.48"
+				},
+				"departureTime": {
+					"type": "string"
+				},
+				"arrivalTime": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"transportation",
+				"stopSequence",
+				"departureTime",
+				"arrivalTime"
+			],
+			"additionalProperties": false
+		},
+		"RTJob": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"stopEvents": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/RTStopEvent"
+					}
+				}
+			},
+			"required": [
+				"id"
+			],
+			"additionalProperties": false
+		},
+		"addInfoJob": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"infos": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/info"
+					}
+				}
+			},
+			"required": [
+				"id"
+			],
+			"additionalProperties": false
+		},
+		"RTStopEvent": {
+			"type": "object",
+			"properties": {
+				"location": {
+					"$ref": "#/definitions/location"
+				},
+				"departureTimePlanned": {
+					"$ref": "#/definitions/dateTime"
+				},
+				"departureTimeEstimated": {
+					"$ref": "#/definitions/dateTime"
+				},
+				"realtimeStatus": {
+					"$ref": "#/definitions/realtimeTripStatus",
+					"version": "10.4.15.5"
+				},
+				"transportation": {
+					"$ref": "#/definitions/transportation",
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false
+		},
+		"parkingDataSet": {
+			"type": "object",
+			"properties": {
+				"freePlaces": {
+					"type": "number"
+				},
+				"occ": {
+					"type": "number"
+				},
+				"occLOS": {
+					"type": "number"
+				},
+				"occLevel": {
+					"type": "string"
+				},
+				"occTrend": {
+					"type": "number"
+				},
+				"dataSource": {
+					"type": "string",
+					"enum": [
+						"PROFILE",
+						"REALTIME",
+						"UNKNOWN"
+					]
+				},
+				"measuredAt": {
+					"$ref": "#/definitions/dateTime"
+				},
+				"additionalInformations": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.8.6"
+		},
+		"parkingStaticInfo": {
+			"type": "object",
+			"properties": {
+				"maxVehicleDimensions": {
+					"$ref": "#/definitions/maxVehicleDimensions"
+				},
+				"maxParkingTime": {
+					"type": "number"
+				},
+				"operator": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						},
+						"phone": {
+							"type": "string"
+						},
+						"address": {
+							"$ref": "#/definitions/address"
+						}
+					},
+					"additionalProperties": false
+				},
+				"address": {
+					"$ref": "#/definitions/address"
+				},
+				"geometryObject": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": [
+								"Point",
+								"LineString",
+								"Polygon",
+								"MultiPoint",
+								"MultiLineString",
+								"MultiPolygon",
+								"GeometryCollection"
+							]
+						},
+						"geometries": {
+							"type": "array"
+						},
+						"coordinates": {
+							"additionalProperties": false
+						},
+						"mapName": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				"link": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"telephone": {
+					"type": "string"
+				},
+				"accessibility": {
+					"type": "string",
+					"enum": [
+						"ACCESSIBILITY_UNDEFINED",
+						"ACCESSIBILITY_RESTRICTED_ACCESS",
+						"ACCESSIBILITY_PUBLIC_ACCESS"
+					]
+				},
+				"properties": {
+					"type": "object"
+				}
+			},
+			"additionalProperties": false
+		},
+		"parkingTax": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"UNKNOWN",
+						"HOUR",
+						"DAY",
+						"MONTH"
+					]
+				},
+				"currency": {
+					"type": "string"
+				},
+				"fare": {
+					"type": "number"
+				},
+				"languageStrings": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/languageString"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"businessHoursInfo": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/languageString"
+			}
+		},
+		"businessHoursArray": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/businessHours"
+			}
+		},
+		"chargingStations": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/chargingInfrastructure"
+			}
+		},
+		"parkingProfileInfo": {
+			"type": "object",
+			"properties": {
+				"currentDayIdx": {
+					"type": "number"
+				},
+				"parkingProfileInfo": {
+					"type": "object",
+					"properties": {
+						"profileValueInfoArray": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/profileValueInfo"
+							}
+						}
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"parkingRealtimeInfo": {
+			"$ref": "#/definitions/parkingDataSet"
+		},
+		"maxVehicleDimensions": {
+			"type": "object",
+			"properties": {
+				"height": {
+					"type": "number"
+				},
+				"length": {
+					"type": "number"
+				},
+				"weight": {
+					"type": "number"
+				},
+				"width": {
+					"type": "number"
+				}
+			},
+			"additionalProperties": false
+		},
+		"address": {
+			"type": "object",
+			"properties": {
+				"address": {
+					"type": "string"
+				},
+				"housenumber": {
+					"type": "string"
+				},
+				"omc": {
+					"type": "number"
+				},
+				"placeId": {
+					"type": "number"
+				},
+				"place": {
+					"type": "string"
+				},
+				"postalCode": {
+					"type": "string"
+				},
+				"region": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"parkingSpaceType": {
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"BICYCLE",
+						"MOTORCYCLE",
+						"CAR",
+						"CAR_HANDICAPPED",
+						"CAR_FEMALE",
+						"CAR_CHARGING_STATION",
+						"CAMPING_VAN",
+						"BUS",
+						"TRUCK",
+						"BICYCLE_SHELTER",
+						"BICYCLE_BOX",
+						"BICYCLE_CHARGING_STATION",
+						"CAR_FAMILY",
+						"UNKNOWN"
+					]
+				},
+				"capacity": {
+					"type": "number"
+				},
+				"freeSpaces": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"languageString": {
+			"type": "object",
+			"properties": {
+				"string": {
+					"type": "string"
+				},
+				"langIso639": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"businessHours": {
+			"type": "object",
+			"properties": {
+				"weekday": {
+					"type": "string",
+					"enum": [
+						"UNDEFINED",
+						"WEEK",
+						"WEEKEND",
+						"MON_FRI",
+						"MON",
+						"TUE",
+						"WED",
+						"THU",
+						"FRI",
+						"SAT",
+						"SUN"
+					]
+				},
+				"from": {
+					"type": "number"
+				},
+				"to": {
+					"type": "number"
+				}
+			},
+			"additionalProperties": false
+		},
+		"chargingInfrastructure": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"chargingOperator": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"properties": {
+							"type": "object"
+						}
+					}
+				},
+				"ConnectorTypes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/connectorType"
+					}
+				},
+				"ChargerConnections": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/connectorType"
+					}
+				},
+				"usageCosts": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/languageString"
+					}
+				},
+				"properties": {
+					"type": "object"
+				}
+			},
+			"additionalProperties": false
+		},
+		"connectorType": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"properties": {
+					"type": "object"
+				}
+			},
+			"additionalProperties": false
+		},
+		"profileValueInfo": {
+			"type": "object",
+			"properties": {
+				"parkingDataType": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				}
+			}
+		},
+		"guidanceSign": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"EXIT_NUMBER",
+						"ROUTE_ID",
+						"DIRECTION",
+						"UNKNOWN_SIGN_TYPE"
+					]
+				},
+				"skyDirection": {
+					"type": "string"
+				},
+				"text": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"operator": {
+			"type": "object",
+			"properties": {
+				"net": {
+					"type": "string"
+				},
+				"code": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"selected": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"mustincl",
+						"mustexcl",
+						"preferincl",
+						"preferexcl",
+						"useonly",
+						"unknown"
+					]
+				},
+				"transportations": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/transportation"
+					}
+				},
+				"offices": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/office"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"office": {
+			"type": "object",
+			"properties": {
+				"shortName": {
+					"type": "string"
+				},
+				"internalPhone": {
+					"type": "string"
+				},
+				"publicPhone": {
+					"type": "string"
+				},
+				"faxNo": {
+					"type": "string"
+				},
+				"address": {
+					"type": "string"
+				},
+				"contactAddress": {
+					"type": "string"
+				},
+				"openingHours": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"lineTrip": {
+			"type": "object",
+			"properties": {
+				"rvb": {
+					"type": "number"
+				},
+				"tripCode": {
+					"type": "number"
+				},
+				"calls": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/callDepArrTimes"
+					}
+				}
+			},
+			"required": [
+				"tripCode",
+				"calls"
+			],
+			"additionalProperties": false
+		},
+		"callDepArrTimes": {
+			"type": "object",
+			"properties": {
+				"arrivalTimePlanned": {
+					"type": "string"
+				},
+				"departureTimePlanned": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false
+		},
+		"pricedTicketBundle": {
+			"type": "object",
+			"properties": {
+				"totalCosts": {
+					"type": "number"
+				},
+				"ticketBundles": {
+					"type": "array",
+					"items": {
+						"$ref": "./Definitions.json#/definitions/ticket"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"coordArray": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/coord"
+			}
+		},
+		"transportationTrip": {
+			"type": "object",
+			"properties": {
+				"tripCode": {
+					"type": "number"
+				},
+				"trainNumber": {
+					"type": "string"
+				},
+				"trainType": {},
+				"departureTimePlannedJourneyOrigin": {
+					"type": "string"
+				},
+				"arrivalTimePlannedJourneyDestination": {
+					"type": "string"
+				},
+				"status": {
+					"type": "string",
+					"enum": [
+						"BLOCKED",
+						"DELAYED",
+						"ADDITIONAL_STOP"
+					]
+				}
+			},
+			"required": [
+				"tripCode"
+			],
+			"additionalProperties": false
+		},
+		"sharingObject": {
+			"type": "object",
+			"properties": {
+				"vehicles": {},
+				"stations": {}
+			}
+		},
+		"station": {
+			"type": "object",
+			"properties": {
+				"addr": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"pos": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"lastUpdate": {
+					"$ref": "#/definitions/dateTime",
+					"version": "10.2.8.6"
+				},
+				"carSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"carCombustionSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"carHybridSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"carElectricSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"motorcycleSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"motorcycleCombustionSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"motorcycleHybridSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"motorcycleElectricSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"bikeSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"eBikeSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"combinedSlots": {
+					"$ref": "#/definitions/slots",
+					"version": "10.2.8.6"
+				},
+				"stNum": {
+					"type": "string",
+					"version": "10.2.8.6"
+				},
+				"oOS": {
+					"type": "boolean",
+					"version": "10.2.8.6"
+				},
+				"vehicles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vehicle",
+						"version": "10.2.2.48"
+					},
+					"version": "10.2.8.6"
+				},
+				"coord": {
+					"$ref": "Definitions.json#/definitions/coord"
+				},
+				"providerId": {
+					"type": "number"
+				},
+				"providerName": {
+					"type": "string"
+				},
+				"operatingAreaId": {
+					"type": "string"
+				},
+				"operatingAreaName": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.8.6"
+		},
+		"predefinedStopTimetable": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"line": {
+					"$ref": "#/definitions/liErgRiProj"
+				}
+			},
+			"required": [
+				"line"
+			],
+			"additionalProperties": false
+		},
+		"liErgRiProj": {
+			"type": "object",
+			"properties": {
+				"l": {
+					"description": "line",
+					"type": "string"
+				},
+				"p": {
+					"description": "project",
+					"type": "string"
+				},
+				"r": {
+					"description": "direction",
+					"type": "string"
+				},
+				"s": {
+					"description": "supplement",
+					"type": "string"
+				},
+				"n": {
+					"description": "network",
+					"type": "string"
+				},
+				"gid": {
+					"description": "global id",
+					"type": "string"
+				}
+			},
+			"required": [
+				"l",
+				"p",
+				"r",
+				"s",
+				"n"
+			],
+			"additionalProperties": false
+		},
+		"accompany": {
+			"type": "object",
+			"properties": {
+				"adults": {
+					"type": "number"
+				},
+				"children": {
+					"type": "number"
+				},
+				"animals": {
+					"type": "number"
+				},
+				"bicycles": {
+					"type": "number"
+				},
+				"startTime": {
+					"type": "number"
+				},
+				"endTime": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"adults",
+				"children",
+				"animals",
+				"bicycles",
+				"startTime",
+				"endTime"
+			],
+			"additionalProperties": false
+		}
+	}
+}

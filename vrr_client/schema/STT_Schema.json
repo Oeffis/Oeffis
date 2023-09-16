@@ -1,0 +1,70 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "STT-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo",
+			"version": "10.2.8.6"
+		},
+		"version": {
+			"type": "string",
+			"version": "10.2.2.48"
+		},
+		"error": {
+			"$ref": "Definitions.json#/definitions/error",
+			"version": "10.2.2.48"
+		},
+		"location": {
+			"$ref": "Definitions.json#/definitions/location",
+			"version": "10.2.2.48"
+		},
+		"lineStopSeq": {
+			"type": "object",
+			"properties": {
+				"line": {
+					"$ref": "Definitions.json#/definitions/transportation",
+					"version": "10.2.2.48"
+				},
+				"lineStopSeq": {
+					"type": "array",
+					"items": {
+						"$ref": "Definitions.json#/definitions/journeyLocation"
+					},
+					"version": "10.2.2.48"
+				}
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"message": {
+			"$ref": "Definitions.json#/definitions/systemMessage",
+			"version": "10.2.2.48"
+		},
+		"presentation": {
+			"type": "string",
+			"enum": [
+				"STT",
+				"TTB",
+				"ROP",
+				"STATIONTT",
+				"TYPE"
+			],
+			"version": "10.2.2.48"
+		},
+		"download": {
+			"$ref": "./Definitions.json#/definitions/download",
+			"version": "10.2.2.48"
+		},
+		"stream": {
+			"type": "string",
+			"version": "10.2.2.48"
+		},
+		"properties": {}
+	},
+	"required": [
+		"version"
+	],
+	"additionalProperties": false,
+	"version": "10.2.2.48"
+}

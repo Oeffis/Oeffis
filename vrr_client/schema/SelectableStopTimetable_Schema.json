@@ -1,0 +1,36 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "SelectableStopTimetable-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo"
+		},
+		"systemMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/systemMessage"
+			}
+		},
+		"version": {
+			"type": "string"
+		},
+		"locations": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/location"
+			}
+		},
+		"download": {
+			"$ref": "./Definitions.json#/definitions/download"
+		},
+		"stream": {
+			"type": "string"
+		},
+		"lines": {
+			"$ref": "./Definitions.json#/definitions/transportation"
+		}
+	},
+	"additionalProperties": false,
+	"version": "10.4.15.5"
+}

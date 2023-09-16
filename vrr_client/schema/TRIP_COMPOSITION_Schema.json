@@ -1,0 +1,21 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "Trip-Composition-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo"
+		},
+		"version": {
+			"type": "string"
+		},
+		"tripInformation": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/tripInformation"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"version": "10.4.15.5"
+}

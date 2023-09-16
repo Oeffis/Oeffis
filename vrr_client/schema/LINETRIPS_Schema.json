@@ -1,0 +1,33 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "LineRoutes-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo",
+			"version": "10.2.8.6"
+		},
+		"version": {
+			"type": "string",
+			"version": "10.2.2.48"
+		},
+		"validity": {
+			"$ref": "Definitions.json#/definitions/datePeriod"
+		},
+		"transportation": {
+			"$ref": "Definitions.json#/definitions/transportation"
+		},
+		"routes": {
+			"type": "array",
+			"items": {
+				"$ref": "Definitions.json#/definitions/route"
+			}
+		},
+		"properties": {}
+	},
+	"required": [
+		"version"
+	],
+	"additionalProperties": false,
+	"version": "10.2.2.48"
+}

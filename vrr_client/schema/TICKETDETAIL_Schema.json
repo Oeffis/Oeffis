@@ -1,0 +1,18 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "TicketDetails-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo"
+		},
+		"version": {
+			"type": "string"
+		},
+		"ticket": {
+			"$ref": "./Definitions.json#/definitions/ticket"
+		}
+	},
+	"additionalProperties": false,
+	"version": "10.4.15.5"
+}
