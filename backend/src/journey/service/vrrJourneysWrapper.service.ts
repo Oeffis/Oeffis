@@ -56,7 +56,7 @@ export class VrrJourneysWrapperService {
     return vrrTransportation !== undefined
       ? {
         name: vrrTransportation.name,
-        trips: this.wrapTransportationTrips(vrrTransportation.trips)
+        trips: this.wrapTransportationTrips(vrrTransportation.trips) || []
       }
       : undefined;
   }
@@ -111,8 +111,8 @@ export class VrrJourneysWrapperService {
       distance: vrrLeg.distance,
       duration: vrrLeg.duration,
       realtimeTripStatus: realTimeTripStatus,
-      infos: this.wrapLegInfos(vrrLeg.infos),
-      hints: this.wrapLegInfos(vrrLeg.hints)
+      infos: this.wrapLegInfos(vrrLeg.infos) || [],
+      hints: this.wrapLegInfos(vrrLeg.hints) || []
     };
 
     return {
