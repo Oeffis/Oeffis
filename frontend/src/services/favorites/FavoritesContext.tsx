@@ -50,7 +50,7 @@ export const FavoriteTripsContext = favoriteTrips.context;
 export const FavoriteTripsProvider = favoriteTrips.provider;
 export const useFavoriteTrips = favoriteTrips.useObjects;
 
-export const FavoriteRouteContext = favoriteRoutes.context;
+export const FavoriteRoutesContext = favoriteRoutes.context;
 export const FavoriteRoutesProvider = favoriteRoutes.provider;
 export const useFavoriteRoutes = favoriteRoutes.useObjects;
 

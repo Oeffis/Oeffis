@@ -16,7 +16,9 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     const newFavoriteTrips = event.detail.complete([...favoriteTrips]);
+    const newFavoriteRoutes = event.detail.complete([...favoriteRoutes]);
     setFavoriteTrips(newFavoriteTrips);
+    setFavoriteRoutes(newFavoriteRoutes);
   };
 
   return (
@@ -27,12 +29,16 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
           onIonItemReorder={handleReorder}
           disabled={false}
         >
-          {favoriteTrips.map((trip, idx) => (
-            <FavoriteTripEntryComponent
-              identifier={idx}
-              onTripSelected={props.onTripSelected}
-              trip={trip} />
-          ))}
+          {
+            favoriteTrips.length > 0
+              ? favoriteTrips.map((trip, idx) => (
+                <FavoriteTripEntryComponent
+                  identifier={idx}
+                  onTripSelected={props.onTripSelected}
+                  trip={trip} />
+              ))
+              : <IonLabel>Keine favorisierten Trips vorhanden</IonLabel>
+          }
         </IonReorderGroup>
       </IonList>
       <IonLabel>Routen</IonLabel>
@@ -41,12 +47,16 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
           onIonItemReorder={handleReorder}
           disabled={false}
         >
-          {favoriteRoutes.map((route, idx) => (
-            <FavoriteRouteEntryComponent
-              identifier={idx}
-              onRouteSelected={props.onRouteSelected}
-              route={route} />
-          ))}
+          {
+            favoriteRoutes.length > 0
+              ? favoriteRoutes.map((route, idx) => (
+                <FavoriteRouteEntryComponent
+                  identifier={idx}
+                  onRouteSelected={props.onRouteSelected}
+                  route={route} />
+              ))
+              : <IonLabel>Keine favorisierten Routen vorhanden</IonLabel>
+          }
         </IonReorderGroup>
       </IonList>
     </>
@@ -93,15 +103,23 @@ interface LoadedFavouriteTripEntryProps {
 
 const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> = (props) => (
   <>
-    <IonLabel>
-      {props.tripTime.substring(0, 16)} - {props.origin.name} - {props.destination.name}
-    </IonLabel>
-    <IonIcon
-      icon={star}
-      color="warning"
-      onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
-      title="Remove from favorites"
-    />
+    <div>
+      <div>
+        <IonLabel>
+          {new Date(props.tripTime).toISOString().substring(0, 16)}
+        </IonLabel>
+        <IonLabel>
+          {props.origin.name} - {props.destination.name}
+        </IonLabel>
+      </div>
+      <IonIcon
+        icon={star}
+        color="warning"
+        onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
+        title="Remove from favorites"
+      />
+    </div>
+
     <IonReorder slot="start" />
   </>
 );

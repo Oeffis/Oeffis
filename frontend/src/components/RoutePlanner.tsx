@@ -129,7 +129,7 @@ const RoutePlanner: React.FC = () => {
       <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
           <IonToolbar>
-            <IonTitle>Zu Favoriten hinzufügen</IonTitle>
+            <IonTitle>Add to favorites</IonTitle>
             <IonButtons slot="end">
               <IonButton color="light" onClick={() => setIsFavoritesDialogueOpen(false)}>
                 <IonIcon icon={closeCircleOutline} />
@@ -138,11 +138,11 @@ const RoutePlanner: React.FC = () => {
           </IonToolbar>
           <div id="content-section">
             <div>
-              Willst du die Route mit oder ohne Uhrzeit speichern?
+              Do you want to save as Route or as Trip?
             </div>
             <div id="buttons">
-              <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Ohne Uhrzeit</IonButton>
-              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, tripTime }); setIsFavoritesDialogueOpen(false); } }}>Mit Uhrzeit</IonButton>
+              <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Route</IonButton>
+              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, tripTime }); setIsFavoritesDialogueOpen(false); } }}>Trip</IonButton>
             </div>
           </div>
 
