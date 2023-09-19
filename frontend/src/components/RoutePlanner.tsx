@@ -11,18 +11,23 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import { formatISO, isSameMinute, parseISO } from "date-fns";
+import React, { useState } from "react";
 import { Journey, Location } from "../api";
+import { useCurrentTime } from "../hooks/useCurrentTime";
+import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../hooks/useCustomDepartureTimeOrCurrentTime";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../hooks/useStateParams";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
 import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
+
+/** String to represent the usage of current time in departure url param. */
+export const DEPARTURE_TIME_NOW_PARAM = "now";
 
 const RoutePlanner: React.FC = () => {
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
@@ -30,6 +35,11 @@ const RoutePlanner: React.FC = () => {
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
+
+  const currentTime = useCurrentTime();
+  const [customDepartureTime, setCustomDepartureTime] = useStateParams<string>(DEPARTURE_TIME_NOW_PARAM, "departure", String, String);
+  const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
+  const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
 
@@ -59,15 +69,55 @@ const RoutePlanner: React.FC = () => {
     setIsFavoritesModalOpen(true);
   };
 
+  const updateMinDepartureTime = (): void => {
+    setMinDepartureTime(currentTime);
+  };
+
+  /**
+   * Sets some time given as string as custom departure time.
+   *
+   * @param departure departure time (as ISO string)
+   */
+  const setCustomDeparture = (departure: string): void => {
+    const parsedDeparture: Date = parseISO(departure);
+    // If min value (current time) gets selected, encode this in url param.
+    const customDepartureTimeString: string =
+      isSameMinute(parsedDeparture, minDepartureTime)
+        ? DEPARTURE_TIME_NOW_PARAM
+        : formatISO(parsedDeparture);
+
+    setCustomDepartureTime(customDepartureTimeString);
+  };
+
   return (
     <>
       <IonList inset={true}>
         <IonItem lines="inset">
-          {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
+          {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
           <IonLabel>Date and Time</IonLabel>
-          <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
-          <IonModal keepContentsMounted={true}>
-            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} />
+          {/* Button to delete custom date/time inputs and use current time. */}
+          <IonButton
+            fill="outline"
+            strong={true}
+            onClick={(): void => setCustomDeparture(formatISO(currentTime))}
+          >
+            Now
+          </IonButton>
+          <IonDatetimeButton aria-label="Date and Time" datetime="datetime"/>
+          {/* Before datetime modal is being presented min departure time is updated to current time. */}
+          <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
+            <IonDatetime
+              name="date_time"
+              id="datetime"
+              /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI. */
+              min={formatISO(minDepartureTime)}
+              value={formatISO(departureTime)}
+              multiple={false} // Assures that value cannot be an array but a single date string only.
+              showDefaultButtons={true}
+              data-testid={"datetime-input"}
+              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+              onIonChange={e => setCustomDeparture(e.detail.value! as string)}
+            />
           </IonModal>
         </IonItem>
         <IonItem>
@@ -97,7 +147,11 @@ const RoutePlanner: React.FC = () => {
       </IonList>
       {
         originLocation !== null && destinationLocation !== null &&
-        <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
+        <TripOptionsDisplay
+          origin={originLocation}
+          destination={destinationLocation}
+          departure={departureTime}
+        />
       }
 
       <IonModal
@@ -119,10 +173,15 @@ const RoutePlanner: React.FC = () => {
 
 export default RoutePlanner;
 
-export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
-  const { origin, destination } = props;
+export function TripOptionsDisplay(props: {
+  origin: Location,
+  destination: Location,
+  departure: Date
+}): JSX.Element {
+  const { origin, destination, departure } = props;
 
-  const result = useJourneyQuery(origin, destination);
+  // TODO Add user input if datetime should be interpreted as arrival time.
+  const result = useJourneyQuery(origin, destination, departure, false);
 
   const iJourneys: false | IJourney[] = result.type === "success" && result.journeyResults.map((journey): IJourney => {
     const lastLeg = journey.legs[journey.legs.length - 1];
@@ -174,33 +233,4 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
       </IonLabel>
     </IonItem>
   );
-}
-
-
-export function useInitialLocationFromLocationIdAndThenAsState(locationId: string | null): [Location | null, (location: Location | null) => void] {
-  const locationFinderApi = useLocationFinderApi();
-  const [location, setLocation] = useState<Location | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const abortController = new AbortController();
-    if (locationId !== null && location === null && locationId !== "") {
-      locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId }, { signal: abortController.signal })
-        .then((locations) => {
-          if (locations.length > 0 && !cancelled) {
-            setLocation(locations[0]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return (): void => {
-      abortController.abort();
-      cancelled = true;
-    };
-  }, [locationId]);
-
-  return [location, setLocation];
 }
