@@ -1,8 +1,11 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsDefined, IsInstance, IsLatitude, IsLongitude, IsNumber, IsOptional } from "class-validator";
 import { Location } from "./location.entity";
 
 export class LocationDetails {
 
+  @IsDefined()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Short name of the location.",
     type: String,
@@ -10,6 +13,8 @@ export class LocationDetails {
   })
   shortName?: string;
 
+  @IsNumber()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Quality how well the given location meets the related query (biggest number is the best result).",
     type: Number,
@@ -17,6 +22,8 @@ export class LocationDetails {
   })
   matchQuality?: number;
 
+  @IsInstance(Location)
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Parent location of this location.",
     type: () => Location,
@@ -28,6 +35,8 @@ export class LocationDetails {
   })
   parent?: Location;
 
+  @IsLatitude()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Latitude of the location.",
     type: Number,
@@ -35,6 +44,8 @@ export class LocationDetails {
   })
   latitude?: number;
 
+  @IsLongitude()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Longitude of the location.",
     type: Number,

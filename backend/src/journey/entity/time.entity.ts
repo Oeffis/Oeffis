@@ -1,7 +1,10 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsDate, IsOptional } from "class-validator";
 
 export class Time {
 
+  @IsDate()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Time estimated.",
     type: Date,
@@ -9,6 +12,8 @@ export class Time {
   })
   estimated?: Date;
 
+  @IsDate()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Time planned.",
     type: Date,

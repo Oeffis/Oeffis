@@ -1,9 +1,12 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsEnum, IsInstance, IsNotEmpty, IsOptional } from "class-validator";
 import { LocationType } from "../../vrr/entity/locationType.entity";
 import { LocationDetails } from "./locationDetails.entity";
 
 export class Location {
 
+  @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Id of the location.",
     type: String,
@@ -11,6 +14,8 @@ export class Location {
   })
   id?: string;
 
+  @IsNotEmpty()
+  @IsOptional()
   @ApiPropertyOptional({
     description: "(Full) Name of the location.",
     type: String,
@@ -18,6 +23,8 @@ export class Location {
   })
   name?: string;
 
+  @IsEnum(LocationType)
+  @IsOptional()
   @ApiPropertyOptional({
     description: "Type of the location.",
     enum: LocationType,
@@ -25,6 +32,7 @@ export class Location {
   })
   type?: LocationType;
 
+  @IsInstance(LocationDetails)
   @ApiPropertyOptional({
     description: "Further details of the location.",
     type: LocationDetails,
