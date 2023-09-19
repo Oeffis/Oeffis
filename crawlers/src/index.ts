@@ -1,8 +1,32 @@
 import yargs from "yargs";
+import { importVrrTimetables } from "./importVrrTimetable/entrypoint";
+import { createPgPool } from "./postgres/createPgPool";
 
 async function main(): Promise<void> {
   const argv = removeNodeOptions(process.argv);
   await yargs(argv)
+    .command("test-parser", "Delete servers from the database", (yargs) => yargs
+      .option("folder", {
+        demandOption: true,
+        describe: "Folder to import",
+        type: "string"
+      })
+      .option("concurrency-limit", {
+        default: 100,
+        describe: "Concurrency limit",
+        type: "number"
+      }), async (argv) => {
+        const pg = await createPgPool({
+          host: "localhost",
+          port: 5432,
+          password: "postgres",
+          user: "postgres"
+        }, console.log);
+
+        await importVrrTimetables(pg.withPgConnection, argv.folder);
+
+        await pg.closePgConnection();
+      })
     .showHelpOnFail(true)
     .demandCommand()
     .recommendCommands()

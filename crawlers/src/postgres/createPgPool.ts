@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createHash } from "crypto";
-import pg, { QueryConfig, QueryResultRow } from "pg";
+import { Pool, PoolClient, PoolConfig, QueryConfig, QueryResultRow } from "pg";
 
-export type Connection = pg.PoolClient & {
+export type Connection = PoolClient & {
   beginTransaction: () => Promise<void>;
   commit: () => Promise<void>;
   rollback: () => Promise<void>;
@@ -16,16 +16,16 @@ export type Connection = pg.PoolClient & {
 export type WithPgConnection = <T> (fn: (conn: Connection) => Promise<T>) => Promise<T>;
 export type CreatePgPoolResult = {
   withPgConnection: WithPgConnection;
-  pool: pg.Pool;
+  pool: Pool;
   closePgConnection: () => Promise<void>;
 };
 
 let patched = false;
-pg.types.setTypeParser(20, BigInt);
+// pg.types.setTypeParser(20, BigInt);
 
 
-export async function createPgPool(config: pg.PoolConfig, logger: (payload: any) => void): Promise<CreatePgPoolResult> {
-  const pool = new pg.Pool({
+export async function createPgPool(config: PoolConfig, logger: (payload: any) => void): Promise<CreatePgPoolResult> {
+  const pool = new Pool({
     ...config,
     idleTimeoutMillis: 0
   });
