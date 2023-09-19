@@ -1,31 +1,30 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
 export class Trip {
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Planned arrival time at destination.",
     type: String
   })
   arrivalTimePlannedJourneyDestination?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Planned departure time at Origin.",
     type: String
   })
   departureTimePlannedJourneyOrigin?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Status information about trip.",
     type: String
   })
   status?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Train number.",
     type: String
   })
   trainNumber?: string;
-
 
   constructor(arrivalTimePlannedJourneyDestination: string, departureTimePlannedJourneyOrigin: string, status: string, trainNumber: string) {
     this.arrivalTimePlannedJourneyDestination = arrivalTimePlannedJourneyDestination;

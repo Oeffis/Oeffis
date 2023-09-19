@@ -1,28 +1,31 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { LocationType } from "../../vrr/entity/locationType.entity";
 import { LocationDetails } from "./locationDetails.entity";
 
 export class Location {
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Id of the location.",
-    type: String
+    type: String,
+    example: "de:05513:5613"
   })
   id?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "(Full) Name of the location.",
-    type: String
+    type: String,
+    example: "Gelsenkirchen, Hbf"
   })
   name?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Type of the location.",
-    enum: LocationType
+    enum: LocationType,
+    example: LocationType.stop
   })
   type?: LocationType;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Further details of the location.",
     type: LocationDetails,
     required: true
@@ -35,4 +38,5 @@ export class Location {
     this.type = type;
     this.details = details;
   }
+
 }

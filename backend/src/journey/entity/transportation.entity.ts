@@ -1,19 +1,18 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Trip } from "./trip.entity";
 
 export class Transportation {
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Name of transportation vehicle.",
     type: String,
-    required: true
+    example: "Regionalbahn 46"
   })
   name?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Trips depending on this transportation.",
-    type: [Trip],
-    required: true
+    type: [Trip]
   })
   trips?: Trip[];
 

@@ -1,9 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Leg } from "./leg.entity";
 
 export class Journey {
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Legs of a journey.",
     type: [Leg]
   })

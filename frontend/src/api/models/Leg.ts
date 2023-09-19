@@ -43,19 +43,19 @@ export interface Leg {
      * @type {JourneyLocation}
      * @memberof Leg
      */
-    origin: JourneyLocation;
+    origin?: JourneyLocation;
     /**
      * 
      * @type {JourneyLocation}
      * @memberof Leg
      */
-    destination: JourneyLocation;
+    destination?: JourneyLocation;
     /**
      * 
      * @type {Transportation}
      * @memberof Leg
      */
-    transportation: Transportation;
+    transportation?: Transportation;
     /**
      * 
      * @type {LegDetails}
@@ -69,9 +69,6 @@ export interface Leg {
  */
 export function instanceOfLeg(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "origin" in value;
-    isInstance = isInstance && "destination" in value;
-    isInstance = isInstance && "transportation" in value;
     isInstance = isInstance && "details" in value;
 
     return isInstance;
@@ -87,9 +84,9 @@ export function LegFromJSONTyped(json: any, ignoreDiscriminator: boolean): Leg {
     }
     return {
         
-        'origin': JourneyLocationFromJSON(json['origin']),
-        'destination': JourneyLocationFromJSON(json['destination']),
-        'transportation': TransportationFromJSON(json['transportation']),
+        'origin': !exists(json, 'origin') ? undefined : JourneyLocationFromJSON(json['origin']),
+        'destination': !exists(json, 'destination') ? undefined : JourneyLocationFromJSON(json['destination']),
+        'transportation': !exists(json, 'transportation') ? undefined : TransportationFromJSON(json['transportation']),
         'details': LegDetailsFromJSON(json['details']),
     };
 }

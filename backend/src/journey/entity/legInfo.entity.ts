@@ -1,10 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
 export class LegInfo {
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Leg origin",
-    type: String
+    type: String,
+    example: "Linie RE42: Fahrradmitnahme begrenzt möglich"
   })
   content?: string;
 
