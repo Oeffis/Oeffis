@@ -17,17 +17,13 @@ export async function buildCreateTableSchemaSql(folder: string, schema: TableSch
 }
 
 function buildFieldSql(schema: TableSchema, field: string): string {
-  const fieldType = determineFieldType(field);
+  const fieldType = schema.determineFieldType ? schema.determineFieldType(field) : "TEXT NOT NULL";
 
   if (schema.primaryKey === field) {
     return `"${field}" ${fieldType} PRIMARY KEY`;
   }
 
   return `"${field}" ${fieldType}`;
-}
-
-function determineFieldType(field: string): string {
-  return "text";
 }
 
 function readFirstLineOfFile(pathToFile: string): Promise<string> {
@@ -58,5 +54,16 @@ async function getCsvHeaderNames(csvPath: string): Promise<string[]> {
 }
 
 export async function buildDropTableSchemaSql(schema: TableSchema): Promise<string> {
-  return `DROP TABLE IF EXISTS "${schema.name}"`;
+  return `DROP TABLE IF EXISTS "${schema.name}" CASCADE`;
+}
+
+export async function buildCreateForeignKeysSql(schema: TableSchema): Promise<string> {
+  if (!schema.foreignKeys || schema.foreignKeys.length === 0) {
+    return "";
+  }
+
+  const foreignKeys = schema.foreignKeys.map(
+    (fk) => `ALTER TABLE "${schema.name}" ADD CONSTRAINT "${schema.name}_${fk.column}_fkey" FOREIGN KEY ("${fk.column}") REFERENCES "${fk.referencedTable}" ("${fk.referencedColumn}")`);
+
+  return foreignKeys.join(";\n");
 }

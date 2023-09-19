@@ -64,7 +64,6 @@ export function importCsvViaStreamingConcurrencyLimitedParser<T>({ concurrencyLi
       function decrementConcurrency(parser: Parser): void {
         concurrency--;
         if (concurrency === 0 && isFinished && !rejected && !isPaused) {
-          console.log("all chunks processed");
           resolve();
         }
         if (isPaused && concurrency < concurrencyLimit) {
