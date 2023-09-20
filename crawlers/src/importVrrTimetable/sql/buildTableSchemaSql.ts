@@ -2,7 +2,7 @@ import { createReadStream } from "fs";
 import { parse } from "papaparse";
 import { join } from "path";
 import { createInterface } from "readline";
-import { TableSchema } from "./entrypoint";
+import { TableSchema } from "../tableSchema";
 
 export async function buildCreateTableSchemaSql(folder: string, schema: TableSchema): Promise<[string, string[]]> {
   const csvPath = join(folder, schema.csv);
@@ -13,7 +13,10 @@ export async function buildCreateTableSchemaSql(folder: string, schema: TableSch
     .map((header) => buildFieldSql(schema, header))
     .join(", ");
 
-  return [`CREATE TABLE "${schema.name}" (${columns})`, csvHeaders];
+  return [
+    `CREATE TABLE "${schema.name}" (${columns})`,
+    csvHeaders
+  ];
 }
 
 function buildFieldSql(schema: TableSchema, field: string): string {
@@ -55,15 +58,4 @@ async function getCsvHeaderNames(csvPath: string): Promise<string[]> {
 
 export async function buildDropTableSchemaSql(schema: TableSchema): Promise<string> {
   return `DROP TABLE IF EXISTS "${schema.name}" CASCADE`;
-}
-
-export async function buildCreateForeignKeysSql(schema: TableSchema): Promise<string> {
-  if (!schema.foreignKeys || schema.foreignKeys.length === 0) {
-    return "";
-  }
-
-  const foreignKeys = schema.foreignKeys.map(
-    (fk) => `ALTER TABLE "${schema.name}" ADD CONSTRAINT "${schema.name}_${fk.column}_fkey" FOREIGN KEY ("${fk.column}") REFERENCES "${fk.referencedTable}" ("${fk.referencedColumn}")`);
-
-  return foreignKeys.join(";\n");
 }
