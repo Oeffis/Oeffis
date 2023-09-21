@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEnum, IsInstance, IsNotEmpty, IsOptional } from "class-validator";
 import { LocationType } from "../../vrr/entity/locationType.entity";
 import { LocationDetails } from "./locationDetails.entity";
@@ -33,7 +33,7 @@ export class Location {
   type?: LocationType;
 
   @IsInstance(LocationDetails)
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: "Further details of the location.",
     type: LocationDetails,
     required: true

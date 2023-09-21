@@ -55,7 +55,7 @@ export interface JourneyLocation {
      * @type {LocationDetails}
      * @memberof JourneyLocation
      */
-    details?: LocationDetails;
+    details: LocationDetails;
     /**
      * 
      * @type {Time}
@@ -98,6 +98,7 @@ export type JourneyLocationTypeEnum = typeof JourneyLocationTypeEnum[keyof typeo
  */
 export function instanceOfJourneyLocation(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "details" in value;
     isInstance = isInstance && "arrival" in value;
     isInstance = isInstance && "departure" in value;
 
@@ -117,7 +118,7 @@ export function JourneyLocationFromJSONTyped(json: any, ignoreDiscriminator: boo
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'type': !exists(json, 'type') ? undefined : json['type'],
-        'details': !exists(json, 'details') ? undefined : LocationDetailsFromJSON(json['details']),
+        'details': LocationDetailsFromJSON(json['details']),
         'arrival': TimeFromJSON(json['arrival']),
         'departure': TimeFromJSON(json['departure']),
     };

@@ -212,7 +212,10 @@
               }
             ]
           }
-        }
+        },
+        "required": [
+          "details"
+        ]
       },
       "LocationDetails": {
         "type": "object",
@@ -393,6 +396,7 @@
           }
         },
         "required": [
+          "details",
           "arrival",
           "departure"
         ]
