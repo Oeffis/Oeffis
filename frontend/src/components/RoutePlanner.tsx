@@ -13,7 +13,7 @@ import {
 } from "@ionic/react";
 import { formatISO, isSameMinute, parseISO } from "date-fns";
 import React, { useState } from "react";
-import { Journey, Location } from "../api";
+import { Journey, Leg, Location } from "../api";
 import { useCurrentTime } from "../hooks/useCurrentTime";
 import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../hooks/useCustomDepartureTimeOrCurrentTime";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
@@ -124,7 +124,7 @@ const RoutePlanner: React.FC = () => {
           <LocationSearchInput
             inputLabel="Origin"
             selectedLocation={originLocation}
-            onSelectedLocationChanged={(location): void => setOriginId(location.id)}
+            onSelectedLocationChanged={(location): void => setOriginId(location.id ?? "")}  /* TODO #312 Revert to saver types. */
             prefixDataTestId="origin-input"
           />
         </IonItem>
@@ -132,7 +132,7 @@ const RoutePlanner: React.FC = () => {
           <LocationSearchInput
             inputLabel="Destination"
             selectedLocation={destinationLocation}
-            onSelectedLocationChanged={(location): void => setDestinationId(location.id)}
+            onSelectedLocationChanged={(location): void => setDestinationId(location.id ?? "")}  /* TODO #312 Revert to saver types. */
             prefixDataTestId="destination-input"
           />
         </IonItem>
@@ -183,24 +183,31 @@ export function TripOptionsDisplay(props: {
   // TODO Add user input if datetime should be interpreted as arrival time.
   const result = useJourneyQuery(origin, destination, departure, false);
 
-  const iJourneys: false | IJourney[] = result.type === "success" && result.journeyResults.map((journey): IJourney => {
-    const lastLeg = journey.legs[journey.legs.length - 1];
-    const firstLeg = journey.legs[0];
+  // TODO #312 Revert to saver types.
+  const iJourneys: false | IJourney[] = result.type === "success"
+    && result.journeyResults
+      .filter((journey) => journey.legs !== undefined)
+      .map((journey): IJourney => {
+        const legs: Leg[] = journey.legs as Leg[];
+
+        const lastLeg = legs[legs.length - 1];
+        const firstLeg = legs[0];
 
     return {
-      startStation: firstLeg.origin.name,
-      startTime: firstLeg.origin.departure.estimated,
-      arrivalStation: lastLeg.destination.name,
-      arrivalTime: lastLeg.destination.arrival.estimated,
-      stops: journey.legs.map((leg): IJourneyStep => ({
-        arrivalTime: leg.destination.arrival.estimated,
-        startTime: leg.origin.departure.estimated,
-        stationName: leg.origin.name,
-        stopName: leg.destination.name,
+      // TODO #312 Revert to saver types.
+      startStation: firstLeg.origin?.name ?? "startStation",
+      startTime: firstLeg.origin?.departure.estimated ?? parseISO("invalid"),
+      arrivalStation: lastLeg.destination?.name ?? "arrivalStation",
+      arrivalTime: lastLeg.destination?.arrival.estimated ?? parseISO("invalid"),
+      stops: legs.map((leg): IJourneyStep => ({
+        arrivalTime: leg.destination?.arrival.estimated ?? parseISO("invalid"),
+        startTime: leg.origin?.departure.estimated ?? parseISO("invalid"),
+        stationName: leg.origin?.name ?? "stationName",
+        stopName: leg.destination?.name ?? "stopName",
         track: "",
-        travelDurationInMinutes: leg.details.duration / 60
+        travelDurationInMinutes: (leg.details.duration ?? -60) / 60
       })),
-      travelDurationInMinutes: journey.legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
+      travelDurationInMinutes: legs.reduce((acc, leg) => acc + (leg.details.duration ?? 0), 0) / 60
     };
   });
 
@@ -223,9 +230,9 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
       <IonLabel>
         <ol>
           {
-            journey.legs.map((leg, idx) => (
+            journey.legs?.map((leg, idx) => ( /* TODO #312 Revert to saver types. */
               <li key={idx}>
-                {leg.transportation.name} {leg.details.duration}
+                {leg.transportation?.name} {leg.details.duration} { /* TODO #312 Revert to saver types. */}
               </li>
             ))
           }
