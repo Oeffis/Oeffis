@@ -12,12 +12,10 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
 import type { Location } from './Location';
 import {
     LocationFromJSON,
-    LocationFromJSONTyped,
-    LocationToJSON,
+    LocationToJSON
 } from './Location';
 
 /**
@@ -93,7 +91,7 @@ export function LocationDetailsToJSON(value?: LocationDetails | null): any {
         return null;
     }
     return {
-        
+
         'shortName': value.shortName,
         'matchQuality': value.matchQuality,
         'parent': LocationToJSON(value.parent),

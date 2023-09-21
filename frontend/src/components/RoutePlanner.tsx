@@ -26,12 +26,19 @@ import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
-/** String to represent the usage of current time in departure url param. */
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
-const RoutePlanner: React.FC = () => {
-  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
+export type RoutePlannerProps = {
+  currentLocation: Location,
+  setSelectedOriginLocation: (location: Location) => void
+  setSelectedDestinationLocation: (location: Location) => void
+};
+
+const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
+
+  const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationLocationId, setDestinationLocationId] = useStateParams<string | null>(null, "destination", String, String);
+
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
@@ -122,9 +129,13 @@ const RoutePlanner: React.FC = () => {
         </IonItem>
         <IonItem>
           <LocationSearchInput
+            currentLocation={currentLocaiton}
             inputLabel="Origin"
             selectedLocation={originLocation}
-            onSelectedLocationChanged={(location): void => setOriginId(location.id ?? "")}  /* TODO #312 Revert to saver types. */
+            onSelectedLocationChanged={(location): void => {
+                setOriginId(location.id ?? "");
+                setSelectedOriginLocation(location);
+            }}  /* TODO #312 Revert to saver types. */
             prefixDataTestId="origin-input"
           />
         </IonItem>
@@ -132,7 +143,10 @@ const RoutePlanner: React.FC = () => {
           <LocationSearchInput
             inputLabel="Destination"
             selectedLocation={destinationLocation}
-            onSelectedLocationChanged={(location): void => setDestinationId(location.id ?? "")}  /* TODO #312 Revert to saver types. */
+            onSelectedLocationChanged={(location): void => {
+                setDestinationId(location.id ?? "");
+                setSelectedDestinationLocation(location);
+            }}  /* TODO #312 Revert to saver types. */
             prefixDataTestId="destination-input"
           />
         </IonItem>

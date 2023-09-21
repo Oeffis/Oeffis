@@ -20,6 +20,7 @@ import LeafletMapContainer from "../LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
 export type LocationSearchInputProps = {
+  currentLocation: Location,
   onSelectedLocationChanged: (location: Location) => void;
   selectedLocation: Location | null;
   inputLabel: string;
@@ -37,10 +38,12 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const setSelectedLocationAndCloseModal = (location: Location): void => {
     props.onSelectedLocationChanged(location);
     setModalOpen(false);
+    setShowMap(false);
   };
 
   const closeModalWithoutSelection = (): void => {
     setModalOpen(false);
+    setShowMap(false);
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
@@ -63,7 +66,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
-        onClick={(): void => setModalOpen(true)}
+        onClick={(): void => { setModalOpen(true); }}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
@@ -106,8 +109,10 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         <IonContent>
           {showResults && showMap
             ? <LeafletMapContainer
+              currentLocation={props.currentLocation}
               locations={
                 foundLocations.searchResults}
+              showLines={false}
               onItemClicked={setSelectedLocationAndCloseModal}
             />
             : <IonList>
