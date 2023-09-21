@@ -10,4 +10,4 @@ import { VrrLocationWrapperService } from "./service/vrrLocationWrapper.service"
   imports: [VrrModule],
   exports: [VrrLocationWrapperService]
 })
-export class LocationFinderModule { }
+export class LocationFinderModule {}

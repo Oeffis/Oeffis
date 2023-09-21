@@ -1,9 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDefined } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsOptional, IsPositive, IsString } from "class-validator";
 
 export class LocationNameDto {
 
-  @IsDefined()
+  @IsString()
   @ApiProperty({
     description: "Name of the location to search.",
     type: String,
@@ -12,10 +12,11 @@ export class LocationNameDto {
   })
   name!: string;
 
-  @ApiProperty({
+  @IsPositive()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Limit of the number of results.",
     type: Number,
-    required: false,
     example: 5
   })
   limit?: number;

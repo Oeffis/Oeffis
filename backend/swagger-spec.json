@@ -18,14 +18,11 @@
         },
         "responses": {
           "200": {
-            "description": "Returns the found locations.",
+            "description": "Location of coordinates with assigned stops.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Location"
-                  }
+                  "$ref": "#/components/schemas/LocationWithAssignedStops"
                 }
               }
             }
@@ -69,7 +66,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Location"
+                    "$ref": "#/components/schemas/RatedLocation"
                   }
                 }
               }
@@ -201,18 +198,154 @@
         "properties": {
           "latitude": {
             "type": "number",
-            "description": "Latitude of the location to search.",
+            "description": "Latitude of the location.",
             "example": 51.50598042775682
           },
           "longitude": {
             "type": "number",
-            "description": "Longitude of the location to search.",
+            "description": "Longitude of the location.",
             "example": 7.101082448485377
           }
         },
         "required": [
           "latitude",
           "longitude"
+        ]
+      },
+      "LocationCoordinates": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the location.",
+            "example": 51.50598042775682
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the location.",
+            "example": 7.101082448485377
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "ParentLocationDetails": {
+        "type": "object",
+        "properties": {
+          "shortName": {
+            "type": "string",
+            "description": "Short name of the location. Can be empty string.",
+            "example": "Hbf"
+          },
+          "coordinates": {
+            "description": "Coordinates of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationCoordinates"
+              }
+            ]
+          },
+          "parent": {
+            "description": "Parent of this location.",
+            "example": {
+              "id": "placeID:5513000:9",
+              "name": "Gelsenkirchen",
+              "type": "locality"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ParentLocation"
+              }
+            ]
+          }
+        }
+      },
+      "ParentLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the parent location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ParentLocationDetails"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details"
+        ]
+      },
+      "LocationDetails": {
+        "type": "object",
+        "properties": {
+          "shortName": {
+            "type": "string",
+            "description": "Short name of the location. Can be empty string.",
+            "example": "Hbf"
+          },
+          "coordinates": {
+            "description": "Coordinates of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationCoordinates"
+              }
+            ]
+          },
+          "parent": {
+            "description": "Parent of this location.",
+            "example": {
+              "id": "placeID:5513000:9",
+              "name": "Gelsenkirchen",
+              "type": "locality"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ParentLocation"
+              }
+            ]
+          }
+        },
+        "required": [
+          "shortName",
+          "coordinates",
+          "parent"
         ]
       },
       "Location": {
@@ -259,46 +392,125 @@
           }
         },
         "required": [
+          "id",
+          "name",
+          "type",
           "details"
         ]
       },
-      "LocationDetails": {
+      "RatedLocation": {
         "type": "object",
         "properties": {
-          "shortName": {
+          "id": {
             "type": "string",
-            "description": "Short name of the location.",
-            "example": "Hbf"
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
           },
-          "matchQuality": {
-            "type": "number",
-            "description": "Quality how well the given location meets the related query (biggest number is the best result).",
-            "example": 805
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
           },
-          "parent": {
-            "description": "Parent location of this location.",
-            "example": {
-              "id": "placeID:5513000:9",
-              "name": "Gelsenkirchen",
-              "type": "locality"
-            },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the location.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Location"
+                "$ref": "#/components/schemas/LocationDetails"
               }
             ]
           },
-          "latitude": {
+          "rating": {
             "type": "number",
-            "description": "Latitude of the location.",
-            "example": 51.50493
-          },
-          "longitude": {
-            "type": "number",
-            "description": "Longitude of the location.",
-            "example": 7.10221
+            "description": "How well the location result meets the query (positive integers including zero, higher means better).",
+            "example": 805
           }
-        }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "rating"
+        ]
+      },
+      "LocationWithAssignedStops": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDetails"
+              }
+            ]
+          },
+          "assignedStops": {
+            "description": "All stops assigned to the location.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RatedLocation"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "assignedStops"
+        ]
       },
       "BadRequest": {
         "type": "object",
@@ -446,6 +658,9 @@
           }
         },
         "required": [
+          "id",
+          "name",
+          "type",
           "details",
           "arrival",
           "departure"
