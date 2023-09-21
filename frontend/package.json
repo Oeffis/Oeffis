@@ -16,6 +16,7 @@
   "dependencies": {
     "@capacitor/app": "5.0.3",
     "@capacitor/core": "5.0.4",
+    "@capacitor/geolocation": "^5.0.6",
     "@capacitor/haptics": "5.0.4",
     "@capacitor/keyboard": "5.0.4",
     "@capacitor/status-bar": "5.0.4",
