@@ -19,7 +19,7 @@ export async function run(args: { stopId: string, limit: number }): Promise<void
     database: process.env.pgDatabase,
     user: process.env.pgUser,
     password: process.env.pgPassword
-  }, () => { /* do nothing */ });
+  }, console.log);
 
   await pgPool.withPgConnection(async pgClient => {
     const promises = stopEvents.map(stop =>
