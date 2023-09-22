@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "LineStopSeq-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo"
+		},
+		"systemMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/systemMessage"
+			}
+		},
+		"version": {
+			"type": "string"
+		},
+		"locationSequence": {
+					"type": "array",
+					"items": {
+						"$ref": "./Definitions.json#/definitions/journeyLocation"
+					}
+				}
+	},
+	"additionalProperties": false,
+	"version": "10.4.15.5"
+}

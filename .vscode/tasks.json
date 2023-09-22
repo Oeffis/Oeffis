@@ -93,6 +93,17 @@
       "presentation": {
         "group": "watchers"
       }
+    },
+    {
+      "label": "Crawlers (watch)",
+      "type": "npm",
+      "script": "build:watch",
+      "path": "crawlers",
+      "problemMatcher": "$tsc-watch",
+      "isBackground": true,
+      "presentation": {
+        "group": "watchers"
+      }
     }
   ]
 }

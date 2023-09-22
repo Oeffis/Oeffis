@@ -62,6 +62,39 @@
       ],
       "smartStep": true,
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run delay crawler",
+      "program": "${workspaceFolder}/crawlers/dist/",
+      "preLaunchTask": "Crawlers (watch)",
+      "args": [
+        "delays",
+        "--stopId",
+        "${input:stopId}",
+        "--limit",
+        "${input:limit}"
+      ],
+      "env": {
+        "pgHost": "localhost",
+        "pgPort": "5432",
+        "pgUser": "postgres",
+        "pgPassword": "postgres",
+        "pgDatabase": "postgres"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run timetable crawler",
+      "program": "${workspaceFolder}/crawlers/dist/",
+      "preLaunchTask": "Crawlers (watch)",
+      "args": [
+        "import-vrr-timetable",
+        "--folder",
+        "${input:gtfsFolder}"
+      ]
     }
   ],
   "compounds": [
@@ -76,6 +109,23 @@
         "group": "",
         "order": 1
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "stopId",
+      "type": "promptString",
+      "description": "Stop ID"
+    },
+    {
+      "id": "limit",
+      "type": "promptString",
+      "description": "Limit"
+    },
+    {
+      "id": "gtfsFolder",
+      "type": "promptString",
+      "description": "GTFS folder to import from"
     }
   ]
 }
