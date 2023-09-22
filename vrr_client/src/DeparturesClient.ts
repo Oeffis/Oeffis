@@ -12,7 +12,7 @@ export class DeparturesClient extends VrrClientBase {
     return this.executeFetchRequest(
       "/static03/XML_DM_REQUEST",
       {
-        name_dm: "de:05513:5613",
+        name_dm: query.stopId,
         type_dm: "any",
         mode: "direct",
         useRealtime: 1,
