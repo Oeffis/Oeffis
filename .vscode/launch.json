@@ -81,7 +81,7 @@
         "pgPort": "5432",
         "pgUser": "postgres",
         "pgPassword": "postgres",
-        "pgDatabase": "delays"
+        "pgDatabase": "postgres"
       }
     }
   ],
