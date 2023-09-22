@@ -59,7 +59,8 @@ async function main(): Promise<void> {
         })
       , async args => {
         const { run } = await import("./delays");
-        return run(args);
+        await run(args);
+        process.exit(0);
       })
     .showHelpOnFail(true)
     .demandCommand()
