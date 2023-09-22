@@ -83,6 +83,18 @@
         "pgPassword": "postgres",
         "pgDatabase": "postgres"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run timetable crawler",
+      "program": "${workspaceFolder}/crawlers/dist/",
+      "preLaunchTask": "Crawlers (watch)",
+      "args": [
+        "import-vrr-timetable",
+        "--folder",
+        "${input:gtfsFolder}"
+      ]
     }
   ],
   "compounds": [
@@ -111,6 +123,11 @@
       "type": "promptString",
       "description": "Limit",
       "default": "100"
+    },
+    {
+      "id": "gtfsFolder",
+      "type": "promptString",
+      "description": "GTFS folder to import from"
     }
   ]
 }
