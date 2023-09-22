@@ -115,14 +115,12 @@
     {
       "id": "stopId",
       "type": "promptString",
-      "description": "Stop ID",
-      "default": "de:05513:5613"
+      "description": "Stop ID"
     },
     {
       "id": "limit",
       "type": "promptString",
-      "description": "Limit",
-      "default": "100"
+      "description": "Limit"
     },
     {
       "id": "gtfsFolder",

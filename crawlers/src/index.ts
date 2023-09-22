@@ -48,8 +48,7 @@ async function main(): Promise<void> {
         .option("stopId", {
           alias: "s",
           type: "string",
-          description: "The stop id to fetch departures for. ",
-          demandOption: true
+          description: "The stop id to fetch departures for. If missing, a stop will be selected by random, where more frequented stops are preferred."
         })
         .option("limit", {
           alias: "l",
