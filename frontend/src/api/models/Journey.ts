@@ -31,7 +31,7 @@ export interface Journey {
      * @type {Array<Leg>}
      * @memberof Journey
      */
-    legs: Array<Leg>;
+    legs?: Array<Leg>;
 }
 
 /**
@@ -39,7 +39,6 @@ export interface Journey {
  */
 export function instanceOfJourney(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "legs" in value;
 
     return isInstance;
 }
@@ -54,7 +53,7 @@ export function JourneyFromJSONTyped(json: any, ignoreDiscriminator: boolean): J
     }
     return {
         
-        'legs': ((json['legs'] as Array<any>).map(LegFromJSON)),
+        'legs': !exists(json, 'legs') ? undefined : ((json['legs'] as Array<any>).map(LegFromJSON)),
     };
 }
 
@@ -67,7 +66,7 @@ export function JourneyToJSON(value?: Journey | null): any {
     }
     return {
         
-        'legs': ((value.legs as Array<any>).map(LegToJSON)),
+        'legs': value.legs === undefined ? undefined : ((value.legs as Array<any>).map(LegToJSON)),
     };
 }
 

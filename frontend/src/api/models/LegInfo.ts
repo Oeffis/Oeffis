@@ -24,7 +24,7 @@ export interface LegInfo {
      * @type {string}
      * @memberof LegInfo
      */
-    content: string;
+    content?: string;
 }
 
 /**
@@ -32,7 +32,6 @@ export interface LegInfo {
  */
 export function instanceOfLegInfo(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "content" in value;
 
     return isInstance;
 }
@@ -47,7 +46,7 @@ export function LegInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     }
     return {
         
-        'content': json['content'],
+        'content': !exists(json, 'content') ? undefined : json['content'],
     };
 }
 

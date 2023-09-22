@@ -1,19 +1,24 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsArray, IsInstance, IsNotEmpty, IsOptional } from "class-validator";
 import { Trip } from "./trip.entity";
 
 export class Transportation {
 
-  @ApiProperty({
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Name of transportation vehicle.",
     type: String,
-    required: true
+    example: "Regionalbahn 46"
   })
   name?: string;
 
-  @ApiProperty({
+  @IsArray()
+  @IsInstance(Trip, { each: true })
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Trips depending on this transportation.",
-    type: [Trip],
-    required: true
+    type: [Trip]
   })
   trips?: Trip[];
 

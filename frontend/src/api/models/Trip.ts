@@ -24,25 +24,25 @@ export interface Trip {
      * @type {string}
      * @memberof Trip
      */
-    arrivalTimePlannedJourneyDestination: string;
+    arrivalTimePlannedJourneyDestination?: string;
     /**
      * Planned departure time at Origin.
      * @type {string}
      * @memberof Trip
      */
-    departureTimePlannedJourneyOrigin: string;
+    departureTimePlannedJourneyOrigin?: string;
     /**
      * Status information about trip.
      * @type {string}
      * @memberof Trip
      */
-    status: string;
+    status?: string;
     /**
      * Train number.
      * @type {string}
      * @memberof Trip
      */
-    trainNumber: string;
+    trainNumber?: string;
 }
 
 /**
@@ -50,10 +50,6 @@ export interface Trip {
  */
 export function instanceOfTrip(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "arrivalTimePlannedJourneyDestination" in value;
-    isInstance = isInstance && "departureTimePlannedJourneyOrigin" in value;
-    isInstance = isInstance && "status" in value;
-    isInstance = isInstance && "trainNumber" in value;
 
     return isInstance;
 }
@@ -68,10 +64,10 @@ export function TripFromJSONTyped(json: any, ignoreDiscriminator: boolean): Trip
     }
     return {
         
-        'arrivalTimePlannedJourneyDestination': json['arrivalTimePlannedJourneyDestination'],
-        'departureTimePlannedJourneyOrigin': json['departureTimePlannedJourneyOrigin'],
-        'status': json['status'],
-        'trainNumber': json['trainNumber'],
+        'arrivalTimePlannedJourneyDestination': !exists(json, 'arrivalTimePlannedJourneyDestination') ? undefined : json['arrivalTimePlannedJourneyDestination'],
+        'departureTimePlannedJourneyOrigin': !exists(json, 'departureTimePlannedJourneyOrigin') ? undefined : json['departureTimePlannedJourneyOrigin'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'trainNumber': !exists(json, 'trainNumber') ? undefined : json['trainNumber'],
     };
 }
 

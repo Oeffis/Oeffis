@@ -33,19 +33,29 @@ export const useJourneyQuery = (
     () => {
       const abortController = new AbortController();
 
-      journeyApi.journeyControllerQueryJourney({
-        originId: origin.id,
-        destinationId: destination.id,
-        departure: departure,
-        asArrival: asArrival
-      }, { signal: abortController.signal })
+      if (!origin.id || !destination.id) {
+        const error: Error = {
+          name: "OriginId and/or destinationId missing.",
+          message: "At least one of originId or destinationId is missing. Booth are required to query a journey."
+        };
+        setJourneyResultsOrError({ type: "error", error });
 
-        .then((journeyResults) => {
-          setJourneyResultsOrError({ type: "success", journeyResults });
-        })
-        .catch((error) => {
-          setJourneyResultsOrError({ type: "error", error });
-        });
+      } else {
+        journeyApi.journeyControllerQueryJourney({
+          originId: origin.id,
+          destinationId: destination.id,
+          departure: departure,
+          asArrival: asArrival
+        }, { signal: abortController.signal })
+
+          .then((journeyResults) => {
+            setJourneyResultsOrError({ type: "success", journeyResults });
+          })
+          .catch((error) => {
+            setJourneyResultsOrError({ type: "error", error });
+          });
+
+      }
 
       return () => {
         abortController.abort();

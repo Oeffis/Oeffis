@@ -78,9 +78,10 @@ const JourneysPage: React.FC = () => {
    * @param journey journey
    */
   const getJourneyShortDescr = (journey: Journey): string => (
-    journey.legs
+    // TODO #312 Revert to saver types.
+    (journey.legs ?? [])
       .map(leg => (
-        leg.transportation.name + " " + leg.destination.name
+        leg.transportation?.name + " " + leg.destination?.name
       ))
       .join(" -> ")
   );

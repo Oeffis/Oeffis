@@ -11,4 +11,5 @@ export class LocationNameDto {
     example: "Gelsen"
   })
   name!: string;
+
 }

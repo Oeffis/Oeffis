@@ -53,7 +53,7 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
     function processSingleLocationFound(matchingLocations: Location[]): true {
       console.debug(`Single location found with id ${locationId}`);
       const location = matchingLocations[0];
-      locationCache.set(location.id, location);
+      locationCache.set(location.id ?? "", location);  // TODO #312 Revert to saver types.
       setLocation(matchingLocations[0]);
       return true;
     }

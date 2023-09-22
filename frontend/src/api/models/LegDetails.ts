@@ -31,31 +31,31 @@ export interface LegDetails {
      * @type {number}
      * @memberof LegDetails
      */
-    distance: number;
+    distance?: number;
     /**
      * Duration of leg in seconds.
      * @type {number}
      * @memberof LegDetails
      */
-    duration: number;
+    duration?: number;
     /**
      * Leg information.
      * @type {Array<LegInfo>}
      * @memberof LegDetails
      */
-    infos: Array<LegInfo>;
+    infos?: Array<LegInfo>;
     /**
      * Leg hints.
      * @type {Array<LegInfo>}
      * @memberof LegDetails
      */
-    hints: Array<LegInfo>;
+    hints?: Array<LegInfo>;
     /**
      * Leg real time status.
      * @type {Array<string>}
      * @memberof LegDetails
      */
-    realtimeTripStatus: Array<LegDetailsRealtimeTripStatusEnum>;
+    realtimeTripStatus?: Array<LegDetailsRealtimeTripStatusEnum>;
 }
 
 
@@ -80,11 +80,6 @@ export type LegDetailsRealtimeTripStatusEnum = typeof LegDetailsRealtimeTripStat
  */
 export function instanceOfLegDetails(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "distance" in value;
-    isInstance = isInstance && "duration" in value;
-    isInstance = isInstance && "infos" in value;
-    isInstance = isInstance && "hints" in value;
-    isInstance = isInstance && "realtimeTripStatus" in value;
 
     return isInstance;
 }
@@ -99,11 +94,11 @@ export function LegDetailsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'distance': json['distance'],
-        'duration': json['duration'],
-        'infos': ((json['infos'] as Array<any>).map(LegInfoFromJSON)),
-        'hints': ((json['hints'] as Array<any>).map(LegInfoFromJSON)),
-        'realtimeTripStatus': json['realtimeTripStatus'],
+        'distance': !exists(json, 'distance') ? undefined : json['distance'],
+        'duration': !exists(json, 'duration') ? undefined : json['duration'],
+        'infos': !exists(json, 'infos') ? undefined : ((json['infos'] as Array<any>).map(LegInfoFromJSON)),
+        'hints': !exists(json, 'hints') ? undefined : ((json['hints'] as Array<any>).map(LegInfoFromJSON)),
+        'realtimeTripStatus': !exists(json, 'realtimeTripStatus') ? undefined : json['realtimeTripStatus'],
     };
 }
 
@@ -118,8 +113,8 @@ export function LegDetailsToJSON(value?: LegDetails | null): any {
         
         'distance': value.distance,
         'duration': value.duration,
-        'infos': ((value.infos as Array<any>).map(LegInfoToJSON)),
-        'hints': ((value.hints as Array<any>).map(LegInfoToJSON)),
+        'infos': value.infos === undefined ? undefined : ((value.infos as Array<any>).map(LegInfoToJSON)),
+        'hints': value.hints === undefined ? undefined : ((value.hints as Array<any>).map(LegInfoToJSON)),
         'realtimeTripStatus': value.realtimeTripStatus,
     };
 }
