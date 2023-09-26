@@ -24,5 +24,5 @@ const MapController = (props: MapControllerProps): JSX.Element => {
   return <></>;
 };
 
-export { MapController };
+export default MapController;
 
