@@ -19,7 +19,7 @@ export type MapProps = {
 
 const LeafletMapContainer = ({ currentLocation, origin, destination, locations, showLines, onItemClicked }: MapProps): JSX.Element => {
 
-  const [center, setCenter] = useState<LatLngTuple>([currentLocation.details.latitude, currentLocation.details.longitude]);
+  const [center, setCenter] = useState<LatLngTuple>([currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]);
   const [zoom, setZoom] = useState<number>();
 
   const getBounds = (): LatLngBoundsLiteral => {
@@ -28,7 +28,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
 
     if (locations.length !== 0) {
       locations.map((location) => {
-        bounds.push([location.details.latitude, location.details.longitude]);
+        bounds.push([location.details.latitude ?? 0, location.details.longitude ?? 0]);
       });
     } else {
       bounds.push(center);
@@ -54,7 +54,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
     const positions: LatLngExpression[] = [];
     locations.map(location => {
       if (location !== currentLocation) {
-        positions.push([location.details.latitude, location.details.longitude]);
+        positions.push([location.details.latitude ?? 0, location.details.longitude ?? 0]);
       }
     });
     return positions;

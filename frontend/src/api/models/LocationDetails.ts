@@ -74,7 +74,6 @@ export function LocationDetailsFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-        
         'shortName': !exists(json, 'shortName') ? undefined : json['shortName'],
         'matchQuality': !exists(json, 'matchQuality') ? undefined : json['matchQuality'],
         'parent': !exists(json, 'parent') ? undefined : LocationFromJSON(json['parent']),
@@ -99,4 +98,3 @@ export function LocationDetailsToJSON(value?: LocationDetails | null): any {
         'longitude': value.longitude,
     };
 }
-

@@ -12,7 +12,7 @@ import {
   IonToolbar
 } from "@ionic/react";
 import { formatISO, isSameMinute, parseISO } from "date-fns";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Journey, Leg, Location } from "../api";
 import { useCurrentTime } from "../hooks/useCurrentTime";
 import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../hooks/useCustomDepartureTimeOrCurrentTime";
@@ -110,7 +110,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           >
             Now
           </IonButton>
-          <IonDatetimeButton aria-label="Date and Time" datetime="datetime"/>
+          <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
           {/* Before datetime modal is being presented min departure time is updated to current time. */}
           <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
             <IonDatetime
@@ -133,9 +133,9 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             inputLabel="Origin"
             selectedLocation={originLocation}
             onSelectedLocationChanged={(location): void => {
-                setOriginId(location.id ?? "");
-                setSelectedOriginLocation(location);
-            }}  /* TODO #312 Revert to saver types. */
+              setOriginId(location.id ?? ""); /* TODO #312 Revert to saver types. */
+              setSelectedOriginLocation(location);
+            }}
             prefixDataTestId="origin-input"
           />
         </IonItem>
@@ -207,23 +207,23 @@ export function TripOptionsDisplay(props: {
         const lastLeg = legs[legs.length - 1];
         const firstLeg = legs[0];
 
-    return {
-      // TODO #312 Revert to saver types.
-      startStation: firstLeg.origin?.name ?? "startStation",
-      startTime: firstLeg.origin?.departure.estimated ?? parseISO("invalid"),
-      arrivalStation: lastLeg.destination?.name ?? "arrivalStation",
-      arrivalTime: lastLeg.destination?.arrival.estimated ?? parseISO("invalid"),
-      stops: legs.map((leg): IJourneyStep => ({
-        arrivalTime: leg.destination?.arrival.estimated ?? parseISO("invalid"),
-        startTime: leg.origin?.departure.estimated ?? parseISO("invalid"),
-        stationName: leg.origin?.name ?? "stationName",
-        stopName: leg.destination?.name ?? "stopName",
-        track: "",
-        travelDurationInMinutes: (leg.details.duration ?? -60) / 60
-      })),
-      travelDurationInMinutes: legs.reduce((acc, leg) => acc + (leg.details.duration ?? 0), 0) / 60
-    };
-  });
+        return {
+          // TODO #312 Revert to saver types.
+          startStation: firstLeg.origin?.name ?? "startStation",
+          startTime: firstLeg.origin?.departure.estimated ?? parseISO("invalid"),
+          arrivalStation: lastLeg.destination?.name ?? "arrivalStation",
+          arrivalTime: lastLeg.destination?.arrival.estimated ?? parseISO("invalid"),
+          stops: legs.map((leg): IJourneyStep => ({
+            arrivalTime: leg.destination?.arrival.estimated ?? parseISO("invalid"),
+            startTime: leg.origin?.departure.estimated ?? parseISO("invalid"),
+            stationName: leg.origin?.name ?? "stationName",
+            stopName: leg.destination?.name ?? "stopName",
+            track: "",
+            travelDurationInMinutes: (leg.details.duration ?? -60) / 60
+          })),
+          travelDurationInMinutes: legs.reduce((acc, leg) => acc + (leg.details.duration ?? 0), 0) / 60
+        };
+      });
 
   return (
     <>

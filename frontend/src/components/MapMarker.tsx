@@ -25,7 +25,7 @@ export type MarkerProps = {
 
 const MapMarker = ({ currentLocation, origin, destination, location, onItemClicked }: MarkerProps): JSX.Element => {
 
-  const getOriginIcon = (type: LocationTypeEnum): string => {
+  const getOriginIcon = (type: LocationTypeEnum | undefined): string => {
     let icon: string = currentPostionIcon;
 
     if (type === LocationTypeEnum.Address) {
@@ -69,7 +69,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
     return icon;
   };
 
-  const getDestinationIcon = (type: LocationTypeEnum): string => {
+  const getDestinationIcon = (type: LocationTypeEnum | undefined): string => {
     let icon: string = currentPostionIcon;
 
     if (type === LocationTypeEnum.Address) {
@@ -113,7 +113,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
     return icon;
   };
 
-  const getLocationIcon = (type: LocationTypeEnum): string => {
+  const getLocationIcon = (type: LocationTypeEnum | undefined): string => {
     let icon: string = currentPostionIcon;
 
     if (type === LocationTypeEnum.Address) {
@@ -158,7 +158,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
   };
 
 
-  const getDesignation = (type: LocationTypeEnum): string => {
+  const getDesignation = (type: LocationTypeEnum | undefined): string => {
 
     let designation = "";
 
@@ -220,7 +220,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude, location.details.longitude]} icon={currentLocationIcon}>
+        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={currentLocationIcon}>
           <Popup className="popup">
             <p className="popupHeadline">{location.name}</p>
           </Popup>
@@ -238,9 +238,9 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude, location.details.longitude]} icon={originLocationIcon}>
+        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={originLocationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
+            <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>Ziel</i>
@@ -263,9 +263,9 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude, location.details.longitude]} icon={destinatinoLocationIcon}>
+        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={destinatinoLocationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
+            <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>Start</i>
@@ -288,9 +288,9 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude, location.details.longitude]} icon={locationIcon}>
+        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={locationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
+            <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>{getDesignation(location.type)}</i>
