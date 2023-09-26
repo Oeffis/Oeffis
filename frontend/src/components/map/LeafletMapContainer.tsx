@@ -19,7 +19,6 @@ export type MapProps = {
 
 const LeafletMapContainer = ({ currentLocation, origin, destination, locations, showLines, onItemClicked }: MapProps): JSX.Element => {
 
-  const [center, setCenter] = useState<LatLngTuple>([currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]);
   const [zoom, setZoom] = useState<number>();
 
   const getBounds = (): LatLngBoundsLiteral => {
@@ -31,7 +30,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
         bounds.push([location.details.latitude ?? 0, location.details.longitude ?? 0]);
       });
     } else {
-      bounds.push(center);
+      bounds.push([currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]);
     }
 
     return bounds;
@@ -64,8 +63,8 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
     setZoom(15);
   }, []);
 
-  return zoom && center.length > 0 ? (
-    <MapContainer id="map" center={center} zoom={zoom} >
+  return zoom && currentLocation !== undefined ? (
+    <MapContainer id="map" center={[currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]} zoom={zoom} >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
