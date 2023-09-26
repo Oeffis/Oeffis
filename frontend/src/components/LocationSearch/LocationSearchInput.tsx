@@ -84,7 +84,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
                 onClick={() => (showMap ? setShowMap(false) : setShowMap(true))}
                 disabled={isMapBtnDisabeld}
               >
-                Show Map
+                Map
               </IonButton>
               <IonButton
                 color={"danger"}
@@ -107,11 +107,11 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>
         <IonContent>
-          {showResults && showMap
+          {showResults
+            && showMap
             ? <LeafletMapContainer
               currentLocation={props.currentLocation}
-              locations={
-                foundLocations.searchResults}
+              locations={[...foundLocations.searchResults, props.currentLocation]}
               showLines={false}
               onItemClicked={setSelectedLocationAndCloseModal}
             />
