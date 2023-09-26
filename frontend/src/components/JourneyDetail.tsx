@@ -44,7 +44,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
         {showDetails
           ? <div className="bottom-section-opened">
             <div className="steps">
-              {props.journey.stops.map(step => <JourneyStepComponent step={step} />)}
+              {props.journey.stops.map((step, index) => <JourneyStepComponent key={"joureneyStep" + index} step={step} />)}
             </div>
             <IonButton fill="clear" onClick={(openDetails)}>
               <IonIcon icon={chevronUpOutline} size="small" />
