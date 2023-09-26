@@ -243,7 +243,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
             <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
-              <i>Ziel</i>
+              <i>Start</i>
             </p>
             {onItemClicked !== undefined
               ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Select</p>
@@ -268,7 +268,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
             <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
-              <i>Start</i>
+              <i>Ziel</i>
             </p>
             {onItemClicked !== undefined
               ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Select</p>
