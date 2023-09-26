@@ -116,7 +116,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             <IonDatetime
               name="date_time"
               id="datetime"
-              /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI. */
+              /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
               min={formatISO(minDepartureTime)}
               value={formatISO(departureTime)}
               multiple={false} // Assures that value cannot be an array but a single date string only.
