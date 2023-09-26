@@ -8,3 +8,26 @@
     top: 0;
     left: 0;
 }
+
+.leaflet-popup-content {
+    line-height: 0.8;
+}
+
+p.popupHeadline {
+    font-weight: bold;
+    margin: 0px;
+}
+
+p.popupText {
+    margin: 0px;
+}
+
+p.selectLocation {
+    color: blue;
+    text-decoration: underline;
+    margin-top: 7px;
+    text-align: center;
+}
+
+
+
