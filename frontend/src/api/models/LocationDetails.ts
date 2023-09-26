@@ -12,6 +12,7 @@
  * Do not edit the class manually.
  */
 
+import { exists } from '../runtime';
 import type { Location } from './Location';
 import {
     LocationFromJSON,
@@ -79,6 +80,12 @@ export function LocationDetailsFromJSONTyped(json: any, ignoreDiscriminator: boo
         'parent': !exists(json, 'parent') ? undefined : LocationFromJSON(json['parent']),
         'latitude': !exists(json, 'latitude') ? undefined : json['latitude'],
         'longitude': !exists(json, 'longitude') ? undefined : json['longitude'],
+
+        /*  'shortName': json['shortName'],
+         'matchQuality': json['matchQuality'],
+         'parent': LocationFromJSON(json['parent']),
+         'latitude': json['latitude'],
+         'longitude': json['longitude'], */
     };
 }
 
