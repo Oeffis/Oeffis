@@ -1,17 +1,17 @@
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Marker, Popup } from "react-leaflet";
-import greenBusIcon from "../../public/images/bus-green-map-marker.svg";
-import redBusIcon from "../../public/images/bus-red-map-marker.svg";
-import whiteBusIcon from "../../public/images/bus-white-map-marker.svg";
-import greenLocationIcon from "../../public/images/location-green-map-marker.svg";
-import redLocationIcon from "../../public/images/location-red-map-marker.svg";
-import whiteLocationIcon from "../../public/images/location-white-map-marker.svg";
-import markerShadow from "../../public/images/marker-shadow.png";
-import greenPinIcon from "../../public/images/pin-green-map-marker.svg";
-import redPinIcon from "../../public/images/pin-red-map-marker.svg";
-import whitePinIcon from "../../public/images/pin-white-map-marker.svg";
-import currentPostionIcon from "../../public/images/position-map-marker.svg";
+import greenBusIcon from "../../src/images/bus-green-map-marker.svg";
+import redBusIcon from "../../src/images/bus-red-map-marker.svg";
+import whiteBusIcon from "../../src/images/bus-white-map-marker.svg";
+import greenLocationIcon from "../../src/images/location-green-map-marker.svg";
+import redLocationIcon from "../../src/images/location-red-map-marker.svg";
+import whiteLocationIcon from "../../src/images/location-white-map-marker.svg";
+import markerShadow from "../../src/images/marker-shadow.png";
+import greenPinIcon from "../../src/images/pin-green-map-marker.svg";
+import redPinIcon from "../../src/images/pin-red-map-marker.svg";
+import whitePinIcon from "../../src/images/pin-white-map-marker.svg";
+import currentPostionIcon from "../../src/images/position-map-marker.svg";
 
 import { Location, LocationTypeEnum } from "../api";
 
