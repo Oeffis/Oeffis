@@ -2,7 +2,7 @@ import { LatLngBoundsLiteral, LatLngExpression, LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ReactElement, useEffect, useState } from "react";
 import { MapContainer, Polygon, TileLayer } from "react-leaflet";
-import { Location } from "../api";
+import { Location } from "../../api";
 import "./LeafletMapContainer.css";
 import { MapController } from "./MapController";
 import MapMarker from "./MapMarker";

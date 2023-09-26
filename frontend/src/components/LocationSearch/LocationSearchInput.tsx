@@ -15,8 +15,8 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Location, LocationDetails } from "../../api";
 import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
-import { useFavouriteLocations } from "../../services/favourites/FavouritesContext";
-import LeafletMapContainer from "../LeafletMapContainer";
+import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
+import LeafletMapContainer from "../map/LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
 export type LocationSearchInputProps = {

@@ -2,9 +2,9 @@ import { Geolocation } from "@capacitor/geolocation";
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { Location } from "../api";
-import LeafletMapContainer from "../components/LeafletMapContainer";
 import Menu from "../components/Menu";
 import RoutePlanner from "../components/RoutePlanner";
+import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import "./JourneyPage.css";
 
 const JourneyPage: React.FC = () => {
