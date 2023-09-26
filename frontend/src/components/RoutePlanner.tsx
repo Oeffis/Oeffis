@@ -136,7 +136,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
               setOriginId(location.id ?? ""); /* TODO #312 Revert to saver types. */
               setSelectedOriginLocation(location);
             }}
-            prefixDataTestId="origin-input"
+            prefixDataTestId="origin-input-clickable" // origin-input
           />
         </IonItem>
         <IonItem>
@@ -144,10 +144,10 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             inputLabel="Destination"
             selectedLocation={destinationLocation}
             onSelectedLocationChanged={(location): void => {
-                setDestinationId(location.id ?? "");
-                setSelectedDestinationLocation(location);
-            }}  /* TODO #312 Revert to saver types. */
-            prefixDataTestId="destination-input"
+              setDestinationId(location.id ?? ""); /* TODO #312 Revert to saver types. */
+              setSelectedDestinationLocation(location);
+            }}
+            prefixDataTestId="destination-input-clickable" // destination-input
           />
         </IonItem>
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
