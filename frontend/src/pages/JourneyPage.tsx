@@ -17,6 +17,9 @@ const JourneyPage: React.FC = () => {
 
     const locations: Location[] = [];
 
+    if (currentLocation !== undefined) {
+      locations.push(currentLocation);
+    }
     if (origin !== undefined) {
       locations.push(origin);
     }
@@ -32,10 +35,10 @@ const JourneyPage: React.FC = () => {
       .then(position =>
         setCurrentLocation({
           id: "",
-          name: "You",
+          name: "Aktuelle Position",
           type: "locality",
           details: {
-            shortName: "You",
+            shortName: "Aktuelle Position",
             matchQuality: 0,
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
@@ -63,6 +66,8 @@ const JourneyPage: React.FC = () => {
               <IonContent className="map">
                 <LeafletMapContainer
                   currentLocation={currentLocation}
+                  origin={origin}
+                  destination={destination}
                   locations={getLocations()}
                   showLines={true}
                 />

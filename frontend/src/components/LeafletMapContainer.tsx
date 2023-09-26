@@ -1,25 +1,26 @@
-import { IonButton } from "@ionic/react";
 import { LatLngBoundsLiteral, LatLngExpression, LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ReactElement, useEffect, useState } from "react";
-import { MapContainer, Marker, Polygon, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../api";
 import "./LeafletMapContainer.css";
 import { MapController } from "./MapController";
+import MapMarker from "./MapMarker";
 
 
 export type MapProps = {
   currentLocation: Location,
+  origin?: Location,
+  destination?: Location,
   locations: Location[],
   showLines: boolean,
   onItemClicked?: (location: Location) => void
 };
 
-const LeafletMapContainer = ({ currentLocation, locations, showLines, onItemClicked }: MapProps): JSX.Element => {
+const LeafletMapContainer = ({ currentLocation, origin, destination, locations, showLines, onItemClicked }: MapProps): JSX.Element => {
 
   const [center, setCenter] = useState<LatLngTuple>([currentLocation.details.latitude, currentLocation.details.longitude]);
   const [zoom, setZoom] = useState<number>();
-  //const [bounds, setBounds] = useState<LatLngBoundsLiteral>([]);
 
   const getBounds = (): LatLngBoundsLiteral => {
 
@@ -40,25 +41,9 @@ const LeafletMapContainer = ({ currentLocation, locations, showLines, onItemClic
 
     const marker: ReactElement[] = [];
 
-    if (currentLocation !== undefined) {
-      marker.push(
-        <Marker key={"currentPosition-m"} position={[currentLocation.details.latitude, currentLocation.details.longitude]}>
-          <Popup key={"currentPosition-p"} className="popup">
-            <IonButton key={"currentPosition-ib"}>{"You"}</IonButton>
-          </Popup>
-        </Marker>
-      );
-    }
-
     locations.map((location, index) => {
       marker.push(
-        <Marker key={"marker" + index} position={[location.details.latitude, location.details.longitude]}>
-          <Popup key={"popup" + index} className="popup">
-            {onItemClicked !== undefined
-              ? <IonButton key={"btn" + index} onClick={() => onItemClicked(location)}>{location.details.shortName}</IonButton>
-              : <IonButton key={"btn" + index}>{location.details.shortName}</IonButton>}
-          </Popup>
-        </Marker>
+        <MapMarker key={"marker" + index} currentLocation={currentLocation} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />
       );
     });
 
@@ -68,20 +53,15 @@ const LeafletMapContainer = ({ currentLocation, locations, showLines, onItemClic
   const getPolygonPositions = (): LatLngExpression[] => {
     const positions: LatLngExpression[] = [];
     locations.map(location => {
-      positions.push([location.details.latitude, location.details.longitude]);
+      if (location !== currentLocation) {
+        positions.push([location.details.latitude, location.details.longitude]);
+      }
     });
     return positions;
   };
 
   useEffect(() => {
-
     setZoom(15);
-
-    console.log("Center: " + center);
-    console.log("CurrentLocation: " + currentLocation);
-    console.log("Locations: ");
-    console.log(locations);
-
   }, []);
 
   return zoom && center.length > 0 ? (
@@ -93,7 +73,7 @@ const LeafletMapContainer = ({ currentLocation, locations, showLines, onItemClic
       <MapController bounds={getBounds()} />
       {renderMarker()}
       {showLines
-        ? <Polygon color={"blue"} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
+        ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
         : <></>}
 
     </MapContainer>
