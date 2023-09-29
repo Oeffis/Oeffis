@@ -1,14 +1,17 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonRadio, IonRadioGroup, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useState } from "react";
+import { Swiper } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../public/images/train_image.png";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
 import { CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
 import "./FavoritesPage.css";
+
+
 
 const FavoritesPage: React.FC = () => {
 
@@ -54,8 +57,8 @@ const FavoritesPage: React.FC = () => {
           <p>{slideName}</p>
         </div>
 
-        <Swiper
-          onSlideChange={(swiper) => setActiveSlideIndex(swiper.activeIndex)}
+        <SwiperReact
+          onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           //onSwiper={(swiper) => console.log(swiper)}
           pagination={{ clickable: true }}
           scrollbar={{ draggable: false }}
@@ -71,7 +74,7 @@ const FavoritesPage: React.FC = () => {
           <SwiperSlide>
             Journeys
           </SwiperSlide>
-        </Swiper>
+        </SwiperReact>
 
       </IonContent>
 
