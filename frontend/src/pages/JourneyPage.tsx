@@ -1,8 +1,8 @@
 import { Geolocation } from "@capacitor/geolocation";
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import logo from "../../public/images/train_image.png";
 import { Location } from "../api";
-import Menu from "../components/Menu";
 import RoutePlanner from "../components/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import "./JourneyPage.css";
@@ -49,36 +49,34 @@ const JourneyPage: React.FC = () => {
   }, []);
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <Menu />
-        <IonPage id="main-content">
-          <IonHeader>
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonMenuButton />
-              </IonButtons>
-              <IonTitle>Oeffies</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          {currentLocation !== undefined
-            ? <IonContent className="journeyContent">
-              <IonContent className="map">
-                <LeafletMapContainer
-                  currentLocation={currentLocation}
-                  origin={origin}
-                  destination={destination}
-                  locations={getLocations()}
-                  showLines={true}
-                />
-              </IonContent>
-              <IonContent className="planner">
-                <RoutePlanner currentLocation={currentLocation} setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
-              </IonContent>
-            </IonContent>
-            : <></>}
-        </IonPage>
-      </IonContent>
+    <IonPage id="main-content">
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <div className="menuBar">
+            <IonTitle>Oeffies</IonTitle>
+            <IonImg className="menuLogo" src={logo} />
+          </div>
+        </IonToolbar>
+      </IonHeader>
+      {currentLocation !== undefined
+        ? <IonContent id="main-content" className="journeyContent">
+          <IonContent className="map">
+            <LeafletMapContainer
+              currentLocation={currentLocation}
+              origin={origin}
+              destination={destination}
+              locations={getLocations()}
+              showLines={true}
+            />
+          </IonContent>
+          <IonContent className="planner">
+            <RoutePlanner currentLocation={currentLocation} setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
+          </IonContent>
+        </IonContent>
+        : <></>}
     </IonPage>
   );
 };
