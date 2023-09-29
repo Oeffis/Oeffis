@@ -7,22 +7,13 @@ import "swiper/css/scrollbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import logo from "../../public/images/train_image.png";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
-import { useStateParams } from "../hooks/useStateParams";
 import { CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
 import "./FavoritesPage.css";
 
 const FavoritesPage: React.FC = () => {
 
-  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-
   const [slideName, setSlideName] = useState<string>("Stations");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
-
-  const setTrip = (trip: CreateFavoriteTrip): void => {
-    setOriginId(trip.originId);
-    setDestinationId(trip.destinationId);
-  };
 
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {
@@ -75,7 +66,7 @@ const FavoritesPage: React.FC = () => {
             Stations
           </SwiperSlide>
           <SwiperSlide>
-            <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} />
+            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => (console.log(trip))} />
           </SwiperSlide>
           <SwiperSlide>
             Journeys
