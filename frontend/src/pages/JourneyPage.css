@@ -14,3 +14,7 @@
   align-items: center;
   justify-content: center;
 }
+
+.swiper-wrapper {
+  height: 100vh;
+}
