@@ -63,7 +63,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
     setZoom(15);
   }, []);
 
-  return zoom && currentLocation !== undefined ? (
+  return zoom ? (
     <MapContainer id="map" center={[currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]} zoom={zoom} >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

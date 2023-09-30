@@ -9,7 +9,20 @@ import "./JourneyPage.css";
 
 const JourneyPage: React.FC = () => {
 
-  const [currentLocation, setCurrentLocation] = useState<Location>();
+  // 51.183334, 7.2
+  const [currentLocation, setCurrentLocation] = useState<Location>(
+    {
+      id: "",
+      name: "",
+      type: "locality",
+      details: {
+        shortName: "",
+        matchQuality: 0,
+        latitude: 51.183334,
+        longitude: 7.2
+      }
+    }
+  );
   const [origin, setOrigin] = useState<Location>();
   const [destination, setDestination] = useState<Location>();
 
@@ -45,7 +58,20 @@ const JourneyPage: React.FC = () => {
           }
         })
       )
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        setCurrentLocation({
+          id: "",
+          name: "",
+          type: "locality",
+          details: {
+            shortName: "",
+            matchQuality: 0,
+            latitude: 51.183334,
+            longitude: 7.2
+          }
+        });
+      });
   }, []);
 
   return (
@@ -61,22 +87,21 @@ const JourneyPage: React.FC = () => {
           </div>
         </IonToolbar>
       </IonHeader>
-      {currentLocation !== undefined
-        ? <IonContent id="main-content" className="journeyContent">
-          <IonContent className="map">
-            <LeafletMapContainer
-              currentLocation={currentLocation}
-              origin={origin}
-              destination={destination}
-              locations={getLocations()}
-              showLines={true}
-            />
-          </IonContent>
-          <IonContent className="planner">
-            <RoutePlanner currentLocation={currentLocation} setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
-          </IonContent>
+      <IonContent id="main-content" className="journeyContent">
+        <IonContent className="map">
+          <LeafletMapContainer
+            currentLocation={currentLocation}
+            origin={origin}
+            destination={destination}
+            locations={getLocations()}
+            showLines={true}
+          />
         </IonContent>
-        : <></>}
+        <IonContent className="planner">
+          <RoutePlanner currentLocation={currentLocation} setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
+        </IonContent>
+      </IonContent>
+
     </IonPage>
   );
 };
