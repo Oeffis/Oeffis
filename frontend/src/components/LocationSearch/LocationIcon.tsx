@@ -1,5 +1,5 @@
 import { IonIcon } from "@ionic/react";
-import { bus, business, car, compass, home, location, pin, shareSocial } from "ionicons/icons";
+import { bus, business, car, compass, help, home, location, pin, shareSocial } from "ionicons/icons";
 
 // See in vrr_client: LocationType
 const ICON_MAP: Record<string, { icon: string, text: string }> = {
@@ -25,11 +25,7 @@ export type LocationIconProps = {
 };
 
 export function LocationIcon({ type }: LocationIconProps): JSX.Element {
-  const iconInfo = ICON_MAP[type];
-
-  if (!iconInfo) {
-    return <>{type}</>;
-  }
+  const iconInfo = ICON_MAP[type] || { icon: help, text: "Unknown" };
 
   return (
     <>
