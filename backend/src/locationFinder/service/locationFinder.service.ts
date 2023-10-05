@@ -31,7 +31,8 @@ export class LocationFinderService {
 
   async findLocationsByName(query: LocationNameDto): Promise<Location[]> {
     const response = await this.locationFinder.findStopByNameOrId({
-      search: query.name
+      search: query.name,
+      limit: query.limit
     });
 
     return this.locationWrapper.wrap(response.locations ?? []);

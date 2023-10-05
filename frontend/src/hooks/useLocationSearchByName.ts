@@ -27,7 +27,7 @@ export type UseLocationSearchByNameOutdated = {
   searchResults: Location[];
 };
 
-export const useLocationSearchByName = (searchInput: string): UseLocationSearchByNameResult => {
+export const useLocationSearchByName = (searchInput: string, limit?: number): UseLocationSearchByNameResult => {
   const locationFinderApi = useLocationFinderApi();
   const [searchResultsOrError, setSearchResultsOrError] = useState<UseLocationSearchByNameResult>(({ type: "empty", searchResults: null }));
 
@@ -42,7 +42,7 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
       setSearchResultsOrError({ type: "outdated", searchResults: previousSearchResultLocations });
 
       const abortController = new AbortController();
-      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationsByName({ name: searchInput }, { signal: abortController.signal });
+      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationsByName({ name: searchInput, limit }, { signal: abortController.signal });
       pendingRequest
         .then((searchResults) => {
           if (abortController.signal.aborted) {

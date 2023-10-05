@@ -26,6 +26,7 @@ export type LocationSearchInputProps = {
 };
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
+  const LOCATIONS_LIMIT = 20;
   const [searchInput, setSearchInput] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -39,7 +40,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
-  const foundLocations = useLocationSearchByName(debouncedSearchInput);
+  const foundLocations = useLocationSearchByName(debouncedSearchInput, LOCATIONS_LIMIT);
   const { favoriteLocations } = useFavoriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;

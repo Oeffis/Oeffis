@@ -12,4 +12,12 @@ export class LocationNameDto {
   })
   name!: string;
 
+  @ApiProperty({
+    description: "Limit of the number of results.",
+    type: Number,
+    required: false,
+    example: 5
+  })
+  limit?: number;
+
 }

@@ -281,6 +281,11 @@
             "type": "string",
             "description": "Name of the location to search.",
             "example": "Gelsen"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit of the number of results.",
+            "example": 5
           }
         },
         "required": [
