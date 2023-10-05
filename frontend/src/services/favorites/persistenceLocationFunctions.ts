@@ -37,9 +37,7 @@ function parseFavoriteLocation(favorite: any): PersistedObject<CreateFavoriteLoc
   return {
     createdAt,
     locationId: favorite.locationId,
-    id: favorite.id,
-    name: favorite.name,
-    type: locationType
+    id: favorite.id
   };
 }
 
