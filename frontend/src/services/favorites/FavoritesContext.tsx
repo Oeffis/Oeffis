@@ -1,4 +1,3 @@
-import { LocationTypeEnum } from "../../api";
 import { generatePersistedObjectStorage } from "../persistence/generatePersistedObjectStorage";
 import { parsePersistedFavoriteLocations, stringifyFavoriteLocations } from "./persistenceLocationFunctions";
 import { parsePersistedFavoriteTrips, stringifyFavoriteTrips } from "./persistenceTripFunctions";
@@ -13,8 +12,6 @@ export type CreateFavoriteTrip = {
 
 export type CreateFavoriteLocation = {
   locationId: string;
-  name: string;
-  type: LocationTypeEnum;
 };
 
 const favoriteTrips = generatePersistedObjectStorage<CreateFavoriteTrip, "favoriteTrip">(

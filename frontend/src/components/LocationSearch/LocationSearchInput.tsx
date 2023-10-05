@@ -88,10 +88,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           <IonList>
             {searchInput === "" &&
               <LocationSearchList
-                locations={
-                  favoriteLocations
-                    .map(({ locationId: id }) => id)
-                }
+                locations={favoriteLocations.map((favoriteLocation) => favoriteLocation.locationId)}
                 onItemClicked={setSelectedLocationAndCloseModal}
               />
             }

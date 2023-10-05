@@ -51,14 +51,6 @@ type LocationSearchListItemProps = {
 function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearchListItemProps): JSX.Element {
   const { favoriteLocations, addFavoriteLocation, removeFavoriteLocationById } = useFavoriteLocations();
 
-  const removeFavoriteStopByLocationId = (locationId: string): void => {
-    const favoriteStop = favoriteLocations.find((favoriteStop) => favoriteStop.locationId === locationId);
-
-    if (favoriteStop) {
-      removeFavoriteLocationById(favoriteStop.id);
-    }
-  };
-
   const isFavoriteStop = favoriteLocations.some((favoriteStop) => favoriteStop.locationId === location.id);
 
   return (
@@ -74,11 +66,11 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
         ? <IonIcon
           icon={star}
           color="warning"
-          onClick={(): void => removeFavoriteStopByLocationId(location.id ?? "")} /* TODO #312 Revert to saver types. */
+          onClick={(): void => void removeFavoriteLocationById(location.id ?? "")} /* TODO #312 Revert to saver types. */
           title="Remove from favorites" />
         : <IonIcon
           icon={starOutline}
-          onClick={() => addFavoriteLocation({ locationId: location.id ?? "", name: location.name ?? "", type: location.type ?? LocationTypeEnum.Unknown })} /* TODO #312 Revert to saver types. */
+          onClick={() => addFavoriteLocation({ locationId: location.id ?? "" })} /* TODO #312 Revert to saver types. */
           title="Add to favorites" />}
     </>
   );
