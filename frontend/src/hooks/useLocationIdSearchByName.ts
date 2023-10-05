@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Location } from "../api";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 export type UseLocationSearchByNameResult = UseLocationSearchByNameSuccess
@@ -14,7 +13,7 @@ export type UseLocationSearchByNameError = {
 
 export type UseLocationSearchByNameSuccess = {
   type: "success";
-  searchResults: Location[];
+  searchResults: string[];
 };
 
 export type UseLocationSearchByNameEmpty = {
@@ -24,10 +23,10 @@ export type UseLocationSearchByNameEmpty = {
 
 export type UseLocationSearchByNameOutdated = {
   type: "outdated";
-  searchResults: Location[];
+  searchResults: string[];
 };
 
-export const useLocationSearchByName = (searchInput: string, limit?: number): UseLocationSearchByNameResult => {
+export const useLocationIdSearchByName = (searchInput: string, limit?: number): UseLocationSearchByNameResult => {
   const locationFinderApi = useLocationFinderApi();
   const [searchResultsOrError, setSearchResultsOrError] = useState<UseLocationSearchByNameResult>(({ type: "empty", searchResults: null }));
 
@@ -42,7 +41,7 @@ export const useLocationSearchByName = (searchInput: string, limit?: number): Us
       setSearchResultsOrError({ type: "outdated", searchResults: previousSearchResultLocations });
 
       const abortController = new AbortController();
-      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationsByName({ name: searchInput, limit }, { signal: abortController.signal });
+      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationIdsByName({ name: searchInput, limit }, { signal: abortController.signal });
       pendingRequest
         .then((searchResults) => {
           if (abortController.signal.aborted) {

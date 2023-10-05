@@ -31,6 +31,10 @@ import {
     LocationNameDtoToJSON,
 } from '../models/index';
 
+export interface LocationFinderControllerFindLocationIdsByNameRequest {
+    locationNameDto: LocationNameDto;
+}
+
 export interface LocationFinderControllerFindLocationsAtCoordinatesRequest {
     locationCoordinatesDto: LocationCoordinatesDto;
 }
@@ -43,6 +47,39 @@ export interface LocationFinderControllerFindLocationsByNameRequest {
  * 
  */
 export class LocationFinderApi extends runtime.BaseAPI {
+
+    /**
+     * finds location ids by name
+     */
+    async locationFinderControllerFindLocationIdsByNameRaw(requestParameters: LocationFinderControllerFindLocationIdsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        if (requestParameters.locationNameDto === null || requestParameters.locationNameDto === undefined) {
+            throw new runtime.RequiredError('locationNameDto','Required parameter requestParameters.locationNameDto was null or undefined when calling locationFinderControllerFindLocationIdsByName.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/location_finder/ids_by_name`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LocationNameDtoToJSON(requestParameters.locationNameDto),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * finds location ids by name
+     */
+    async locationFinderControllerFindLocationIdsByName(locationNameDto: LocationNameDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.locationFinderControllerFindLocationIdsByNameRaw({ locationNameDto: locationNameDto }, initOverrides);
+        return await response.value();
+    }
 
     /**
      * finds locations at given coordinates

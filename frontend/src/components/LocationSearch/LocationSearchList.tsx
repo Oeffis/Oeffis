@@ -6,16 +6,15 @@ import { useFavoriteLocations } from "../../services/favorites/FavoritesContext"
 import { LocationIcon } from "./LocationIcon";
 
 export type LocationSearchListProps = {
-  locations: Location[];
+  locations: string[];
   onItemClicked: (location: Location) => void;
 };
 
 export function LocationSearchList({ locations, onItemClicked }: LocationSearchListProps): JSX.Element {
-  const items = locations.map((location) => (
+  const items = locations.map((locationId) => (
     <LocationSearchListItem
-      key={location.id}
-      locationId={location.id ?? ""}
-      location={location}
+      key={locationId}
+      locationId={locationId}
       onItemClicked={onItemClicked}
     />
   ));
@@ -25,7 +24,6 @@ export function LocationSearchList({ locations, onItemClicked }: LocationSearchL
 
 type LocationSearchListAsyncItemProps = {
   locationId: string;
-  location: Location;
   onItemClicked: (location: Location) => void;
 };
 

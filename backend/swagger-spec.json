@@ -91,6 +91,51 @@
         ]
       }
     },
+    "/location_finder/ids_by_name": {
+      "post": {
+        "operationId": "LocationFinderController_findLocationIdsByName",
+        "summary": "finds location ids by name",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationNameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the found location ids.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "location_finder"
+        ]
+      }
+    },
     "/journey": {
       "post": {
         "operationId": "JourneyController_queryJourney",
