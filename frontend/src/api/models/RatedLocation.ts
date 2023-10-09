@@ -23,52 +23,46 @@ import {
 /**
  * 
  * @export
- * @interface JourneyLocation
+ * @interface RatedLocation
  */
-export interface JourneyLocation {
+export interface RatedLocation {
     /**
      * Id of the location.
      * @type {string}
-     * @memberof JourneyLocation
+     * @memberof RatedLocation
      */
     id: string;
     /**
      * (Full) Name of the location.
      * @type {string}
-     * @memberof JourneyLocation
+     * @memberof RatedLocation
      */
     name: string;
     /**
      * Type of the location.
      * @type {string}
-     * @memberof JourneyLocation
+     * @memberof RatedLocation
      */
-    type: JourneyLocationTypeEnum;
+    type: RatedLocationTypeEnum;
     /**
      * 
      * @type {LocationDetails}
-     * @memberof JourneyLocation
+     * @memberof RatedLocation
      */
     details: LocationDetails;
     /**
-     * Planned arrival time. If there is no specific arrival time, departure time gets duplicated.
-     * @type {Date}
-     * @memberof JourneyLocation
+     * How well the location result meets the query (positive integers including zero, higher means better).
+     * @type {number}
+     * @memberof RatedLocation
      */
-    arrivalTimePlanned: Date;
-    /**
-     * Planned departure time. If there is no specific departure time, arrival time gets duplicated.
-     * @type {Date}
-     * @memberof JourneyLocation
-     */
-    departureTimePlanned: Date;
+    rating: number;
 }
 
 
 /**
  * @export
  */
-export const JourneyLocationTypeEnum = {
+export const RatedLocationTypeEnum = {
     Address: 'address',
     Crossing: 'crossing',
     Gis: 'gis',
@@ -84,29 +78,28 @@ export const JourneyLocationTypeEnum = {
     Unknown: 'unknown',
     Singlehouse: 'singlehouse'
 } as const;
-export type JourneyLocationTypeEnum = typeof JourneyLocationTypeEnum[keyof typeof JourneyLocationTypeEnum];
+export type RatedLocationTypeEnum = typeof RatedLocationTypeEnum[keyof typeof RatedLocationTypeEnum];
 
 
 /**
- * Check if a given object implements the JourneyLocation interface.
+ * Check if a given object implements the RatedLocation interface.
  */
-export function instanceOfJourneyLocation(value: object): boolean {
+export function instanceOfRatedLocation(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "type" in value;
     isInstance = isInstance && "details" in value;
-    isInstance = isInstance && "arrivalTimePlanned" in value;
-    isInstance = isInstance && "departureTimePlanned" in value;
+    isInstance = isInstance && "rating" in value;
 
     return isInstance;
 }
 
-export function JourneyLocationFromJSON(json: any): JourneyLocation {
-    return JourneyLocationFromJSONTyped(json, false);
+export function RatedLocationFromJSON(json: any): RatedLocation {
+    return RatedLocationFromJSONTyped(json, false);
 }
 
-export function JourneyLocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): JourneyLocation {
+export function RatedLocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): RatedLocation {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -116,12 +109,11 @@ export function JourneyLocationFromJSONTyped(json: any, ignoreDiscriminator: boo
         'name': json['name'],
         'type': json['type'],
         'details': LocationDetailsFromJSON(json['details']),
-        'arrivalTimePlanned': (new Date(json['arrivalTimePlanned'])),
-        'departureTimePlanned': (new Date(json['departureTimePlanned'])),
+        'rating': json['rating'],
     };
 }
 
-export function JourneyLocationToJSON(value?: JourneyLocation | null): any {
+export function RatedLocationToJSON(value?: RatedLocation | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -134,8 +126,7 @@ export function JourneyLocationToJSON(value?: JourneyLocation | null): any {
         'name': value.name,
         'type': value.type,
         'details': LocationDetailsToJSON(value.details),
-        'arrivalTimePlanned': (value.arrivalTimePlanned.toISOString()),
-        'departureTimePlanned': (value.departureTimePlanned.toISOString()),
+        'rating': value.rating,
     };
 }
 

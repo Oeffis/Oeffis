@@ -19,56 +19,56 @@ import {
     LocationDetailsFromJSONTyped,
     LocationDetailsToJSON,
 } from './LocationDetails';
+import type { RatedLocation } from './RatedLocation';
+import {
+    RatedLocationFromJSON,
+    RatedLocationFromJSONTyped,
+    RatedLocationToJSON,
+} from './RatedLocation';
 
 /**
  * 
  * @export
- * @interface JourneyLocation
+ * @interface LocationWithAssignedStops
  */
-export interface JourneyLocation {
+export interface LocationWithAssignedStops {
     /**
      * Id of the location.
      * @type {string}
-     * @memberof JourneyLocation
+     * @memberof LocationWithAssignedStops
      */
     id: string;
     /**
      * (Full) Name of the location.
      * @type {string}
-     * @memberof JourneyLocation
+     * @memberof LocationWithAssignedStops
      */
     name: string;
     /**
      * Type of the location.
      * @type {string}
-     * @memberof JourneyLocation
+     * @memberof LocationWithAssignedStops
      */
-    type: JourneyLocationTypeEnum;
+    type: LocationWithAssignedStopsTypeEnum;
     /**
      * 
      * @type {LocationDetails}
-     * @memberof JourneyLocation
+     * @memberof LocationWithAssignedStops
      */
     details: LocationDetails;
     /**
-     * Planned arrival time. If there is no specific arrival time, departure time gets duplicated.
-     * @type {Date}
-     * @memberof JourneyLocation
+     * All stops assigned to the location.
+     * @type {Array<RatedLocation>}
+     * @memberof LocationWithAssignedStops
      */
-    arrivalTimePlanned: Date;
-    /**
-     * Planned departure time. If there is no specific departure time, arrival time gets duplicated.
-     * @type {Date}
-     * @memberof JourneyLocation
-     */
-    departureTimePlanned: Date;
+    assignedStops: Array<RatedLocation>;
 }
 
 
 /**
  * @export
  */
-export const JourneyLocationTypeEnum = {
+export const LocationWithAssignedStopsTypeEnum = {
     Address: 'address',
     Crossing: 'crossing',
     Gis: 'gis',
@@ -84,29 +84,28 @@ export const JourneyLocationTypeEnum = {
     Unknown: 'unknown',
     Singlehouse: 'singlehouse'
 } as const;
-export type JourneyLocationTypeEnum = typeof JourneyLocationTypeEnum[keyof typeof JourneyLocationTypeEnum];
+export type LocationWithAssignedStopsTypeEnum = typeof LocationWithAssignedStopsTypeEnum[keyof typeof LocationWithAssignedStopsTypeEnum];
 
 
 /**
- * Check if a given object implements the JourneyLocation interface.
+ * Check if a given object implements the LocationWithAssignedStops interface.
  */
-export function instanceOfJourneyLocation(value: object): boolean {
+export function instanceOfLocationWithAssignedStops(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "type" in value;
     isInstance = isInstance && "details" in value;
-    isInstance = isInstance && "arrivalTimePlanned" in value;
-    isInstance = isInstance && "departureTimePlanned" in value;
+    isInstance = isInstance && "assignedStops" in value;
 
     return isInstance;
 }
 
-export function JourneyLocationFromJSON(json: any): JourneyLocation {
-    return JourneyLocationFromJSONTyped(json, false);
+export function LocationWithAssignedStopsFromJSON(json: any): LocationWithAssignedStops {
+    return LocationWithAssignedStopsFromJSONTyped(json, false);
 }
 
-export function JourneyLocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): JourneyLocation {
+export function LocationWithAssignedStopsFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationWithAssignedStops {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -116,12 +115,11 @@ export function JourneyLocationFromJSONTyped(json: any, ignoreDiscriminator: boo
         'name': json['name'],
         'type': json['type'],
         'details': LocationDetailsFromJSON(json['details']),
-        'arrivalTimePlanned': (new Date(json['arrivalTimePlanned'])),
-        'departureTimePlanned': (new Date(json['departureTimePlanned'])),
+        'assignedStops': ((json['assignedStops'] as Array<any>).map(RatedLocationFromJSON)),
     };
 }
 
-export function JourneyLocationToJSON(value?: JourneyLocation | null): any {
+export function LocationWithAssignedStopsToJSON(value?: LocationWithAssignedStops | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -134,8 +132,7 @@ export function JourneyLocationToJSON(value?: JourneyLocation | null): any {
         'name': value.name,
         'type': value.type,
         'details': LocationDetailsToJSON(value.details),
-        'arrivalTimePlanned': (value.arrivalTimePlanned.toISOString()),
-        'departureTimePlanned': (value.departureTimePlanned.toISOString()),
+        'assignedStops': ((value.assignedStops as Array<any>).map(RatedLocationToJSON)),
     };
 }
 

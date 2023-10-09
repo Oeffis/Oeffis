@@ -13,50 +13,50 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { LocationDetails } from './LocationDetails';
+import type { ParentLocationDetails } from './ParentLocationDetails';
 import {
-    LocationDetailsFromJSON,
-    LocationDetailsFromJSONTyped,
-    LocationDetailsToJSON,
-} from './LocationDetails';
+    ParentLocationDetailsFromJSON,
+    ParentLocationDetailsFromJSONTyped,
+    ParentLocationDetailsToJSON,
+} from './ParentLocationDetails';
 
 /**
  * 
  * @export
- * @interface Location
+ * @interface ParentLocation
  */
-export interface Location {
+export interface ParentLocation {
     /**
      * Id of the location.
      * @type {string}
-     * @memberof Location
+     * @memberof ParentLocation
      */
     id: string;
     /**
      * (Full) Name of the location.
      * @type {string}
-     * @memberof Location
+     * @memberof ParentLocation
      */
     name: string;
     /**
      * Type of the location.
      * @type {string}
-     * @memberof Location
+     * @memberof ParentLocation
      */
-    type: LocationTypeEnum;
+    type: ParentLocationTypeEnum;
     /**
      * 
-     * @type {LocationDetails}
-     * @memberof Location
+     * @type {ParentLocationDetails}
+     * @memberof ParentLocation
      */
-    details: LocationDetails;
+    details: ParentLocationDetails;
 }
 
 
 /**
  * @export
  */
-export const LocationTypeEnum = {
+export const ParentLocationTypeEnum = {
     Address: 'address',
     Crossing: 'crossing',
     Gis: 'gis',
@@ -72,13 +72,13 @@ export const LocationTypeEnum = {
     Unknown: 'unknown',
     Singlehouse: 'singlehouse'
 } as const;
-export type LocationTypeEnum = typeof LocationTypeEnum[keyof typeof LocationTypeEnum];
+export type ParentLocationTypeEnum = typeof ParentLocationTypeEnum[keyof typeof ParentLocationTypeEnum];
 
 
 /**
- * Check if a given object implements the Location interface.
+ * Check if a given object implements the ParentLocation interface.
  */
-export function instanceOfLocation(value: object): boolean {
+export function instanceOfParentLocation(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
@@ -88,11 +88,11 @@ export function instanceOfLocation(value: object): boolean {
     return isInstance;
 }
 
-export function LocationFromJSON(json: any): Location {
-    return LocationFromJSONTyped(json, false);
+export function ParentLocationFromJSON(json: any): ParentLocation {
+    return ParentLocationFromJSONTyped(json, false);
 }
 
-export function LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Location {
+export function ParentLocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): ParentLocation {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -101,11 +101,11 @@ export function LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'id': json['id'],
         'name': json['name'],
         'type': json['type'],
-        'details': LocationDetailsFromJSON(json['details']),
+        'details': ParentLocationDetailsFromJSON(json['details']),
     };
 }
 
-export function LocationToJSON(value?: Location | null): any {
+export function ParentLocationToJSON(value?: ParentLocation | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -117,7 +117,7 @@ export function LocationToJSON(value?: Location | null): any {
         'id': value.id,
         'name': value.name,
         'type': value.type,
-        'details': LocationDetailsToJSON(value.details),
+        'details': ParentLocationDetailsToJSON(value.details),
     };
 }
 

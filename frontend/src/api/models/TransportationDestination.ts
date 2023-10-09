@@ -13,50 +13,37 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { LocationDetails } from './LocationDetails';
-import {
-    LocationDetailsFromJSON,
-    LocationDetailsFromJSONTyped,
-    LocationDetailsToJSON,
-} from './LocationDetails';
-
 /**
  * 
  * @export
- * @interface Location
+ * @interface TransportationDestination
  */
-export interface Location {
+export interface TransportationDestination {
     /**
      * Id of the location.
      * @type {string}
-     * @memberof Location
+     * @memberof TransportationDestination
      */
     id: string;
     /**
      * (Full) Name of the location.
      * @type {string}
-     * @memberof Location
+     * @memberof TransportationDestination
      */
     name: string;
     /**
      * Type of the location.
      * @type {string}
-     * @memberof Location
+     * @memberof TransportationDestination
      */
-    type: LocationTypeEnum;
-    /**
-     * 
-     * @type {LocationDetails}
-     * @memberof Location
-     */
-    details: LocationDetails;
+    type: TransportationDestinationTypeEnum;
 }
 
 
 /**
  * @export
  */
-export const LocationTypeEnum = {
+export const TransportationDestinationTypeEnum = {
     Address: 'address',
     Crossing: 'crossing',
     Gis: 'gis',
@@ -72,27 +59,26 @@ export const LocationTypeEnum = {
     Unknown: 'unknown',
     Singlehouse: 'singlehouse'
 } as const;
-export type LocationTypeEnum = typeof LocationTypeEnum[keyof typeof LocationTypeEnum];
+export type TransportationDestinationTypeEnum = typeof TransportationDestinationTypeEnum[keyof typeof TransportationDestinationTypeEnum];
 
 
 /**
- * Check if a given object implements the Location interface.
+ * Check if a given object implements the TransportationDestination interface.
  */
-export function instanceOfLocation(value: object): boolean {
+export function instanceOfTransportationDestination(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "type" in value;
-    isInstance = isInstance && "details" in value;
 
     return isInstance;
 }
 
-export function LocationFromJSON(json: any): Location {
-    return LocationFromJSONTyped(json, false);
+export function TransportationDestinationFromJSON(json: any): TransportationDestination {
+    return TransportationDestinationFromJSONTyped(json, false);
 }
 
-export function LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Location {
+export function TransportationDestinationFromJSONTyped(json: any, ignoreDiscriminator: boolean): TransportationDestination {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -101,11 +87,10 @@ export function LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'id': json['id'],
         'name': json['name'],
         'type': json['type'],
-        'details': LocationDetailsFromJSON(json['details']),
     };
 }
 
-export function LocationToJSON(value?: Location | null): any {
+export function TransportationDestinationToJSON(value?: TransportationDestination | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -117,7 +102,6 @@ export function LocationToJSON(value?: Location | null): any {
         'id': value.id,
         'name': value.name,
         'type': value.type,
-        'details': LocationDetailsToJSON(value.details),
     };
 }
 

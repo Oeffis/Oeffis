@@ -29,58 +29,55 @@ import {
 /**
  * 
  * @export
- * @interface LocationDetails
+ * @interface ParentLocationDetails
  */
-export interface LocationDetails {
+export interface ParentLocationDetails {
     /**
      * Short name of the location. Can be empty string.
      * @type {string}
-     * @memberof LocationDetails
+     * @memberof ParentLocationDetails
      */
-    shortName: string;
+    shortName?: string;
     /**
      * 
      * @type {LocationCoordinates}
-     * @memberof LocationDetails
+     * @memberof ParentLocationDetails
      */
-    coordinates: LocationCoordinates;
+    coordinates?: LocationCoordinates;
     /**
      * 
      * @type {ParentLocation}
-     * @memberof LocationDetails
+     * @memberof ParentLocationDetails
      */
-    parent: ParentLocation;
+    parent?: ParentLocation;
 }
 
 /**
- * Check if a given object implements the LocationDetails interface.
+ * Check if a given object implements the ParentLocationDetails interface.
  */
-export function instanceOfLocationDetails(value: object): boolean {
+export function instanceOfParentLocationDetails(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "shortName" in value;
-    isInstance = isInstance && "coordinates" in value;
-    isInstance = isInstance && "parent" in value;
 
     return isInstance;
 }
 
-export function LocationDetailsFromJSON(json: any): LocationDetails {
-    return LocationDetailsFromJSONTyped(json, false);
+export function ParentLocationDetailsFromJSON(json: any): ParentLocationDetails {
+    return ParentLocationDetailsFromJSONTyped(json, false);
 }
 
-export function LocationDetailsFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationDetails {
+export function ParentLocationDetailsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ParentLocationDetails {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'shortName': json['shortName'],
-        'coordinates': LocationCoordinatesFromJSON(json['coordinates']),
-        'parent': ParentLocationFromJSON(json['parent']),
+        'shortName': !exists(json, 'shortName') ? undefined : json['shortName'],
+        'coordinates': !exists(json, 'coordinates') ? undefined : LocationCoordinatesFromJSON(json['coordinates']),
+        'parent': !exists(json, 'parent') ? undefined : ParentLocationFromJSON(json['parent']),
     };
 }
 
-export function LocationDetailsToJSON(value?: LocationDetails | null): any {
+export function ParentLocationDetailsToJSON(value?: ParentLocationDetails | null): any {
     if (value === undefined) {
         return undefined;
     }

@@ -16,27 +16,27 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface LocationCoordinatesDto
+ * @interface LocationCoordinates
  */
-export interface LocationCoordinatesDto {
+export interface LocationCoordinates {
     /**
      * Latitude of the location.
      * @type {number}
-     * @memberof LocationCoordinatesDto
+     * @memberof LocationCoordinates
      */
     latitude: number;
     /**
      * Longitude of the location.
      * @type {number}
-     * @memberof LocationCoordinatesDto
+     * @memberof LocationCoordinates
      */
     longitude: number;
 }
 
 /**
- * Check if a given object implements the LocationCoordinatesDto interface.
+ * Check if a given object implements the LocationCoordinates interface.
  */
-export function instanceOfLocationCoordinatesDto(value: object): boolean {
+export function instanceOfLocationCoordinates(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "latitude" in value;
     isInstance = isInstance && "longitude" in value;
@@ -44,11 +44,11 @@ export function instanceOfLocationCoordinatesDto(value: object): boolean {
     return isInstance;
 }
 
-export function LocationCoordinatesDtoFromJSON(json: any): LocationCoordinatesDto {
-    return LocationCoordinatesDtoFromJSONTyped(json, false);
+export function LocationCoordinatesFromJSON(json: any): LocationCoordinates {
+    return LocationCoordinatesFromJSONTyped(json, false);
 }
 
-export function LocationCoordinatesDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationCoordinatesDto {
+export function LocationCoordinatesFromJSONTyped(json: any, ignoreDiscriminator: boolean): LocationCoordinates {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -59,7 +59,7 @@ export function LocationCoordinatesDtoFromJSONTyped(json: any, ignoreDiscriminat
     };
 }
 
-export function LocationCoordinatesDtoToJSON(value?: LocationCoordinatesDto | null): any {
+export function LocationCoordinatesToJSON(value?: LocationCoordinates | null): any {
     if (value === undefined) {
         return undefined;
     }
