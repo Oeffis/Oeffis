@@ -27,10 +27,10 @@ async function main(): Promise<void> {
         }),
       async (argv) => {
         const pg = await createPgPool({
-          host: "localhost",
-          port: 5432,
-          password: "postgres",
-          user: "postgres"
+          host: process.env.PG_HOST ?? "localhost",
+          port: parseInt(process.env.PG_PORT ?? "5432"),
+          user: process.env.PG_USER ?? "postgres",
+          password: process.env.PG_PASSWORD ?? "postgres"
         }, console.log);
 
         await importVrrTimetables({
