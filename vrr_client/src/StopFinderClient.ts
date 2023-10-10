@@ -10,6 +10,7 @@ export interface FindStopAtCoordinatesParameters {
 export interface FindStopByNameOrIdParameters {
   search: string;
   disableProprietaryVrrParameters?: boolean;
+  limit?: number;
 }
 
 export class StopFinderClient extends VrrClientBase {
@@ -41,6 +42,7 @@ export class StopFinderClient extends VrrClientBase {
       {
         name_sf: query.search,
         type_sf: "any",
+        ...(query.limit ? { anyMaxSizeHitList: query.limit + "" } : {}),
         ...proprietaryVrrParameters
       },
       warpAsFailSafeSchemaConverter(Convert.toLOCATIONSUGGESTSchema),

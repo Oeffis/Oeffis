@@ -31,10 +31,20 @@ export class LocationFinderService {
 
   async findLocationsByName(query: LocationNameDto): Promise<Location[]> {
     const response = await this.locationFinder.findStopByNameOrId({
-      search: query.name
+      search: query.name,
+      limit: query.limit
     });
 
     return this.locationWrapper.wrap(response.locations ?? []);
+  }
+
+  async findLocationIdsByNameOrId(query: LocationNameDto): Promise<string[]> {
+    const response = await this.locationFinder.findStopByNameOrId({
+      search: query.name,
+      limit: query.limit
+    });
+
+    return response.locations?.map(location => location.id) as string[] ?? [];
   }
 
 }

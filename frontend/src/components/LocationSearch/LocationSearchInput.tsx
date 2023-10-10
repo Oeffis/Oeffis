@@ -13,8 +13,8 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Location, LocationDetails } from "../../api";
-import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
+import { Location } from "../../api";
+import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import { LocationSearchList } from "./LocationSearchList";
 
@@ -26,6 +26,7 @@ export type LocationSearchInputProps = {
 };
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
+  const LOCATIONS_LIMIT = 20;
   const [searchInput, setSearchInput] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -39,7 +40,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   };
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
-  const foundLocations = useLocationSearchByName(debouncedSearchInput);
+  const foundLocations = useLocationIdSearchByName(debouncedSearchInput, LOCATIONS_LIMIT);
   const { favoriteLocations } = useFavoriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;
@@ -87,10 +88,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           <IonList>
             {searchInput === "" &&
               <LocationSearchList
-                locations={
-                  favoriteLocations
-                    .map(({ locationId: id, name, type }) => ({ id, name, type, details: {} as unknown as LocationDetails }))
-                }
+                locations={favoriteLocations.map((favoriteLocation) => favoriteLocation.locationId)}
                 onItemClicked={setSelectedLocationAndCloseModal}
               />
             }

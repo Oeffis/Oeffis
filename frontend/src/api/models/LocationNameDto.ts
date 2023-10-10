@@ -25,6 +25,12 @@ export interface LocationNameDto {
      * @memberof LocationNameDto
      */
     name: string;
+    /**
+     * Limit of the number of results.
+     * @type {number}
+     * @memberof LocationNameDto
+     */
+    limit?: number;
 }
 
 /**
@@ -48,6 +54,7 @@ export function LocationNameDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'name': json['name'],
+        'limit': !exists(json, 'limit') ? undefined : json['limit'],
     };
 }
 
@@ -61,6 +68,7 @@ export function LocationNameDtoToJSON(value?: LocationNameDto | null): any {
     return {
         
         'name': value.name,
+        'limit': value.limit,
     };
 }
 
