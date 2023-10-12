@@ -13,9 +13,8 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Location, LocationDetails } from "../../api";
-import { useLocationSearchByName } from "../../hooks/useLocationSearchByName";
-import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
+import { Location } from "../../api";
+import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
@@ -48,7 +47,6 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
   const foundLocations = useLocationIdSearchByName(debouncedSearchInput, LOCATIONS_LIMIT);
-  const { favoriteLocations } = useFavoriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;
   const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);

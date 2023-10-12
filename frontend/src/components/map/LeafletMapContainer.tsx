@@ -36,18 +36,11 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
     return bounds;
   };
 
-  const renderMarker = (): ReactElement[] => {
+  const renderMarker = (): ReactElement[] =>
+    locations.map((location, index) =>
+      <MapMarker key={"marker" + index} currentLocation={currentLocation} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />
+    );
 
-    const marker: ReactElement[] = [];
-
-    locations.map((location, index) => {
-      marker.push(
-        <MapMarker key={"marker" + index} currentLocation={currentLocation} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />
-      );
-    });
-
-    return marker;
-  };
 
   const getPolygonPositions = (): LatLngExpression[] => {
     const positions: LatLngExpression[] = [];
