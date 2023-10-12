@@ -1,4 +1,4 @@
-import { LatLngBoundsLiteral, LatLngTuple } from "leaflet";
+import { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ReactElement, useEffect, useState } from "react";
 import { MapContainer, Polygon, TileLayer } from "react-leaflet";
@@ -31,7 +31,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
     })
     .filter(tupel => tupel !== undefined) as LatLngTuple[];
 
-  const getBounds = (): LatLngBoundsLiteral => {
+  const getBounds = (): LatLngTuple[] => {
     const bounds = getLocationsCoords();
     if (bounds.length <= 0) {
       return [[currentLocation.details.latitude ?? 51.183334, currentLocation.details.longitude ?? 7.200000]];

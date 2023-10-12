@@ -1,9 +1,9 @@
-import { LatLngBoundsLiteral } from "leaflet";
+import { LatLngTuple } from "leaflet";
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 
 export type MapControllerProps = {
-  bounds: LatLngBoundsLiteral
+  bounds: LatLngTuple[]
 };
 
 const MapController = (props: MapControllerProps): JSX.Element => {
@@ -14,9 +14,9 @@ const MapController = (props: MapControllerProps): JSX.Element => {
   useEffect(() => {
 
     if (props) {
-      map.flyToBounds(props.bounds, {
+      /* map.flyToBounds(props.bounds, {
         duration: flyToDuration
-      });
+      }); */
     }
 
   }, [props]);
