@@ -29,7 +29,7 @@ const JourneyPage: React.FC = () => {
     const locations: string[] = [];
 
     if (currentLocation !== undefined) {
-      locations.push(currentLocation.id ?? "");
+      /* locations.push(currentLocation.id ?? ""); */
     }
     if (origin !== undefined) {
       locations.push(origin.id ?? "");
@@ -103,7 +103,7 @@ const JourneyPage: React.FC = () => {
             currentLocation={currentLocation}
             origin={origin}
             destination={destination}
-            locations={getLocations()}
+            locationIds={getLocations()}
             showLines={true}
           />
         </IonContent>
