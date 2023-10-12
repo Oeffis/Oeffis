@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Location } from "../../api";
 import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
+import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
@@ -47,6 +48,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
   const foundLocations = useLocationIdSearchByName(debouncedSearchInput, LOCATIONS_LIMIT);
+  const { favoriteLocations } = useFavoriteLocations();
 
   const inputStillInDebounce = debouncedSearchInput !== searchInput;
   const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);
@@ -109,14 +111,14 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             && showMap
             ? <LeafletMapContainer
               currentLocation={props.currentLocation}
-              locations={[...foundLocations.searchResults, props.currentLocation]}
+              locations={[...foundLocations.searchResults]}
               showLines={false}
               onItemClicked={setSelectedLocationAndCloseModal}
             />
             : <IonList>
               {searchInput === "" &&
                 <LocationSearchList
-                  locations={favouriteLocations.map((favoriteLocaiton) => favoriteLocation.locationId)}
+                  locations={favoriteLocations.map((favoriteLocation) => favoriteLocation.locationId)}
                   onItemClicked={setSelectedLocationAndCloseModal}
                 />
               }
