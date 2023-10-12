@@ -30,13 +30,13 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
     })
     .filter(tupel => tupel !== undefined) as LatLngTuple[];
 
-  const getBounds = (): LatLngTuple[] => {
+  /* const getBounds = (): LatLngTuple[] => {
     const bounds = getLocationsCoords();
     if (bounds.length <= 0) {
       return [[currentLocation.details.latitude ?? 51.183334, currentLocation.details.longitude ?? 7.200000]];
     }
     return bounds;
-  };
+  }; */
 
   const renderMarker = (): ReactElement[] => locations.map((location, index) => {
     if (location === null) return <></>;
