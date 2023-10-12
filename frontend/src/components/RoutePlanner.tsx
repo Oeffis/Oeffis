@@ -36,8 +36,8 @@ export type RoutePlannerProps = {
 
 const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
-  const [originLocationId, setOriginLocationId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationLocationId, setDestinationLocationId] = useStateParams<string | null>(null, "destination", String, String);
+  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
 
 
   const originLocation = useLocationByIdOrNull(originId);
@@ -129,7 +129,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
         </IonItem>
         <IonItem>
           <LocationSearchInput
-            currentLocation={currentLocaiton}
+            currentLocation={currentLocation}
             inputLabel="Origin"
             selectedLocation={originLocation}
             onSelectedLocationChanged={(location): void => {
@@ -141,6 +141,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
         </IonItem>
         <IonItem>
           <LocationSearchInput
+            currentLocation={currentLocation}
             inputLabel="Destination"
             selectedLocation={destinationLocation}
             onSelectedLocationChanged={(location): void => {
