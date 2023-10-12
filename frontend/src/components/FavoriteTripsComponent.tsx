@@ -26,6 +26,7 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
         >
           {favoriteTrips.map((trip, idx) => (
             <FavoriteTripEntryComponent
+              key={"FavoriteTripEntry" + idx}
               identifier={idx}
               onTripSelected={props.onTripSelected}
               trip={trip} />

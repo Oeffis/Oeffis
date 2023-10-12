@@ -1,7 +1,6 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -18,7 +17,12 @@ import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
+import Menu from "./components/Menu";
+import FavoritesPage from "./pages/FavoritesPage";
+import JourneyPage from "./pages/JourneyPage";
 import JourneysPage from "./pages/JourneysPage";
+import UserHistoryPage from "./pages/UserHistoryPage";
+import UserPreferencesPage from "./pages/UserPreferencesPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
 import { FavoriteLocationsProvider, FavoriteTripsProvider } from "./services/favorites/FavoritesContext";
@@ -35,12 +39,22 @@ const App: React.FC = () => (
           <FavoriteTripsProvider>
             <IonApp>
               <IonReactRouter>
-                <IonRouterOutlet>
-                  <Route exact path="/home">
-                    <Home />
-                  </Route>
+                <Menu />
+                <IonRouterOutlet id="main-content">
                   <Route exact path="/">
-                    <Redirect to="/home" />
+                    <Redirect to="/journey" />
+                  </Route>
+                  <Route exact path="/journey">
+                    <JourneyPage />
+                  </Route>
+                  <Route exact path="/favorites">
+                    <FavoritesPage />
+                  </Route>
+                  <Route exact path="/userHistory">
+                    <UserHistoryPage />
+                  </Route>
+                  <Route exact path="/userPreferences">
+                    <UserPreferencesPage />
                   </Route>
                   <Route exact path="/journeyDemo">
                     <JourneysPage />

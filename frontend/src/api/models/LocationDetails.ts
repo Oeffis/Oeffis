@@ -12,12 +12,11 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { exists } from '../runtime';
 import type { Location } from './Location';
 import {
     LocationFromJSON,
-    LocationFromJSONTyped,
-    LocationToJSON,
+    LocationToJSON
 } from './Location';
 
 /**
@@ -76,12 +75,17 @@ export function LocationDetailsFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-        
         'shortName': !exists(json, 'shortName') ? undefined : json['shortName'],
         'matchQuality': !exists(json, 'matchQuality') ? undefined : json['matchQuality'],
         'parent': !exists(json, 'parent') ? undefined : LocationFromJSON(json['parent']),
         'latitude': !exists(json, 'latitude') ? undefined : json['latitude'],
         'longitude': !exists(json, 'longitude') ? undefined : json['longitude'],
+
+        /*  'shortName': json['shortName'],
+         'matchQuality': json['matchQuality'],
+         'parent': LocationFromJSON(json['parent']),
+         'latitude': json['latitude'],
+         'longitude': json['longitude'], */
     };
 }
 
@@ -93,7 +97,7 @@ export function LocationDetailsToJSON(value?: LocationDetails | null): any {
         return null;
     }
     return {
-        
+
         'shortName': value.shortName,
         'matchQuality': value.matchQuality,
         'parent': LocationToJSON(value.parent),
@@ -101,4 +105,3 @@ export function LocationDetailsToJSON(value?: LocationDetails | null): any {
         'longitude': value.longitude,
     };
 }
-
