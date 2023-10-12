@@ -1,8 +1,9 @@
-import { LatLngBoundsLiteral, LatLngExpression, LatLngTuple } from "leaflet";
+import { LatLngBoundsLiteral, LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ReactElement, useEffect, useState } from "react";
 import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
+import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import "./LeafletMapContainer.css";
 import MapController from "./MapController";
 import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
@@ -12,7 +13,7 @@ export type MapProps = {
   currentLocation: Location,
   origin?: Location,
   destination?: Location,
-  locations: Location[],
+  locations: string[],
   showLines: boolean,
   onItemClicked?: (location: Location) => void
 };
@@ -21,36 +22,34 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
 
   const [zoom, setZoom] = useState<number>();
 
+  const getLocationsCoords = (): LatLngTuple[] =>
+    locations
+      .map((locationId) => {
+        const location = useLocationByIdOrNull(locationId);
+        if (location === null) return;
+        if (location.details.latitude === undefined) return;
+        if (location.details.longitude === undefined) return;
+        return [location.details.latitude, location.details.longitude];
+      })
+      .filter(tupel => tupel !== undefined) as LatLngTuple[];
+
   const getBounds = (): LatLngBoundsLiteral => {
-
-    const bounds: LatLngTuple[] = [];
-
-    if (locations.length !== 0) {
-      locations.map((location) => {
-        bounds.push([location.details.latitude ?? 0, location.details.longitude ?? 0]);
-      });
-    } else {
-      bounds.push([currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]);
+    const bounds = getLocationsCoords();
+    if (bounds.length <= 0) {
+      return [[currentLocation.details.latitude ?? 51.183334, currentLocation.details.longitude ?? 7.200000]];
     }
-
     return bounds;
   };
 
   const renderMarker = (): ReactElement[] =>
-    locations.map((location, index) =>
-      <MapMarker key={"marker" + index} currentLocation={currentLocation} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />
-    );
 
-
-  const getPolygonPositions = (): LatLngExpression[] => {
-    const positions: LatLngExpression[] = [];
-    locations.map(location => {
-      if (location !== currentLocation) {
-        positions.push([location.details.latitude ?? 0, location.details.longitude ?? 0]);
-      }
+    locations.map((locationId, index) => {
+      const location = useLocationByIdOrNull(locationId);
+      if (location === null) return <></>;
+      return <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />;
     });
-    return positions;
-  };
+
+  const getPolygonPositions = getLocationsCoords;
 
   useEffect(() => {
     setZoom(15);
