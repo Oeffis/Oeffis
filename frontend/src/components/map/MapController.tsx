@@ -14,9 +14,9 @@ const MapController = (props: MapControllerProps): JSX.Element => {
   useEffect(() => {
 
     if (props) {
-      /* map.flyToBounds(props.bounds, {
+      map.flyToBounds(props.bounds, {
         duration: flyToDuration
-      }); */
+      });
     }
 
   }, [props]);

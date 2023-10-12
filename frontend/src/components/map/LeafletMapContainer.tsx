@@ -5,7 +5,6 @@ import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
 import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocationsByIdOrNull";
 import "./LeafletMapContainer.css";
-import MapController from "./MapController";
 import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
 
 
@@ -56,7 +55,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MapController bounds={getBounds()} />
+      {/* <MapController bounds={getBounds()} /> */}
       {renderMarker()}
       {currentLocation ? <CurrentLocationMapMarker currentLocation={currentLocation} /> : <></>}
       {showLines
