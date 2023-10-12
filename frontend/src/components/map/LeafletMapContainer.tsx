@@ -5,7 +5,7 @@ import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
 import "./LeafletMapContainer.css";
 import MapController from "./MapController";
-import MapMarker from "./MapMarker";
+import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
 
 
 export type MapProps = {
@@ -64,6 +64,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
       />
       <MapController bounds={getBounds()} />
       {renderMarker()}
+      {currentLocation ? <CurrentLocationMapMarker currentLocation={currentLocation} /> : <></>}
       {showLines
         ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
         : <></>}

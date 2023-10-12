@@ -16,14 +16,13 @@ import currentPostionIcon from "../../../src/images/position-map-marker.svg";
 import { Location, LocationTypeEnum } from "../../api";
 
 export type MarkerProps = {
-  currentLocation: Location,
   origin?: Location,
   destination?: Location,
   location: Location,
   onItemClicked?: (location: Location) => void
 };
 
-const MapMarker = ({ currentLocation, origin, destination, location, onItemClicked }: MarkerProps): JSX.Element => {
+const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps): JSX.Element => {
 
   const getOriginIcon = (type: LocationTypeEnum | undefined): string => {
     let icon: string = currentPostionIcon;
@@ -208,25 +207,7 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
 
     let mapMarker: JSX.Element = <></>;
 
-    if (currentLocation === location) {
-
-      const currentLocationIcon = new Icon({
-        iconUrl: currentPostionIcon,
-        iconSize: [20, 20],
-        iconAnchor: [0, 0],
-        shadowUrl: markerShadow,
-        shadowAnchor: [0, 20],
-        popupAnchor: [10, 0]
-      });
-
-      mapMarker = (
-        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={currentLocationIcon}>
-          <Popup className="popup">
-            <p className="popupHeadline">{location.name}</p>
-          </Popup>
-        </Marker>
-      );
-    } else if (origin === location) {
+    if (origin === location) {
 
       const originLocationIcon = new Icon({
         iconUrl: getOriginIcon(location.type),
@@ -310,3 +291,31 @@ const MapMarker = ({ currentLocation, origin, destination, location, onItemClick
 };
 
 export default MapMarker;
+
+
+
+interface CurrentLocationMapMarkerProps {
+  currentLocation: Location
+}
+
+export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> = ({ currentLocation }) => {
+
+
+  const currentLocationIcon = new Icon({
+    iconUrl: currentPostionIcon,
+    iconSize: [20, 20],
+    iconAnchor: [0, 0],
+    shadowUrl: markerShadow,
+    shadowAnchor: [0, 20],
+    popupAnchor: [10, 0]
+  });
+
+
+  return (
+    <Marker position={[currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]} icon={currentLocationIcon}>
+      <Popup className="popup">
+        <p className="popupHeadline">{currentLocation.name}</p>
+      </Popup>
+    </Marker>
+  );
+};
