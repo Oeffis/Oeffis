@@ -24,18 +24,18 @@ const JourneyPage: React.FC = () => {
   const [origin, setOrigin] = useState<Location>();
   const [destination, setDestination] = useState<Location>();
 
-  const getLocations = (): Location[] => {
+  const getLocations = (): string[] => {
 
-    const locations: Location[] = [];
+    const locations: string[] = [];
 
     if (currentLocation !== undefined) {
-      locations.push(currentLocation);
+      locations.push(currentLocation.id ?? "");
     }
     if (origin !== undefined) {
-      locations.push(origin);
+      locations.push(origin.id ?? "");
     }
     if (destination !== undefined) {
-      locations.push(destination);
+      locations.push(destination.id ?? "");
     }
 
     return locations;
