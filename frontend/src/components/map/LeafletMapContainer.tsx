@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { ReactElement, useEffect, useState } from "react";
 import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
-import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
+import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocationsByIdOrNull";
 import "./LeafletMapContainer.css";
 import MapController from "./MapController";
 import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
@@ -13,25 +13,23 @@ export type MapProps = {
   currentLocation: Location,
   origin?: Location,
   destination?: Location,
-  locations: string[],
+  locationIds: string[],
   showLines: boolean,
   onItemClicked?: (location: Location) => void
 };
 
-const LeafletMapContainer = ({ currentLocation, origin, destination, locations, showLines, onItemClicked }: MapProps): JSX.Element => {
+const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
+  const locations = useMultipleLocationsByIdOrNull(locationIds);
 
   const [zoom, setZoom] = useState<number>();
 
-  const getLocationsCoords = (): LatLngTuple[] =>
-    locations
-      .map((locationId) => {
-        const location = useLocationByIdOrNull(locationId);
-        if (location === null) return;
-        if (location.details.latitude === undefined) return;
-        if (location.details.longitude === undefined) return;
-        return [location.details.latitude, location.details.longitude];
-      })
-      .filter(tupel => tupel !== undefined) as LatLngTuple[];
+  const getLocationsCoords = (): LatLngTuple[] => locations
+    .map((location) => {
+      if (location.details.latitude === undefined) return;
+      if (location.details.longitude === undefined) return;
+      return [location.details.latitude, location.details.longitude];
+    })
+    .filter(tupel => tupel !== undefined) as LatLngTuple[];
 
   const getBounds = (): LatLngBoundsLiteral => {
     const bounds = getLocationsCoords();
@@ -41,13 +39,10 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
     return bounds;
   };
 
-  const renderMarker = (): ReactElement[] =>
-
-    locations.map((locationId, index) => {
-      const location = useLocationByIdOrNull(locationId);
-      if (location === null) return <></>;
-      return <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />;
-    });
+  const renderMarker = (): ReactElement[] => locations.map((location, index) => {
+    if (location === null) return <></>;
+    return <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />;
+  });
 
   const getPolygonPositions = getLocationsCoords;
 
@@ -67,7 +62,6 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locations, 
       {showLines
         ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
         : <></>}
-
     </MapContainer>
   ) : <div />;
 };
