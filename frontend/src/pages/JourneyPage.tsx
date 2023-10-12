@@ -1,4 +1,3 @@
-import { Geolocation } from "@capacitor/geolocation";
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import logo from "../../public/images/train_image.png";
@@ -9,7 +8,6 @@ import "./JourneyPage.css";
 
 const JourneyPage: React.FC = () => {
 
-  // 51.183334, 7.2
   const [currentLocation, setCurrentLocation] = useState<Location>(
     {
       id: "",
@@ -19,7 +17,7 @@ const JourneyPage: React.FC = () => {
         shortName: "",
         matchQuality: 0,
         latitude: 51.183334,
-        longitude: 7.2
+        longitude: 7.200000
       }
     }
   );
@@ -44,34 +42,46 @@ const JourneyPage: React.FC = () => {
   };
 
   useEffect(() => {
-    Geolocation.getCurrentPosition()
-      .then(position =>
-        setCurrentLocation({
-          id: "",
-          name: "Aktuelle Position",
-          type: "locality",
-          details: {
-            shortName: "Aktuelle Position",
-            matchQuality: 0,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }
-        })
-      )
-      .catch(error => {
-        console.log(error);
-        setCurrentLocation({
-          id: "",
-          name: "",
-          type: "locality",
-          details: {
-            shortName: "",
-            matchQuality: 0,
-            latitude: 51.183334,
-            longitude: 7.2
-          }
-        });
-      });
+    /*  Geolocation.getCurrentPosition()
+       .then(position =>
+         setCurrentLocation({
+           id: "",
+           name: "Aktuelle Position",
+           type: "locality",
+           details: {
+             shortName: "Aktuelle Position",
+             matchQuality: 0,
+             latitude: position.coords.latitude,
+             longitude: position.coords.longitude
+           }
+         })
+       )
+       .catch(error => {
+         console.log(error);
+         setCurrentLocation({
+           id: "",
+           name: "",
+           type: "locality",
+           details: {
+             shortName: "",
+             matchQuality: 0,
+             latitude: 51.183334,
+             longitude: 7.200000
+           }
+         });
+       }); */
+
+    setCurrentLocation({
+      id: "",
+      name: "",
+      type: "locality",
+      details: {
+        shortName: "",
+        matchQuality: 0,
+        latitude: 51.183334,
+        longitude: 7.200000
+      }
+    });
   }, []);
 
   return (
