@@ -59,7 +59,12 @@
       }
     ],
     "@typescript-eslint/semi": "error",
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
     "eqeqeq": "warn",
+    "indent": "off",
     "no-throw-literal": "warn",
     "prefer-const": "warn",
     "semi": "off",
@@ -69,11 +74,6 @@
       {
         "allowTemplateLiterals": true
       }
-    ],
-    "indent": "off",
-    "comma-dangle": [
-      "error",
-      "never"
     ]
   }
 }
