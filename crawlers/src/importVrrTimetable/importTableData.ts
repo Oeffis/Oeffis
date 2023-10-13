@@ -28,7 +28,7 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
   let finished = false;
   await Promise.race([
     promise,
-    new Promise<void>(async (resolve) => {
+    (async () => {
       while (!finished) {
         await new Promise((resolve) => setTimeout(resolve, 10_000));
         if (finished) {
@@ -43,7 +43,6 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
         const estimatedFinishDate = new Date(timeLeftInSecounds * 1000 + new Date().getTime());
         console.log(`Estimated time left for ${tableSchema.name}: ${formatDistanceToNow(estimatedFinishDate, { includeSeconds: true })}. ETA ${estimatedFinishDate.toLocaleString()}`);
       }
-      resolve();
     })
   ]);
 
