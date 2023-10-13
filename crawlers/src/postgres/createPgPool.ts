@@ -38,7 +38,7 @@ export async function createPgPool(config: PoolConfig, logger: (payload: any) =>
   });
 
   const withPgConnection: WithPgConnection = async (fn) => {
-    const client: Connection = await pool.connect() as any;
+    const client = await pool.connect() as Connection;
 
     if (!patched) {
       patched = true;

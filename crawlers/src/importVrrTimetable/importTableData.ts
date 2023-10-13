@@ -29,8 +29,9 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
   await Promise.race([
     promise,
     (async () => {
+      // eslint-disable-next-line no-unmodified-loop-condition
       while (!finished) {
-        await new Promise((resolve) => setTimeout(resolve, 10_000));
+        await new Promise((resolve) => void setTimeout(resolve, 10_000));
         if (finished) {
           break;
         }

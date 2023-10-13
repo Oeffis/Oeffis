@@ -66,13 +66,34 @@
     ],
     "eqeqeq": "warn",
     "indent": "off",
+    "no-constant-binary-expression": "warn",
+    "no-constructor-return": "warn",
+    "no-duplicate-imports": "warn",
     "no-multiple-empty-lines": [
-      "error",
+      "warn",
       {
         "max": 1
       }
     ],
+    "no-new-native-nonconstructor": "warn",
+    "no-promise-executor-return": [
+      "warn",
+      {
+        "allowVoid": true
+      }
+    ],
+    "no-self-compare": "error",
+    "no-template-curly-in-string": "error",
     "no-throw-literal": "warn",
+    "no-unmodified-loop-condition": "error",
+    "no-unreachable-loop": "error",
+    "no-unused-private-class-members": "error",
+    "require-atomic-updates": [
+      "error",
+      {
+        "allowProperties": true
+      }
+    ],
     "prefer-const": "warn",
     "semi": "off",
     "quotes": [
