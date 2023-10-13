@@ -25,8 +25,6 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       )
       .then(processLocationResult, processLocationFailure);
 
-
-
     function processLocationResult(matchingLocations: Location[]): void {
       isAborted()
         || checkNoLocationFound(matchingLocations)

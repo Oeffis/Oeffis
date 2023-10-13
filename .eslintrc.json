@@ -65,6 +65,12 @@
     ],
     "eqeqeq": "warn",
     "indent": "off",
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1
+      }
+    ],
     "no-throw-literal": "warn",
     "prefer-const": "warn",
     "semi": "off",

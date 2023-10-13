@@ -11,8 +11,6 @@ import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
 import { CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
 import "./FavoritesPage.css";
 
-
-
 const FavoritesPage: React.FC = () => {
 
   const [slideName, setSlideName] = useState<string>("Stations");

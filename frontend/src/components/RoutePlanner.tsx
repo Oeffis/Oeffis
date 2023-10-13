@@ -39,7 +39,6 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
 
-
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
 

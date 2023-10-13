@@ -23,7 +23,6 @@ export type CreatePgPoolResult = {
 let patched = false;
 // pg.types.setTypeParser(20, BigInt);
 
-
 export async function createPgPool(config: PoolConfig, logger: (payload: any) => void): Promise<CreatePgPoolResult> {
   const pool = new Pool({
     ...config,

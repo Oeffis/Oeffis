@@ -7,7 +7,6 @@ import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocations
 import "./LeafletMapContainer.css";
 import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
 
-
 export type MapProps = {
   currentLocation: Location,
   origin?: Location,

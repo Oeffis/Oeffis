@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "lint": "npm run lint:vrr_client && npm run lint:backend && npm run lint:frontend",
-    "lint:vrr_client": "cd vrr_client && npm run lint",
-    "lint:backend": "cd backend && npm run lint",
-    "lint:frontend": "cd frontend && npm run lint"
+    "lint": "npm run lint:vrr_client && npm run lint:backend && npm run lint:frontend && npm run lint:crawlers",
+    "lint:vrr_client": "cd vrr_client && npm run lint -- --no-fix",
+    "lint:backend": "cd backend && npm run lint -- --no-fix",
+    "lint:frontend": "cd frontend && npm run lint -- --no-fix",
+    "lint:crawlers": "cd crawlers && npm run lint -- --no-fix"
   }
 }

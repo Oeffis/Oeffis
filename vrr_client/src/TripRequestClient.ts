@@ -18,7 +18,6 @@ export type FindStopByNameParameters = {
 
 export class TripRequestClient extends VrrClientBase {
 
-
   public async queryTrip(query: QueryTripParameters): Promise<TRIPSchema> {
     const planedTimeOptions = this.perparePlanedTimeOption(query);
     const viaOptions = this.prepareViaOption(query);
