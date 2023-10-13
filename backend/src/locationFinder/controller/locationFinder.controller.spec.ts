@@ -64,7 +64,7 @@ function ratedLocation(id: string): RatedLocation {
 }
 
 function location(id: string): Location {
-  return <Location>{
+  return {
     id: id,
     name: "Gelsenkirchen Hbf",
     type: LocationType.stop,
@@ -76,5 +76,5 @@ function location(id: string): Location {
         longitude: 7.101
       }
     }
-  };
+  } as Location;
 }

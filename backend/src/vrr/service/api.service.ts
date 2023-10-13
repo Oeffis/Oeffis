@@ -17,7 +17,7 @@ export class ApiService {
     return new clientClass(this.baseUrl, ...args);
   }
 
-  public mapLocationType(vrrLocationType: VrrLocationType | undefined): LocationType {
+  public mapVrrLocationType(vrrLocationType: VrrLocationType | undefined): LocationType {
     const locationTypeMap: Record<VrrLocationType | string, LocationType> = {
       address: LocationType.address,
       crossing: LocationType.crossing,
@@ -32,13 +32,12 @@ export class ApiService {
       street: LocationType.street,
       suburb: LocationType.suburb,
       unknown: LocationType.unknown,
-      "singlehouse": LocationType.singlehouse
+      singlehouse: LocationType.singlehouse
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const locationType = vrrLocationType ? locationTypeMap[vrrLocationType] ?? LocationType.unknown : LocationType.unknown;
-
-    return locationType;
+    return vrrLocationType
+      ? locationTypeMap[vrrLocationType] ?? LocationType.unknown
+      : LocationType.unknown;
   }
 
   public mapRealTimeTripStatus(vrrRealTimeTripStatus: RealtimeTripStatus | undefined): LegRealtimeTripStatus | undefined {
