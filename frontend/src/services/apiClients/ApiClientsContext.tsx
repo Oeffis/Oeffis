@@ -3,10 +3,10 @@ import { createContext, useContext } from "react";
 import { Configuration, JourneyApi, LocationFinderApi } from "../../api";
 import { useAppConfig } from "../config/AppConfigContext";
 
-export type ApiClients = {
+export interface ApiClients {
   journeyApi: JourneyApi;
   locationFinderApi: LocationFinderApi;
-};
+}
 
 export const ApiClientsContext = createContext<ApiClients | null>(null);
 

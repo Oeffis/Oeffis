@@ -6,14 +6,14 @@ import { Connection, createPgPool } from "../postgres/createPgPool";
 export async function run(args: { stopId?: string, limit: number }): Promise<void> {
   const pgPool = await createPgPool({
     host: process.env.pgHost,
-    port: parseInt(process.env.pgPort || "5432"),
+    port: parseInt(process.env.pgPort ?? "5432"),
     database: process.env.pgDatabase,
     user: process.env.pgUser,
     password: process.env.pgPassword
   }, console.log);
 
   await pgPool.withPgConnection(async pgClient => {
-    const definitiveStopId = args.stopId || await getStopIdFromDb(pgClient);
+    const definitiveStopId = args.stopId ?? await getStopIdFromDb(pgClient);
     console.log("fetching delays for stop id", definitiveStopId);
 
     const recordingTime = new Date();
@@ -63,8 +63,8 @@ async function getDepartureDelays(stopId: string, limit: number): Promise<StopEv
   const departures = await new DeparturesClient(VRR_TEST_API_BASE_URL)
     .findDeparturesByStop({ stopId, limit });
 
-  const departureEvents = departures.stopEvents || [];
-  if (departureEvents === undefined || departureEvents.length === 0) {
+  const departureEvents = departures.stopEvents ?? [];
+  if (departureEvents.length === 0) {
     console.warn("no departure events found. no entries will be added to the database.");
   }
 
@@ -85,7 +85,7 @@ async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], pgClient: Co
     JSON.stringify(stop)
   ])
   );
-  const results = await Promise.allSettled(promises || []);
+  const results = await Promise.allSettled(promises);
   let successCount = 0;
   results.forEach(result => {
     if (result.status === "rejected") {

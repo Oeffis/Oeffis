@@ -9,6 +9,7 @@ interface PersistedTrip {
 }
 
 function parseFavoriteTrip(favorite: PersistedTrip): PersistedObject<CreateFavoriteTrip> | null {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (typeof favorite !== "object" || favorite === null) {
     return null;
   }
@@ -43,7 +44,7 @@ export function parsePersistedFavoriteTrips(persistedFavoriteTrips: string | nul
     return [];
   }
 
-  const parsedFromPersistence = JSON.parse(persistedFavoriteTrips);
+  const parsedFromPersistence = JSON.parse(persistedFavoriteTrips) as PersistedObject<CreateFavoriteTrip>;
   if (!Array.isArray(parsedFromPersistence)) {
     return [];
   }

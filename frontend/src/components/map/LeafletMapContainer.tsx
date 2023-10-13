@@ -7,14 +7,14 @@ import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocations
 import "./LeafletMapContainer.css";
 import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
 
-export type MapProps = {
+export interface MapProps {
   currentLocation: Location,
   origin?: Location,
   destination?: Location,
   locationIds: string[],
   showLines: boolean,
   onItemClicked?: (location: Location) => void
-};
+}
 
 const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
   const locations = useMultipleLocationsByIdOrNull(locationIds);
@@ -37,10 +37,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
     return bounds;
   }; */
 
-  const renderMarker = (): ReactElement[] => locations.map((location, index) => {
-    if (location === null) return <></>;
-    return <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />;
-  });
+  const renderMarker = (): ReactElement[] => locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
 
   const getPolygonPositions = getLocationsCoords;
 
@@ -56,7 +53,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
       />
       {/* <MapController bounds={getBounds()} /> */}
       {renderMarker()}
-      {currentLocation ? <CurrentLocationMapMarker currentLocation={currentLocation} /> : <></>}
+      {<CurrentLocationMapMarker currentLocation={currentLocation} />}
       {showLines
         ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
         : <></>}

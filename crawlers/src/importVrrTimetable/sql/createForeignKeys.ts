@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/require-await */
 import { TableSchema } from "importVrrTimetable/tableSchema";
 import { WithPgConnection } from "postgres/createPgPool";
 

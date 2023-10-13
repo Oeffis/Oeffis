@@ -11,11 +11,11 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
   useEffect(() => {
     const abortController = new AbortController();
 
-    if (locationId === null) return setLocation(null);
+    if (locationId === null) { setLocation(null); return; }
 
     const cachedLocation = locationCache.get(locationId);
     if (cachedLocation) {
-      return setLocation(cachedLocation);
+      setLocation(cachedLocation); return;
     }
 
     locationFinderApi
@@ -62,7 +62,7 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       error.cause && console.error(error.cause);
     }
 
-    return () => abortController.abort();
+    return () => { abortController.abort(); };
   }, [locationFinderApi, locationCache, locationId]);
 
   return location;

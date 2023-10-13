@@ -44,7 +44,7 @@ export class LocationFinderService {
       limit: query.limit
     });
 
-    return response.locations?.map(location => location.id) as string[] ?? [];
+    return response.locations?.map(location => location.id) as string[] | undefined ?? [];
   }
 
 }

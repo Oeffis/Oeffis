@@ -5,10 +5,10 @@ import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import { LocationIcon } from "./LocationIcon";
 
-export type LocationSearchListProps = {
+export interface LocationSearchListProps {
   locations: string[];
   onItemClicked: (location: Location) => void;
-};
+}
 
 export function LocationSearchList({ locations, onItemClicked }: LocationSearchListProps): JSX.Element {
   const items = locations.map((locationId) => (
@@ -22,10 +22,10 @@ export function LocationSearchList({ locations, onItemClicked }: LocationSearchL
   return <>{items}</>;
 }
 
-type LocationSearchListAsyncItemProps = {
+interface LocationSearchListAsyncItemProps {
   locationId: string;
   onItemClicked: (location: Location) => void;
-};
+}
 
 function LocationSearchListItem({ locationId, onItemClicked }: LocationSearchListAsyncItemProps): JSX.Element {
   const locationAsync = useLocationByIdOrNull(locationId);
@@ -43,10 +43,10 @@ function LocationSearchListItem({ locationId, onItemClicked }: LocationSearchLis
   </IonItem>;
 }
 
-type LocationSearchListItemProps = {
+interface LocationSearchListItemProps {
   location: Location;
   onItemClicked: (location: Location) => void;
-};
+}
 
 function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearchListItemProps): JSX.Element {
   const { favoriteLocations, addFavoriteLocation, removeFavoriteLocationById } = useFavoriteLocations();
@@ -58,7 +58,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
       <LocationIcon type={location.type ?? LocationTypeEnum.Unknown} /> {/* TODO #312 Revert to saver types. */}
       <IonLabel
         data-testid="locationName"
-        onClick={(): void => onItemClicked(location)}
+        onClick={(): void => { onItemClicked(location); }}
       >
         {location.name}
       </IonLabel>

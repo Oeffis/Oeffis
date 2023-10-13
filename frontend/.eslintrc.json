@@ -4,7 +4,8 @@
     "build/",
     "dist/",
     "public/",
-    "capacitor.config.ts"
+    "capacitor.config.ts",
+    "src/api/"
   ],
   "root": true,
   "env": {

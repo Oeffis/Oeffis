@@ -6,25 +6,25 @@ export type UseLocationSearchByNameResult = UseLocationSearchByNameSuccess
   | UseLocationSearchByNameEmpty
   | UseLocationSearchByNameOutdated;
 
-export type UseLocationSearchByNameError = {
+export interface UseLocationSearchByNameError {
   type: "error";
   error: Error;
-};
+}
 
-export type UseLocationSearchByNameSuccess = {
+export interface UseLocationSearchByNameSuccess {
   type: "success";
   searchResults: string[];
-};
+}
 
-export type UseLocationSearchByNameEmpty = {
+export interface UseLocationSearchByNameEmpty {
   type: "empty";
   searchResults: null;
-};
+}
 
-export type UseLocationSearchByNameOutdated = {
+export interface UseLocationSearchByNameOutdated {
   type: "outdated";
   searchResults: string[];
-};
+}
 
 export const useLocationIdSearchByName = (searchInput: string, limit?: number): UseLocationSearchByNameResult => {
   const locationFinderApi = useLocationFinderApi();
@@ -49,7 +49,7 @@ export const useLocationIdSearchByName = (searchInput: string, limit?: number): 
           }
           setSearchResultsOrError({ type: "success", searchResults });
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           if (abortController.signal.aborted) {
             return;
           }

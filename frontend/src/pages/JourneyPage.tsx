@@ -28,9 +28,6 @@ const JourneyPage: React.FC = () => {
 
     const locations: string[] = [];
 
-    if (currentLocation !== undefined) {
-      /* locations.push(currentLocation.id ?? ""); */
-    }
     if (origin !== undefined) {
       locations.push(origin.id ?? "");
     }

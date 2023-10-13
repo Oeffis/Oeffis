@@ -3,18 +3,18 @@ import { format } from "date-fns";
 import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
 import { Convert, TRIPSchema } from "./vendor/VrrApiTypes";
 
-export type QueryTripParameters = {
+export interface QueryTripParameters {
   originPointId: string;
   destinationPointId: string;
   viaPointId?: string;
 
   plannedTime?: Date;
   plannedTimeIs?: "departure" | "arrival";
-};
+}
 
-export type FindStopByNameParameters = {
+export interface FindStopByNameParameters {
   search: string;
-};
+}
 
 export class TripRequestClient extends VrrClientBase {
 

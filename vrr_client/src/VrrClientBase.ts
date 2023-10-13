@@ -1,9 +1,9 @@
 import fetch, { RequestInit } from "node-fetch";
-import { SystemMessage, SystemMessageType } from "./vendor/VrrApiTypes";
+import { Module, SystemMessage, SystemMessageType } from "./vendor/VrrApiTypes";
 
-export type BaseApiResponse = {
+export interface BaseApiResponse {
   systemMessages?: SystemMessage[];
-};
+}
 
 export type SchemaConverter<T extends BaseApiResponse> = (json: string) => T;
 
@@ -18,7 +18,7 @@ export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(
       return schemaConverter(json);
     } catch (e) {
       console.error("Ignoring error while parsing response", e);
-      return JSON.parse(json);
+      return JSON.parse(json) as T;
     }
   };
 }
@@ -77,7 +77,7 @@ export class VrrClientBase {
       // The API sometimes returns errors that are not really errors...
       if (
         message.type === SystemMessageType.Error &&
-        message.module === "BROKER" &&
+        message.module === Module.Broker &&
         message.code === -8011 &&
         message.text === ""
       ) {

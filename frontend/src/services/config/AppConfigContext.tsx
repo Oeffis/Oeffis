@@ -7,11 +7,12 @@ export const AppConfigContext = createContext<AppConfig | null>(null);
 
 async function fetcher<C>(url: string): Promise<C> {
   const res = await fetch(url);
-  if (!res.ok) throw new Error(res.body?.toString() || "Failed to fetch");
-  return res.json();
+  if (!res.ok) throw new Error(res.body?.toString() ?? "Failed to fetch");
+  return res.json() as Promise<C>;
 }
 
 export function AppConfigProvider(props: { children: React.ReactNode }): JSX.Element {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { data, error } = useSWR<AppConfig>("/config/config.json", fetcher);
   if (error) {
     return <div>Failed to load config</div>;

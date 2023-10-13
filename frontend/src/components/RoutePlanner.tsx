@@ -28,11 +28,11 @@ import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
-export type RoutePlannerProps = {
+export interface RoutePlannerProps {
   currentLocation: Location,
   setSelectedOriginLocation: (location: Location) => void
   setSelectedDestinationLocation: (location: Location) => void
-};
+}
 
 const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
@@ -105,13 +105,13 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           <IonButton
             fill="outline"
             strong={true}
-            onClick={(): void => setCustomDeparture(formatISO(currentTime))}
+            onClick={(): void => { setCustomDeparture(formatISO(currentTime)); }}
           >
             Now
           </IonButton>
           <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
           {/* Before datetime modal is being presented min departure time is updated to current time. */}
-          <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
+          <IonModal keepContentsMounted={true} onWillPresent={() => { updateMinDepartureTime(); }}>
             <IonDatetime
               name="date_time"
               id="datetime"
@@ -122,7 +122,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
               showDefaultButtons={true}
               data-testid={"datetime-input"}
               /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              onIonChange={e => setCustomDeparture(e.detail.value! as string)}
+              onIonChange={e => { setCustomDeparture(e.detail.value! as string); }}
             />
           </IonModal>
         </IonItem>
@@ -153,10 +153,10 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
         <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
         <IonButton expand="block" color="warning"
           disabled={!canCurrentBeFavorited()}
-          onClick={() => addToFavorites()}
+          onClick={() => { addToFavorites(); }}
         >Add To Favorites</IonButton>
         <IonButton expand="block" color="warning"
-          onClick={() => showFavorites()}
+          onClick={() => { showFavorites(); }}
         >Show Favorites</IonButton>
       </IonList>
       {
@@ -170,7 +170,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
 
       <IonModal
         isOpen={isFavoritesModalOpen}
-        onDidDismiss={() => setIsFavoritesModalOpen(false)}
+        onDidDismiss={() => { setIsFavoritesModalOpen(false); }}
       >
         <IonHeader>
           <IonToolbar>
@@ -178,7 +178,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} />
+          <FavoriteTripsComponent onTripSelected={trip => { setTrip(trip); }} />
         </IonContent>
       </IonModal>
     </>
@@ -202,7 +202,8 @@ export function TripOptionsDisplay(props: {
     && result.journeyResults
       .filter((journey) => journey.legs !== undefined)
       .map((journey): IJourney => {
-        const legs: Leg[] = journey.legs as Leg[];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const legs: Leg[] = journey.legs!;
 
         const lastLeg = legs[legs.length - 1];
         const firstLeg = legs[0];

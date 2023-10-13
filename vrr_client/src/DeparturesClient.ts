@@ -16,7 +16,7 @@ export class DeparturesClient extends VrrClientBase {
         type_dm: "any",
         mode: "direct",
         useRealtime: 1,
-        limit: query.limit || 100
+        limit: query.limit ?? 100
       },
       warpAsFailSafeSchemaConverter(Convert.toDMTTPSchema),
     );

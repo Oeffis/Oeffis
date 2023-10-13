@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/prefer-ts-expect-error */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createHash } from "crypto";
@@ -14,11 +20,11 @@ export type Connection = PoolClient & {
 };
 
 export type WithPgConnection = <T> (fn: (conn: Connection) => Promise<T>) => Promise<T>;
-export type CreatePgPoolResult = {
+export interface CreatePgPoolResult {
   withPgConnection: WithPgConnection;
   pool: Pool;
   closePgConnection: () => Promise<void>;
-};
+}
 
 let patched = false;
 // pg.types.setTypeParser(20, BigInt);

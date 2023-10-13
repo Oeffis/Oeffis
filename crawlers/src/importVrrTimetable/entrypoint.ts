@@ -4,12 +4,12 @@ import { createForeignKeys } from "./sql/createForeignKeys";
 import { setupTables } from "./sql/setupTables";
 import { TABLE_SCHEMAS, TableSchema } from "./tableSchema";
 
-export type ImportVrrTimetablesOptions = {
+export interface ImportVrrTimetablesOptions {
   withPgConnection: WithPgConnection,
   folder: string,
   concurrencyLimit: number,
   batchSize: number
-};
+}
 
 export async function importVrrTimetables(options: ImportVrrTimetablesOptions): Promise<void> {
   for (const tableSchema of TABLE_SCHEMAS) {
