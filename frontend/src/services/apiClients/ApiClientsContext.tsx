@@ -1,5 +1,4 @@
-
-import { createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { Configuration, JourneyApi, LocationFinderApi } from "../../api";
 import { useAppConfig } from "../config/AppConfigContext";
 

@@ -1,5 +1,6 @@
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import React from "react";
 import { Marker, Popup } from "react-leaflet";
 import greenBusIcon from "../../../src/images/bus-green-map-marker.svg";
 import redBusIcon from "../../../src/images/bus-red-map-marker.svg";
@@ -11,7 +12,7 @@ import markerShadow from "../../../src/images/marker-shadow.png";
 import greenPinIcon from "../../../src/images/pin-green-map-marker.svg";
 import redPinIcon from "../../../src/images/pin-red-map-marker.svg";
 import whitePinIcon from "../../../src/images/pin-white-map-marker.svg";
-import currentPostionIcon from "../../../src/images/position-map-marker.svg";
+import currentPositionIcon from "../../../src/images/position-map-marker.svg";
 
 import { Location, LocationTypeEnum } from "../../api";
 
@@ -24,20 +25,20 @@ export interface MarkerProps {
 
 const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps): JSX.Element => {
 
-  const getOriginIcon = (type: LocationTypeEnum | undefined): string => {
-    let icon: string = currentPostionIcon;
+  const getOriginIcon = (type: LocationTypeEnum): string => {
+    let icon: string = currentPositionIcon;
 
     if (type === LocationTypeEnum.Address) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Crossing) {
       icon = whiteLocationIcon;
     }
     if (type === LocationTypeEnum.Gis) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Locality) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Platform) {
       icon = whiteBusIcon;
@@ -49,7 +50,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       icon = whitePinIcon;
     }
     if (type === LocationTypeEnum.Sharing) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Stop) {
       icon = whiteBusIcon;
@@ -58,30 +59,30 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       icon = whiteLocationIcon;
     }
     if (type === LocationTypeEnum.Suburb) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     // not present in vrr spec
     if (type === LocationTypeEnum.Singlehouse) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
 
     return icon;
   };
 
-  const getDestinationIcon = (type: LocationTypeEnum | undefined): string => {
-    let icon: string = currentPostionIcon;
+  const getDestinationIcon = (type: LocationTypeEnum): string => {
+    let icon: string = currentPositionIcon;
 
     if (type === LocationTypeEnum.Address) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Crossing) {
       icon = redLocationIcon;
     }
     if (type === LocationTypeEnum.Gis) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Locality) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Platform) {
       icon = redBusIcon;
@@ -93,7 +94,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       icon = redPinIcon;
     }
     if (type === LocationTypeEnum.Sharing) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Stop) {
       icon = redBusIcon;
@@ -102,30 +103,30 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       icon = redLocationIcon;
     }
     if (type === LocationTypeEnum.Suburb) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     // not present in vrr spec
     if (type === LocationTypeEnum.Singlehouse) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
 
     return icon;
   };
 
-  const getLocationIcon = (type: LocationTypeEnum | undefined): string => {
-    let icon: string = currentPostionIcon;
+  const getLocationIcon = (type: LocationTypeEnum): string => {
+    let icon: string = currentPositionIcon;
 
     if (type === LocationTypeEnum.Address) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Crossing) {
       icon = greenLocationIcon;
     }
     if (type === LocationTypeEnum.Gis) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Locality) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Platform) {
       icon = greenBusIcon;
@@ -137,7 +138,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       icon = greenPinIcon;
     }
     if (type === LocationTypeEnum.Sharing) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     if (type === LocationTypeEnum.Stop) {
       icon = greenBusIcon;
@@ -146,17 +147,17 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       icon = greenLocationIcon;
     }
     if (type === LocationTypeEnum.Suburb) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
     // not present in vrr spec
     if (type === LocationTypeEnum.Singlehouse) {
-      icon = currentPostionIcon;
+      icon = currentPositionIcon;
     }
 
     return icon;
   };
 
-  const getDesignation = (type: LocationTypeEnum | undefined): string => {
+  const getDesignation = (type: LocationTypeEnum): string => {
 
     let designation = "";
 
@@ -217,9 +218,10 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={originLocationIcon}>
+        <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+                icon={originLocationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
+            <p className="popupHeadline">{location.name.split(",")[0]}</p><br/>
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>Start</i>
@@ -232,7 +234,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       );
     } else if (destination === location) {
 
-      const destinatinoLocationIcon = new Icon({
+      const destinationLocationIcon = new Icon({
         iconUrl: getDestinationIcon(location.type),
         iconSize: [25, 41],
         iconAnchor: [12.5, 38],
@@ -242,9 +244,10 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={destinatinoLocationIcon}>
+        <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+                icon={destinationLocationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
+            <p className="popupHeadline">{location.name.split(",")[0]}</p><br/>
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>Ziel</i>
@@ -267,9 +270,10 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       });
 
       mapMarker = (
-        <Marker position={[location.details.latitude ?? 0, location.details.longitude ?? 0]} icon={locationIcon}>
+        <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+                icon={locationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name?.split(",")[0]}</p><br />
+            <p className="popupHeadline">{location.name.split(",")[0]}</p><br/>
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>{getDesignation(location.type)}</i>
@@ -297,7 +301,7 @@ interface CurrentLocationMapMarkerProps {
 export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> = ({ currentLocation }) => {
 
   const currentLocationIcon = new Icon({
-    iconUrl: currentPostionIcon,
+    iconUrl: currentPositionIcon,
     iconSize: [20, 20],
     iconAnchor: [0, 0],
     shadowUrl: markerShadow,
@@ -306,7 +310,8 @@ export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> =
   });
 
   return (
-    <Marker position={[currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]} icon={currentLocationIcon}>
+    <Marker position={[currentLocation.details.coordinates.latitude, currentLocation.details.coordinates.longitude]}
+            icon={currentLocationIcon}>
       <Popup className="popup">
         <p className="popupHeadline">{currentLocation.name}</p>
       </Popup>
