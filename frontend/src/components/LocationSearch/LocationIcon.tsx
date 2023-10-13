@@ -1,8 +1,9 @@
 import { IonIcon } from "@ionic/react";
 import { bus, business, car, compass, help, home, location, pin, shareSocial } from "ionicons/icons";
+import { LocationTypeEnum } from "../../api";
 
 // See in vrr_client: LocationType
-const ICON_MAP = {
+const ICON_MAP: Record<LocationTypeEnum, { icon: string; text: string }> = {
   "address": { icon: home, text: "Address" },
   "crossing": { icon: location, text: "Crossing" },
   "gis": { icon: compass, text: "Geo Information System" },
@@ -17,7 +18,8 @@ const ICON_MAP = {
   "suburb": { icon: business, text: "Suburb" },
 
   // not present in vrr spec
-  "singlehouse": { icon: home, text: "Single House" }
+  "singlehouse": { icon: home, text: "Single House" },
+  "unknown": { icon: help, text: "Unknown" }
 };
 
 export interface LocationIconProps {
@@ -25,8 +27,7 @@ export interface LocationIconProps {
 }
 
 export function LocationIcon({ type }: LocationIconProps): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  const iconInfo = ICON_MAP[type] || { icon: help, text: "Unknown" };
+  const iconInfo = ICON_MAP[type];
 
   return (
     <>
