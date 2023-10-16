@@ -136,8 +136,8 @@ const JourneysPage: React.FC = () => {
           <IonList>
             {/* Input for query string. */}
             <IonItem>
-              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-              <IonInput onIonInput={e => { setSearchLocationsQuery(e.detail.value!); }}
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+              <IonInput onIonInput={e => setSearchLocationsQuery(e.detail.value!)}
                 label="Location query"
                 placeholder="Enter location query." data-testid="stopQuery" />
               <IonButton onClick={() => void searchLocations()}
@@ -160,13 +160,13 @@ const JourneysPage: React.FC = () => {
             {/* Input for start location. */}
             <IonLabel>START</IonLabel>
             <IonItem>
-              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-              <IonInput onIonChange={e => { setPlanJourneyStart(e.detail.value!); }}
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion*/}
+              <IonInput onIonChange={e => setPlanJourneyStart(e.detail.value!)}
                 disabled={useLocationAsStart}
                 label="Start (id)"
                 placeholder="Enter start location (id)." />
-              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-              <IonCheckbox onIonChange={e => { setUseLocationAsStart(e.detail.checked); }}
+
+              <IonCheckbox onIonChange={e => setUseLocationAsStart(e.detail.checked)}
                 disabled={useLocationAsDestination}
                 checked={useLocationAsStart}
                 justify="end">USE LOCATION</IonCheckbox>
@@ -175,13 +175,12 @@ const JourneysPage: React.FC = () => {
             {/* Input for destination location. */}
             <IonLabel>DESTINATION</IonLabel>
             <IonItem>
-              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-              <IonInput onIonChange={e => { setPlanJourneyDestination(e.detail.value!); }}
+              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+              <IonInput onIonChange={e => setPlanJourneyDestination(e.detail.value!)}
                 disabled={useLocationAsDestination}
                 label="Destination (id)"
                 placeholder="Enter destination location (id)." />
-              {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/explicit-function-return-type */}
-              <IonCheckbox onIonChange={e => { setUseLocationAsDestination(e.detail.checked); }}
+              <IonCheckbox onIonChange={e => setUseLocationAsDestination(e.detail.checked)}
                 disabled={useLocationAsStart}
                 checked={useLocationAsDestination}
                 justify="end">USE LOCATION</IonCheckbox>

@@ -57,7 +57,7 @@ const FavoritesPage: React.FC = () => {
 
         <SwiperReact
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-          onSlideChange={(swiper: Swiper) => { setActiveSlideIndex(swiper.activeIndex); }}
+          onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           //onSwiper={(swiper) => console.log(swiper)}
           pagination={{ clickable: true }}
           scrollbar={{ draggable: false }}
@@ -68,7 +68,7 @@ const FavoritesPage: React.FC = () => {
             Stations
           </SwiperSlide>
           <SwiperSlide>
-            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { console.log(trip); }} />
+            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => console.log(trip)} />
           </SwiperSlide>
           <SwiperSlide>
             Journeys

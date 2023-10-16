@@ -225,7 +225,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
               <i>Start</i>
             </p>
             {onItemClicked !== undefined
-              ? <p className="selectLocation" onClick={() => { onItemClicked(location); }}>Select</p>
+              ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Select</p>
               : <></>}
           </Popup>
         </Marker>
@@ -250,7 +250,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
               <i>Ziel</i>
             </p>
             {onItemClicked !== undefined
-              ? <p className="selectLocation" onClick={() => { onItemClicked(location); }}>Select</p>
+              ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Select</p>
               : <></>}
           </Popup>
         </Marker>
@@ -275,7 +275,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
               <i>{getDesignation(location.type)}</i>
             </p>
             {onItemClicked !== undefined
-              ? <p className="selectLocation" onClick={() => { onItemClicked(location); }}>Auswählen</p>
+              ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Auswählen</p>
               : <></>}
           </Popup>
         </Marker>

@@ -66,7 +66,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
-        onClick={(): void => { setModalOpen(true); }}
+        onClick={() => setModalOpen(true)}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
@@ -81,7 +81,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             <IonTitle> Search for {props.inputLabel}</IonTitle>
             <IonButtons slot="end">
               <IonButton
-                onClick={() => { showMap ? setShowMap(false) : setShowMap(true); }}
+                onClick={() => showMap ? setShowMap(false) : setShowMap(true)}
                 disabled={isMapBtnDisabeld}
               >
                 Map
@@ -96,13 +96,13 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           </IonToolbar>
           <IonSearchbar
             value={searchInput}
-            onInput={(e) => { setSearchInput(e.currentTarget.value ?? ""); }}
+            onInput={(e) => setSearchInput(e.currentTarget.value ?? "")}
             type="text"
             animated={true}
             placeholder={"Enter " + props.inputLabel}
             data-testid={"location-search-input"}
             autocomplete="street-address"
-            onIonClear={() => { setSearchInput(""); }}
+            onIonClear={() => setSearchInput("")}
           />
           {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>

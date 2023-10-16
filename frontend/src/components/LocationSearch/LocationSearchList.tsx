@@ -58,7 +58,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
       <LocationIcon type={location.type ?? LocationTypeEnum.Unknown} /> {/* TODO #312 Revert to saver types. */}
       <IonLabel
         data-testid="locationName"
-        onClick={(): void => { onItemClicked(location); }}
+        onClick={() => onItemClicked(location)}
       >
         {location.name}
       </IonLabel>
@@ -66,7 +66,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
         ? <IonIcon
           icon={star}
           color="warning"
-          onClick={(): void => void removeFavoriteLocationById(location.id ?? "")} /* TODO #312 Revert to saver types. */
+          onClick={() => removeFavoriteLocationById(location.id ?? "")} /* TODO #312 Revert to saver types. */
           title="Remove from favorites" />
         : <IonIcon
           icon={starOutline}
