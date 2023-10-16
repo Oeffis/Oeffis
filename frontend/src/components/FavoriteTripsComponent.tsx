@@ -51,7 +51,7 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
 
   return <IonItem
     key={props.identifier}
-    onClick={() => { props.onTripSelected(props.trip); }}
+    onClick={() => props.onTripSelected(props.trip)}
   >
     {
       isReady ?
