@@ -11,6 +11,7 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
   const csvPath = join(folder, tableSchema.csv);
   const rs = createReadStream(csvPath);
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { promise, estimateTimeLeftInSeconds } = importCsvViaStreamingConcurrencyLimitedParser<Record<string, string>>({
     stream: rs,
     chunkCallback: async (data, fields) => {
@@ -28,9 +29,11 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
   let finished = false;
   await Promise.race([
     promise,
-    new Promise<void>(async (resolve) => {
+    (async () => {
+      // eslint-disable-next-line no-unmodified-loop-condition
       while (!finished) {
-        await new Promise((resolve) => setTimeout(resolve, 10_000));
+        await new Promise((resolve) => void setTimeout(resolve, 10_000));
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (finished) {
           break;
         }
@@ -43,7 +46,6 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
         const estimatedFinishDate = new Date(timeLeftInSecounds * 1000 + new Date().getTime());
         console.log(`Estimated time left for ${tableSchema.name}: ${formatDistanceToNow(estimatedFinishDate, { includeSeconds: true })}. ETA ${estimatedFinishDate.toLocaleString()}`);
       }
-      resolve();
     })
   ]);
 
@@ -52,10 +54,10 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
   rs.close();
 }
 
-function convertObjIntoPositionalArray(fields: Array<string>, obj: Record<string, string>): Array<string> {
+function convertObjIntoPositionalArray(fields: string[], obj: Record<string, string>): string[] {
   return fields.map((field) => obj[field]);
 }
 
-function mapEmptyStringsToNull(fields: Array<string>): Array<string | null> {
+function mapEmptyStringsToNull(fields: string[]): (string | null)[] {
   return fields.map((value) => value === "" ? null : value);
 }

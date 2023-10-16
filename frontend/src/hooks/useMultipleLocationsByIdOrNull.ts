@@ -23,7 +23,7 @@ export function useMultipleLocationsByIdOrNull(locationIds: string[]): Location[
         )
         .then(
           (result) => processLocationResult(locationId, result),
-          (error) => processLocationFailure(locationId, error)
+          (error: Error) => processLocationFailure(locationId, error)
         );
     });
     Promise
@@ -62,7 +62,7 @@ export function useMultipleLocationsByIdOrNull(locationIds: string[]): Location[
       throw new Error(`Failed to find location with id ${locationId}`, { cause: error });
     }
 
-    return () => abortController.abort();
+    return () => { abortController.abort(); };
   }, [locationFinderApi, locationCache, locationIds]);
 
   return locations;

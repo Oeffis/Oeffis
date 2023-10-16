@@ -1,9 +1,8 @@
-import { LocationTypeEnum } from "../../api";
 import { PersistedObject } from "../persistence/generatePersistedObjectStorage";
 import { CreateFavoriteLocation } from "./FavoritesContext";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseFavoriteLocation(favorite: any): PersistedObject<CreateFavoriteLocation> | null {
+function parseFavoriteLocation(favorite: PersistedObject<CreateFavoriteLocation>): PersistedObject<CreateFavoriteLocation> | null {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (typeof favorite !== "object" || favorite === null) {
     return null;
   }
@@ -21,19 +20,6 @@ function parseFavoriteLocation(favorite: any): PersistedObject<CreateFavoriteLoc
     return null;
   }
 
-  if (typeof favorite.name !== "string") {
-    return null;
-  }
-
-  if (typeof favorite.type !== "string") {
-    return null;
-  }
-
-  const locationType = Object.entries(LocationTypeEnum).some(([, value]) => value === favorite.type) ? favorite.type : undefined;
-  if (typeof locationType === "undefined") {
-    return null;
-  }
-
   return {
     createdAt,
     locationId: favorite.locationId,
@@ -46,7 +32,7 @@ export function parsePersistedFavoriteLocations(persistedFavoriteTrips: string |
     return [];
   }
 
-  const parsedFromPersistence = JSON.parse(persistedFavoriteTrips);
+  const parsedFromPersistence = JSON.parse(persistedFavoriteTrips) as PersistedObject<CreateFavoriteLocation>;
   if (!Array.isArray(parsedFromPersistence)) {
     return [];
   }

@@ -1,14 +1,14 @@
 import { ReadStream, statSync } from "fs";
 import { ParseResult, Parser, parse } from "papaparse";
 
-export type ChunkCallback<T> = (data: Array<T>, fields: Array<string>) => Promise<void>;
+export type ChunkCallback<T> = (data: T[], fields: string[]) => Promise<void>;
 
-export type ImportCsvViaStreamingConcurrencyLimitedParserOptions<T> = {
+export interface ImportCsvViaStreamingConcurrencyLimitedParserOptions<T> {
   concurrencyLimit: number;
   chunkSize: number;
   chunkCallback: ChunkCallback<T>;
   stream: ReadStream;
-};
+}
 
 /**
  * Parses a CSV file via streaming and calls the chunk callback for each chunk.
@@ -99,12 +99,13 @@ export function importCsvViaStreamingConcurrencyLimitedParser<T>({ concurrencyLi
         incrementConcurrency(parser);
 
         const bytesReadBeforeCallbackCurrent = result.meta.cursor;
-        chunkCallback(result.data as unknown as Array<T>, result.meta.fields as Array<string>)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        chunkCallback(result.data as unknown as T[], result.meta.fields!)
           .then(() => {
             decrementConcurrency(parser);
             currentCallbackBytesRead = bytesReadBeforeCallbackCurrent;
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             decrementConcurrency(parser);
             rejectOnError(parser, err);
           });

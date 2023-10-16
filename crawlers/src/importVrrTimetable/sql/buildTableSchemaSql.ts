@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { createReadStream } from "fs";
 import { parse } from "papaparse";
 import { join } from "path";

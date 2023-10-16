@@ -15,12 +15,12 @@ import currentPostionIcon from "../../../src/images/position-map-marker.svg";
 
 import { Location, LocationTypeEnum } from "../../api";
 
-export type MarkerProps = {
+export interface MarkerProps {
   origin?: Location,
   destination?: Location,
   location: Location,
   onItemClicked?: (location: Location) => void
-};
+}
 
 const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps): JSX.Element => {
 
@@ -156,7 +156,6 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     return icon;
   };
 
-
   const getDesignation = (type: LocationTypeEnum | undefined): string => {
 
     let designation = "";
@@ -201,7 +200,6 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
     return designation;
   };
-
 
   const createMarker = (): JSX.Element => {
 
@@ -292,14 +290,11 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
 export default MapMarker;
 
-
-
 interface CurrentLocationMapMarkerProps {
   currentLocation: Location
 }
 
 export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> = ({ currentLocation }) => {
-
 
   const currentLocationIcon = new Icon({
     iconUrl: currentPostionIcon,
@@ -309,7 +304,6 @@ export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> =
     shadowAnchor: [0, 20],
     popupAnchor: [10, 0]
   });
-
 
   return (
     <Marker position={[currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]} icon={currentLocationIcon}>

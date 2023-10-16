@@ -2,13 +2,13 @@
 import { VrrClientBase, warpAsFailSafeSchemaConverter } from "./VrrClientBase";
 import { Convert, SERVINGLINESSchema } from "./vendor/VrrApiTypes";
 
-export type FindServingLinesByStopParameters = {
+export interface FindServingLinesByStopParameters {
   pointId: string;
-};
+}
 
-export type FindServingLinesByLineName = {
+export interface FindServingLinesByLineName {
   search: string;
-};
+}
 
 export class ServingLinesClient extends VrrClientBase {
   public async findServingLinesByStop(

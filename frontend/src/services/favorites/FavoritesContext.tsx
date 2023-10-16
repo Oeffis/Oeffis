@@ -5,14 +5,14 @@ import { parsePersistedFavoriteTrips, stringifyFavoriteTrips } from "./persisten
 const FAVORITE_TRIPS_KEY = "favorite_trips";
 const FAVORITE_STOPS_KEY = "favorite_stops";
 
-export type CreateFavoriteTrip = {
+export interface CreateFavoriteTrip {
   originId: string;
   destinationId: string;
-};
+}
 
-export type CreateFavoriteLocation = {
+export interface CreateFavoriteLocation {
   locationId: string;
-};
+}
 
 const favoriteTrips = generatePersistedObjectStorage<CreateFavoriteTrip, "favoriteTrip">(
   "favoriteTrip",

@@ -1,19 +1,19 @@
 
-export type TableSchema = {
+export interface TableSchema {
   name: string;
   csv: string;
-  foreignKeys: Array<ForeignKey>;
+  foreignKeys: ForeignKey[];
   primaryKey?: string;
   determineFieldType?: (field: string) => string;
-};
+}
 
-export type ForeignKey = {
+export interface ForeignKey {
   column: string;
   referencedColumn: string;
   referencedTable: string;
-};
+}
 
-function asNullableField(fields: Array<string>): TableSchema["determineFieldType"] {
+function asNullableField(fields: string[]): TableSchema["determineFieldType"] {
   return (field) => {
     if (fields.includes(field)) {
       return "TEXT";

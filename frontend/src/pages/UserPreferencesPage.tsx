@@ -2,7 +2,6 @@ import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonT
 import logo from "../../public/images/train_image.png";
 import "./UserPreferencesPage.css";
 
-
 const UserPreferencesPage: React.FC = () => (
   <IonPage id="main-content">
     <IonHeader>

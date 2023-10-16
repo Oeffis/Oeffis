@@ -28,17 +28,16 @@ import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
-export type RoutePlannerProps = {
+export interface RoutePlannerProps {
   currentLocation: Location,
   setSelectedOriginLocation: (location: Location) => void
   setSelectedDestinationLocation: (location: Location) => void
-};
+}
 
 const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
@@ -106,7 +105,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           <IonButton
             fill="outline"
             strong={true}
-            onClick={(): void => setCustomDeparture(formatISO(currentTime))}
+            onClick={() => setCustomDeparture(formatISO(currentTime))}
           >
             Now
           </IonButton>
@@ -203,7 +202,8 @@ export function TripOptionsDisplay(props: {
     && result.journeyResults
       .filter((journey) => journey.legs !== undefined)
       .map((journey): IJourney => {
-        const legs: Leg[] = journey.legs as Leg[];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const legs: Leg[] = journey.legs!;
 
         const lastLeg = legs[legs.length - 1];
         const firstLeg = legs[0];

@@ -34,7 +34,7 @@ export class VrrJourneysWrapperService {
   }
 
   wrap(vrrJourneys: VrrJourney[]): Journey[] {
-    return vrrJourneys?.map((journey) => this.wrapJourneys(journey));
+    return vrrJourneys.map((journey) => this.wrapJourneys(journey));
   }
 
   private wrapTransportationTrips(vrrTransportationTrips: (TransportationTrip[] | undefined)): (Trip[] | undefined) {
@@ -56,7 +56,7 @@ export class VrrJourneysWrapperService {
     return vrrTransportation !== undefined
       ? {
         name: vrrTransportation.name,
-        trips: this.wrapTransportationTrips(vrrTransportation.trips) || []
+        trips: this.wrapTransportationTrips(vrrTransportation.trips) ?? []
       }
       : undefined;
   }
@@ -99,11 +99,12 @@ export class VrrJourneysWrapperService {
 
     return infos
       .filter(info => info.content !== undefined)
-      .map(info => new LegInfo(info.content as string));
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .map(info => new LegInfo(info.content!));
   }
 
   private wrapLegs(vrrLeg: VrrLeg): Leg {
-    const realTimeTripStatus = vrrLeg?.realtimeStatus
+    const realTimeTripStatus = vrrLeg.realtimeStatus
       ?.map((status) => this.apiService.mapRealTimeTripStatus(status))
       .filter((status) => status !== undefined) as LegRealtimeTripStatus[];
 
@@ -111,8 +112,8 @@ export class VrrJourneysWrapperService {
       distance: vrrLeg.distance,
       duration: vrrLeg.duration,
       realtimeTripStatus: realTimeTripStatus,
-      infos: this.wrapLegInfos(vrrLeg.infos) || [],
-      hints: this.wrapLegInfos(vrrLeg.hints) || []
+      infos: this.wrapLegInfos(vrrLeg.infos) ?? [],
+      hints: this.wrapLegInfos(vrrLeg.hints) ?? []
     };
 
     return {

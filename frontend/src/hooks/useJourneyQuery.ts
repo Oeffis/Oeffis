@@ -3,20 +3,20 @@ import { Journey, Location } from "../api";
 import { useJourneyApi } from "../services/apiClients/ApiClientsContext";
 
 export type UseJourneyQueryResult = UseJourneyQuerySuccess | UseJourneyQueryError | UseJourneyQueryPending;
-export type UseJourneyQueryError = {
+export interface UseJourneyQueryError {
   type: "error";
   error: Error;
-};
+}
 
-export type UseJourneyQuerySuccess = {
+export interface UseJourneyQuerySuccess {
   type: "success";
   journeyResults: Journey[];
-};
+}
 
-export type UseJourneyQueryPending = {
+export interface UseJourneyQueryPending {
   type: "pending";
   journeyResults: null;
-};
+}
 
 export const useJourneyQuery = (
   origin: Location,
@@ -51,7 +51,7 @@ export const useJourneyQuery = (
           .then((journeyResults) => {
             setJourneyResultsOrError({ type: "success", journeyResults });
           })
-          .catch((error) => {
+          .catch((error: Error) => {
             setJourneyResultsOrError({ type: "error", error });
           });
 

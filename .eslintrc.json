@@ -10,24 +10,32 @@
     "import"
   ],
   "extends": [
-    "plugin:@typescript-eslint/recommended"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked"
   ],
   "rules": {
-    "arrow-body-style": [
-      "error",
-      "as-needed"
-    ],
-    "no-debugger": 2,
-    "no-console": 0,
-    "no-empty": "error",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
         "allowExpressions": true
       }
     ],
+    "@typescript-eslint/no-confusing-void-expression": [
+      "warn",
+      {
+        "ignoreArrowShorthand": true,
+        "ignoreVoidOperator": true
+      }
+    ],
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-extraneous-class": [
+      "error",
+      {
+        "allowEmpty": true
+      }
+    ],
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -59,8 +67,53 @@
       }
     ],
     "@typescript-eslint/semi": "error",
+    "@typescript-eslint/unbound-method": [
+      "error",
+      {
+        "ignoreStatic": true
+      }
+    ],
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
     "eqeqeq": "warn",
+    "indent": "off",
+    "no-console": 0,
+    "no-constant-binary-expression": "warn",
+    "no-constructor-return": "warn",
+    "no-debugger": 2,
+    "no-duplicate-imports": "warn",
+    "no-empty": "error",
+    "no-multiple-empty-lines": [
+      "warn",
+      {
+        "max": 1
+      }
+    ],
+    "no-new-native-nonconstructor": "warn",
+    "no-promise-executor-return": [
+      "warn",
+      {
+        "allowVoid": true
+      }
+    ],
+    "no-self-compare": "error",
+    "no-template-curly-in-string": "error",
     "no-throw-literal": "warn",
+    "no-unmodified-loop-condition": "error",
+    "no-unreachable-loop": "error",
+    "no-unused-private-class-members": "error",
+    "require-atomic-updates": [
+      "error",
+      {
+        "allowProperties": true
+      }
+    ],
     "prefer-const": "warn",
     "semi": "off",
     "quotes": [
@@ -69,11 +122,6 @@
       {
         "allowTemplateLiterals": true
       }
-    ],
-    "indent": "off",
-    "comma-dangle": [
-      "error",
-      "never"
     ]
   }
 }

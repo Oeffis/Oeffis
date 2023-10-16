@@ -19,13 +19,13 @@ import { useFavoriteLocations } from "../../services/favorites/FavoritesContext"
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
-export type LocationSearchInputProps = {
+export interface LocationSearchInputProps {
   currentLocation: Location,
   onSelectedLocationChanged: (location: Location) => void;
   selectedLocation: Location | null;
   inputLabel: string;
   prefixDataTestId?: string;
-};
+}
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
   const LOCATIONS_LIMIT = 20;
@@ -66,7 +66,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
-        onClick={(): void => { setModalOpen(true); }}
+        onClick={() => setModalOpen(true)}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
@@ -81,7 +81,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             <IonTitle> Search for {props.inputLabel}</IonTitle>
             <IonButtons slot="end">
               <IonButton
-                onClick={() => (showMap ? setShowMap(false) : setShowMap(true))}
+                onClick={() => showMap ? setShowMap(false) : setShowMap(true)}
                 disabled={isMapBtnDisabeld}
               >
                 Map
@@ -96,7 +96,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           </IonToolbar>
           <IonSearchbar
             value={searchInput}
-            onInput={(e) => setSearchInput(e.currentTarget.value as string ?? "")}
+            onInput={(e) => setSearchInput(e.currentTarget.value ?? "")}
             type="text"
             animated={true}
             placeholder={"Enter " + props.inputLabel}

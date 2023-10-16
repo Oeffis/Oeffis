@@ -19,6 +19,7 @@ export function PersistenceProvider(props: PropsWithChildren): JSX.Element {
 export function usePersistence(): PersistenceService {
   const persistence = useContext(PersistenceContext);
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!persistence) {
     throw new Error("PersistenceContext not found");
   }

@@ -5,7 +5,8 @@
 import "@testing-library/jest-dom/extend-expect";
 
 // Mock matchmedia
-window.matchMedia = window.matchMedia || function (): MediaQueryList {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+window.matchMedia = window.matchMedia ?? function (): MediaQueryList {
   return {
     matches: false,
     addListener: function (): void {
@@ -19,7 +20,7 @@ window.matchMedia = window.matchMedia || function (): MediaQueryList {
 
 // Disable rendering of certain components which have issues running in jsdom
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+// @ts-expect-error
 window.Ionic = {
   config: {
     _testing: true
