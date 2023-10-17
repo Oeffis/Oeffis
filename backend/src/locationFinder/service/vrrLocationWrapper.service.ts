@@ -19,8 +19,7 @@ export class VrrLocationWrapperService {
     return vrrLocations
       .map(vrrLocation => this.wrapLocation(vrrLocation))
       // Removing all "undefined" entries.
-      .filter(location => location !== undefined)
-      .map(location => location as Location);
+      .filter(location => location !== undefined) as Location[];
   }
 
   public wrapLocation(vrrLocation: VrrLocation | undefined): (Location | undefined) {
@@ -37,13 +36,13 @@ export class VrrLocationWrapperService {
   }
 
   public wrapLocationDetails(vrrLocation: VrrLocation): LocationDetails {
-    return <LocationDetails>{
+    return {
       shortName: vrrLocation.disassembledName,
       matchQuality: vrrLocation.matchQuality,
       parent: this.wrapLocation(vrrLocation.parent),
-      latitude: (vrrLocation.coord?.[0] as number) ?? undefined,
-      longitude: (vrrLocation.coord?.[1] as number) ?? undefined
-    };
+      latitude: (vrrLocation.coord?.[0]) ?? undefined,
+      longitude: (vrrLocation.coord?.[1]) ?? undefined
+    } as LocationDetails;
   }
 
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Location } from "../api";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 export type UseLocationSearchByNameResult = UseLocationSearchByNameSuccess
@@ -7,27 +6,27 @@ export type UseLocationSearchByNameResult = UseLocationSearchByNameSuccess
   | UseLocationSearchByNameEmpty
   | UseLocationSearchByNameOutdated;
 
-export type UseLocationSearchByNameError = {
+export interface UseLocationSearchByNameError {
   type: "error";
   error: Error;
-};
+}
 
-export type UseLocationSearchByNameSuccess = {
+export interface UseLocationSearchByNameSuccess {
   type: "success";
-  searchResults: Location[];
-};
+  searchResults: string[];
+}
 
-export type UseLocationSearchByNameEmpty = {
+export interface UseLocationSearchByNameEmpty {
   type: "empty";
   searchResults: null;
-};
+}
 
-export type UseLocationSearchByNameOutdated = {
+export interface UseLocationSearchByNameOutdated {
   type: "outdated";
-  searchResults: Location[];
-};
+  searchResults: string[];
+}
 
-export const useLocationSearchByName = (searchInput: string): UseLocationSearchByNameResult => {
+export const useLocationIdSearchByName = (searchInput: string, limit?: number): UseLocationSearchByNameResult => {
   const locationFinderApi = useLocationFinderApi();
   const [searchResultsOrError, setSearchResultsOrError] = useState<UseLocationSearchByNameResult>(({ type: "empty", searchResults: null }));
 
@@ -42,7 +41,7 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
       setSearchResultsOrError({ type: "outdated", searchResults: previousSearchResultLocations });
 
       const abortController = new AbortController();
-      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationsByName({ name: searchInput }, { signal: abortController.signal });
+      const pendingRequest = locationFinderApi.locationFinderControllerFindLocationIdsByName({ name: searchInput, limit }, { signal: abortController.signal });
       pendingRequest
         .then((searchResults) => {
           if (abortController.signal.aborted) {
@@ -50,7 +49,7 @@ export const useLocationSearchByName = (searchInput: string): UseLocationSearchB
           }
           setSearchResultsOrError({ type: "success", searchResults });
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           if (abortController.signal.aborted) {
             return;
           }

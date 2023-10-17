@@ -1,0 +1,48 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "tripRequest",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo",
+			"version": "10.2.8.6"
+		},
+		"version": {
+			"type": "string",
+			"version": "10.2.2.48"
+		},
+		"systemMessages": {
+			"type": "array",
+			"items": {
+				"$ref": "./Definitions.json#/definitions/systemMessage"
+			},
+			"version": "10.2.2.48"
+		},
+		"error": {
+			"$ref": "Definitions.json#/definitions/error",
+			"version": "10.2.2.48"
+		},
+		"taxiOperators": {
+			"type": "array",
+			"items": {
+				"$ref": "Definitions.json#/definitions/taxiOperator"
+			},
+			"additionalProperties": false,
+			"version": "10.4.15.5"
+		},
+		"journeys": {
+			"type": "array",
+			"items": {
+				"$ref": "Definitions.json#/definitions/journey"
+			},
+			"additionalProperties": false,
+			"version": "10.2.2.48"
+		},
+		"properties": {}
+	},
+	"required": [
+		"version"
+	],
+	"additionalProperties": false,
+	"version": "10.2.2.48"
+}

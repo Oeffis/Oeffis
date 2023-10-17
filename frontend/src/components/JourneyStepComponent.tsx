@@ -5,7 +5,6 @@ import "./JourneyStepComponent.css";
 
 const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
 
-
 export interface StationProps { step: IJourneyStep, first?: boolean, last?: boolean }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => (
@@ -30,6 +29,5 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => (
     </div>
   </div>
 );
-
 
 export default JourneyStepComponent;

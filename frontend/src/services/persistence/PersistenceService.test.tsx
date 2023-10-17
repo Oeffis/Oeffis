@@ -14,20 +14,20 @@ test("returns null if key does not exist", () => {
 
 test("fails if key is an integer", () => {
   const service = new PersistenceService();
-  expect(() => service.set(1 as any, "test")).toThrowError();
+  expect(() => { service.set(1 as unknown as string, "test"); }).toThrowError();
 });
 
 test("fails if value is an integer", () => {
   const service = new PersistenceService();
-  expect(() => service.set("test", 1 as any)).toThrowError();
+  expect(() => { service.set("test", 1 as unknown as string); }).toThrowError();
 });
 
 test("fails if key is an object", () => {
   const service = new PersistenceService();
-  expect(() => service.set({} as any, "test")).toThrowError();
+  expect(() => { service.set({} as unknown as string, "test"); }).toThrowError();
 });
 
 test("fails if value is an object", () => {
   const service = new PersistenceService();
-  expect(() => service.set("test", {} as any)).toThrowError();
+  expect(() => { service.set("test", {} as unknown as string); }).toThrowError();
 });

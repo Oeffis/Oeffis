@@ -24,13 +24,13 @@ export interface Time {
      * @type {Date}
      * @memberof Time
      */
-    estimated: Date;
+    estimated?: Date;
     /**
      * Time planned.
      * @type {Date}
      * @memberof Time
      */
-    planned: Date;
+    planned?: Date;
 }
 
 /**
@@ -38,8 +38,6 @@ export interface Time {
  */
 export function instanceOfTime(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "estimated" in value;
-    isInstance = isInstance && "planned" in value;
 
     return isInstance;
 }
@@ -54,8 +52,8 @@ export function TimeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Time
     }
     return {
         
-        'estimated': (new Date(json['estimated'])),
-        'planned': (new Date(json['planned'])),
+        'estimated': !exists(json, 'estimated') ? undefined : (new Date(json['estimated'])),
+        'planned': !exists(json, 'planned') ? undefined : (new Date(json['planned'])),
     };
 }
 
@@ -68,8 +66,8 @@ export function TimeToJSON(value?: Time | null): any {
     }
     return {
         
-        'estimated': (value.estimated.toISOString()),
-        'planned': (value.planned.toISOString()),
+        'estimated': value.estimated === undefined ? undefined : (value.estimated.toISOString()),
+        'planned': value.planned === undefined ? undefined : (value.planned.toISOString()),
     };
 }
 

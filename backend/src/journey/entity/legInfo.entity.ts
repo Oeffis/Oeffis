@@ -1,10 +1,14 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class LegInfo {
 
-  @ApiProperty({
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Leg origin",
-    type: String
+    type: String,
+    example: "Linie RE42: Fahrradmitnahme begrenzt möglich"
   })
   content?: string;
 

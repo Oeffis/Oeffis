@@ -91,6 +91,51 @@
         ]
       }
     },
+    "/location_finder/ids_by_name": {
+      "post": {
+        "operationId": "LocationFinderController_findLocationIdsByName",
+        "summary": "finds location ids by name",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationNameDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the found location ids.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "location_finder"
+        ]
+      }
+    },
     "/journey": {
       "post": {
         "operationId": "JourneyController_queryJourney",
@@ -175,11 +220,13 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Id of the location."
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
           },
           "name": {
             "type": "string",
-            "description": "(Full) Name of the location."
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
           },
           "type": {
             "type": "string",
@@ -199,7 +246,8 @@
               "suburb",
               "unknown",
               "singlehouse"
-            ]
+            ],
+            "example": "stop"
           },
           "details": {
             "description": "Further details of the location.",
@@ -211,9 +259,6 @@
           }
         },
         "required": [
-          "id",
-          "name",
-          "type",
           "details"
         ]
       },
@@ -222,14 +267,21 @@
         "properties": {
           "shortName": {
             "type": "string",
-            "description": "Short name of the location."
+            "description": "Short name of the location.",
+            "example": "Hbf"
           },
           "matchQuality": {
             "type": "number",
-            "description": "Quality how well the given location meets the related query (biggest number is the best result)."
+            "description": "Quality how well the given location meets the related query (biggest number is the best result).",
+            "example": 805
           },
           "parent": {
             "description": "Parent location of this location.",
+            "example": {
+              "id": "placeID:5513000:9",
+              "name": "Gelsenkirchen",
+              "type": "locality"
+            },
             "allOf": [
               {
                 "$ref": "#/components/schemas/Location"
@@ -238,20 +290,15 @@
           },
           "latitude": {
             "type": "number",
-            "description": "Latitude of a location."
+            "description": "Latitude of the location.",
+            "example": 51.50493
           },
           "longitude": {
             "type": "number",
-            "description": "Longitude of a location."
+            "description": "Longitude of the location.",
+            "example": 7.10221
           }
-        },
-        "required": [
-          "shortName",
-          "matchQuality",
-          "parent",
-          "latitude",
-          "longitude"
-        ]
+        }
       },
       "BadRequest": {
         "type": "object",
@@ -279,6 +326,11 @@
             "type": "string",
             "description": "Name of the location to search.",
             "example": "Gelsen"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit of the number of results.",
+            "example": 5
           }
         },
         "required": [
@@ -301,20 +353,20 @@
           "departure": {
             "format": "date-time",
             "type": "string",
-            "description": "Date of the trip to start (default: current date).",
-            "example": "2023-08-29T16:58:47.129Z"
+            "description": "Date of the trip to start.",
+            "example": "2023-12-01T11:30:00.000Z"
           },
           "asArrival": {
             "type": "boolean",
             "description": "Use departure date as arrival.",
-            "default": false
+            "default": false,
+            "example": false
           }
         },
         "required": [
           "originId",
           "destinationId",
-          "departure",
-          "asArrival"
+          "departure"
         ]
       },
       "Time": {
@@ -323,29 +375,29 @@
           "estimated": {
             "format": "date-time",
             "type": "string",
-            "description": "Time estimated."
+            "description": "Time estimated.",
+            "example": "2023-08-29T16:58:00.000Z"
           },
           "planned": {
             "format": "date-time",
             "type": "string",
-            "description": "Time planned."
+            "description": "Time planned.",
+            "example": "2023-08-29T17:23:00.000Z"
           }
-        },
-        "required": [
-          "estimated",
-          "planned"
-        ]
+        }
       },
       "JourneyLocation": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Id of the location."
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
           },
           "name": {
             "type": "string",
-            "description": "(Full) Name of the location."
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
           },
           "type": {
             "type": "string",
@@ -365,7 +417,8 @@
               "suburb",
               "unknown",
               "singlehouse"
-            ]
+            ],
+            "example": "stop"
           },
           "details": {
             "description": "Further details of the location.",
@@ -393,9 +446,6 @@
           }
         },
         "required": [
-          "id",
-          "name",
-          "type",
           "details",
           "arrival",
           "departure"
@@ -420,20 +470,15 @@
             "type": "string",
             "description": "Train number."
           }
-        },
-        "required": [
-          "arrivalTimePlannedJourneyDestination",
-          "departureTimePlannedJourneyOrigin",
-          "status",
-          "trainNumber"
-        ]
+        }
       },
       "Transportation": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "Name of transportation vehicle."
+            "description": "Name of transportation vehicle.",
+            "example": "Regionalbahn 46"
           },
           "trips": {
             "description": "Trips depending on this transportation.",
@@ -442,23 +487,17 @@
               "$ref": "#/components/schemas/Trip"
             }
           }
-        },
-        "required": [
-          "name",
-          "trips"
-        ]
+        }
       },
       "LegInfo": {
         "type": "object",
         "properties": {
           "content": {
             "type": "string",
-            "description": "Leg origin"
+            "description": "Leg origin",
+            "example": "Linie RE42: Fahrradmitnahme begrenzt möglich"
           }
-        },
-        "required": [
-          "content"
-        ]
+        }
       },
       "LegDetails": {
         "type": "object",
@@ -469,7 +508,8 @@
           },
           "duration": {
             "type": "number",
-            "description": "Duration of leg in seconds."
+            "description": "Duration of leg in seconds.",
+            "example": 480
           },
           "infos": {
             "description": "Leg information.",
@@ -502,14 +542,7 @@
               ]
             }
           }
-        },
-        "required": [
-          "distance",
-          "duration",
-          "infos",
-          "hints",
-          "realtimeTripStatus"
-        ]
+        }
       },
       "Leg": {
         "type": "object",
@@ -548,9 +581,6 @@
           }
         },
         "required": [
-          "origin",
-          "destination",
-          "transportation",
           "details"
         ]
       },
@@ -564,10 +594,7 @@
               "$ref": "#/components/schemas/Leg"
             }
           }
-        },
-        "required": [
-          "legs"
-        ]
+        }
       }
     }
   }

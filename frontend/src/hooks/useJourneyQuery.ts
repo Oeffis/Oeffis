@@ -3,22 +3,28 @@ import { Journey, Location } from "../api";
 import { useJourneyApi } from "../services/apiClients/ApiClientsContext";
 
 export type UseJourneyQueryResult = UseJourneyQuerySuccess | UseJourneyQueryError | UseJourneyQueryPending;
-export type UseJourneyQueryError = {
+export interface UseJourneyQueryError {
   type: "error";
   error: Error;
-};
+}
 
-export type UseJourneyQuerySuccess = {
+export interface UseJourneyQuerySuccess {
   type: "success";
   journeyResults: Journey[];
-};
+}
 
-export type UseJourneyQueryPending = {
+export interface UseJourneyQueryPending {
   type: "pending";
   journeyResults: null;
-};
+}
 
-export const useJourneyQuery = (origin: Location, destination: Location): UseJourneyQueryResult => {
+export const useJourneyQuery = (
+  origin: Location,
+  destination: Location,
+  departure: Date,
+  asArrival: boolean
+): UseJourneyQueryResult => {
+
   const journeyApi = useJourneyApi();
 
   const [journeyResultsOrError, setJourneyResultsOrError] = useState<UseJourneyQueryResult>(({ type: "pending", journeyResults: null }));
@@ -27,19 +33,29 @@ export const useJourneyQuery = (origin: Location, destination: Location): UseJou
     () => {
       const abortController = new AbortController();
 
-      journeyApi.journeyControllerQueryJourney({
-        originId: origin.id,
-        destinationId: destination.id,
-        departure: new Date(),
-        asArrival: false
-      }, { signal: abortController.signal })
+      if (!origin.id || !destination.id) {
+        const error: Error = {
+          name: "OriginId and/or destinationId missing.",
+          message: "At least one of originId or destinationId is missing. Booth are required to query a journey."
+        };
+        setJourneyResultsOrError({ type: "error", error });
 
-        .then((journeyResults) => {
-          setJourneyResultsOrError({ type: "success", journeyResults });
-        })
-        .catch((error) => {
-          setJourneyResultsOrError({ type: "error", error });
-        });
+      } else {
+        journeyApi.journeyControllerQueryJourney({
+          originId: origin.id,
+          destinationId: destination.id,
+          departure: departure,
+          asArrival: asArrival
+        }, { signal: abortController.signal })
+
+          .then((journeyResults) => {
+            setJourneyResultsOrError({ type: "success", journeyResults });
+          })
+          .catch((error: Error) => {
+            setJourneyResultsOrError({ type: "error", error });
+          });
+
+      }
 
       return () => {
         abortController.abort();
@@ -48,6 +64,7 @@ export const useJourneyQuery = (origin: Location, destination: Location): UseJou
     [
       origin.id,
       destination.id,
+      departure.valueOf(),
       setJourneyResultsOrError
     ]
   );

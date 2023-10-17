@@ -1,0 +1,29 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "SystemInfo-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo",
+			"version": "10.2.8.6"
+		},
+		"version": {
+			"type": "string",
+			"version": "10.2.2.48"
+		},
+		"ptKernel": {
+			"$ref": "Definitions.json#/definitions/ptKernel"
+		},
+		"validity": {
+			"$ref": "Definitions.json#/definitions/datePeriod"
+		},
+		"properties": {}
+	},
+	"required": [
+		"version",
+		"ptKernel",
+		"validity"
+	],
+	"additionalProperties": false,
+	"version": "10.2.2.48"
+}

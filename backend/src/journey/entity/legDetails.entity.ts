@@ -1,34 +1,49 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsArray, IsEnum, IsInstance, IsNumber, IsOptional } from "class-validator";
 import { LegRealtimeTripStatus } from "../../vrr/entity/legRealtimeTripStatus.entity";
 import { LegInfo } from "./legInfo.entity";
 
 export class LegDetails {
 
-  @ApiProperty({
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Distance of leg in meter?",
     type: Number
   })
   distance?: number;
 
-  @ApiProperty({
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Duration of leg in seconds.",
-    type: Number
+    type: Number,
+    example: 480
   })
   duration?: number;
 
-  @ApiProperty({
+  @IsArray()
+  @IsInstance(LegInfo, { each: true })
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Leg information.",
     type: [LegInfo]
   })
   infos?: LegInfo[];
 
-  @ApiProperty({
+  @IsArray()
+  @IsInstance(LegInfo, { each: true })
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Leg hints.",
     type: [LegInfo]
   })
   hints?: LegInfo[];
 
-  @ApiProperty({
+  @IsArray()
+  @IsEnum(LegRealtimeTripStatus, { each: true })
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Leg real time status.",
     isArray: true,
     enum: LegRealtimeTripStatus

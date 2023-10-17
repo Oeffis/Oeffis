@@ -31,13 +31,13 @@ export interface Transportation {
      * @type {string}
      * @memberof Transportation
      */
-    name: string;
+    name?: string;
     /**
      * Trips depending on this transportation.
      * @type {Array<Trip>}
      * @memberof Transportation
      */
-    trips: Array<Trip>;
+    trips?: Array<Trip>;
 }
 
 /**
@@ -45,8 +45,6 @@ export interface Transportation {
  */
 export function instanceOfTransportation(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "trips" in value;
 
     return isInstance;
 }
@@ -61,8 +59,8 @@ export function TransportationFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'name': json['name'],
-        'trips': ((json['trips'] as Array<any>).map(TripFromJSON)),
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'trips': !exists(json, 'trips') ? undefined : ((json['trips'] as Array<any>).map(TripFromJSON)),
     };
 }
 
@@ -76,7 +74,7 @@ export function TransportationToJSON(value?: Transportation | null): any {
     return {
         
         'name': value.name,
-        'trips': ((value.trips as Array<any>).map(TripToJSON)),
+        'trips': value.trips === undefined ? undefined : ((value.trips as Array<any>).map(TripToJSON)),
     };
 }
 

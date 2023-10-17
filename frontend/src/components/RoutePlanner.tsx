@@ -13,28 +13,44 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
+import { formatISO, isSameMinute, parseISO } from "date-fns";
 import { closeCircleOutline } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
-import { Journey, Location } from "../api";
+import { useState } from "react";
+import { Journey, Leg, Location } from "../api";
+import { useCurrentTime } from "../hooks/useCurrentTime";
+import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../hooks/useCustomDepartureTimeOrCurrentTime";
 import { useJourneyQuery } from "../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../hooks/useStateParams";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../services/favorites/FavoritesContext";
 import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
 
-const RoutePlanner: React.FC = () => {
+export const DEPARTURE_TIME_NOW_PARAM = "now";
+
+export interface RoutePlannerProps {
+  currentLocation: Location,
+  setSelectedOriginLocation: (location: Location) => void
+  setSelectedDestinationLocation: (location: Location) => void
+}
+
+const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
+
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
   const [tripTime, setTripTime] = useStateParams<string>(new Date().toISOString(), "tripTime", String, String);
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
+
+  const currentTime = useCurrentTime();
+  const [customDepartureTime, setCustomDepartureTime] = useStateParams<string>(DEPARTURE_TIME_NOW_PARAM, "departure", String, String);
+  const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
+  const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
@@ -86,30 +102,78 @@ const RoutePlanner: React.FC = () => {
     setIsFavoritesModalOpen(true);
   };
 
+  const updateMinDepartureTime = (): void => {
+    setMinDepartureTime(currentTime);
+  };
+
+  /**
+   * Sets some time given as string as custom departure time.
+   *
+   * @param departure departure time (as ISO string)
+   */
+  const setCustomDeparture = (departure: string): void => {
+    const parsedDeparture: Date = parseISO(departure);
+    // If min value (current time) gets selected, encode this in url param.
+    const customDepartureTimeString: string =
+      isSameMinute(parsedDeparture, minDepartureTime)
+        ? DEPARTURE_TIME_NOW_PARAM
+        : formatISO(parsedDeparture);
+
+    setCustomDepartureTime(customDepartureTimeString);
+  };
+
   return (
     <>
       <IonList inset={true}>
         <IonItem lines="inset">
-          {/* Date-Time-Picker, allowing the user to select dates in the present aswell as the future */}
+          {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
           <IonLabel>Date and Time</IonLabel>
+          {/* Button to delete custom date/time inputs and use current time. */}
+          <IonButton
+            fill="outline"
+            strong={true}
+            onClick={() => setCustomDeparture(formatISO(currentTime))}
+          >
+            Now
+          </IonButton>
           <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
-          <IonModal keepContentsMounted={true}>
-            <IonDatetime name="date_time" id="datetime" min={new Date().toISOString()} onIonChange={(e: CustomEvent) => { setTripTime(e.detail.value); }} />
+          {/* Before datetime modal is being presented min departure time is updated to current time. */}
+          <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
+            <IonDatetime
+              name="date_time"
+              id="datetime"
+              /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
+              min={formatISO(minDepartureTime)}
+              value={formatISO(departureTime)}
+              multiple={false} // Assures that value cannot be an array but a single date string only.
+              showDefaultButtons={true}
+              data-testid={"datetime-input"}
+              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setTripTime(e.detail.value as string) }}
+            />
           </IonModal>
         </IonItem>
         <IonItem>
           <LocationSearchInput
+            currentLocation={currentLocation}
             inputLabel="Origin"
             selectedLocation={originLocation}
-            onSelectedLocationChanged={(location): void => setOriginId(location.id)}
+            onSelectedLocationChanged={(location): void => {
+              setOriginId(location.id ?? ""); /* TODO #312 Revert to saver types. */
+              setSelectedOriginLocation(location);
+            }}
             prefixDataTestId="origin-input"
           />
         </IonItem>
         <IonItem>
           <LocationSearchInput
+            currentLocation={currentLocation}
             inputLabel="Destination"
             selectedLocation={destinationLocation}
-            onSelectedLocationChanged={(location): void => setDestinationId(location.id)}
+            onSelectedLocationChanged={(location): void => {
+              setDestinationId(location.id ?? ""); /* TODO #312 Revert to saver types. */
+              setSelectedDestinationLocation(location);
+            }}
             prefixDataTestId="destination-input"
           />
         </IonItem>
@@ -124,7 +188,11 @@ const RoutePlanner: React.FC = () => {
       </IonList>
       {
         originLocation !== null && destinationLocation !== null &&
-        <TripOptionsDisplay origin={originLocation} destination={destinationLocation} />
+        <TripOptionsDisplay
+          origin={originLocation}
+          destination={destinationLocation}
+          departure={departureTime}
+        />
       }
       <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
@@ -167,31 +235,44 @@ const RoutePlanner: React.FC = () => {
 
 export default RoutePlanner;
 
-export function TripOptionsDisplay(props: { origin: Location, destination: Location }): JSX.Element {
-  const { origin, destination } = props;
+export function TripOptionsDisplay(props: {
+  origin: Location,
+  destination: Location,
+  departure: Date
+}): JSX.Element {
+  const { origin, destination, departure } = props;
 
-  const result = useJourneyQuery(origin, destination);
+  // TODO Add user input if datetime should be interpreted as arrival time.
+  const result = useJourneyQuery(origin, destination, departure, false);
 
-  const iJourneys: false | IJourney[] = result.type === "success" && result.journeyResults.map((journey): IJourney => {
-    const lastLeg = journey.legs[journey.legs.length - 1];
-    const firstLeg = journey.legs[0];
+  // TODO #312 Revert to saver types.
+  const iJourneys: false | IJourney[] = result.type === "success"
+    && result.journeyResults
+      .filter((journey) => journey.legs !== undefined)
+      .map((journey): IJourney => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const legs: Leg[] = journey.legs!;
 
-    return {
-      startStation: firstLeg.origin.name,
-      startTime: firstLeg.origin.departure.estimated,
-      arrivalStation: lastLeg.destination.name,
-      arrivalTime: lastLeg.destination.arrival.estimated,
-      stops: journey.legs.map((leg): IJourneyStep => ({
-        arrivalTime: leg.destination.arrival.estimated,
-        startTime: leg.origin.departure.estimated,
-        stationName: leg.origin.name,
-        stopName: leg.destination.name,
-        track: "",
-        travelDurationInMinutes: leg.details.duration / 60
-      })),
-      travelDurationInMinutes: journey.legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
-    };
-  });
+        const lastLeg = legs[legs.length - 1];
+        const firstLeg = legs[0];
+
+        return {
+          // TODO #312 Revert to saver types.
+          startStation: firstLeg.origin?.name ?? "startStation",
+          startTime: firstLeg.origin?.departure.estimated ?? parseISO("invalid"),
+          arrivalStation: lastLeg.destination?.name ?? "arrivalStation",
+          arrivalTime: lastLeg.destination?.arrival.estimated ?? parseISO("invalid"),
+          stops: legs.map((leg): IJourneyStep => ({
+            arrivalTime: leg.destination?.arrival.estimated ?? parseISO("invalid"),
+            startTime: leg.origin?.departure.estimated ?? parseISO("invalid"),
+            stationName: leg.origin?.name ?? "stationName",
+            stopName: leg.destination?.name ?? "stopName",
+            track: "",
+            travelDurationInMinutes: (leg.details.duration ?? -60) / 60
+          })),
+          travelDurationInMinutes: legs.reduce((acc, leg) => acc + (leg.details.duration ?? 0), 0) / 60
+        };
+      });
 
   return (
     <>
@@ -212,9 +293,9 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
       <IonLabel>
         <ol>
           {
-            journey.legs.map((leg, idx) => (
+            journey.legs?.map((leg, idx) => ( /* TODO #312 Revert to saver types. */
               <li key={idx}>
-                {leg.transportation.name} {leg.details.duration}
+                {leg.transportation?.name} {leg.details.duration} { /* TODO #312 Revert to saver types. */}
               </li>
             ))
           }
@@ -222,33 +303,4 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
       </IonLabel>
     </IonItem>
   );
-}
-
-
-export function useInitialLocationFromLocationIdAndThenAsState(locationId: string | null): [Location | null, (location: Location | null) => void] {
-  const locationFinderApi = useLocationFinderApi();
-  const [location, setLocation] = useState<Location | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const abortController = new AbortController();
-    if (locationId !== null && location === null && locationId !== "") {
-      locationFinderApi.locationFinderControllerFindLocationsByName({ name: locationId }, { signal: abortController.signal })
-        .then((locations) => {
-          if (locations.length > 0 && !cancelled) {
-            setLocation(locations[0]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    return (): void => {
-      abortController.abort();
-      cancelled = true;
-    };
-  }, [locationId]);
-
-  return [location, setLocation];
 }

@@ -1,31 +1,39 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class Trip {
 
-  @ApiProperty({
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Planned arrival time at destination.",
     type: String
   })
   arrivalTimePlannedJourneyDestination?: string;
 
-  @ApiProperty({
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Planned departure time at Origin.",
     type: String
   })
   departureTimePlannedJourneyOrigin?: string;
 
-  @ApiProperty({
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Status information about trip.",
     type: String
   })
   status?: string;
 
-  @ApiProperty({
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Train number.",
     type: String
   })
   trainNumber?: string;
-
 
   constructor(arrivalTimePlannedJourneyDestination: string, departureTimePlannedJourneyOrigin: string, status: string, trainNumber: string) {
     this.arrivalTimePlannedJourneyDestination = arrivalTimePlannedJourneyDestination;

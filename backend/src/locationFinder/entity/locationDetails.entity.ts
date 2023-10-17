@@ -1,35 +1,55 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsDefined, IsInstance, IsLatitude, IsLongitude, IsNumber, IsOptional } from "class-validator";
 import { Location } from "./location.entity";
 
 export class LocationDetails {
 
-  @ApiProperty({
+  @IsDefined()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Short name of the location.",
-    type: String
+    type: String,
+    example: "Hbf"
   })
   shortName?: string;
 
-  @ApiProperty({
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Quality how well the given location meets the related query (biggest number is the best result).",
-    type: Number
+    type: Number,
+    example: 805
   })
   matchQuality?: number;
 
-  @ApiProperty({
+  @IsInstance(Location)
+  @IsOptional()
+  @ApiPropertyOptional({
     description: "Parent location of this location.",
-    type: () => Location
+    type: () => Location,
+    example: {
+      id: "placeID:5513000:9",
+      name: "Gelsenkirchen",
+      type: "locality"
+    }
   })
   parent?: Location;
 
-  @ApiProperty({
-    description: "Latitude of a location.",
-    type: Number
+  @IsLatitude()
+  @IsOptional()
+  @ApiPropertyOptional({
+    description: "Latitude of the location.",
+    type: Number,
+    example: 51.50493
   })
   latitude?: number;
 
-  @ApiProperty({
-    description: "Longitude of a location.",
-    type: Number
+  @IsLongitude()
+  @IsOptional()
+  @ApiPropertyOptional({
+    description: "Longitude of the location.",
+    type: Number,
+    example: 7.10221
   })
   longitude?: number;
 

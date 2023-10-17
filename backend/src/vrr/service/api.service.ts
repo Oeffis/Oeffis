@@ -11,7 +11,7 @@ type UrlConstructorType<T extends VrrClientBase> = new (baseUrl: string, ...args
 
 @Injectable()
 export class ApiService {
-  private baseUrl = process.env.VRR_BASE_URL || VRR_TEST_API_BASE_URL;
+  private baseUrl = process.env.VRR_BASE_URL ?? VRR_TEST_API_BASE_URL;
 
   getInstanceOf<T extends VrrClientBase>(clientClass: UrlConstructorType<T>, ...args: unknown[]): T {
     return new clientClass(this.baseUrl, ...args);
@@ -35,6 +35,7 @@ export class ApiService {
       "singlehouse": LocationType.singlehouse
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const locationType = vrrLocationType ? locationTypeMap[vrrLocationType] ?? LocationType.unknown : LocationType.unknown;
 
     return locationType;

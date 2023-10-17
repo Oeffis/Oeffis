@@ -42,4 +42,20 @@ export class LocationFinderController {
   async findLocationsByName(@Body() query: LocationNameDto): Promise<Location[]> {
     return this.locationFinderService.findLocationsByName(query);
   }
+
+  @Post("ids_by_name")
+  @ApiOperation({
+    summary: "finds location ids by name"
+  })
+  @ApiOkResponse({
+    description: "Returns the found location ids.",
+    type: [String]
+  })
+  @ApiBadRequestResponse({
+    description: "Bad request.",
+    type: BadRequest
+  })
+  async findLocationIdsByName(@Body() query: LocationNameDto): Promise<string[]> {
+    return this.locationFinderService.findLocationIdsByNameOrId(query);
+  }
 }

@@ -11,11 +11,11 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
   useEffect(() => {
     const abortController = new AbortController();
 
-    if (locationId === null) return setLocation(null);
+    if (locationId === null) { setLocation(null); return; }
 
     const cachedLocation = locationCache.get(locationId);
     if (cachedLocation) {
-      return setLocation(cachedLocation);
+      setLocation(cachedLocation); return;
     }
 
     locationFinderApi
@@ -24,8 +24,6 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
         { signal: abortController.signal }
       )
       .then(processLocationResult, processLocationFailure);
-
-
 
     function processLocationResult(matchingLocations: Location[]): void {
       isAborted()
@@ -53,7 +51,7 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
     function processSingleLocationFound(matchingLocations: Location[]): true {
       console.debug(`Single location found with id ${locationId}`);
       const location = matchingLocations[0];
-      locationCache.set(location.id, location);
+      locationCache.set(location.id ?? "", location);  // TODO #312 Revert to saver types.
       setLocation(matchingLocations[0]);
       return true;
     }
@@ -64,7 +62,7 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       error.cause && console.error(error.cause);
     }
 
-    return () => abortController.abort();
+    return () => { abortController.abort(); };
   }, [locationFinderApi, locationCache, locationId]);
 
   return location;

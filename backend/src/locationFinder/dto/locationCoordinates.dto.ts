@@ -1,7 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsLatitude, IsLongitude } from "class-validator";
 
 export class LocationCoordinatesDto {
 
+  @IsLatitude()
   @ApiProperty({
     description: "Latitude of the location to search.",
     type: Number,
@@ -10,6 +12,7 @@ export class LocationCoordinatesDto {
   })
   latitude!: number;
 
+  @IsLongitude()
   @ApiProperty({
     description: "Longitude of the location to search.",
     type: Number,

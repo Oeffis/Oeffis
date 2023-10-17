@@ -1,0 +1,207 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "Journey Planner",
+	"type": "object",
+	"additionalProperties": {
+		"description": "DO NOT DELETE,  MESSES UP ONEOF"
+	},
+	"anyOf": [
+		{
+			"$ref": "TRIP_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "LOCATION_SUGGEST_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "STOPEVENT_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "ADDINFO_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "COORD_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "STT_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "ROP_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "TTB_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "SELTT_Schema.json#",
+			"version": "10.2.2.48"
+		},
+		{
+			"$ref": "STOPSEQCOORD_Schema.json#",
+			"version": "10.2.8.6"
+		},
+		{
+			"$ref": "STOPSTRUCTURE_Schema.json#",
+			"version": "10.2.8.6"
+		},
+		{
+			"$ref": "GEOOBJECT_Schema.json#",
+			"version": "10.2.8.6"
+		},
+		{
+			"$ref": "STOPZONEINFO_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "INTERCHANGE_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "LINELIST_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "OPAREA_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "STOPLIST_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "LINEROUTES_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "DMTTP_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "PS_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TRIPSTOPTIMES_Schema.json#",
+			"version": "10.4.15.5"
+		},		
+		{
+			"$ref": "RECALCWAYPOINTS_Schema.json#",
+			"version": "10.4.15.5"		
+		},
+		{
+			"$ref": "SYSTEMINFO_Schema.json#",
+			"version": "10.4.15.5"		
+		},
+		{
+			"$ref": "TARIFFSCOPE_Schema.json#",
+			"version": "10.4.15.5"		
+		},
+		{
+			"$ref": "PRODUCTINSTANCE_Schema.json#",
+			"version": "10.4.15.5"		
+		},
+		{
+			"$ref": "DESTINATIONS_FROM_STOP_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "GENERAL_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "LINESTOPSEQUENCE_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "MOVETRIP_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "GETREALTIMEFORTRIP_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "RECALCFARES_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "SELECTABLESTOPTIMETABLE_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "SURROUND_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "SERVINGLINES_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TRIPRELATION_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TRANSFORM_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TRIPCOORDSEQ_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "MAPROUTE_Schema.json#",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "PARKOBJECT_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TICKETDETAIL_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TRIP_COMPOSITION_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "JOURNEY_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "JOURNEYCHECK_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "OPERATOR_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TICKET_PRODUCT_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TICKET_SORTIMENT_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "TICKET_TYPE_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "MODESHARING_Schema.json",
+			"version": "10.4.15.5"
+		},
+		{
+			"$ref": "CHECK_MULTISTOPTIMETABLE_Schema.json",
+			"version": "10.4.15.5"
+		}		
+	],
+	"version": "10.2.2.48"
+}

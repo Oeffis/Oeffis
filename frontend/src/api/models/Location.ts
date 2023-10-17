@@ -31,19 +31,19 @@ export interface Location {
      * @type {string}
      * @memberof Location
      */
-    id: string;
+    id?: string;
     /**
      * (Full) Name of the location.
      * @type {string}
      * @memberof Location
      */
-    name: string;
+    name?: string;
     /**
      * Type of the location.
      * @type {string}
      * @memberof Location
      */
-    type: LocationTypeEnum;
+    type?: LocationTypeEnum;
     /**
      * 
      * @type {LocationDetails}
@@ -80,9 +80,6 @@ export type LocationTypeEnum = typeof LocationTypeEnum[keyof typeof LocationType
  */
 export function instanceOfLocation(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "type" in value;
     isInstance = isInstance && "details" in value;
 
     return isInstance;
@@ -98,9 +95,9 @@ export function LocationFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'id': json['id'],
-        'name': json['name'],
-        'type': json['type'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'type': !exists(json, 'type') ? undefined : json['type'],
         'details': LocationDetailsFromJSON(json['details']),
     };
 }

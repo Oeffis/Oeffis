@@ -1,0 +1,28 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "LineList-Request",
+	"type": "object",
+	"properties": {
+		"serverInfo": {
+			"$ref": "./Definitions.json#/definitions/serverInfo",
+			"version": "10.2.8.6"
+		},
+		"version": {
+			"type": "string",
+			"version": "10.2.2.48"
+		},
+		"transportations": {
+			"type": "array",
+			"items": {
+				"$ref": "Definitions.json#/definitions/transportation"
+			},
+			"version": "10.2.2.48"
+		},
+		"properties": {}
+	},
+	"required": [
+		"version"
+	],
+	"additionalProperties": false,
+	"version": "10.2.2.48"
+}

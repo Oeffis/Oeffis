@@ -32,7 +32,7 @@ export interface JourneyRequestDto {
      */
     destinationId: string;
     /**
-     * Date of the trip to start (default: current date).
+     * Date of the trip to start.
      * @type {Date}
      * @memberof JourneyRequestDto
      */
@@ -42,7 +42,7 @@ export interface JourneyRequestDto {
      * @type {boolean}
      * @memberof JourneyRequestDto
      */
-    asArrival: boolean;
+    asArrival?: boolean;
 }
 
 /**
@@ -53,7 +53,6 @@ export function instanceOfJourneyRequestDto(value: object): boolean {
     isInstance = isInstance && "originId" in value;
     isInstance = isInstance && "destinationId" in value;
     isInstance = isInstance && "departure" in value;
-    isInstance = isInstance && "asArrival" in value;
 
     return isInstance;
 }
@@ -71,7 +70,7 @@ export function JourneyRequestDtoFromJSONTyped(json: any, ignoreDiscriminator: b
         'originId': json['originId'],
         'destinationId': json['destinationId'],
         'departure': (new Date(json['departure'])),
-        'asArrival': json['asArrival'],
+        'asArrival': !exists(json, 'asArrival') ? undefined : json['asArrival'],
     };
 }
 

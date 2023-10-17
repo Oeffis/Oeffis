@@ -17,6 +17,7 @@
     "test": "echo \"No test specified\""
   },
   "dependencies": {
+    "@oeffis/vrr_client": "file:../vrr_client",
     "@types/node": "^16.18.39",
     "date-fns": "^2.30.0",
     "node-fetch": "^2.6.12",
@@ -29,8 +30,7 @@
     "@types/papaparse": "^5.3.8",
     "@types/pg": "^8.10.2",
     "@types/yargs": "^17.0.24",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.59.11",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.26.0",
