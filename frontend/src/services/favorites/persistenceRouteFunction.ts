@@ -8,7 +8,7 @@ interface PersistedRoute {
   destinationId: string;
 }
 
-function parseFavoriteRoute(favorite: PersistedRoute): PersistedObject<CreateFavoriteRoute> | null {
+function parseFavoriteRoute(favorite: PersistedRoute | null): PersistedObject<CreateFavoriteRoute> | null {
   if (typeof favorite !== "object" || favorite === null) {
     return null;
   }
@@ -43,7 +43,7 @@ export function parsePersistedFavoriteRoutes(persistedFavoriteRoutes: string | n
     return [];
   }
 
-  const parsedFromPersistence = JSON.parse(persistedFavoriteRoutes);
+  const parsedFromPersistence: unknown = JSON.parse(persistedFavoriteRoutes);
   if (!Array.isArray(parsedFromPersistence)) {
     return [];
   }

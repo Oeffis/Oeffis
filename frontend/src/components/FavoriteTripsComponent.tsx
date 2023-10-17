@@ -15,8 +15,8 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
   const { favoriteRoutes, setFavoriteRoutes } = useFavoriteRoutes();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
-    const newFavoriteTrips = event.detail.complete([...favoriteTrips]);
-    const newFavoriteRoutes = event.detail.complete([...favoriteRoutes]);
+    const newFavoriteTrips: PersistedObject<CreateFavoriteTrip>[] = event.detail.complete([...favoriteTrips]);
+    const newFavoriteRoutes: PersistedObject<CreateFavoriteRoute>[] = event.detail.complete([...favoriteRoutes]);
     setFavoriteTrips(newFavoriteTrips);
     setFavoriteRoutes(newFavoriteRoutes);
   };

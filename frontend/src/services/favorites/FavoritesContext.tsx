@@ -11,12 +11,12 @@ export interface CreateFavoriteTrip {
   originId: string;
   destinationId: string;
   tripTime: string;
-};
+}
 
-export type CreateFavoriteRoute = {
+export interface CreateFavoriteRoute {
   originId: string;
   destinationId: string;
-};
+}
 
 export interface CreateFavoriteLocation {
   locationId: string;

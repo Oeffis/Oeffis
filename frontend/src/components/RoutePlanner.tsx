@@ -149,7 +149,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
               showDefaultButtons={true}
               data-testid={"datetime-input"}
               /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setTripTime(e.detail.value as string) }}
+              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setTripTime(e.detail.value as string); }}
             />
           </IonModal>
         </IonItem>
