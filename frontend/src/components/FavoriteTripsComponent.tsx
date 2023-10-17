@@ -7,7 +7,7 @@ import { PersistedObject } from "../services/persistence/generatePersistedObject
 
 export interface FavoriteTripsComponentProps {
   onTripSelected: (trip: CreateFavoriteTrip) => void;
-  onRouteSelected: (route: CreateFavoriteRoute) => void;
+  onRouteSelected?: (route: CreateFavoriteRoute) => void;
 }
 
 export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (props) => {
@@ -132,7 +132,7 @@ const PendingFavoriteTripEntry: React.FC = () => <>
 </>;
 
 export interface FavoriteRouteEntryComponentProps {
-  onRouteSelected: (trip: CreateFavoriteRoute) => void;
+  onRouteSelected?: (trip: CreateFavoriteRoute) => void;
   route: PersistedObject<CreateFavoriteRoute>;
   identifier: number;
 }
@@ -146,7 +146,7 @@ const FavoriteRouteEntryComponent: React.FC<FavoriteRouteEntryComponentProps> = 
 
   return <IonItem
     key={props.identifier}
-    onClick={() => props.onRouteSelected(props.route)}
+    onClick={() => props.onRouteSelected ? props.onRouteSelected(props.route) : {}}
   >
     {
       isReady ?
