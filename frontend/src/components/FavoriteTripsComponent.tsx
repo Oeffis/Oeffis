@@ -15,8 +15,8 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
   const { favoriteRoutes, setFavoriteRoutes } = useFavoriteRoutes();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
-    const newFavoriteTrips: PersistedObject<CreateFavoriteTrip>[] = event.detail.complete([...favoriteTrips]);
-    const newFavoriteRoutes: PersistedObject<CreateFavoriteRoute>[] = event.detail.complete([...favoriteRoutes]);
+    const newFavoriteTrips: PersistedObject<CreateFavoriteTrip>[] = event.detail.complete([...favoriteTrips]) as PersistedObject<CreateFavoriteTrip>[];
+    const newFavoriteRoutes: PersistedObject<CreateFavoriteRoute>[] = event.detail.complete([...favoriteRoutes]) as PersistedObject<CreateFavoriteRoute>[];
     setFavoriteTrips(newFavoriteTrips);
     setFavoriteRoutes(newFavoriteRoutes);
   };
@@ -92,7 +92,6 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
     }
   </IonItem>;
 };
-
 
 interface LoadedFavouriteTripEntryProps {
   origin: Location;

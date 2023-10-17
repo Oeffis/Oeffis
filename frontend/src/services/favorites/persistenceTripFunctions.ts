@@ -53,7 +53,7 @@ export function parsePersistedFavoriteTrips(persistedFavoriteTrips: string | nul
 
   const parsedFavorites = parsedFromPersistence
     .map(parseFavoriteTrip)
-    .filter((favorite): favorite is PersistedObject<CreateFavoriteTrip> => favorite !== null && new Date(favorite?.tripTime) >= new Date());
+    .filter((favorite): favorite is PersistedObject<CreateFavoriteTrip> => favorite !== null && new Date(favorite.tripTime) >= new Date());
 
   return parsedFavorites;
 }
