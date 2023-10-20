@@ -12,7 +12,7 @@ When("the destination input is clicked", () => {
   cy.findByTestId("destination-input-clickable").click();
 });
 
-When("the mock server is prepared to return a canned response for {string}", (query: string) => {
+When("the mock server is prepared to return sample locations for {string}", (query: string) => {
   cy.mocksSetCollection(`Query for '${query}'`);
 });
 

@@ -8,7 +8,7 @@
   {
     "id": "Query for 'Gelsenkirchen Hbf'",
     "routes": [
-      "stop_finder:result for 'Gelsenkirchen Hbf'"
+      "stop_finder:sample stops for 'Gelsenkirchen'"
     ]
   }
 ]

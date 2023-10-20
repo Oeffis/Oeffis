@@ -4,8 +4,8 @@ Feature: RoutePlanner
 
   Scenario: a start location can be picked
     When the start input is clicked
-    And the mock server is prepared to return a canned response for "Gelsenkirchen Hbf"
-    And "Gelsenkirchen Hbf" is entered into the search field
+    And the mock server is prepared to return sample locations for "Gelsenkirchen Hbf"
+    And "Gelsenkirchen" is entered into the search field
     Then one of the results is "Gelsenkirchen, Hbf"
     And one of the results is "Gelsenkirchen, Hauptbahnhof Parkhaus"
     When the result "Gelsenkirchen, Hbf" is clicked
@@ -13,8 +13,8 @@ Feature: RoutePlanner
 
   Scenario: a destination location can be picked
     When the destination input is clicked
-    And the mock server is prepared to return a canned response for "Gelsenkirchen Hbf"
-    And "Gelsenkirchen Hbf" is entered into the search field
+    And the mock server is prepared to return sample locations for "Gelsenkirchen Hbf"
+    And "Gelsenkirchen" is entered into the search field
     Then one of the results is "Gelsenkirchen, Hbf"
     And one of the results is "Gelsenkirchen, Hauptbahnhof Parkhaus"
     When the result "Gelsenkirchen, Hbf" is clicked

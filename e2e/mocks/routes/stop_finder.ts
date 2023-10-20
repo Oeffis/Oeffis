@@ -1,4 +1,18 @@
-import { StopFinderResponseGelsenkirchenHbf } from "../fixtures/response_gelsenkirchen_hbf";
+import * as Express from "express";
+import { responseWithLocations } from "../fixtures/stop_finder/responseWithLocations";
+import { stops } from "../fixtures/stop_finder/stops";
+
+interface StopFinderQuery {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    name_sf: string;
+    limit?: number;
+}
+
+function isStopFinderQuery(obj: unknown): obj is StopFinderQuery {
+    return typeof obj === "object"
+        && obj !== null
+        && typeof (obj as StopFinderQuery).name_sf === "string";
+}
 
 export default [
     {
@@ -7,11 +21,22 @@ export default [
         method: "GET",
         variants: [
             {
-                id: "result for 'Gelsenkirchen Hbf'",
-                type: "json",
+                id: "sample stops for 'Gelsenkirchen'",
+                type: "middleware",
                 options: {
-                    status: 200,
-                    body: StopFinderResponseGelsenkirchenHbf
+                    middleware: (req: Express.Request, res: Express.Response) => {
+                        const body: unknown = req.query;
+                        if (!isStopFinderQuery(body)) {
+                            res.status(400);
+                            res.send();
+                            return;
+                        }
+
+                        const name = body.name_sf;
+                        const result = stops.filter(stop => stop.id === name || stop.name.includes(name));
+                        res.status(200);
+                        res.send(responseWithLocations(result));
+                    }
                 }
             }
         ]
