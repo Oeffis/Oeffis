@@ -487,6 +487,8 @@ jobs:
           uses: cypress-io/github-action@v5
           with:
             working-directory: e2e
+            env: 
+              TZ=Europe/Berlin
 
         - name: Upload Artifacts
           if: always()

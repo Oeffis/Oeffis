@@ -50,14 +50,15 @@ Then("I get a route option with a duration of {int} Min and the following legs:"
     .eq(1)
     .as("journeyDetails");
 
+  cy.get("@journeyDetails").scrollIntoView();
+
   cy.get("@journeyDetails")
     .findByTestId("journey-details-duration")
     .should("have.text", duration);
 
   cy.get("@journeyDetails")
     .findByTestId("journey-details-start-time")
-    .should("have.text", legs[0].departure)
-    .scrollIntoView();
+    .should("have.text", legs[0].departure);
 
   cy.get("@journeyDetails")
     .findByTestId("journey-details-end-time")
