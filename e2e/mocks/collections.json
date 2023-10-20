@@ -6,7 +6,7 @@
     ]
   },
   {
-    "id": "Query for 'Gelsenkirchen Hbf'",
+    "id": "Location Query for 'Gelsenkirchen'",
     "routes": [
       "stop_finder:sample stops for 'Gelsenkirchen'"
     ]

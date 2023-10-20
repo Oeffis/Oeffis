@@ -12,8 +12,8 @@ When("the destination input is clicked", () => {
   cy.findByTestId("destination-input-clickable").click();
 });
 
-When("the mock server is prepared to return sample locations for {string}", (query: string) => {
-  cy.mocksSetCollection(`Query for '${query}'`);
+When("the mock server is prepared to handle location queries for {string}", (query: string) => {
+  cy.mocksSetCollection(`Location Query for '${query}'`);
 });
 
 When("{string} is entered into the search field", (query: string) => {
