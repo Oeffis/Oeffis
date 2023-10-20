@@ -4,6 +4,8 @@ import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  viewportHeight: 800,
+  viewportWidth: 390,
   e2e: {
     defaultCommandTimeout: process.env.GITHUB_ACTIONS ? 10000 : 4000,
     baseUrl: "http://localhost:8000",

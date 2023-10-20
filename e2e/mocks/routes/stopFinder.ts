@@ -1,6 +1,6 @@
 import * as Express from "express";
-import { responseWithLocations } from "../fixtures/stop_finder/responseWithLocations";
-import { stops } from "../fixtures/stop_finder/stops";
+import { responseWithLocations } from "../fixtures/stopFinder/responseWithLocations";
+import { stops } from "../fixtures/stopFinder/stops";
 
 interface StopFinderQuery {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -16,12 +16,12 @@ function isStopFinderQuery(obj: unknown): obj is StopFinderQuery {
 
 export default [
     {
-        id: "stop_finder",
+        id: "stopFinder",
         url: "/static03/XML_STOPFINDER_REQUEST",
         method: "GET",
         variants: [
             {
-                id: "sample stops for 'Gelsenkirchen'",
+                id: "sample stops",
                 type: "middleware",
                 options: {
                     middleware: (req: Express.Request, res: Express.Response) => {

@@ -95,6 +95,71 @@ export const stops = [
     "properties": {
       "stopId": "20005613"
     }
+  },
+  {
+    "id": "poiID:68760:5315000:-1:KVB-Kundencenter Dom/Hbf:Köln:KVB-Kundencenter Dom/Hbf:ANY:POI:774580:5388991:MRCV:nrw",
+    "name": "Köln, KVB-Kundencenter Dom/Hbf",
+    "disassembledName": "KVB-Kundencenter Dom/Hbf",
+    "coord": [5388991.0, 774580.0],
+    "type": "poi",
+    "matchQuality": 240,
+    "isBest": false,
+    "parent": {
+      "id": "placeID:5315000:-1",
+      "name": "Köln",
+      "type": "locality"
+    }
+  },
+  {
+    "id": "de:05315:11201",
+    "isGlobalId": true,
+    "name": "Köln, Köln Hbf",
+    "disassembledName": "Köln Hbf",
+    "coord": [5388777.0, 774642.0],
+    "type": "stop",
+    "matchQuality": 989,
+    "isBest": true,
+    "productClasses": [0, 1],
+    "parent": {
+      "id": "placeID:5315000:1",
+      "name": "Köln",
+      "type": "locality"
+    },
+    "properties": { "stopId": "22000008" }
+  },
+  {
+    "id": "de:05315:11212",
+    "isGlobalId": true,
+    "name": "Köln, Breslauer Platz/Hbf",
+    "disassembledName": "Breslauer Platz/Hbf",
+    "coord": [5388784.0, 774828.0],
+    "type": "stop",
+    "matchQuality": 982,
+    "isBest": false,
+    "productClasses": [0, 4, 5],
+    "parent": {
+      "id": "placeID:5315000:1",
+      "name": "Köln",
+      "type": "locality"
+    },
+    "properties": { "stopId": "22000009" }
+  },
+  {
+    "id": "de:05315:11211",
+    "isGlobalId": true,
+    "name": "Köln, Dom/Hbf",
+    "disassembledName": "Dom/Hbf",
+    "coord": [5388994.0, 774457.0],
+    "type": "stop",
+    "matchQuality": 986,
+    "isBest": false,
+    "productClasses": [4, 5],
+    "parent": {
+      "id": "placeID:5315000:1",
+      "name": "Köln",
+      "type": "locality"
+    },
+    "properties": { "stopId": "22000752" }
   }
 ];
 

@@ -18,7 +18,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
     console.log(showDetails);
   };
   return (
-    <div className="JourneyDetail">
+    <div className="JourneyDetail" data-testid="journey-details">
       <IonCard className="detail-card">
         <div className="content-section">
           <div className="img-container">
@@ -26,14 +26,16 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
           </div>
           <div className="mid-section">
             <IonLabel>
-              {formatDateShort(props.journey.startTime)} - {formatDateShort(props.journey.arrivalTime)}
+              <span data-testid="journey-details-start-time">{formatDateShort(props.journey.startTime)}</span>
+              -
+              <span data-testid="journey-details-end-time">{formatDateShort(props.journey.arrivalTime)}</span>
             </IonLabel>
             <IonLabel>
               {props.journey.startStation} - {props.journey.arrivalStation}
             </IonLabel>
           </div>
           <div className="duration">
-            <IonLabel>
+            <IonLabel data-testid="journey-details-duration">
               {props.journey.travelDurationInMinutes}
             </IonLabel>
             <IonLabel>
@@ -44,14 +46,14 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
         {showDetails
           ? <div className="bottom-section-opened">
             <div className="steps">
-              {props.journey.stops.map((step, index) => <JourneyStepComponent key={"joureneyStep" + index} step={step} />)}
+              {props.journey.stops.map((step, index) => <JourneyStepComponent key={"journeyStep" + index} step={step} />)}
             </div>
             <IonButton fill="clear" onClick={(openDetails)}>
               <IonIcon icon={chevronUpOutline} size="small" />
             </IonButton>
           </div>
           : <div className="bottom-section-closed">
-            <IonButton fill="clear" onClick={(openDetails)}>
+            <IonButton fill="clear" onClick={(openDetails)} data-testid="journey-details-open">
               <IonIcon icon={chevronDownOutline} onClick={openDetails} size="small" />
             </IonButton>
           </div>}
