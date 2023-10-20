@@ -15,5 +15,5 @@ before(() => {
 });
 
 after(() => {
-  cy.mocksSetCollection("default");
+  cy.mocksSetCollection("base");
 });
