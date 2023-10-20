@@ -19,6 +19,7 @@ env:
   E2E_MOCKSSERVER_GITHUB_IMAGE_NAME: oeffis/oeffis/e2e-mocksserver
   CRAWLERS_GITHUB_IMAGE_NAME: oeffis/oeffis/crawlers
   CRAWLERS_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/crawlers
+  TZ: Europe/Berlin
 
 jobs:
     frontend_lint_test_build:
@@ -487,8 +488,6 @@ jobs:
           uses: cypress-io/github-action@v5
           with:
             working-directory: e2e
-            env: 
-              TZ=Europe/Berlin
 
         - name: Upload Artifacts
           if: always()
