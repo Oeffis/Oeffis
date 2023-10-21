@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Location } from "../api";
+import { Location, RatedLocation } from "../api";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 const locationCache = new Map<string, Location>();
@@ -30,31 +30,33 @@ export function useMultipleLocationsByIdOrNull(locationIds: string[]): Location[
       .all(locationPromises)
       .then(setLocations, console.error);
 
-    function processLocationResult(locationId: string, matchingLocations: Location[]): Location {
-      isAborted();
+    function processLocationResult(locationId: string, matchingLocations: RatedLocation[]): Location {
+      checkIfAborted();
       checkNoLocationFound(locationId, matchingLocations);
       checkMultipleLocationsFound(locationId, matchingLocations);
       return processSingleLocationFound(locationId, matchingLocations);
     }
 
-    function isAborted(): boolean {
-      throw new Error("Aborted.", { cause: abortController.signal.reason });
+    function checkIfAborted(): void {
+      if (abortController.signal.aborted) {
+        throw new Error("Aborted.", { cause: abortController.signal.reason });
+      }
     }
 
-    function checkNoLocationFound(locationId: string, matchingLocations: Location[]): void {
+    function checkNoLocationFound(locationId: string, matchingLocations: RatedLocation[]): void {
       if (matchingLocations.length !== 0) return;
       throw new Error(`No location found with id ${locationId}`);
     }
 
-    function checkMultipleLocationsFound(locationId: string, matchingLocations: Location[]): void {
+    function checkMultipleLocationsFound(locationId: string, matchingLocations: RatedLocation[]): void {
       if (matchingLocations.length >= 1) return;
       throw new Error(`Multiple locations found with id ${locationId}`);
     }
 
-    function processSingleLocationFound(locationId: string, matchingLocations: Location[]): Location {
+    function processSingleLocationFound(locationId: string, matchingLocations: RatedLocation[]): Location {
       console.debug(`Single location found with id ${locationId}`);
-      const location = matchingLocations[0];
-      locationCache.set(location.id ?? "", location);  // TODO #312 Revert to saver types.
+      const location = matchingLocations[0] as Location;
+      locationCache.set(location.id, location);
       return location;
     }
 

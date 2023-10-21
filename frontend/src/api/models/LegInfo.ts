@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { LegInfoValidity } from './LegInfoValidity';
+import {
+    LegInfoValidityFromJSON,
+    LegInfoValidityFromJSONTyped,
+    LegInfoValidityToJSON,
+} from './LegInfoValidity';
+
 /**
  * 
  * @export
@@ -20,18 +27,67 @@ import { exists, mapValues } from '../runtime';
  */
 export interface LegInfo {
     /**
-     * Leg origin
+     * Priority of information.
      * @type {string}
      * @memberof LegInfo
      */
-    content?: string;
+    priority: LegInfoPriorityEnum;
+    /**
+     * 
+     * @type {LegInfoValidity}
+     * @memberof LegInfo
+     */
+    validity: LegInfoValidity;
+    /**
+     * Title of information. Empty string if there is none.
+     * @type {string}
+     * @memberof LegInfo
+     */
+    title: string;
+    /**
+     * Content of information (can be formatted with HTML)
+     * @type {string}
+     * @memberof LegInfo
+     */
+    content: string;
+    /**
+     * URL that supplies given content.
+     * @type {string}
+     * @memberof LegInfo
+     */
+    sourceUrl: string;
+    /**
+     * Additional links supplying further information. Can be empty if there are none.
+     * @type {Array<string>}
+     * @memberof LegInfo
+     */
+    additionalLinks: Array<string>;
 }
+
+
+/**
+ * @export
+ */
+export const LegInfoPriorityEnum = {
+    Low: 'low',
+    Normal: 'normal',
+    High: 'high',
+    VeryHigh: 'veryHigh'
+} as const;
+export type LegInfoPriorityEnum = typeof LegInfoPriorityEnum[keyof typeof LegInfoPriorityEnum];
+
 
 /**
  * Check if a given object implements the LegInfo interface.
  */
 export function instanceOfLegInfo(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "priority" in value;
+    isInstance = isInstance && "validity" in value;
+    isInstance = isInstance && "title" in value;
+    isInstance = isInstance && "content" in value;
+    isInstance = isInstance && "sourceUrl" in value;
+    isInstance = isInstance && "additionalLinks" in value;
 
     return isInstance;
 }
@@ -46,7 +102,12 @@ export function LegInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     }
     return {
         
-        'content': !exists(json, 'content') ? undefined : json['content'],
+        'priority': json['priority'],
+        'validity': LegInfoValidityFromJSON(json['validity']),
+        'title': json['title'],
+        'content': json['content'],
+        'sourceUrl': json['sourceUrl'],
+        'additionalLinks': json['additionalLinks'],
     };
 }
 
@@ -59,7 +120,12 @@ export function LegInfoToJSON(value?: LegInfo | null): any {
     }
     return {
         
+        'priority': value.priority,
+        'validity': LegInfoValidityToJSON(value.validity),
+        'title': value.title,
         'content': value.content,
+        'sourceUrl': value.sourceUrl,
+        'additionalLinks': value.additionalLinks,
     };
 }
 

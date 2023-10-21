@@ -22,12 +22,7 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
   const [zoom, setZoom] = useState<number>();
 
   const getLocationsCoords = (): LatLngTuple[] => locations
-    .map((location) => {
-      if (location.details.latitude === undefined) return;
-      if (location.details.longitude === undefined) return;
-      return [location.details.latitude, location.details.longitude];
-    })
-    .filter(tupel => tupel !== undefined) as LatLngTuple[];
+    .map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);
 
   /* const getBounds = (): LatLngTuple[] => {
     const bounds = getLocationsCoords();
@@ -46,7 +41,9 @@ const LeafletMapContainer = ({ currentLocation, origin, destination, locationIds
   }, []);
 
   return zoom ? (
-    <MapContainer id="map" center={[currentLocation.details.latitude ?? 0, currentLocation.details.longitude ?? 0]} zoom={zoom} >
+    <MapContainer id="map"
+                  center={[currentLocation.details.coordinates.latitude, currentLocation.details.coordinates.longitude]}
+                  zoom={zoom}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

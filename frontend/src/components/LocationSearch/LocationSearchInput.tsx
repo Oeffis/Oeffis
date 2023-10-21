@@ -33,7 +33,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const [showMap, setShowMap] = useState<boolean>(false);
-  const [isMapBtnDisabeld, setIsMapBtnDisabeld] = useState<boolean>(true);
+  const [isMapBtnDisabled, setIsMapBtnDisabled] = useState<boolean>(true);
 
   const setSelectedLocationAndCloseModal = (location: Location): void => {
     props.onSelectedLocationChanged(location);
@@ -56,10 +56,10 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   useEffect(() => {
     if (searchInput === "") {
-      setIsMapBtnDisabeld(true);
+      setIsMapBtnDisabled(true);
       setShowMap(false);
     } else {
-      setIsMapBtnDisabeld(false);
+      setIsMapBtnDisabled(false);
     }
   }, [searchInput]);
 
@@ -70,7 +70,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
-        value={props.selectedLocation?.name ?? ""}
+        value={props.selectedLocation?.name}
         label={props.inputLabel}
         labelPlacement="floating"
       />
@@ -82,7 +82,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             <IonButtons slot="end">
               <IonButton
                 onClick={() => showMap ? setShowMap(false) : setShowMap(true)}
-                disabled={isMapBtnDisabeld}
+                disabled={isMapBtnDisabled}
               >
                 Map
               </IonButton>

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from "@nestjs/common";
 import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client";
+import { LocationType as VrrLocationType } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { VrrClientBase } from "@oeffis/vrr_client/dist/VrrClientBase";
-import { RealtimeTripStatus, LocationType as VrrLocationType } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { LegRealtimeTripStatus } from "vrr/entity/legRealtimeTripStatus.entity";
 import { LocationType } from "vrr/entity/locationType.entity";
+import { LegInfoPriority } from "../entity/legInfoPriority.entity";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UrlConstructorType<T extends VrrClientBase> = new (baseUrl: string, ...args: unknown[]) => T;
 
 @Injectable()
@@ -17,7 +16,7 @@ export class ApiService {
     return new clientClass(this.baseUrl, ...args);
   }
 
-  public mapLocationType(vrrLocationType: VrrLocationType | undefined): LocationType {
+  public mapVrrLocationType(vrrLocationType: VrrLocationType | undefined): LocationType {
     const locationTypeMap: Record<VrrLocationType | string, LocationType> = {
       address: LocationType.address,
       crossing: LocationType.crossing,
@@ -32,29 +31,27 @@ export class ApiService {
       street: LocationType.street,
       suburb: LocationType.suburb,
       unknown: LocationType.unknown,
-      "singlehouse": LocationType.singlehouse
+      singlehouse: LocationType.singlehouse
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const locationType = vrrLocationType ? locationTypeMap[vrrLocationType] ?? LocationType.unknown : LocationType.unknown;
-
-    return locationType;
+    return vrrLocationType
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      ? locationTypeMap[vrrLocationType] ?? LocationType.unknown
+      : LocationType.unknown;
   }
 
-  public mapRealTimeTripStatus(vrrRealTimeTripStatus: RealtimeTripStatus | undefined): LegRealtimeTripStatus | undefined {
-    const realtimeStatusMap: Record<RealtimeTripStatus, LegRealtimeTripStatus> = {
-      DEVIATION: LegRealtimeTripStatus.deviation,
-      TRIP_CANCELLED: LegRealtimeTripStatus.tripCancelled,
-      EXTRA_STOPS: LegRealtimeTripStatus.extraStops,
-      EXTRA_TRIP: LegRealtimeTripStatus.extraTrip,
-      MONITORED: LegRealtimeTripStatus.monitored,
-      OUTSIDE_REALTIME_WINDOW: LegRealtimeTripStatus.outsideRealtimeWindow,
-      PROGNOSIS_IMPOSSIBLE: LegRealtimeTripStatus.prognosisImpossible,
-      REALTIME_ONLY_INFORMATIVE: LegRealtimeTripStatus.realtimeOnlyInformative
+  public mapLegInfoPriority(vrrLegInfoPriority: string | undefined): LegInfoPriority {
+    const legInfoPriorityMap: Record<string, LegInfoPriority> = {
+      "low": LegInfoPriority.low,
+      "normal": LegInfoPriority.normal,
+      "high": LegInfoPriority.high,
+      "veryHigh": LegInfoPriority.veryHigh
     };
 
-    const realtimeStatus = (vrrRealTimeTripStatus && realtimeStatusMap[vrrRealTimeTripStatus]) ?? undefined;
-
-    return realtimeStatus;
+    return vrrLegInfoPriority
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      ? legInfoPriorityMap[vrrLegInfoPriority] ?? LegInfoPriority.normal
+      : LegInfoPriority.normal;
   }
+
 }

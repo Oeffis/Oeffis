@@ -18,14 +18,11 @@
         },
         "responses": {
           "200": {
-            "description": "Returns the found locations.",
+            "description": "Location of coordinates with assigned stops.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Location"
-                  }
+                  "$ref": "#/components/schemas/LocationWithAssignedStops"
                 }
               }
             }
@@ -69,7 +66,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Location"
+                    "$ref": "#/components/schemas/RatedLocation"
                   }
                 }
               }
@@ -201,18 +198,154 @@
         "properties": {
           "latitude": {
             "type": "number",
-            "description": "Latitude of the location to search.",
+            "description": "Latitude of the location.",
             "example": 51.50598042775682
           },
           "longitude": {
             "type": "number",
-            "description": "Longitude of the location to search.",
+            "description": "Longitude of the location.",
             "example": 7.101082448485377
           }
         },
         "required": [
           "latitude",
           "longitude"
+        ]
+      },
+      "LocationCoordinates": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the location.",
+            "example": 51.50598042775682
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the location.",
+            "example": 7.101082448485377
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "ParentLocationDetails": {
+        "type": "object",
+        "properties": {
+          "shortName": {
+            "type": "string",
+            "description": "Short name of the location. Can be empty string.",
+            "example": "Hbf"
+          },
+          "coordinates": {
+            "description": "Coordinates of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationCoordinates"
+              }
+            ]
+          },
+          "parent": {
+            "description": "Parent of this location.",
+            "example": {
+              "id": "placeID:5513000:9",
+              "name": "Gelsenkirchen",
+              "type": "locality"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ParentLocation"
+              }
+            ]
+          }
+        }
+      },
+      "ParentLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the parent location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ParentLocationDetails"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details"
+        ]
+      },
+      "LocationDetails": {
+        "type": "object",
+        "properties": {
+          "shortName": {
+            "type": "string",
+            "description": "Short name of the location. Can be empty string.",
+            "example": "Hbf"
+          },
+          "coordinates": {
+            "description": "Coordinates of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationCoordinates"
+              }
+            ]
+          },
+          "parent": {
+            "description": "Parent of this location.",
+            "example": {
+              "id": "placeID:5513000:9",
+              "name": "Gelsenkirchen",
+              "type": "locality"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ParentLocation"
+              }
+            ]
+          }
+        },
+        "required": [
+          "shortName",
+          "coordinates",
+          "parent"
         ]
       },
       "Location": {
@@ -259,46 +392,125 @@
           }
         },
         "required": [
+          "id",
+          "name",
+          "type",
           "details"
         ]
       },
-      "LocationDetails": {
+      "RatedLocation": {
         "type": "object",
         "properties": {
-          "shortName": {
+          "id": {
             "type": "string",
-            "description": "Short name of the location.",
-            "example": "Hbf"
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
           },
-          "matchQuality": {
-            "type": "number",
-            "description": "Quality how well the given location meets the related query (biggest number is the best result).",
-            "example": 805
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
           },
-          "parent": {
-            "description": "Parent location of this location.",
-            "example": {
-              "id": "placeID:5513000:9",
-              "name": "Gelsenkirchen",
-              "type": "locality"
-            },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the location.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Location"
+                "$ref": "#/components/schemas/LocationDetails"
               }
             ]
           },
-          "latitude": {
+          "rating": {
             "type": "number",
-            "description": "Latitude of the location.",
-            "example": 51.50493
-          },
-          "longitude": {
-            "type": "number",
-            "description": "Longitude of the location.",
-            "example": 7.10221
+            "description": "How well the location result meets the query (positive integers including zero, higher means better).",
+            "example": 805
           }
-        }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "rating"
+        ]
+      },
+      "LocationWithAssignedStops": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDetails"
+              }
+            ]
+          },
+          "assignedStops": {
+            "description": "All stops assigned to the location.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RatedLocation"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "assignedStops"
+        ]
       },
       "BadRequest": {
         "type": "object",
@@ -359,32 +571,222 @@
           "asArrival": {
             "type": "boolean",
             "description": "Use departure date as arrival.",
-            "default": false,
             "example": false
           }
         },
         "required": [
           "originId",
           "destinationId",
-          "departure"
+          "departure",
+          "asArrival"
         ]
       },
-      "Time": {
+      "LegOriginLocation": {
         "type": "object",
         "properties": {
-          "estimated": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDetails"
+              }
+            ]
+          },
+          "departureTimePlanned": {
             "format": "date-time",
             "type": "string",
-            "description": "Time estimated.",
+            "description": "Planned departure time. If there is no specific departure time, arrival time gets duplicated.",
+            "example": "2023-08-29T17:02:00.000Z"
+          },
+          "departureTimeEstimated": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Estimated departure time. If there is no estimated departure time, planned departure time gets duplicated.",
+            "example": "2023-08-29T17:02:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "departureTimePlanned",
+          "departureTimeEstimated"
+        ]
+      },
+      "LegDestinationLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          },
+          "details": {
+            "description": "Further details of the location.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDetails"
+              }
+            ]
+          },
+          "arrivalTimePlanned": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Planned arrival time. If there is no specific arrival time, departure time gets duplicated.",
             "example": "2023-08-29T16:58:00.000Z"
           },
-          "planned": {
+          "arrivalTimeEstimated": {
             "format": "date-time",
             "type": "string",
-            "description": "Time planned.",
-            "example": "2023-08-29T17:23:00.000Z"
+            "description": "Estimated arrival time. If there is no estimated arrival time, planned arrival time gets duplicated.",
+            "example": "2023-08-29T16:59:30.000Z"
           }
-        }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "arrivalTimePlanned",
+          "arrivalTimeEstimated"
+        ]
+      },
+      "LegInfoValidity": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "format": "date-time",
+            "type": "string",
+            "description": "From which date on leg information becomes valid.",
+            "example": "2023-10-01T00:00:00.000Z"
+          },
+          "to": {
+            "format": "date-time",
+            "type": "string",
+            "description": "From which date on leg information is not valid any more. Sometimes a date far away in the future is used to state that there is no end date known yet.",
+            "example": "2023-10-12T23:59:00.000Z"
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ]
+      },
+      "LegInfo": {
+        "type": "object",
+        "properties": {
+          "priority": {
+            "type": "string",
+            "description": "Priority of information.",
+            "enum": [
+              "low",
+              "normal",
+              "high",
+              "veryHigh"
+            ],
+            "example": "normal"
+          },
+          "validity": {
+            "description": "In which period of time the leg information is valid.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegInfoValidity"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of information. Empty string if there is none.",
+            "example": "Haltestellenausfälle durch Baumaßnahme"
+          },
+          "content": {
+            "type": "string",
+            "description": "Content of information (can be formatted with HTML)",
+            "example": "<b>Linien 253, 253E und TB253: </b>An der <b>(H) Gladbeck, Paul-Löbe-Str.</b> kommt es zu <b>Haltestellenausfällen</b>.<br><br> Dauer: Bis auf Weiteres<br><br>Die Haltestellen werden nicht angefahren.Die (H) „Paul-Löbe-Straße“, (H) „Enfieldstraße“, (H) Theodor-Heuss-Straße und (H) „Gustav-Stresemannstraße“. Alternativhaltestellen: (H) „Hegestraße“ und Ersatz-(H) Haltestelle auf der Fritz-Erler-Straße.<br><br> Die beschriebenen Änderungen sind in der elektronischen Fahrplanauskunft (EFA) <b>nicht</b> berücksichtigt."
+          },
+          "sourceUrl": {
+            "type": "string",
+            "description": "URL that supplies given content.",
+            "example": "http://ems.vrr.de/info-link/3d6d3916-d219-5c50-8bd2-e7c5184eb1cc"
+          },
+          "additionalLinks": {
+            "description": "Additional links supplying further information. Can be empty if there are none.",
+            "example": [
+              "https://www.zuginfo.nrw/download/1694062491251_1693576007350_Plakat.pdf",
+              "https://www.zuginfo.nrw/download/1694062491297_1693576007385_Fahrplan.pdf"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "priority",
+          "validity",
+          "title",
+          "content",
+          "sourceUrl",
+          "additionalLinks"
+        ]
       },
       "JourneyLocation": {
         "type": "object",
@@ -428,173 +830,347 @@
               }
             ]
           },
-          "arrival": {
-            "description": "Arrival time.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Time"
-              }
-            ]
+          "arrivalTimePlanned": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Planned arrival time. If there is no specific arrival time, departure time gets duplicated.",
+            "example": "2023-08-29T16:58:00.000Z"
           },
-          "departure": {
-            "description": "Departure time.",
+          "departureTimePlanned": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Planned departure time. If there is no specific departure time, arrival time gets duplicated.",
+            "example": "2023-08-29T17:02:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "details",
+          "arrivalTimePlanned",
+          "departureTimePlanned"
+        ]
+      },
+      "Footpath": {
+        "type": "object",
+        "properties": {
+          "totalDuration": {
+            "type": "number",
+            "description": "Total duration of the footpath in seconds.",
+            "example": 360
+          },
+          "totalDistance": {
+            "type": "number",
+            "description": "Total distance of the footpath in meters.",
+            "example": 250
+          }
+        },
+        "required": [
+          "totalDuration",
+          "totalDistance"
+        ]
+      },
+      "LegInterchange": {
+        "type": "object",
+        "properties": {
+          "footpath": {
+            "description": "Details about the interchange footpath.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Time"
+                "$ref": "#/components/schemas/Footpath"
               }
             ]
           }
         },
         "required": [
-          "details",
-          "arrival",
-          "departure"
+          "footpath"
         ]
-      },
-      "Trip": {
-        "type": "object",
-        "properties": {
-          "arrivalTimePlannedJourneyDestination": {
-            "type": "string",
-            "description": "Planned arrival time at destination."
-          },
-          "departureTimePlannedJourneyOrigin": {
-            "type": "string",
-            "description": "Planned departure time at Origin."
-          },
-          "status": {
-            "type": "string",
-            "description": "Status information about trip."
-          },
-          "trainNumber": {
-            "type": "string",
-            "description": "Train number."
-          }
-        }
-      },
-      "Transportation": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of transportation vehicle.",
-            "example": "Regionalbahn 46"
-          },
-          "trips": {
-            "description": "Trips depending on this transportation.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Trip"
-            }
-          }
-        }
-      },
-      "LegInfo": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "string",
-            "description": "Leg origin",
-            "example": "Linie RE42: Fahrradmitnahme begrenzt möglich"
-          }
-        }
       },
       "LegDetails": {
         "type": "object",
         "properties": {
-          "distance": {
-            "type": "number",
-            "description": "Distance of leg in meter?"
-          },
           "duration": {
             "type": "number",
             "description": "Duration of leg in seconds.",
             "example": 480
           },
           "infos": {
-            "description": "Leg information.",
+            "description": "Information like restrictions regarding this specifically dated leg (can be empty).",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LegInfo"
             }
           },
-          "hints": {
-            "description": "Leg hints.",
+          "stopSequence": {
+            "description": "All stops that are part of this leg (origin to destination including intermediate stops).",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LegInfo"
+              "$ref": "#/components/schemas/JourneyLocation"
             }
           },
-          "realtimeTripStatus": {
+          "interchange": {
+            "description": "Interchange to next leg that takes place at the end of this leg.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegInterchange"
+              }
+            ]
+          },
+          "coords": {
+            "description": "Coordinates that are describing the route this leg takes.",
             "type": "array",
-            "description": "Leg real time status.",
             "items": {
-              "type": "string",
-              "enum": [
-                "DEVIATION",
-                "EXTRA_STOPS",
-                "EXTRA_TRIP",
-                "MONITORED",
-                "OUTSIDE_REALTIME_WINDOW",
-                "PROGNOSIS_IMPOSSIBLE",
-                "REALTIME_ONLY_INFORMATIVE",
-                "TRIP_CANCELLED"
-              ]
+              "$ref": "#/components/schemas/LocationCoordinates"
             }
           }
-        }
+        },
+        "required": [
+          "duration",
+          "infos",
+          "stopSequence",
+          "coords"
+        ]
       },
-      "Leg": {
+      "TransportationDestination": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of the location.",
+            "example": "de:05513:5613"
+          },
+          "name": {
+            "type": "string",
+            "description": "(Full) Name of the location.",
+            "example": "Gelsenkirchen, Hbf"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the location.",
+            "enum": [
+              "address",
+              "crossing",
+              "gis",
+              "locality",
+              "parking",
+              "platform",
+              "poi",
+              "poiHierarchy",
+              "sharing",
+              "stop",
+              "street",
+              "suburb",
+              "unknown",
+              "singlehouse"
+            ],
+            "example": "stop"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "Transportation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id of transportation vehicle.",
+            "example": "ddb:90E43: :R:j23"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of transportation vehicle.",
+            "example": "Regionalzug RB43"
+          },
+          "line": {
+            "type": "string",
+            "description": "Line (number) or short name of transportation vehicle.",
+            "example": "RB43"
+          },
+          "destination": {
+            "description": "Destination of transportation vehicle (id is no globalId mostly!).",
+            "example": {
+              "id": "20003868",
+              "name": "Dorsten Bf",
+              "type": "stop"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransportationDestination"
+              }
+            ]
+          },
+          "operator": {
+            "type": "string",
+            "description": "Operator of transportation vehicle (name). Can be empty string, if none is given.",
+            "example": "DB Regio AG NRW"
+          },
+          "hints": {
+            "description": "Hints about the specific transportation vehicle. Can be empty.",
+            "example": [
+              "Linie RB43: Fahrradmitnahme begrenzt möglich",
+              "Linie RB43: Fahrzeuggebundene Einstiegshilfe vorhanden",
+              "Linie RB43: rollstuhltaugliches WC"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "line",
+          "destination",
+          "operator",
+          "hints"
+        ]
+      },
+      "TransportationLeg": {
         "type": "object",
         "properties": {
           "origin": {
-            "description": "Leg origin",
+            "description": "Origin location of the leg.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/JourneyLocation"
+                "$ref": "#/components/schemas/LegOriginLocation"
               }
             ]
           },
           "destination": {
-            "description": "Leg destination.",
+            "description": "Destination location of the leg.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/JourneyLocation"
-              }
-            ]
-          },
-          "transportation": {
-            "description": "Leg transportation.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Transportation"
+                "$ref": "#/components/schemas/LegDestinationLocation"
               }
             ]
           },
           "details": {
-            "description": "Leg details.",
+            "description": "Further details of the leg.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/LegDetails"
               }
             ]
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the leg.",
+            "enum": [
+              "transportation",
+              "footpath"
+            ],
+            "default": "transportation"
+          },
+          "transportation": {
+            "description": "Transportation that is used in this leg.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Transportation"
+              }
+            ]
           }
         },
         "required": [
-          "details"
+          "origin",
+          "destination",
+          "details",
+          "type",
+          "transportation"
+        ]
+      },
+      "FootpathLeg": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "Origin location of the leg.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegOriginLocation"
+              }
+            ]
+          },
+          "destination": {
+            "description": "Destination location of the leg.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegDestinationLocation"
+              }
+            ]
+          },
+          "details": {
+            "description": "Further details of the leg.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegDetails"
+              }
+            ]
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the leg.",
+            "enum": [
+              "transportation",
+              "footpath"
+            ],
+            "default": "footpath"
+          },
+          "footpath": {
+            "description": "Details about the footpath.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Footpath"
+              }
+            ]
+          }
+        },
+        "required": [
+          "origin",
+          "destination",
+          "details",
+          "type",
+          "footpath"
         ]
       },
       "Journey": {
         "type": "object",
         "properties": {
+          "interchanges": {
+            "type": "number",
+            "description": "Number of interchanges contained in given journey (corresponds to number of legs minus one).",
+            "example": 2
+          },
           "legs": {
-            "description": "Legs of a journey.",
             "type": "array",
+            "description": "Partial trips/journeys which are forming the journey as a whole.",
             "items": {
-              "$ref": "#/components/schemas/Leg"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/TransportationLeg"
+                },
+                {
+                  "$ref": "#/components/schemas/FootpathLeg"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "transportation": "#/components/schemas/TransportationLeg",
+                  "footpath": "#/components/schemas/FootpathLeg"
+                }
+              }
             }
           }
-        }
+        },
+        "required": [
+          "interchanges",
+          "legs"
+        ]
       }
     }
   }

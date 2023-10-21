@@ -19,12 +19,6 @@ import {
     LocationDetailsFromJSONTyped,
     LocationDetailsToJSON,
 } from './LocationDetails';
-import type { Time } from './Time';
-import {
-    TimeFromJSON,
-    TimeFromJSONTyped,
-    TimeToJSON,
-} from './Time';
 
 /**
  * 
@@ -37,19 +31,19 @@ export interface JourneyLocation {
      * @type {string}
      * @memberof JourneyLocation
      */
-    id?: string;
+    id: string;
     /**
      * (Full) Name of the location.
      * @type {string}
      * @memberof JourneyLocation
      */
-    name?: string;
+    name: string;
     /**
      * Type of the location.
      * @type {string}
      * @memberof JourneyLocation
      */
-    type?: JourneyLocationTypeEnum;
+    type: JourneyLocationTypeEnum;
     /**
      * 
      * @type {LocationDetails}
@@ -57,17 +51,17 @@ export interface JourneyLocation {
      */
     details: LocationDetails;
     /**
-     * 
-     * @type {Time}
+     * Planned arrival time. If there is no specific arrival time, departure time gets duplicated.
+     * @type {Date}
      * @memberof JourneyLocation
      */
-    arrival: Time;
+    arrivalTimePlanned: Date;
     /**
-     * 
-     * @type {Time}
+     * Planned departure time. If there is no specific departure time, arrival time gets duplicated.
+     * @type {Date}
      * @memberof JourneyLocation
      */
-    departure: Time;
+    departureTimePlanned: Date;
 }
 
 
@@ -98,9 +92,12 @@ export type JourneyLocationTypeEnum = typeof JourneyLocationTypeEnum[keyof typeo
  */
 export function instanceOfJourneyLocation(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "type" in value;
     isInstance = isInstance && "details" in value;
-    isInstance = isInstance && "arrival" in value;
-    isInstance = isInstance && "departure" in value;
+    isInstance = isInstance && "arrivalTimePlanned" in value;
+    isInstance = isInstance && "departureTimePlanned" in value;
 
     return isInstance;
 }
@@ -115,12 +112,12 @@ export function JourneyLocationFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'type': !exists(json, 'type') ? undefined : json['type'],
+        'id': json['id'],
+        'name': json['name'],
+        'type': json['type'],
         'details': LocationDetailsFromJSON(json['details']),
-        'arrival': TimeFromJSON(json['arrival']),
-        'departure': TimeFromJSON(json['departure']),
+        'arrivalTimePlanned': (new Date(json['arrivalTimePlanned'])),
+        'departureTimePlanned': (new Date(json['departureTimePlanned'])),
     };
 }
 
@@ -137,8 +134,8 @@ export function JourneyLocationToJSON(value?: JourneyLocation | null): any {
         'name': value.name,
         'type': value.type,
         'details': LocationDetailsToJSON(value.details),
-        'arrival': TimeToJSON(value.arrival),
-        'departure': TimeToJSON(value.departure),
+        'arrivalTimePlanned': (value.arrivalTimePlanned.toISOString()),
+        'departureTimePlanned': (value.departureTimePlanned.toISOString()),
     };
 }
 

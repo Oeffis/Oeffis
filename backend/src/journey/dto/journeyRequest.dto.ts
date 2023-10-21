@@ -1,9 +1,10 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsBoolean, IsDate, IsNotEmpty, IsOptional } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, IsString } from "class-validator";
 
 export class JourneyRequestDto {
 
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
     description: "Origin (id) of the trip.",
@@ -13,6 +14,7 @@ export class JourneyRequestDto {
   })
   originId!: string;
 
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({
     description: "Destination (id) of the trip.",
@@ -33,13 +35,12 @@ export class JourneyRequestDto {
   departure!: Date;
 
   @IsBoolean()
-  @IsOptional()
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: "Use departure date as arrival.",
     type: Boolean,
-    default: false,
+    required: true,
     example: false
   })
-  asArrival?: boolean;
+  asArrival!: boolean;
 
 }
