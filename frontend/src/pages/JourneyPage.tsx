@@ -1,26 +1,33 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import logo from "../../public/images/train_image.png";
-import { Location } from "../api";
-import RoutePlanner from "../components/RoutePlanner";
+import { Location, LocationTypeEnum } from "../api";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
+import RoutePlanner from "../components/RoutePlanner";
 import "./JourneyPage.css";
+
+const INITIAL_LOCATION: Location = {
+  id: "",
+  name: "",
+  type: LocationTypeEnum.Locality,
+  details: {
+    shortName: "",
+    coordinates: {
+      latitude: 51.183334,
+      longitude: 7.200000
+    },
+    parent: {
+      id: "",
+      name: "",
+      type: LocationTypeEnum.Unknown,
+      details: {}
+    }
+  }
+} as Location;
 
 const JourneyPage: React.FC = () => {
 
-  const [currentLocation, setCurrentLocation] = useState<Location>(
-    {
-      id: "",
-      name: "",
-      type: "locality",
-      details: {
-        shortName: "",
-        matchQuality: 0,
-        latitude: 51.183334,
-        longitude: 7.200000
-      }
-    }
-  );
+  const [currentLocation, setCurrentLocation] = useState<Location>(INITIAL_LOCATION);
   const [origin, setOrigin] = useState<Location>();
   const [destination, setDestination] = useState<Location>();
 
@@ -29,10 +36,10 @@ const JourneyPage: React.FC = () => {
     const locations: string[] = [];
 
     if (origin !== undefined) {
-      locations.push(origin.id ?? "");
+      locations.push(origin.id);
     }
     if (destination !== undefined) {
-      locations.push(destination.id ?? "");
+      locations.push(destination.id);
     }
 
     return locations;
@@ -55,30 +62,10 @@ const JourneyPage: React.FC = () => {
        )
        .catch(error => {
          console.log(error);
-         setCurrentLocation({
-           id: "",
-           name: "",
-           type: "locality",
-           details: {
-             shortName: "",
-             matchQuality: 0,
-             latitude: 51.183334,
-             longitude: 7.200000
-           }
-         });
+         setCurrentLocation(INITIAL_LOCATION);
        }); */
 
-    setCurrentLocation({
-      id: "",
-      name: "",
-      type: "locality",
-      details: {
-        shortName: "",
-        matchQuality: 0,
-        latitude: 51.183334,
-        longitude: 7.200000
-      }
-    });
+    setCurrentLocation(INITIAL_LOCATION);
   }, []);
 
   return (
@@ -89,7 +76,7 @@ const JourneyPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <div className="menuBar">
-            <IonTitle>Oeffies</IonTitle>
+            <IonTitle>Oeffis</IonTitle>
             <IonImg className="menuLogo" src={logo} />
           </div>
         </IonToolbar>

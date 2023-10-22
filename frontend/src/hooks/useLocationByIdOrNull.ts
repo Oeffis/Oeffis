@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Location } from "../api";
+import { Location, RatedLocation } from "../api";
 import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 const locationCache = new Map<string, Location>();
@@ -25,7 +25,7 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       )
       .then(processLocationResult, processLocationFailure);
 
-    function processLocationResult(matchingLocations: Location[]): void {
+    function processLocationResult(matchingLocations: RatedLocation[]): void {
       isAborted()
         || checkNoLocationFound(matchingLocations)
         || checkMultipleLocationsFound(matchingLocations)
@@ -36,7 +36,7 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       return abortController.signal.aborted;
     }
 
-    function checkNoLocationFound(matchingLocations: Location[]): boolean {
+    function checkNoLocationFound(matchingLocations: RatedLocation[]): boolean {
       if (matchingLocations.length !== 0) return false;
       console.warn(`No location found with id ${locationId}`);
       return true;
@@ -48,11 +48,11 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       return true;
     }
 
-    function processSingleLocationFound(matchingLocations: Location[]): true {
+    function processSingleLocationFound(matchingLocations: RatedLocation[]): true {
       console.debug(`Single location found with id ${locationId}`);
-      const location = matchingLocations[0];
-      locationCache.set(location.id ?? "", location);  // TODO #312 Revert to saver types.
-      setLocation(matchingLocations[0]);
+      const location = matchingLocations[0] as Location;
+      locationCache.set(location.id, location);
+      setLocation(location);
       return true;
     }
 

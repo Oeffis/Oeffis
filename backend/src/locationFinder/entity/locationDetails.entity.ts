@@ -1,64 +1,55 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsDefined, IsInstance, IsLatitude, IsLongitude, IsNumber, IsOptional } from "class-validator";
-import { Location } from "./location.entity";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { IsInstance, IsString } from "class-validator";
+import { ParentLocation } from "./location.entity";
+import { LocationCoordinates } from "./locationCoordinates.entity";
 
+/**
+ * Details of a location. Fields that are not primarily relevant to identify one location.
+ */
 export class LocationDetails {
 
-  @IsDefined()
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Short name of the location.",
+  @IsString()
+  @ApiProperty({
+    description: "Short name of the location. Can be empty string.",
     type: String,
+    required: true,
     example: "Hbf"
   })
-  shortName?: string;
+  shortName: string;
 
-  @IsNumber()
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Quality how well the given location meets the related query (biggest number is the best result).",
-    type: Number,
-    example: 805
+  @IsInstance(LocationCoordinates)
+  @ApiProperty({
+    description: "Coordinates of the location.",
+    type: LocationCoordinates,
+    required: true
   })
-  matchQuality?: number;
+  coordinates: LocationCoordinates;
 
-  @IsInstance(Location)
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Parent location of this location.",
-    type: () => Location,
+  @IsInstance(ParentLocation)
+  @ApiProperty({
+    description: "Parent of this location.",
+    type: () => ParentLocation,
+    required: true,
     example: {
       id: "placeID:5513000:9",
       name: "Gelsenkirchen",
       type: "locality"
     }
   })
-  parent?: Location;
+  parent: ParentLocation;
 
-  @IsLatitude()
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Latitude of the location.",
-    type: Number,
-    example: 51.50493
-  })
-  latitude?: number;
+  constructor(
+    shortName: string,
+    coordinates: LocationCoordinates,
+    parent: ParentLocation) {
 
-  @IsLongitude()
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Longitude of the location.",
-    type: Number,
-    example: 7.10221
-  })
-  longitude?: number;
-
-  constructor(shortName: string, matchQuality: number, parent: Location, latitude: number, longitude: number) {
     this.shortName = shortName;
     this.parent = parent;
-    this.matchQuality = matchQuality;
-    this.latitude = latitude;
-    this.longitude = longitude;
+    this.coordinates = coordinates;
   }
-
 }
+
+/**
+ * Special type of location details, that is used for location parents. Fields are all optional.
+ */
+export class ParentLocationDetails extends PartialType(LocationDetails) {}

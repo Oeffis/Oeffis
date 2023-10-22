@@ -1,5 +1,6 @@
 import { IonIcon, IonItem, IonLabel, IonSkeletonText } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
+import React from "react";
 import { Location, LocationTypeEnum } from "../../api";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
@@ -55,7 +56,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
 
   return (
     <>
-      <LocationIcon type={location.type ?? LocationTypeEnum.Unknown} /> {/* TODO #312 Revert to saver types. */}
+      <LocationIcon type={location.type}/>
       <IonLabel
         data-testid="locationName"
         onClick={() => onItemClicked(location)}
@@ -66,11 +67,11 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
         ? <IonIcon
           icon={star}
           color="warning"
-          onClick={() => removeFavoriteLocationById(location.id ?? "")} /* TODO #312 Revert to saver types. */
+          onClick={() => removeFavoriteLocationById(location.id)}
           title="Remove from favorites" />
         : <IonIcon
           icon={starOutline}
-          onClick={() => addFavoriteLocation({ locationId: location.id ?? "" })} /* TODO #312 Revert to saver types. */
+          onClick={() => addFavoriteLocation({ locationId: location.id })}
           title="Add to favorites" />}
     </>
   );

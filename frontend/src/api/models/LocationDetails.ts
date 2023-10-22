@@ -12,12 +12,19 @@
  * Do not edit the class manually.
  */
 
-import { exists } from '../runtime';
-import type { Location } from './Location';
+import { exists, mapValues } from '../runtime';
+import type { LocationCoordinates } from './LocationCoordinates';
 import {
-    LocationFromJSON,
-    LocationToJSON
-} from './Location';
+    LocationCoordinatesFromJSON,
+    LocationCoordinatesFromJSONTyped,
+    LocationCoordinatesToJSON,
+} from './LocationCoordinates';
+import type { ParentLocation } from './ParentLocation';
+import {
+    ParentLocationFromJSON,
+    ParentLocationFromJSONTyped,
+    ParentLocationToJSON,
+} from './ParentLocation';
 
 /**
  * 
@@ -26,35 +33,23 @@ import {
  */
 export interface LocationDetails {
     /**
-     * Short name of the location.
+     * Short name of the location. Can be empty string.
      * @type {string}
      * @memberof LocationDetails
      */
-    shortName?: string;
-    /**
-     * Quality how well the given location meets the related query (biggest number is the best result).
-     * @type {number}
-     * @memberof LocationDetails
-     */
-    matchQuality?: number;
+    shortName: string;
     /**
      * 
-     * @type {Location}
+     * @type {LocationCoordinates}
      * @memberof LocationDetails
      */
-    parent?: Location;
+    coordinates: LocationCoordinates;
     /**
-     * Latitude of the location.
-     * @type {number}
+     * 
+     * @type {ParentLocation}
      * @memberof LocationDetails
      */
-    latitude?: number;
-    /**
-     * Longitude of the location.
-     * @type {number}
-     * @memberof LocationDetails
-     */
-    longitude?: number;
+    parent: ParentLocation;
 }
 
 /**
@@ -62,6 +57,9 @@ export interface LocationDetails {
  */
 export function instanceOfLocationDetails(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "shortName" in value;
+    isInstance = isInstance && "coordinates" in value;
+    isInstance = isInstance && "parent" in value;
 
     return isInstance;
 }
@@ -75,17 +73,10 @@ export function LocationDetailsFromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-        'shortName': !exists(json, 'shortName') ? undefined : json['shortName'],
-        'matchQuality': !exists(json, 'matchQuality') ? undefined : json['matchQuality'],
-        'parent': !exists(json, 'parent') ? undefined : LocationFromJSON(json['parent']),
-        'latitude': !exists(json, 'latitude') ? undefined : json['latitude'],
-        'longitude': !exists(json, 'longitude') ? undefined : json['longitude'],
-
-        /*  'shortName': json['shortName'],
-         'matchQuality': json['matchQuality'],
-         'parent': LocationFromJSON(json['parent']),
-         'latitude': json['latitude'],
-         'longitude': json['longitude'], */
+        
+        'shortName': json['shortName'],
+        'coordinates': LocationCoordinatesFromJSON(json['coordinates']),
+        'parent': ParentLocationFromJSON(json['parent']),
     };
 }
 
@@ -97,11 +88,10 @@ export function LocationDetailsToJSON(value?: LocationDetails | null): any {
         return null;
     }
     return {
-
+        
         'shortName': value.shortName,
-        'matchQuality': value.matchQuality,
-        'parent': LocationToJSON(value.parent),
-        'latitude': value.latitude,
-        'longitude': value.longitude,
+        'coordinates': LocationCoordinatesToJSON(value.coordinates),
+        'parent': ParentLocationToJSON(value.parent),
     };
 }
+

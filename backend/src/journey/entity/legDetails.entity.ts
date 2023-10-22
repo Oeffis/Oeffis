@@ -1,61 +1,71 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsArray, IsEnum, IsInstance, IsNumber, IsOptional } from "class-validator";
-import { LegRealtimeTripStatus } from "../../vrr/entity/legRealtimeTripStatus.entity";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsArray, IsInstance, IsInt, IsOptional, Min } from "class-validator";
+import { LocationCoordinates } from "../../locationFinder/entity/locationCoordinates.entity";
+import { JourneyLocation } from "./journeyLocation.entity";
 import { LegInfo } from "./legInfo.entity";
+import { LegInterchange } from "./legInterchange.entity";
 
+/**
+ * Details of journey leg.
+ */
 export class LegDetails {
 
-  @IsNumber()
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Distance of leg in meter?",
-    type: Number
-  })
-  distance?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @ApiPropertyOptional({
+  @IsInt()
+  @Min(0)
+  @ApiProperty({
     description: "Duration of leg in seconds.",
     type: Number,
+    required: true,
     example: 480
   })
-  duration?: number;
+  duration: number;
 
   @IsArray()
   @IsInstance(LegInfo, { each: true })
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Leg information.",
-    type: [LegInfo]
+  @ApiProperty({
+    description: "Information like restrictions regarding this specifically dated leg (can be empty).",
+    type: [LegInfo],
+    required: true
   })
-  infos?: LegInfo[];
+  infos: LegInfo[];
 
   @IsArray()
-  @IsInstance(LegInfo, { each: true })
+  @IsInstance(JourneyLocation, { each: true })
+  @ApiProperty({
+    description: "All stops that are part of this leg (origin to destination including intermediate stops).",
+    type: [JourneyLocation],
+    required: true
+  })
+  stopSequence: JourneyLocation[];
+
+  @IsInstance(LegInterchange)
   @IsOptional()
   @ApiPropertyOptional({
-    description: "Leg hints.",
-    type: [LegInfo]
+    description: "Interchange to next leg that takes place at the end of this leg.",
+    type: LegInterchange
   })
-  hints?: LegInfo[];
+  interchange?: LegInterchange;
 
   @IsArray()
-  @IsEnum(LegRealtimeTripStatus, { each: true })
-  @IsOptional()
-  @ApiPropertyOptional({
-    description: "Leg real time status.",
-    isArray: true,
-    enum: LegRealtimeTripStatus
+  @IsInstance(LocationCoordinates, { each: true })
+  @ApiProperty({
+    description: "Coordinates that are describing the route this leg takes.",
+    type: [LocationCoordinates],
+    required: true
   })
-  realtimeTripStatus?: LegRealtimeTripStatus[];
+  coords: LocationCoordinates[];
 
-  constructor(distance: number, duration: number, infos: LegInfo[], hints: LegInfo[], realtimeTripStatus?: LegRealtimeTripStatus[]) {
-    this.distance = distance;
+  constructor(
+    duration: number,
+    infos: LegInfo[],
+    stopSequence: JourneyLocation[],
+    coords: LocationCoordinates[],
+    interchange?: LegInterchange) {
+
     this.duration = duration;
     this.infos = infos;
-    this.hints = hints;
-    this.realtimeTripStatus = realtimeTripStatus;
+    this.stopSequence = stopSequence;
+    this.coords = coords;
+    this.interchange = interchange;
   }
-
 }

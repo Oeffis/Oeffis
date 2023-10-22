@@ -20,13 +20,13 @@ import { exists, mapValues } from '../runtime';
  */
 export interface LocationCoordinatesDto {
     /**
-     * Latitude of the location to search.
+     * Latitude of the location.
      * @type {number}
      * @memberof LocationCoordinatesDto
      */
     latitude: number;
     /**
-     * Longitude of the location to search.
+     * Longitude of the location.
      * @type {number}
      * @memberof LocationCoordinatesDto
      */
