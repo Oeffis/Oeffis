@@ -32,8 +32,8 @@ export class JourneyLocation extends Location {
     name: string,
     type: LocationType,
     details: LocationDetails,
-    arrivalTimePlanned: Date,
-    departureTimePlanned: Date) {
+    arrivalTimePlanned?: Date,
+    departureTimePlanned?: Date) {
 
     super(id, name, type, details);
     this.arrivalTimePlanned = arrivalTimePlanned;
