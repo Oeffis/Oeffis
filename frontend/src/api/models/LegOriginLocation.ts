@@ -51,7 +51,7 @@ export interface LegOriginLocation {
      */
     details: LocationDetails;
     /**
-     * Planned departure time. If there is no specific departure time, arrival time gets duplicated.
+     * Planned departure time.
      * @type {Date}
      * @memberof LegOriginLocation
      */

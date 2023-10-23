@@ -51,7 +51,7 @@ export interface LegDestinationLocation {
      */
     details: LocationDetails;
     /**
-     * Planned arrival time. If there is no specific arrival time, departure time gets duplicated.
+     * Planned arrival time.
      * @type {Date}
      * @memberof LegDestinationLocation
      */

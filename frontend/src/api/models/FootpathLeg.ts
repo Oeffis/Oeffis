@@ -135,3 +135,4 @@ export function FootpathLegToJSON(value?: FootpathLeg | null): any {
         'footpath': FootpathToJSON(value.footpath),
     };
 }
+

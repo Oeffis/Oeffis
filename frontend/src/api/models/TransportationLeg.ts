@@ -135,3 +135,4 @@ export function TransportationLegToJSON(value?: TransportationLeg | null): any {
         'transportation': TransportationToJSON(value.transportation),
     };
 }
+
