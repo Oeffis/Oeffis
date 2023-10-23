@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Leg } from './Leg';
+import type { JourneyLegsInner } from './JourneyLegsInner';
 import {
-    LegFromJSON,
-    LegFromJSONTyped,
-    LegToJSON,
-} from './Leg';
+    JourneyLegsInnerFromJSON,
+    JourneyLegsInnerFromJSONTyped,
+    JourneyLegsInnerToJSON,
+} from './JourneyLegsInner';
 
 /**
  * 
@@ -27,11 +27,17 @@ import {
  */
 export interface Journey {
     /**
-     * Legs of a journey.
-     * @type {Array<Leg>}
+     * Number of interchanges contained in given journey (corresponds to number of legs minus one).
+     * @type {number}
      * @memberof Journey
      */
-    legs?: Array<Leg>;
+    interchanges: number;
+    /**
+     * Partial trips/journeys which are forming the journey as a whole.
+     * @type {Array<JourneyLegsInner>}
+     * @memberof Journey
+     */
+    legs: Array<JourneyLegsInner>;
 }
 
 /**
@@ -39,6 +45,8 @@ export interface Journey {
  */
 export function instanceOfJourney(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "interchanges" in value;
+    isInstance = isInstance && "legs" in value;
 
     return isInstance;
 }
@@ -53,7 +61,8 @@ export function JourneyFromJSONTyped(json: any, ignoreDiscriminator: boolean): J
     }
     return {
         
-        'legs': !exists(json, 'legs') ? undefined : ((json['legs'] as Array<any>).map(LegFromJSON)),
+        'interchanges': json['interchanges'],
+        'legs': ((json['legs'] as Array<any>).map(JourneyLegsInnerFromJSON)),
     };
 }
 
@@ -66,7 +75,8 @@ export function JourneyToJSON(value?: Journey | null): any {
     }
     return {
         
-        'legs': value.legs === undefined ? undefined : ((value.legs as Array<any>).map(LegToJSON)),
+        'interchanges': value.interchanges,
+        'legs': ((value.legs as Array<any>).map(JourneyLegsInnerToJSON)),
     };
 }
 

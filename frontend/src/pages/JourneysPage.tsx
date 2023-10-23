@@ -12,12 +12,13 @@ import {
   IonList
 } from "@ionic/react";
 import React, { useState } from "react";
-import { Journey, JourneyRequestDto, Location } from "../api";
+import { Journey, JourneyRequestDto, Location, TransportationLeg, TransportationLegTypeEnum } from "../api";
 import { useJourneyApi, useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 /**
  * Container of elements related to journeys.
  */
+// TODO Is this page even used in some place anymore?
 const JourneysPage: React.FC = () => {
   const locationFinderService = useLocationFinderApi();
   const journeyService = useJourneyApi();
@@ -44,21 +45,6 @@ const JourneysPage: React.FC = () => {
    * Plans a journey with given start and destination.
    */
   const planJourney = async (): Promise<void> => {
-    // Mock for the user location (uses "Westfälische Hochschule Gelsenkirchen" as user location).
-    // TODO Determine real user location.
-    // const userLocation = {
-    //   address: "Neidenburger Str. 43, 45897 Gelsenkirchen",
-    //   latitude: 51.574272755490284,
-    //   longitude: 7.027275510766967
-    // };
-
-    // const startLocation = !useLocationAsStart
-    //   ? planJourneyStart
-    //   : userLocation;
-    // const destinationLocation = !useLocationAsDestination
-    //   ? planJourneyDestination
-    //   : userLocation;
-
     const journeyParameters: JourneyRequestDto = {
       originId: planJourneyStart,
       destinationId: planJourneyDestination,
@@ -78,11 +64,12 @@ const JourneysPage: React.FC = () => {
    * @param journey journey
    */
   const getJourneyShortDescr = (journey: Journey): string => (
-    // TODO #312 Revert to saver types.
-    (journey.legs ?? [])
-      .map(leg => (
-        leg.transportation?.name + " " + leg.destination?.name
-      ))
+    journey.legs.map(leg =>
+      leg.type === TransportationLegTypeEnum.Transportation
+        ? (leg as TransportationLeg).transportation.name
+        + " (" + (leg as TransportationLeg).transportation.destination.name + ") "
+        : "footpath"
+    )
       .join(" -> ")
   );
 

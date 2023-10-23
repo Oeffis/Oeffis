@@ -5,7 +5,7 @@ export class LocationCoordinatesDto {
 
   @IsLatitude()
   @ApiProperty({
-    description: "Latitude of the location to search.",
+    description: "Latitude of the location.",
     type: Number,
     required: true,
     example: 51.50598042775682
@@ -14,7 +14,7 @@ export class LocationCoordinatesDto {
 
   @IsLongitude()
   @ApiProperty({
-    description: "Longitude of the location to search.",
+    description: "Longitude of the location.",
     type: Number,
     required: true,
     example: 7.101082448485377

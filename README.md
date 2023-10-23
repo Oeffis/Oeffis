@@ -53,6 +53,13 @@ Needed dependencies will be listed here:
 -   install Node.js Version 18
 -   Docker
 
+## Importing and using the database
+
+1. Make sure to delete the current database in the `.localdev` folder if it exists.
+2. Remove all files fro mthe `schema` folder.
+3. Download the latest dump from [https://dumps.oeffis.0209.cloud/](https://dumps.oeffis.0209.cloud/).
+4. Place the dump in the `schema` folder.
+5. Run `docker-compose up` to start the database.
 
 ## Updating the generated Client
 

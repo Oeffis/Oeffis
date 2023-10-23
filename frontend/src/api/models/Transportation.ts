@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Trip } from './Trip';
+import type { TransportationDestination } from './TransportationDestination';
 import {
-    TripFromJSON,
-    TripFromJSONTyped,
-    TripToJSON,
-} from './Trip';
+    TransportationDestinationFromJSON,
+    TransportationDestinationFromJSONTyped,
+    TransportationDestinationToJSON,
+} from './TransportationDestination';
 
 /**
  * 
@@ -27,17 +27,41 @@ import {
  */
 export interface Transportation {
     /**
+     * Id of transportation vehicle.
+     * @type {string}
+     * @memberof Transportation
+     */
+    id: string;
+    /**
      * Name of transportation vehicle.
      * @type {string}
      * @memberof Transportation
      */
-    name?: string;
+    name: string;
     /**
-     * Trips depending on this transportation.
-     * @type {Array<Trip>}
+     * Line (number) or short name of transportation vehicle.
+     * @type {string}
      * @memberof Transportation
      */
-    trips?: Array<Trip>;
+    line: string;
+    /**
+     * 
+     * @type {TransportationDestination}
+     * @memberof Transportation
+     */
+    destination: TransportationDestination;
+    /**
+     * Operator of transportation vehicle (name). Can be empty string, if none is given.
+     * @type {string}
+     * @memberof Transportation
+     */
+    operator: string;
+    /**
+     * Hints about the specific transportation vehicle. Can be empty.
+     * @type {Array<string>}
+     * @memberof Transportation
+     */
+    hints: Array<string>;
 }
 
 /**
@@ -45,6 +69,12 @@ export interface Transportation {
  */
 export function instanceOfTransportation(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "line" in value;
+    isInstance = isInstance && "destination" in value;
+    isInstance = isInstance && "operator" in value;
+    isInstance = isInstance && "hints" in value;
 
     return isInstance;
 }
@@ -59,8 +89,12 @@ export function TransportationFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'trips': !exists(json, 'trips') ? undefined : ((json['trips'] as Array<any>).map(TripFromJSON)),
+        'id': json['id'],
+        'name': json['name'],
+        'line': json['line'],
+        'destination': TransportationDestinationFromJSON(json['destination']),
+        'operator': json['operator'],
+        'hints': json['hints'],
     };
 }
 
@@ -73,8 +107,12 @@ export function TransportationToJSON(value?: Transportation | null): any {
     }
     return {
         
+        'id': value.id,
         'name': value.name,
-        'trips': value.trips === undefined ? undefined : ((value.trips as Array<any>).map(TripToJSON)),
+        'line': value.line,
+        'destination': TransportationDestinationToJSON(value.destination),
+        'operator': value.operator,
+        'hints': value.hints,
     };
 }
 

@@ -16,19 +16,22 @@
 import * as runtime from '../runtime';
 import type {
   BadRequest,
-  Location,
   LocationCoordinatesDto,
   LocationNameDto,
+  LocationWithAssignedStops,
+  RatedLocation,
 } from '../models/index';
 import {
     BadRequestFromJSON,
     BadRequestToJSON,
-    LocationFromJSON,
-    LocationToJSON,
     LocationCoordinatesDtoFromJSON,
     LocationCoordinatesDtoToJSON,
     LocationNameDtoFromJSON,
     LocationNameDtoToJSON,
+    LocationWithAssignedStopsFromJSON,
+    LocationWithAssignedStopsToJSON,
+    RatedLocationFromJSON,
+    RatedLocationToJSON,
 } from '../models/index';
 
 export interface LocationFinderControllerFindLocationIdsByNameRequest {
@@ -84,7 +87,7 @@ export class LocationFinderApi extends runtime.BaseAPI {
     /**
      * finds locations at given coordinates
      */
-    async locationFinderControllerFindLocationsAtCoordinatesRaw(requestParameters: LocationFinderControllerFindLocationsAtCoordinatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Location>>> {
+    async locationFinderControllerFindLocationsAtCoordinatesRaw(requestParameters: LocationFinderControllerFindLocationsAtCoordinatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LocationWithAssignedStops>> {
         if (requestParameters.locationCoordinatesDto === null || requestParameters.locationCoordinatesDto === undefined) {
             throw new runtime.RequiredError('locationCoordinatesDto','Required parameter requestParameters.locationCoordinatesDto was null or undefined when calling locationFinderControllerFindLocationsAtCoordinates.');
         }
@@ -103,13 +106,13 @@ export class LocationFinderApi extends runtime.BaseAPI {
             body: LocationCoordinatesDtoToJSON(requestParameters.locationCoordinatesDto),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LocationFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LocationWithAssignedStopsFromJSON(jsonValue));
     }
 
     /**
      * finds locations at given coordinates
      */
-    async locationFinderControllerFindLocationsAtCoordinates(locationCoordinatesDto: LocationCoordinatesDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Location>> {
+    async locationFinderControllerFindLocationsAtCoordinates(locationCoordinatesDto: LocationCoordinatesDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LocationWithAssignedStops> {
         const response = await this.locationFinderControllerFindLocationsAtCoordinatesRaw({ locationCoordinatesDto: locationCoordinatesDto }, initOverrides);
         return await response.value();
     }
@@ -117,7 +120,7 @@ export class LocationFinderApi extends runtime.BaseAPI {
     /**
      * finds locations by name
      */
-    async locationFinderControllerFindLocationsByNameRaw(requestParameters: LocationFinderControllerFindLocationsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Location>>> {
+    async locationFinderControllerFindLocationsByNameRaw(requestParameters: LocationFinderControllerFindLocationsByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RatedLocation>>> {
         if (requestParameters.locationNameDto === null || requestParameters.locationNameDto === undefined) {
             throw new runtime.RequiredError('locationNameDto','Required parameter requestParameters.locationNameDto was null or undefined when calling locationFinderControllerFindLocationsByName.');
         }
@@ -136,13 +139,13 @@ export class LocationFinderApi extends runtime.BaseAPI {
             body: LocationNameDtoToJSON(requestParameters.locationNameDto),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LocationFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RatedLocationFromJSON));
     }
 
     /**
      * finds locations by name
      */
-    async locationFinderControllerFindLocationsByName(locationNameDto: LocationNameDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Location>> {
+    async locationFinderControllerFindLocationsByName(locationNameDto: LocationNameDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RatedLocation>> {
         const response = await this.locationFinderControllerFindLocationsByNameRaw({ locationNameDto: locationNameDto }, initOverrides);
         return await response.value();
     }

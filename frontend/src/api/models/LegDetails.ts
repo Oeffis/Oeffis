@@ -13,12 +13,30 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { JourneyLocation } from './JourneyLocation';
+import {
+    JourneyLocationFromJSON,
+    JourneyLocationFromJSONTyped,
+    JourneyLocationToJSON,
+} from './JourneyLocation';
 import type { LegInfo } from './LegInfo';
 import {
     LegInfoFromJSON,
     LegInfoFromJSONTyped,
     LegInfoToJSON,
 } from './LegInfo';
+import type { LegInterchange } from './LegInterchange';
+import {
+    LegInterchangeFromJSON,
+    LegInterchangeFromJSONTyped,
+    LegInterchangeToJSON,
+} from './LegInterchange';
+import type { LocationCoordinates } from './LocationCoordinates';
+import {
+    LocationCoordinatesFromJSON,
+    LocationCoordinatesFromJSONTyped,
+    LocationCoordinatesToJSON,
+} from './LocationCoordinates';
 
 /**
  * 
@@ -27,59 +45,46 @@ import {
  */
 export interface LegDetails {
     /**
-     * Distance of leg in meter?
-     * @type {number}
-     * @memberof LegDetails
-     */
-    distance?: number;
-    /**
      * Duration of leg in seconds.
      * @type {number}
      * @memberof LegDetails
      */
-    duration?: number;
+    duration: number;
     /**
-     * Leg information.
+     * Information like restrictions regarding this specifically dated leg (can be empty).
      * @type {Array<LegInfo>}
      * @memberof LegDetails
      */
-    infos?: Array<LegInfo>;
+    infos: Array<LegInfo>;
     /**
-     * Leg hints.
-     * @type {Array<LegInfo>}
+     * All stops that are part of this leg (origin to destination including intermediate stops).
+     * @type {Array<JourneyLocation>}
      * @memberof LegDetails
      */
-    hints?: Array<LegInfo>;
+    stopSequence: Array<JourneyLocation>;
     /**
-     * Leg real time status.
-     * @type {Array<string>}
+     * 
+     * @type {LegInterchange}
      * @memberof LegDetails
      */
-    realtimeTripStatus?: Array<LegDetailsRealtimeTripStatusEnum>;
+    interchange?: LegInterchange;
+    /**
+     * Coordinates that are describing the route this leg takes.
+     * @type {Array<LocationCoordinates>}
+     * @memberof LegDetails
+     */
+    coords: Array<LocationCoordinates>;
 }
-
-
-/**
- * @export
- */
-export const LegDetailsRealtimeTripStatusEnum = {
-    Deviation: 'DEVIATION',
-    ExtraStops: 'EXTRA_STOPS',
-    ExtraTrip: 'EXTRA_TRIP',
-    Monitored: 'MONITORED',
-    OutsideRealtimeWindow: 'OUTSIDE_REALTIME_WINDOW',
-    PrognosisImpossible: 'PROGNOSIS_IMPOSSIBLE',
-    RealtimeOnlyInformative: 'REALTIME_ONLY_INFORMATIVE',
-    TripCancelled: 'TRIP_CANCELLED'
-} as const;
-export type LegDetailsRealtimeTripStatusEnum = typeof LegDetailsRealtimeTripStatusEnum[keyof typeof LegDetailsRealtimeTripStatusEnum];
-
 
 /**
  * Check if a given object implements the LegDetails interface.
  */
 export function instanceOfLegDetails(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "duration" in value;
+    isInstance = isInstance && "infos" in value;
+    isInstance = isInstance && "stopSequence" in value;
+    isInstance = isInstance && "coords" in value;
 
     return isInstance;
 }
@@ -94,11 +99,11 @@ export function LegDetailsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'distance': !exists(json, 'distance') ? undefined : json['distance'],
-        'duration': !exists(json, 'duration') ? undefined : json['duration'],
-        'infos': !exists(json, 'infos') ? undefined : ((json['infos'] as Array<any>).map(LegInfoFromJSON)),
-        'hints': !exists(json, 'hints') ? undefined : ((json['hints'] as Array<any>).map(LegInfoFromJSON)),
-        'realtimeTripStatus': !exists(json, 'realtimeTripStatus') ? undefined : json['realtimeTripStatus'],
+        'duration': json['duration'],
+        'infos': ((json['infos'] as Array<any>).map(LegInfoFromJSON)),
+        'stopSequence': ((json['stopSequence'] as Array<any>).map(JourneyLocationFromJSON)),
+        'interchange': !exists(json, 'interchange') ? undefined : LegInterchangeFromJSON(json['interchange']),
+        'coords': ((json['coords'] as Array<any>).map(LocationCoordinatesFromJSON)),
     };
 }
 
@@ -111,11 +116,11 @@ export function LegDetailsToJSON(value?: LegDetails | null): any {
     }
     return {
         
-        'distance': value.distance,
         'duration': value.duration,
-        'infos': value.infos === undefined ? undefined : ((value.infos as Array<any>).map(LegInfoToJSON)),
-        'hints': value.hints === undefined ? undefined : ((value.hints as Array<any>).map(LegInfoToJSON)),
-        'realtimeTripStatus': value.realtimeTripStatus,
+        'infos': ((value.infos as Array<any>).map(LegInfoToJSON)),
+        'stopSequence': ((value.stopSequence as Array<any>).map(JourneyLocationToJSON)),
+        'interchange': LegInterchangeToJSON(value.interchange),
+        'coords': ((value.coords as Array<any>).map(LocationCoordinatesToJSON)),
     };
 }
 
