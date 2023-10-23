@@ -51,12 +51,12 @@ interface LocationSearchListItemProps {
 
 function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearchListItemProps): JSX.Element {
   const { favoriteLocations, addFavoriteLocation, removeFavoriteLocationById } = useFavoriteLocations();
-
-  const isFavoriteStop = favoriteLocations.some((favoriteStop) => favoriteStop.locationId === location.id);
+  const persistedLocation = favoriteLocations.find((favoriteLocation) => favoriteLocation.locationId === location.id);
+  const isFavoriteStop = persistedLocation !== undefined;
 
   return (
     <>
-      <LocationIcon type={location.type}/>
+      <LocationIcon type={location.type} />
       <IonLabel
         data-testid="locationName"
         onClick={() => onItemClicked(location)}
@@ -67,7 +67,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
         ? <IonIcon
           icon={star}
           color="warning"
-          onClick={() => removeFavoriteLocationById(location.id)}
+          onClick={() => removeFavoriteLocationById(persistedLocation.id)}
           title="Remove from favorites" />
         : <IonIcon
           icon={starOutline}
