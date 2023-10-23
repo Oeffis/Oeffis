@@ -31,16 +31,14 @@ export class JourneyLocationMapperService {
       const baseLocation = this.locationMapper.mapVrrLocation(journeyLocation);
 
       // It is ensured before that departureTimePlanned is present (not undefined).
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const arrivalTime = (journeyLocation.arrivalTimePlanned ?? journeyLocation.departureTimePlanned!);
+      const arrivalTime = (journeyLocation.arrivalTimePlanned);
       // It is ensured before that arrivalTimePlanned is present (not undefined).
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const departureTime = (journeyLocation.departureTimePlanned ?? journeyLocation.arrivalTimePlanned!);
+      const departureTime = (journeyLocation.departureTimePlanned);
 
       return {
         ...baseLocation,
-        arrivalTimePlanned: new Date(arrivalTime),
-        departureTimePlanned: new Date(departureTime)
+        arrivalTimePlanned: arrivalTime ? new Date(arrivalTime) : undefined,
+        departureTimePlanned: departureTime ? new Date(departureTime) : undefined
       } as JourneyLocation;
     });
   }
@@ -103,19 +101,7 @@ export class JourneyLocationMapperService {
    * @param vrrJourneyLocations VRR journey locations to check
    */
   checkVrrJourneyLocationsIntegrity(vrrJourneyLocations: VrrJourneyLocation[]): boolean {
-    let isValid = true;
-
-    // Check for missing arrivalTimePlanned+departureTimePlanned within some journey location.
-    if (vrrJourneyLocations.some(location =>
-      !location.arrivalTimePlanned && !location.departureTimePlanned)) {
-
-      console.error("VRR journey location is missing arrival and departure time " +
-        "and therefore given journeys won´t be processed: ", JSON.stringify(vrrJourneyLocations));
-      isValid = false;
-    }
-
-    return isValid
-      && vrrJourneyLocations.every(location => this.locationMapper.checkVrrLocationIntegrity(location));
+    return vrrJourneyLocations.every(location => this.locationMapper.checkVrrLocationIntegrity(location));
   }
 
   /**
@@ -159,5 +145,4 @@ export class JourneyLocationMapperService {
     return isValid
       && this.locationMapper.checkVrrLocationIntegrity(vrrLegDestinationLocation);
   }
-
 }
