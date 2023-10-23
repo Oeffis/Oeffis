@@ -22,23 +22,21 @@ export class JourneyLocationMapperService {
    * @param vrrJourneyLocations VRR journey locations
    */
   mapJourneyLocations(vrrJourneyLocations: VrrJourneyLocation[]): JourneyLocation[] {
-    if (!this.checkVrrJourneyLocationsIntegrity(vrrJourneyLocations)) {
-      throw new Error("At least one of given journey location misses planned arrival and departure time. " +
-        "Mapping is not possible.\n" + JSON.stringify(vrrJourneyLocations));
-    }
+    const filteredLocations = vrrJourneyLocations.filter(location => this.checkVrrJourneyLocationIntegrity(location));
 
-    return vrrJourneyLocations.map(journeyLocation => {
+    return filteredLocations.map(journeyLocation => {
       const baseLocation = this.locationMapper.mapVrrLocation(journeyLocation);
 
-      // It is ensured before that departureTimePlanned is present (not undefined).
-      const arrivalTime = (journeyLocation.arrivalTimePlanned);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const arrivalTime = (journeyLocation.arrivalTimePlanned ?? journeyLocation.departureTimePlanned!);
       // It is ensured before that arrivalTimePlanned is present (not undefined).
-      const departureTime = (journeyLocation.departureTimePlanned);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const departureTime = (journeyLocation.departureTimePlanned ?? journeyLocation.arrivalTimePlanned!);
 
       return {
         ...baseLocation,
-        arrivalTimePlanned: arrivalTime ? new Date(arrivalTime) : undefined,
-        departureTimePlanned: departureTime ? new Date(departureTime) : undefined
+        arrivalTimePlanned: new Date(arrivalTime),
+        departureTimePlanned: new Date(departureTime)
       } as JourneyLocation;
     });
   }
@@ -100,8 +98,11 @@ export class JourneyLocationMapperService {
    *
    * @param vrrJourneyLocations VRR journey locations to check
    */
-  checkVrrJourneyLocationsIntegrity(vrrJourneyLocations: VrrJourneyLocation[]): boolean {
-    return vrrJourneyLocations.every(location => this.locationMapper.checkVrrLocationIntegrity(location));
+  checkVrrJourneyLocationIntegrity(vrrJourneyLocation: VrrJourneyLocation): boolean {
+    const hasPlannedTime = vrrJourneyLocation.arrivalTimePlanned !== undefined
+      || vrrJourneyLocation.departureTimePlanned !== undefined;
+    return hasPlannedTime &&
+      this.locationMapper.checkVrrLocationIntegrity(vrrJourneyLocation);
   }
 
   /**

@@ -84,7 +84,7 @@ beforeEach(() => {
       footpathMapper,
       new LocationMapperService(apiService, new LocationCoordinatesMapperService()));
 
-  vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationsIntegrity")
+  vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationIntegrity")
     .mockReturnValue(true);
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrLegOriginLocationIntegrity")
     .mockReturnValue(true);
@@ -137,7 +137,7 @@ it.each([
   const journey: VrrJourney =
     vrrJourney(2, [vrrJourneyTransportationLeg(), vrrJourneyFootpathLeg(), vrrJourneyTransportationLeg()]);
 
-  vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationsIntegrity")
+  vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationIntegrity")
     .mockReturnValueOnce(validStops);
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrLegOriginLocationIntegrity")
     .mockReturnValueOnce(validOrigDest);

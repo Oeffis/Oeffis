@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from "@nestjs/swagger";
-import { IsDate, IsOptional } from "class-validator";
+import { IsDate } from "class-validator";
 import { Location } from "locationFinder/entity/location.entity";
 import { LocationDetails } from "locationFinder/entity/locationDetails.entity";
 import { LocationType } from "vrr/entity/locationType.entity";
@@ -10,30 +10,28 @@ import { LocationType } from "vrr/entity/locationType.entity";
 export class JourneyLocation extends Location {
 
   @IsDate()
-  @IsOptional()
   @ApiProperty({
     description: "Planned arrival time.",
     type: Date,
     example: new Date("2023-08-29T16:58:00.000Z")
   })
-  arrivalTimePlanned?: Date;
+  arrivalTimePlanned: Date;
 
   @IsDate()
-  @IsOptional()
   @ApiProperty({
     description: "Planned departure time.",
     type: Date,
     example: new Date("2023-08-29T17:02:00.000Z")
   })
-  departureTimePlanned?: Date;
+  departureTimePlanned: Date;
 
   constructor(
     id: string,
     name: string,
     type: LocationType,
     details: LocationDetails,
-    arrivalTimePlanned?: Date,
-    departureTimePlanned?: Date) {
+    arrivalTimePlanned: Date,
+    departureTimePlanned: Date) {
 
     super(id, name, type, details);
     this.arrivalTimePlanned = arrivalTimePlanned;

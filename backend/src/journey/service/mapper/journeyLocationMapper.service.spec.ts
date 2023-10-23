@@ -40,20 +40,12 @@ beforeEach(() => {
 });
 
 it.each([
-  ["missing arrival and departure time (all)", [
-    vrrJourneyLocation()], false],
-  ["missing arrival and departure time (one)", [
-    vrrJourneyLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:58:00.000Z"),
-    vrrJourneyLocation()], false],
-  ["valid locations", [
-    vrrJourneyLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:58:00.000Z"),
-    vrrJourneyLocation("2023-08-29T16:58:00.000Z", undefined),
-    vrrJourneyLocation(undefined, "2023-08-29T16:58:00.000Z")
-  ], true]
+  ["missing arrival and departure time", vrrJourneyLocation(), false],
+  ["valid locations", vrrJourneyLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:58:00.000Z"), true]
 ])("check journey locations: %s", (_descr, vrrJourneyLocations, expectedResult) => {
   // Given
   // When
-  const checkResult = journeyLocationMapper.checkVrrJourneyLocationsIntegrity(vrrJourneyLocations);
+  const checkResult = journeyLocationMapper.checkVrrJourneyLocationIntegrity(vrrJourneyLocations);
   // Then
   expect(checkResult).toBe(expectedResult);
 });
@@ -99,9 +91,7 @@ it.each([
   { validLocation: true, result: true }
 ])("process mappers' result ($validLocation).", ({ validLocation, result }) => {
   // Given
-  const journeyLocations: VrrLocation[] = [
-    vrrJourneyLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:59:00.000Z")
-  ];
+  const journeyLocations = vrrJourneyLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:59:00.000Z");
   const legOriginLocation: VrrLocation =
     vrrLegOriginLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:59:00.000Z");
   const legDestinationLocation: VrrLocation =
@@ -110,7 +100,7 @@ it.each([
   // When
   vi.spyOn(journeyLocationMapper["locationMapper"], "checkVrrLocationIntegrity")
     .mockReturnValueOnce(validLocation);
-  const checkResult = journeyLocationMapper.checkVrrJourneyLocationsIntegrity(journeyLocations);
+  const checkResult = journeyLocationMapper.checkVrrJourneyLocationIntegrity(journeyLocations);
 
   vi.spyOn(journeyLocationMapper["locationMapper"], "checkVrrLocationIntegrity")
     .mockReturnValueOnce(validLocation);
@@ -176,17 +166,19 @@ it.each([
   expect(mappedJourneyLocations).toEqual(expectedJourneyLocations);
 });
 
-it("throw error if some invalid journey location.", () => {
+it("filters out locations without departure and arrival time", () => {
   // Given
-  const vrrJourneyLocations: VrrJourneyLocation[] = [
+  const sampleLocations = [
     vrrJourneyLocation("2023-08-29T16:58:00.000Z", "2023-08-29T16:59:00.000Z"),
-    vrrJourneyLocation(),
-    vrrJourneyLocation("2023-08-28T16:58:00.000Z", "2023-08-28T16:58:30.000Z")
+    vrrJourneyLocation()
   ];
 
-  // When & Then
-  expect(() => journeyLocationMapper.mapJourneyLocations(vrrJourneyLocations))
-    .toThrowError("journey location misses planned arrival and departure time");
+  // When
+  const mappedLocations = journeyLocationMapper.mapJourneyLocations(sampleLocations);
+
+  // Then
+  expect(mappedLocations.length).toBe(1);
+  expect(mappedLocations[0].arrivalTimePlanned.toISOString()).toBe("2023-08-29T16:58:00.000Z");
 });
 
 it("map vrr leg origin with all fields given.", () => {

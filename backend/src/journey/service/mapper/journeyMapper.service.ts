@@ -92,7 +92,7 @@ export class JourneyMapperService {
       // 5a) Check stop sequence locations information are present.
       // It is checked before if stop sequence is present (in DetailsMapper).
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      && this.journeyLocationMapper.checkVrrJourneyLocationsIntegrity(vrrLeg.stopSequence!)
+      && this.journeyLocationMapper.checkVrrJourneyLocationIntegrity(vrrLeg.stopSequence!)
 
       // 5b) Check leg origin location information are present.
       // It is checked before if origin location is present (this mapper).
