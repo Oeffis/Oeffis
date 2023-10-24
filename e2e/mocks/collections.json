@@ -2,14 +2,20 @@
   {
     "id": "base",
     "routes": [
-      "pass-through:VRR-API"
+      "passThrough:VRR-API"
     ]
   },
   {
-    "id": "Query for 'Gelsenkirchen Hbf'",
-    "from": "base",
+    "id": "Location Query",
     "routes": [
-      "stop_finder:result for 'Gelsenkirchen Hbf'"
+      "stopFinder:sample stops"
+    ]
+  },
+  {
+    "id": "Route from 'Gelsenkirchen, Hbf' to 'Köln Hbf'",
+    "routes": [
+      "stopFinder:sample stops",
+      "trip:GE to K"
     ]
   }
 ]

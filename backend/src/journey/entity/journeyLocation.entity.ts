@@ -11,18 +11,16 @@ export class JourneyLocation extends Location {
 
   @IsDate()
   @ApiProperty({
-    description: "Planned arrival time. If there is no specific arrival time, departure time gets duplicated.",
+    description: "Planned arrival time.",
     type: Date,
-    required: true,
     example: new Date("2023-08-29T16:58:00.000Z")
   })
   arrivalTimePlanned: Date;
 
   @IsDate()
   @ApiProperty({
-    description: "Planned departure time. If there is no specific departure time, arrival time gets duplicated.",
+    description: "Planned departure time.",
     type: Date,
-    required: true,
     example: new Date("2023-08-29T17:02:00.000Z")
   })
   departureTimePlanned: Date;
@@ -86,10 +84,10 @@ class JourneyLocationWithEstimates extends JourneyLocation {
  * Origin location of a leg which includes departure times only.
  */
 export class LegOriginLocation
-  extends OmitType(JourneyLocationWithEstimates, ["arrivalTimePlanned", "arrivalTimeEstimated"] as const) {}
+  extends OmitType(JourneyLocationWithEstimates, ["arrivalTimePlanned", "arrivalTimeEstimated"] as const) { }
 
 /**
  * Destination location of a leg which includes arrival times only.
  */
 export class LegDestinationLocation
-  extends OmitType(JourneyLocationWithEstimates, ["departureTimePlanned", "departureTimeEstimated"] as const) {}
+  extends OmitType(JourneyLocationWithEstimates, ["departureTimePlanned", "departureTimeEstimated"] as const) { }

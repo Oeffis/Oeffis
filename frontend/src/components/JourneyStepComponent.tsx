@@ -8,7 +8,7 @@ const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
 export interface StationProps { step: IJourneyStep, first?: boolean, last?: boolean }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => (
-  <div className="container">
+  <div className="container" data-testid="journey-step">
     <div className="left">
       {formatDateShort(props.step.arrivalTime)}
       <div className="timeline-container">
@@ -18,13 +18,20 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => (
     </div>
     <div className="step-info">
       <IonLabel>
-        {props.step.stopName} "{props.step.stationName}"
+        <span data-testid="journey-step-stop-name">
+          {props.step.stopName}
+        </span>
       </IonLabel>
       <IonLabel>
-        Abfahrt: {formatDateShort(props.step.startTime)}
+        Abfahrt:
+        <span data-testid="journey-step-start-time">
+          {formatDateShort(props.step.startTime)}
+        </span>
       </IonLabel>
       <IonLabel>
-        Ankunft: {formatDateShort(props.step.arrivalTime)}
+        <span data-testid="journey-step-arrival-time">
+          {formatDateShort(props.step.arrivalTime)}
+        </span>
       </IonLabel>
     </div>
   </div>

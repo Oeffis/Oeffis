@@ -60,7 +60,7 @@ beforeEach(() => {
 
   const journeyLocationMapper =
     new JourneyLocationMapperService(new LocationMapperService(apiService, locationCoordinatesMapper));
-  vi.spyOn(journeyLocationMapper, "checkVrrJourneyLocationsIntegrity")
+  vi.spyOn(journeyLocationMapper, "checkVrrJourneyLocationIntegrity")
     .mockReturnValue(true);
   vi.spyOn(journeyLocationMapper, "mapJourneyLocations")
     .mockReturnValue([JOURNEY_LOCATION, JOURNEY_LOCATION]);

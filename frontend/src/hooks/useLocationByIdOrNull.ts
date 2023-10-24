@@ -42,8 +42,8 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
       return true;
     }
 
-    function checkMultipleLocationsFound(matchingLocations: RatedLocation[]): boolean {
-      if (matchingLocations.length >= 1) return false;
+    function checkMultipleLocationsFound(matchingLocations: Location[]): boolean {
+      if (matchingLocations.length <= 1) return false;
       console.warn(`Multiple locations found with id ${locationId}`);
       return true;
     }
