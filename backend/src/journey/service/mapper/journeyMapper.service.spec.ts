@@ -128,7 +128,7 @@ it.each([
   { validStops: true, validOrigDest: true, validTransport: true, validFoot: true, validDetails: false, result: false },
   { validStops: true, validOrigDest: true, validTransport: true, validFoot: false, validDetails: true, result: false },
   { validStops: true, validOrigDest: true, validTransport: false, validFoot: true, validDetails: true, result: false },
-  { validStops: true, validOrigDest: false, validTransport: true, validFoot: true, validDetails: true, result: false },
+  { validStops: true, validOrigDest: false, validTransport: true, validFoot: true, validDetails: true, result: false }
 ])("process mappers' result ($validStops, $validOrigDest, $validTransport, $validFoot, $validDetails).", (
   { validOrigDest, validTransport, validFoot, validDetails, result }
 ) => {
