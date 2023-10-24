@@ -1,8 +1,8 @@
 // Needed to mock private field behaviour.
 /* eslint-disable @typescript-eslint/dot-notation */
 import {
-  Journey as VrrJourney,
   JourneyLocationElement,
+  Journey as VrrJourney,
   Leg as VrrLeg,
   LocationType as VrrLocationType
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
@@ -129,16 +129,13 @@ it.each([
   { validStops: true, validOrigDest: true, validTransport: true, validFoot: false, validDetails: true, result: false },
   { validStops: true, validOrigDest: true, validTransport: false, validFoot: true, validDetails: true, result: false },
   { validStops: true, validOrigDest: false, validTransport: true, validFoot: true, validDetails: true, result: false },
-  { validStops: false, validOrigDest: true, validTransport: true, validFoot: true, validDetails: true, result: false }
 ])("process mappers' result ($validStops, $validOrigDest, $validTransport, $validFoot, $validDetails).", (
-  { validStops, validOrigDest, validTransport, validFoot, validDetails, result }
+  { validOrigDest, validTransport, validFoot, validDetails, result }
 ) => {
   // Given
   const journey: VrrJourney =
     vrrJourney(2, [vrrJourneyTransportationLeg(), vrrJourneyFootpathLeg(), vrrJourneyTransportationLeg()]);
 
-  vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationIntegrity")
-    .mockReturnValueOnce(validStops);
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrLegOriginLocationIntegrity")
     .mockReturnValueOnce(validOrigDest);
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrLegDestinationLocationIntegrity")
