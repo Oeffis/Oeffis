@@ -51,13 +51,13 @@ export interface JourneyLocation {
      */
     details: LocationDetails;
     /**
-     * Planned arrival time. If there is no specific arrival time, departure time gets duplicated.
+     * Planned arrival time.
      * @type {Date}
      * @memberof JourneyLocation
      */
     arrivalTimePlanned: Date;
     /**
-     * Planned departure time. If there is no specific departure time, arrival time gets duplicated.
+     * Planned departure time.
      * @type {Date}
      * @memberof JourneyLocation
      */

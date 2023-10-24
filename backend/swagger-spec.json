@@ -626,7 +626,7 @@
           "departureTimePlanned": {
             "format": "date-time",
             "type": "string",
-            "description": "Planned departure time. If there is no specific departure time, arrival time gets duplicated.",
+            "description": "Planned departure time.",
             "example": "2023-08-29T17:02:00.000Z"
           },
           "departureTimeEstimated": {
@@ -690,7 +690,7 @@
           "arrivalTimePlanned": {
             "format": "date-time",
             "type": "string",
-            "description": "Planned arrival time. If there is no specific arrival time, departure time gets duplicated.",
+            "description": "Planned arrival time.",
             "example": "2023-08-29T16:58:00.000Z"
           },
           "arrivalTimeEstimated": {
@@ -833,13 +833,13 @@
           "arrivalTimePlanned": {
             "format": "date-time",
             "type": "string",
-            "description": "Planned arrival time. If there is no specific arrival time, departure time gets duplicated.",
+            "description": "Planned arrival time.",
             "example": "2023-08-29T16:58:00.000Z"
           },
           "departureTimePlanned": {
             "format": "date-time",
             "type": "string",
-            "description": "Planned departure time. If there is no specific departure time, arrival time gets duplicated.",
+            "description": "Planned departure time.",
             "example": "2023-08-29T17:02:00.000Z"
           }
         },
