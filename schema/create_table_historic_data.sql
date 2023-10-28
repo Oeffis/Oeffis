@@ -7,5 +7,6 @@ CREATE TABLE historic_data (
     planned TIMESTAMP NOT NULL,
     estimated TIMESTAMP,
     raw_data VARCHAR NOT NULL,
+    vrr_timetable_version_id INTEGER NOT NULL,
     PRIMARY KEY (id)
 );
