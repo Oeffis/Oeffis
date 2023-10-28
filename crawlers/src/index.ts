@@ -24,6 +24,11 @@ async function main(): Promise<void> {
           default: 1000,
           describe: "Batch size for database inserts",
           type: "number"
+        })
+        .option("drop-tables", {
+          default: false,
+          describe: "Drop tables before importing and recreate them. If false, the schema will be checked and an error will be thrown if the schema is not compatible.",
+          type: "boolean"
         }),
       async (argv) => {
         const pg = await createPgPool({
@@ -37,7 +42,8 @@ async function main(): Promise<void> {
           withPgConnection: pg.withPgConnection,
           folder: argv.folder,
           concurrencyLimit: argv.concurrencyLimit,
-          batchSize: argv.batchSize
+          batchSize: argv.batchSize,
+          dropTables: argv.dropTables
         });
 
         await pg.closePgConnection();

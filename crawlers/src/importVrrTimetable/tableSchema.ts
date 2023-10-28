@@ -5,11 +5,13 @@ export interface TableSchema {
   foreignKeys: ForeignKey[];
   primaryKey?: string;
   determineFieldType?: (field: string) => string;
+  extraFields?: string[];
+  extraSqlInCreateTable?: string;
 }
 
 export interface ForeignKey {
-  column: string;
-  referencedColumn: string;
+  columns: string[];
+  referencedColumns: string[];
   referencedTable: string;
 }
 
@@ -19,6 +21,44 @@ function asNullableField(fields: string[]): TableSchema["determineFieldType"] {
       return "TEXT";
     }
     return "TEXT NOT NULL";
+  };
+}
+
+function addVrrTimetableVersionIdField(schema: TableSchema): TableSchema {
+  const primaryKeyData = schema.primaryKey ? {
+    primaryKey: undefined,
+    extraSqlInCreateTable:
+      (schema.extraSqlInCreateTable ?? "") + ", PRIMARY KEY (" + schema.primaryKey + ", vrr_timetable_version_id)"
+  } : {};
+
+  return {
+    ...schema,
+    extraFields: [
+      "vrr_timetable_version_id"
+    ],
+    determineFieldType: (field) => {
+      if (field === "vrr_timetable_version_id") {
+        return "integer NOT NULL";
+      }
+
+      if (schema.determineFieldType) {
+        return schema.determineFieldType(field);
+      }
+      return "TEXT NOT NULL";
+    },
+    foreignKeys: [
+      ...schema.foreignKeys.map((fk) => ({
+        ...fk,
+        columns: [...fk.columns, "vrr_timetable_version_id"],
+        referencedColumns: [...fk.referencedColumns, "vrr_timetable_version_id"]
+      })),
+      {
+        columns: ["vrr_timetable_version_id"],
+        referencedColumns: ["vrr_timetable_version_id"],
+        referencedTable: "vrr_timetable_version"
+      }
+    ],
+    ...primaryKeyData
   };
 }
 
@@ -51,8 +91,8 @@ export const TABLE_SCHEMAS: TableSchema[] = [
     csv: "routes.txt",
     foreignKeys: [
       {
-        column: "agency_id",
-        referencedColumn: "agency_id",
+        columns: ["agency_id"],
+        referencedColumns: ["agency_id"],
         referencedTable: "agency"
       }
     ],
@@ -70,8 +110,8 @@ export const TABLE_SCHEMAS: TableSchema[] = [
     csv: "stops.txt",
     foreignKeys: [
       {
-        column: "parent_station",
-        referencedColumn: "stop_id",
+        columns: ["parent_station"],
+        referencedColumns: ["stop_id"],
         referencedTable: "stops"
       }
     ],
@@ -83,8 +123,8 @@ export const TABLE_SCHEMAS: TableSchema[] = [
     csv: "stop_times.txt",
     foreignKeys: [
       {
-        column: "stop_id",
-        referencedColumn: "stop_id",
+        columns: ["stop_id"],
+        referencedColumns: ["stop_id"],
         referencedTable: "stops"
       }
     ],
@@ -95,13 +135,13 @@ export const TABLE_SCHEMAS: TableSchema[] = [
     csv: "transfers.txt",
     foreignKeys: [
       {
-        column: "from_stop_id",
-        referencedColumn: "stop_id",
+        columns: ["from_stop_id"],
+        referencedColumns: ["stop_id"],
         referencedTable: "stops"
       },
       {
-        column: "to_stop_id",
-        referencedColumn: "stop_id",
+        columns: ["to_stop_id"],
+        referencedColumns: ["stop_id"],
         referencedTable: "stops"
       }
     ],
@@ -112,22 +152,22 @@ export const TABLE_SCHEMAS: TableSchema[] = [
     csv: "trips.txt",
     foreignKeys: [
       {
-        column: "route_id",
-        referencedColumn: "route_id",
+        columns: ["route_id"],
+        referencedColumns: ["route_id"],
         referencedTable: "routes"
       },
       {
-        column: "service_id",
-        referencedColumn: "service_id",
+        columns: ["service_id"],
+        referencedColumns: ["service_id"],
         referencedTable: "calendar"
       },
       {
-        column: "shape_id",
-        referencedColumn: "shape_id",
+        columns: ["shape_id"],
+        referencedColumns: ["shape_id"],
         referencedTable: "shapes"
       }
     ],
     primaryKey: "trip_id",
     determineFieldType: asNullableField(["shape_id", "trip_headsign", "trip_short_name"])
   }
-];
+].map(addVrrTimetableVersionIdField);

@@ -10,13 +10,14 @@ export async function buildCreateTableSchemaSql(folder: string, schema: TableSch
 
   const csvHeaders = await getCsvHeaderNames(csvPath);
 
-  const columns = csvHeaders
+  const fields = [...csvHeaders, ...schema.extraFields ?? []];
+  const columns = fields
     .map((header) => buildFieldSql(schema, header))
     .join(", ");
 
   return [
-    `CREATE TABLE "${schema.name}" (${columns})`,
-    csvHeaders
+    `CREATE TABLE "${schema.name}" (${columns} ${schema.extraSqlInCreateTable ?? ""})`,
+    fields
   ];
 }
 

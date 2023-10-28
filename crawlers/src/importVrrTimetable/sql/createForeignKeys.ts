@@ -15,8 +15,13 @@ async function buildCreateForeignKeysSql(schema: TableSchema): Promise<string> {
     return "";
   }
 
-  const foreignKeys = schema.foreignKeys.map(
-    (fk) => `ALTER TABLE "${schema.name}" ADD CONSTRAINT "${schema.name}_${fk.column}_fkey" FOREIGN KEY ("${fk.column}") REFERENCES "${fk.referencedTable}" ("${fk.referencedColumn}")`);
+  const foreignKeys = schema.foreignKeys.map((fk) => {
+    const fkName = `${schema.name}_${fk.columns.join("_")}_fkey`;
+    const fkColumns = fk.columns.map((column) => `"${column}"`).join(", ");
+    const referencedColumns = fk.referencedColumns.map((column) => `"${column}"`).join(", ");
+
+    return `ALTER TABLE "${schema.name}" ADD CONSTRAINT "${fkName}" FOREIGN KEY (${fkColumns}) REFERENCES "${fk.referencedTable}" (${referencedColumns})`;
+  });
 
   return foreignKeys.join(";\n");
 }
