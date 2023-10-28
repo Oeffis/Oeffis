@@ -14,10 +14,10 @@ import { VrrModule } from "./vrr/vrr.module";
     HistoricDataModule,
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "postgres",
+      host: process.env.PG_HOST ?? "localhost",
+      port: parseInt(process.env.PG_PORT ?? "5432"),
+      username: process.env.PG_USER ?? "postgres",
+      password: process.env.PG_PASSWORD ?? "postgres",
       database: "postgres",
       entities: [
         DelayEntry
