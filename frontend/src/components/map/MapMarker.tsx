@@ -15,6 +15,7 @@ import whitePinIcon from "../../../src/images/pin-white-map-marker.svg";
 import currentPositionIcon from "../../../src/images/position-map-marker.svg";
 
 import { Location, LocationTypeEnum } from "../../api";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 
 export interface MarkerProps {
   origin?: Location,
@@ -219,9 +220,9 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
       mapMarker = (
         <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-                icon={originLocationIcon}>
+          icon={originLocationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br/>
+            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>Start</i>
@@ -245,9 +246,9 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
       mapMarker = (
         <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-                icon={destinationLocationIcon}>
+          icon={destinationLocationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br/>
+            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>Ziel</i>
@@ -271,9 +272,9 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
       mapMarker = (
         <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-                icon={locationIcon}>
+          icon={locationIcon}>
           <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br/>
+            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
             <p className="popupText">{location.details.shortName}</p><br />
             <p className="popupText">
               <i>{getDesignation(location.type)}</i>
@@ -294,11 +295,8 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
 export default MapMarker;
 
-interface CurrentLocationMapMarkerProps {
-  currentLocation: Location
-}
-
-export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> = ({ currentLocation }) => {
+export const CurrentLocationMapMarker: React.FC = () => {
+  const { currentLocation } = useCurrentLocation();
 
   const currentLocationIcon = new Icon({
     iconUrl: currentPositionIcon,
@@ -310,11 +308,17 @@ export const CurrentLocationMapMarker: React.FC<CurrentLocationMapMarkerProps> =
   });
 
   return (
-    <Marker position={[currentLocation.details.coordinates.latitude, currentLocation.details.coordinates.longitude]}
+    <>
+      {
+        currentLocation ?
+          <Marker
+            position={[currentLocation.coords.latitude, currentLocation.coords.longitude]}
             icon={currentLocationIcon}>
-      <Popup className="popup">
-        <p className="popupHeadline">{currentLocation.name}</p>
-      </Popup>
-    </Marker>
+            <Popup className="popup" >
+              <p className="popupHeadline">Your position</p>
+            </Popup >
+          </Marker >
+          : <></>}
+    </>
   );
 };
