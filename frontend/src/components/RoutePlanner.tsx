@@ -31,8 +31,8 @@ import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../hooks/useStateParams";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
+import FavoritesPage from "../pages/FavoritesPage";
 import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../services/favorites/FavoritesContext";
-import { FavoriteTripsComponent } from "./FavoriteTripsComponent";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
@@ -49,7 +49,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [tripTime, setTripTime] = useStateParams<string>(new Date().toISOString(), "tripTime", String, String);
+  const [startTime, setStartTime] = useStateParams<string>(new Date().toISOString(), "startTime", String, String);
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
@@ -67,7 +67,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
     setIsFavoritesModalOpen(false);
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
-    setTripTime(trip.tripTime);
+    setStartTime(trip.startTime);
   };
 
   const setRoute = (route: CreateFavoriteRoute): void => {
@@ -81,7 +81,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
     const existing = favoriteTrips.find(c =>
       c.originId === originId
       && c.destinationId === destinationId
-      && c.tripTime === tripTime
+      && c.startTime === startTime
     );
     return existing !== undefined;
   };
@@ -156,7 +156,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
               showDefaultButtons={true}
               data-testid={"datetime-input"}
               /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setTripTime(e.detail.value as string); }}
+              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setStartTime(e.detail.value as string); }}
             />
           </IonModal>
         </IonItem>
@@ -217,7 +217,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             </div>
             <div id="buttons">
               <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Route</IonButton>
-              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, tripTime }); setIsFavoritesDialogueOpen(false); } }}>Trip</IonButton>
+              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, startTime }); setIsFavoritesDialogueOpen(false); } }}>Trip</IonButton>
             </div>
           </div>
 
@@ -233,7 +233,12 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <FavoriteTripsComponent onTripSelected={trip => setTrip(trip)} onRouteSelected={route => setRoute(route)} />
+          {/* set launchTab=1 to start at Routes Tab -> 0=stations, 2=Journeys */}
+          <FavoritesPage
+            launchTab={1}
+            showHeader={false}
+            onRouteSelected={route => setRoute(route)}
+            onTripSelected={trip => setTrip(trip)} />
         </IonContent>
       </IonModal>
     </>

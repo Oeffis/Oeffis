@@ -7,15 +7,23 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../public/images/train_image.png";
+import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
-import { CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
+import { CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
 import "./FavoritesPage.css";
 
-const FavoritesPage: React.FC = () => {
+
+export interface FavoritesPageProps {
+  launchTab?: number;
+  showHeader?: boolean;
+  onTripSelected?: (trip: CreateFavoriteTrip) => void;
+  onRouteSelected?: (trip: CreateFavoriteRoute) => void;
+}
+const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
   const [slideName, setSlideName] = useState<string>("Stations");
-  const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
-
+  const [activeSlideIndex, setActiveSlideIndex] = useState<number>(props.launchTab ?? 0);
+  const initialSlide = props.launchTab ?? 0;
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {
       setSlideName("Stations");
@@ -34,7 +42,7 @@ const FavoritesPage: React.FC = () => {
 
   return (
     <IonPage id="main-content">
-      <IonHeader>
+      {!(props.showHeader === false) && <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton />
@@ -44,7 +52,7 @@ const FavoritesPage: React.FC = () => {
             <IonImg className="menuLogo" src={logo} />
           </div>
         </IonToolbar>
-      </IonHeader>
+      </IonHeader>}
       <IonContent>
         <div className="selection">
           <IonRadioGroup value={slideName}>
@@ -58,25 +66,23 @@ const FavoritesPage: React.FC = () => {
         <SwiperReact
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
-          //onSwiper={(swiper) => console.log(swiper)}
           pagination={{ clickable: true }}
           scrollbar={{ draggable: false }}
           spaceBetween={100}
           slidesPerView={1}
+          initialSlide={initialSlide}
         >
           <SwiperSlide>
             Stations
           </SwiperSlide>
           <SwiperSlide>
-            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => console.log(trip)} />
+            <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { props.onRouteSelected ? props.onRouteSelected(route) : console.log('no prop'); }} />
           </SwiperSlide>
           <SwiperSlide>
-            Journeys
+            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { props.onTripSelected ? props.onTripSelected(trip) : console.log('no prop'); }} />
           </SwiperSlide>
         </SwiperReact>
-
       </IonContent>
-
     </IonPage>
   );
 };

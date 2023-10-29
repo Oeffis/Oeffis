@@ -6,7 +6,7 @@ interface PersistedTrip {
   id: string;
   originId: string;
   destinationId: string;
-  tripTime: string;
+  startTime: string;
 }
 
 function parseFavoriteTrip(favorite: PersistedTrip): PersistedObject<CreateFavoriteTrip> | null {
@@ -37,7 +37,7 @@ function parseFavoriteTrip(favorite: PersistedTrip): PersistedObject<CreateFavor
     id: favorite.id,
     originId: favorite.originId,
     destinationId: favorite.destinationId,
-    tripTime: favorite.tripTime
+    startTime: favorite.startTime
   };
 }
 
@@ -53,7 +53,8 @@ export function parsePersistedFavoriteTrips(persistedFavoriteTrips: string | nul
 
   const parsedFavorites = parsedFromPersistence
     .map(parseFavoriteTrip)
-    .filter((favorite): favorite is PersistedObject<CreateFavoriteTrip> => favorite !== null && new Date(favorite.tripTime) >= new Date());
+    .filter((favorite): favorite is PersistedObject<CreateFavoriteTrip> => favorite !== null && new Date(favorite.startTime) >= new Date())
+    .sort((a, b) => a.startTime <= b.startTime ? -1 : 1);
 
   return parsedFavorites;
 }

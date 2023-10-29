@@ -10,7 +10,7 @@ const FAVORITE_STOPS_KEY = "favorite_stops";
 export interface CreateFavoriteTrip {
   originId: string;
   destinationId: string;
-  tripTime: string;
+  startTime: string;
 }
 
 export interface CreateFavoriteRoute {

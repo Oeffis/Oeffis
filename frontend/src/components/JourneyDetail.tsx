@@ -15,7 +15,6 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
 
   const openDetails = (): void => {
     setShowDetails(!showDetails);
-    console.log(showDetails);
   };
   return (
     <div className="JourneyDetail" data-testid="journey-details">

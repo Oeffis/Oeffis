@@ -35,7 +35,7 @@ test("Can use context to add favorite Trips", async () => {
   const elementToAdd1 = {
     originId: "testaa",
     destinationId: "testbb",
-    tripTime: "2023-09-18T19:29:0"
+    startTime: "2023-09-18T19:29:0"
   } as Partial<CreateFavoriteTrip> as CreateFavoriteTrip;
 
   await act(() => addFavoriteTrip(elementToAdd1));

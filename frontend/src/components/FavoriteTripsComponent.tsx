@@ -12,28 +12,24 @@ import { star } from "ionicons/icons";
 import React from "react";
 import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
-import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../services/favorites/FavoritesContext";
+import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
+import "./FavoriteTripsComponent.css";
 
 export interface FavoriteTripsComponentProps {
   onTripSelected: (trip: CreateFavoriteTrip) => void;
-  onRouteSelected?: (route: CreateFavoriteRoute) => void;
 }
 
 export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (props) => {
   const { favoriteTrips, setFavoriteTrips } = useFavoriteTrips();
-  const { favoriteRoutes, setFavoriteRoutes } = useFavoriteRoutes();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     const newFavoriteTrips: PersistedObject<CreateFavoriteTrip>[] = event.detail.complete([...favoriteTrips]) as PersistedObject<CreateFavoriteTrip>[];
-    const newFavoriteRoutes: PersistedObject<CreateFavoriteRoute>[] = event.detail.complete([...favoriteRoutes]) as PersistedObject<CreateFavoriteRoute>[];
     setFavoriteTrips(newFavoriteTrips);
-    setFavoriteRoutes(newFavoriteRoutes);
   };
 
   return (
     <>
-      <IonLabel>Trips</IonLabel>
       <IonList>
         <IonReorderGroup
           onIonItemReorder={handleReorder}
@@ -51,24 +47,6 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
           }
         </IonReorderGroup>
       </IonList>
-      <IonLabel>Routen</IonLabel>
-      <IonList>
-        <IonReorderGroup
-          onIonItemReorder={handleReorder}
-          disabled={false}
-        >
-          {
-            favoriteRoutes.length > 0
-              ? favoriteRoutes.map((route, idx) => (
-                <FavoriteRouteEntryComponent
-                  identifier={idx}
-                  onRouteSelected={props.onRouteSelected}
-                  route={route} />
-              ))
-              : <IonLabel>Keine favorisierten Routen vorhanden</IonLabel>
-          }
-        </IonReorderGroup>
-      </IonList>
     </>
   );
 };
@@ -81,7 +59,8 @@ export interface FavoriteTripEntryComponentProps {
 const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (props) => {
   const origin = useLocationByIdOrNull(props.trip.originId);
   const destination = useLocationByIdOrNull(props.trip.destinationId);
-  const tripTime = props.trip.tripTime;
+  const startTime = props.trip.startTime;
+
   const { removeFavoriteTrip } = useFavoriteTrips();
 
   const isReady = origin !== null && destination !== null;
@@ -95,8 +74,8 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
         <LoadedFavoriteTripEntryComponent
           origin={origin}
           destination={destination}
-          tripTime={tripTime}
-          starClicked={() => removeFavoriteTrip(props.trip)}
+          startTime={new Date(startTime)}
+          starClicked={() => { removeFavoriteTrip(props.trip); }}
         />
         : <PendingFavoriteTripEntry />
     }
@@ -106,28 +85,35 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
 interface LoadedFavouriteTripEntryProps {
   origin: Location;
   destination: Location;
-  tripTime: string;
+  startTime: Date;
   starClicked: () => void;
 }
 
 const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> = (props) => (
   <>
-    <div>
-      <div>
+    <div className="trip-information">
+      <IonLabel>
+        {props.startTime.getDate() < 10 ? "0" + props.startTime.getDate() : props.startTime.getDate()}.
+        {props.startTime.getMonth() < 10 ? "0" + props.startTime.getMonth() : props.startTime.getMonth()}.
+        {props.startTime.getFullYear() + " - "}
+        {props.startTime.getHours() < 10 ? "0" + props.startTime.getHours() : props.startTime.getHours()}:
+        {props.startTime.getMinutes() < 10 ? "0" + props.startTime.getMinutes() : props.startTime.getMinutes()} Uhr
+      </IonLabel>
+      <div className="trip-destinations">
         <IonLabel>
-          {new Date(props.tripTime).toISOString().substring(0, 16)}
+          {props.origin.name}
         </IonLabel>
         <IonLabel>
-          {props.origin.name} - {props.destination.name}
+          {props.destination.name}
         </IonLabel>
       </div>
-      <IonIcon
-        icon={star}
-        color="warning"
-        onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
-        title="Remove from favorites"
-      />
     </div>
+    <IonIcon
+      icon={star}
+      color="warning"
+      onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
+      title="Remove from favorites"
+    />
 
     <IonReorder slot="start" />
   </>
@@ -140,53 +126,3 @@ const PendingFavoriteTripEntry: React.FC = () => <>
   <IonIcon icon={star} />
   <IonReorder slot="start" />
 </>;
-
-export interface FavoriteRouteEntryComponentProps {
-  onRouteSelected?: (trip: CreateFavoriteRoute) => void;
-  route: PersistedObject<CreateFavoriteRoute>;
-  identifier: number;
-}
-
-const FavoriteRouteEntryComponent: React.FC<FavoriteRouteEntryComponentProps> = (props) => {
-  const origin = useLocationByIdOrNull(props.route.originId);
-  const destination = useLocationByIdOrNull(props.route.destinationId);
-  const { removeFavoriteRoute } = useFavoriteRoutes();
-
-  const isReady = origin !== null && destination !== null;
-
-  return <IonItem
-    key={props.identifier}
-    onClick={() => props.onRouteSelected ? props.onRouteSelected(props.route) : {}}
-  >
-    {
-      isReady ?
-        <LoadedFavoriteRouteEntryComponent
-          origin={origin}
-          destination={destination}
-          starClicked={() => removeFavoriteRoute(props.route)}
-        />
-        : <PendingFavoriteTripEntry />
-    }
-  </IonItem>;
-};
-
-interface LoadedFavouriteRouteEntryProps {
-  origin: Location;
-  destination: Location;
-  starClicked: () => void;
-}
-
-const LoadedFavoriteRouteEntryComponent: React.FC<LoadedFavouriteRouteEntryProps> = (props) => (
-  <>
-    <IonLabel>
-      {props.origin.name} - {props.destination.name}
-    </IonLabel>
-    <IonIcon
-      icon={star}
-      color="warning"
-      onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
-      title="Remove from favorites"
-    />
-    <IonReorder slot="start" />
-  </>
-);
