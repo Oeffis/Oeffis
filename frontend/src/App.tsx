@@ -25,7 +25,7 @@ import UserHistoryPage from "./pages/UserHistoryPage";
 import UserPreferencesPage from "./pages/UserPreferencesPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
-import { FavoriteLocationsProvider, FavoriteTripsProvider } from "./services/favorites/FavoritesContext";
+import { FavoriteLocationsProvider, FavoriteRoutesProvider, FavoriteTripsProvider } from "./services/favorites/FavoritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
 import "./theme/variables.css";
 
@@ -37,31 +37,33 @@ const App: React.FC = () => (
       <PersistenceProvider>
         <FavoriteLocationsProvider>
           <FavoriteTripsProvider>
-            <IonApp>
-              <IonReactRouter>
-                <Menu />
-                <IonRouterOutlet id="main-content">
-                  <Route exact path="/">
-                    <Redirect to="/journey" />
-                  </Route>
-                  <Route exact path="/journey">
-                    <JourneyPage />
-                  </Route>
-                  <Route exact path="/favorites">
-                    <FavoritesPage />
-                  </Route>
-                  <Route exact path="/userHistory">
-                    <UserHistoryPage />
-                  </Route>
-                  <Route exact path="/userPreferences">
-                    <UserPreferencesPage />
-                  </Route>
-                  <Route exact path="/journeyDemo">
-                    <JourneysPage />
-                  </Route>
-                </IonRouterOutlet>
-              </IonReactRouter>
-            </IonApp>
+            <FavoriteRoutesProvider>
+              <IonApp>
+                <IonReactRouter>
+                  <Menu />
+                  <IonRouterOutlet id="main-content">
+                    <Route exact path="/">
+                      <Redirect to="/journey" />
+                    </Route>
+                    <Route exact path="/journey">
+                      <JourneyPage />
+                    </Route>
+                    <Route exact path="/favorites">
+                      <FavoritesPage />
+                    </Route>
+                    <Route exact path="/userHistory">
+                      <UserHistoryPage />
+                    </Route>
+                    <Route exact path="/userPreferences">
+                      <UserPreferencesPage />
+                    </Route>
+                    <Route exact path="/journeyDemo">
+                      <JourneysPage />
+                    </Route>
+                  </IonRouterOutlet>
+                </IonReactRouter>
+              </IonApp>
+            </FavoriteRoutesProvider>
           </FavoriteTripsProvider>
         </FavoriteLocationsProvider>
       </PersistenceProvider>
