@@ -33,9 +33,6 @@ started.
         cd /frontend
         npm install
 
-        cd /e2e
-        npm install
-
 3.  Get Nest.js CLI:
 
         npm i -g @nestjs/cli

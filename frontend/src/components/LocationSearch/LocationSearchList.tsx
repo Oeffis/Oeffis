@@ -58,7 +58,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
     <>
       <LocationIcon type={location.type} />
       <IonLabel
-        data-testid="locationName"
+
         onClick={() => onItemClicked(location)}
       >
         {location.name}

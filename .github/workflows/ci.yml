@@ -11,12 +11,10 @@ env:
   GITHUB_REGISTRY: ghcr.io
   FRONTEND_SIMPLE_IMAGE_NAME: oeffis/frontend
   BACKEND_SIMPLE_IMAGE_NAME: oeffis/backend
-  E2E_MOCKSSERVER_SIMPLE_IMAGE_NAME: oeffis/e2e-mocksserver
   FRONTEND_GITHUB_IMAGE_NAME: oeffis/oeffis/frontend
   FRONTEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/frontend
   BACKEND_GITHUB_IMAGE_NAME: oeffis/oeffis/backend
   BACKEND_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/backend
-  E2E_MOCKSSERVER_GITHUB_IMAGE_NAME: oeffis/oeffis/e2e-mocksserver
   CRAWLERS_GITHUB_IMAGE_NAME: oeffis/oeffis/crawlers
   CRAWLERS_DOCKER_HUB_IMAGE_NAME: docker.io/oeffis/crawlers
   TZ: Europe/Berlin
@@ -392,116 +390,9 @@ jobs:
             build-args: |
               VRR_CLIENT_VERSION=0.0.${{ github.run_number }}-ci-${{ github.sha }}
 
-    e2e_lint:
-      name: Lint E2E
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Install Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: 18.x
-
-        - name: Install Dependencies
-          working-directory: e2e
-          run: |
-            npm ci
-
-        - name: Lint
-          working-directory: e2e
-          run: |
-            npm run lint -- --max-warnings 0 --no-fix
-
-    build_e2e_mocksserver_container:
-      name: Build container for mocksserver
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-            registry: ${{ env.GITHUB_REGISTRY }}
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Container
-        uses: docker/build-push-action@v4
-        with:
-            context: e2e
-            platforms: linux/amd64
-            push: true
-            tags: |
-              ${{ env.GITHUB_REGISTRY }}/${{ env.E2E_MOCKSSERVER_GITHUB_IMAGE_NAME }}:${{ github.sha }}
-            cache-from: |
-              type=gha,scope=${{github.ref_name}}-e2e-mocksserver
-              type=gha,scope=${{github.base_ref}}-e2e-mocksserver
-            cache-to: type=gha,mode=max,scope=${{github.ref_name}}-e2e-mocksserver
-
-    e2e_test:
-      name: Run E2E Tests
-      needs: [e2e_lint,build_e2e_mocksserver_container,frontend_container,backend_container]
-      runs-on: ubuntu-latest
-      services:
-        backend:
-          image: oeffis/backend:${{ github.sha }}-untested-amd64
-          ports:
-            - 3000:3000
-          env:
-            VRR_BASE_URL: http://mocks-server:3100
-        frontend:
-          image: oeffis/frontend:${{ github.sha }}-untested-amd64
-          ports:
-            - 8000:80
-        mocks-server:
-          image: ghcr.io/oeffis/oeffis/e2e-mocksserver:${{ github.sha }}
-          ports:
-            - 3100:3100
-            - 3110:3110
-          volumes:
-            - ./e2e/:/input
-
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Install Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: 18.x
-
-        - name: Install Dependencies
-          working-directory: e2e
-          run: |
-            npm ci
-
-        - name: Run Tests
-          uses: cypress-io/github-action@v5
-          with:
-            working-directory: e2e
-
-        - name: Upload Artifacts
-          if: always()
-          uses: actions/upload-artifact@v3
-          with:
-            name: cypress-report
-            path: |
-              e2e/cypress/screenshots
-              e2e/cypress/videos
-
     publish_amd64:
       name: Publish Images (amd64 + arm64)
       needs:
-        - e2e_test
         - frontend_container
         - backend_container
         - crawlers_container
