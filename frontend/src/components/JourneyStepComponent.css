@@ -1,44 +1,42 @@
 .container {
-    display: flex;
-    flex-direction: row;
-    min-height: 40px;
-    position: relative;
-    margin-top: 12px;
-    margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: row;
+  min-height: 40px;
+  position: relative;
 }
 
 .left {
-    display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 10%;
+  max-width: 10%;
+}
+
+.middle {
+  min-width: 20%;
+  max-width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .line {
+    align-items: center;
+  }
 }
 
 .circle {
-    border-radius: 50%;
-    background: gray;
-    height: 24px;
-    width: 24px;
-}
-
-.line {
-    width: 4px;
-    height: 28px;
-    background: gray;
-    margin-top: 8px;
-}
-
-.timeline-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 24px;
+  border-radius: 50%;
+  background: gray;
+  height: 28px;
+  width: 28px;
 }
 
 .step-info {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin-left: 20px;
-}
-
-IonLabel {
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 20px;
 }

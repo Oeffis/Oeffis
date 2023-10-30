@@ -3,34 +3,24 @@ import { format } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import "./JourneyStepComponent.css";
 
-const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
-
+const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { step: IJourneyStep, first?: boolean, last?: boolean }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => (
+
   <div className="container" data-testid="journey-step">
     <div className="left">
-      {formatDateShort(props.step.arrivalTime)}
-      <div className="timeline-container">
-        <div className="circle" />
-        <div className="line" />
-      </div>
+      <IonLabel>
+        {formatDateTime(props.step.startTime)}
+      </IonLabel>
+    </div>
+    <div className="middle">
+      <div className="circle" />
     </div>
     <div className="step-info">
       <IonLabel>
         <span data-testid="journey-step-stop-name">
-          {props.step.stopName}
-        </span>
-      </IonLabel>
-      <IonLabel>
-        Abfahrt:
-        <span data-testid="journey-step-start-time">
-          {formatDateShort(props.step.startTime)}
-        </span>
-      </IonLabel>
-      <IonLabel>
-        <span data-testid="journey-step-arrival-time">
-          {formatDateShort(props.step.arrivalTime)}
+          {props.step.stationName}
         </span>
       </IonLabel>
     </div>

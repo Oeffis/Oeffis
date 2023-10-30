@@ -1,0 +1,29 @@
+
+.line {
+  border-radius: 15px;
+  width: 6px;
+  height: 90px;
+  background: lightgray;
+}
+
+.fill-line {
+  --progress: 0;
+
+  border-radius: 15px;
+  width: 6px;
+  height: var(--progress);
+  background: gray;
+}
+
+.timeline-container {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 20px;
+}

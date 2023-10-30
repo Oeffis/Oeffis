@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IJourney } from "../interfaces/IJourney.interface";
 import "./JourneyDetail.css";
 import JourneyStepComponent from "./JourneyStepComponent";
+import StepProgressComponent from "./StepProgressComponent";
 
 export interface TravelProps { journey: IJourney }
 
@@ -45,7 +46,15 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
         {showDetails
           ? <div className="bottom-section-opened">
             <div className="steps">
-              {props.journey.stops.map((step, index) => <JourneyStepComponent key={"journeyStep" + index} step={step} />)}
+              {
+                //check if is last step in journey, if so -> show StepProgressComponent
+                props.journey.stops.map((step, index) =>
+                  index + 1 !== props.journey.stops.length
+                    ? <><JourneyStepComponent key={"journeyStep" + index} step={step} />
+                      <StepProgressComponent key={"stepProgress" + index} step={step} />
+                    </>
+                    : <JourneyStepComponent key={"journeyStep" + index} step={step} />)
+              }
             </div>
             <IonButton fill="clear" onClick={(openDetails)}>
               <IonIcon icon={chevronUpOutline} size="small" />
