@@ -17,7 +17,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
     setShowDetails(!showDetails);
   };
   return (
-    <div className="JourneyDetail" data-testid="journey-details">
+    <div className="JourneyDetail">
       <IonCard className="detail-card">
         <div className="content-section">
           <div className="img-container">
@@ -25,16 +25,16 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
           </div>
           <div className="mid-section">
             <IonLabel>
-              <span data-testid="journey-details-start-time">{formatDateShort(props.journey.startTime)}</span>
+              <span>{formatDateShort(props.journey.startTime)}</span>
               -
-              <span data-testid="journey-details-end-time">{formatDateShort(props.journey.arrivalTime)}</span>
+              <span>{formatDateShort(props.journey.arrivalTime)}</span>
             </IonLabel>
             <IonLabel>
               {props.journey.startStation} - {props.journey.arrivalStation}
             </IonLabel>
           </div>
           <div className="duration">
-            <IonLabel data-testid="journey-details-duration">
+            <IonLabel>
               {props.journey.travelDurationInMinutes}
             </IonLabel>
             <IonLabel>
@@ -52,7 +52,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
             </IonButton>
           </div>
           : <div className="bottom-section-closed">
-            <IonButton fill="clear" onClick={(openDetails)} data-testid="journey-details-open">
+            <IonButton fill="clear" onClick={(openDetails)}>
               <IonIcon icon={chevronDownOutline} onClick={openDetails} size="small" />
             </IonButton>
           </div>}
