@@ -4,8 +4,21 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     volumes:
       - ./.localdev/pgdata:/var/lib/postgresql/data
       - ./schema:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyter
+    links:
+      - db
+    restart: always
+    volumes:
+      - .:/home/jovyan/work
+    ports:
+      - "8888:8888"
