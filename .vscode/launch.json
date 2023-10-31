@@ -13,10 +13,7 @@
       "runtimeArgs": [
         "run-script",
         "start:dev"
-      ],
-      "env": {
-        "VRR_BASE_URL": "http://127.0.0.1:3100"
-      }
+      ]
     },
     {
       "type": "chrome",

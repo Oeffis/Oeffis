@@ -5,7 +5,7 @@ import { importCsvViaStreamingConcurrencyLimitedParser } from "./csv/importCsvVi
 import { ImportVrrTimetablesOptions } from "./entrypoint";
 import { TableSchema } from "./tableSchema";
 
-export async function importTableData(options: ImportVrrTimetablesOptions, tableSchema: TableSchema, insertSql: string): Promise<void> {
+export async function importTableData(options: ImportVrrTimetablesOptions, tableSchema: TableSchema, insertSql: string, vrrTimetableVersionId: number): Promise<void> {
   const { withPgConnection, folder, concurrencyLimit, batchSize } = options;
 
   const csvPath = join(folder, tableSchema.csv);
@@ -16,10 +16,20 @@ export async function importTableData(options: ImportVrrTimetablesOptions, table
     stream: rs,
     chunkCallback: async (data, fields) => {
       await withPgConnection(async (pgClient) => {
+        // Disables foreign key checks for the current transaction.
+        await pgClient.query("SET session_replication_role = 'replica';");
+
         await Promise.all(data.map((obj) => {
-          const data = mapEmptyStringsToNull(convertObjIntoPositionalArray(fields, obj));
+          const data = mapEmptyStringsToNull([...convertObjIntoPositionalArray(fields, obj), vrrTimetableVersionId]);
           return pgClient.query(insertSql, data);
         }));
+
+        // Re-enables foreign key checks
+        try {
+          await pgClient.query("SET session_replication_role = 'origin';");
+        } catch (e) {
+          // ignore
+        }
       });
     },
     concurrencyLimit,
@@ -59,6 +69,6 @@ function convertObjIntoPositionalArray(fields: string[], obj: Record<string, str
   return fields.map((field) => obj[field]);
 }
 
-function mapEmptyStringsToNull(fields: string[]): (string | null)[] {
+function mapEmptyStringsToNull(fields: (string | number)[]): (string | number | null)[] {
   return fields.map((value) => value === "" ? null : value);
 }

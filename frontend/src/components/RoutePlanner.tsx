@@ -40,12 +40,11 @@ import "./RoutePlanner.css";
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
 export interface RoutePlannerProps {
-  currentLocation: Location,
   setSelectedOriginLocation: (location: Location) => void
   setSelectedDestinationLocation: (location: Location) => void
 }
 
-const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
+const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
@@ -162,7 +161,6 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
         </IonItem>
         <IonItem>
           <LocationSearchInput
-            currentLocation={currentLocation}
             inputLabel="Origin"
             selectedLocation={originLocation}
             onSelectedLocationChanged={(location): void => {
@@ -174,7 +172,6 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
         </IonItem>
         <IonItem>
           <LocationSearchInput
-            currentLocation={currentLocation}
             inputLabel="Destination"
             selectedLocation={destinationLocation}
             onSelectedLocationChanged={(location): void => {

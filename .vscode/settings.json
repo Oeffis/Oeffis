@@ -19,7 +19,6 @@
   "eslint.workingDirectories": [
     "./frontend",
     "./backend",
-    "./e2e",
     "./vrr_client",
     "./crawlers"
   ],

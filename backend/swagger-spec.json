@@ -177,6 +177,20 @@
           "journey"
         ]
       }
+    },
+    "/historicData/delayEntryCount": {
+      "get": {
+        "operationId": "HistoricDataController_getDelayEntryCount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "historicData"
+        ]
+      }
     }
   },
   "info": {
