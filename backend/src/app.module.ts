@@ -2,6 +2,9 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { HistoricDataModule } from "historicData/historicData.module";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import { StopEntry } from "./historicData/entity/stopEntry.entity";
+import { VrrTimetableVersionEntry } from "./historicData/entity/vrrTimetableVersionEntry.entity";
 import { JourneyModule } from "./journey/journey.module";
 import { LocationFinderModule } from "./locationFinder/locationFinder.module";
 import { VrrModule } from "./vrr/vrr.module";
@@ -19,8 +22,11 @@ import { VrrModule } from "./vrr/vrr.module";
       username: process.env.PG_USER ?? "postgres",
       password: process.env.PG_PASSWORD ?? "postgres",
       database: process.env.PG_DATABASE ?? "postgres",
+      namingStrategy: new SnakeNamingStrategy(),
       entities: [
-        DelayEntry
+        DelayEntry,
+        StopEntry,
+        VrrTimetableVersionEntry
       ]
     })
   ],
