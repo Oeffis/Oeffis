@@ -190,7 +190,7 @@ const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLo
           departure={departureTime}
         />
       }
-      <IonModal isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
+      <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
           <IonToolbar>
             <IonTitle>Add to favorites</IonTitle>
