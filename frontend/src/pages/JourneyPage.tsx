@@ -2,7 +2,7 @@ import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonT
 import React, { useState } from "react";
 import logo from "../../public/images/train_image.png";
 import { Location } from "../api";
-import RoutePlanner from "../components/RoutePlanner";
+import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import "./JourneyPage.css";
 
@@ -47,7 +47,7 @@ const JourneyPage: React.FC = () => {
           />
         </IonContent>
         <IonContent className="planner">
-          <RoutePlanner setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
+          <RoutePlanner onSelectedOriginLocationChanged={setOrigin} onSelectedDestinationLocationChanged={setDestination} />
         </IonContent>
       </IonContent>
 
