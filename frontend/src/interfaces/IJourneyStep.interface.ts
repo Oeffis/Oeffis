@@ -5,4 +5,5 @@ export interface IJourneyStep {
   arrivalTime: Date;
   travelDurationInMinutes: number;
   track: string;
+  line: string;
 }

@@ -49,12 +49,16 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
               {
                 //check if is last step in journey, if so -> show StepProgressComponent
                 props.journey.stops.map((step, index) =>
-                  index + 1 !== props.journey.stops.length
-                    ? <><JourneyStepComponent key={"journeyStep" + index} step={step} />
-                      <StepProgressComponent key={"stepProgress" + index} step={step} />
-                    </>
-                    : <JourneyStepComponent key={"journeyStep" + index} step={step} />)
+                  <><JourneyStepComponent key={"journeyStep" + index} step={step} arrivalTime={index > 0 ? props.journey.stops[index - 1].arrivalTime : step.startTime} isFirst={index === 0} />
+                    <StepProgressComponent key={"stepProgress" + index} step={step} />
+                  </>
+                )
               }
+              <div className="steps">
+                {
+                  <JourneyStepComponent arrivalDestination={props.journey.arrivalStation} arrivalTime={props.journey.arrivalTime} isFirst={false}></JourneyStepComponent>
+                }
+              </div>
             </div>
             <IonButton fill="clear" onClick={(openDetails)}>
               <IonIcon icon={chevronUpOutline} size="small" />

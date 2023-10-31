@@ -8,7 +8,6 @@ const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StepProgressProps { step: IJourneyStep }
 
 let progress = 0;
-
 const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressProps) => {
   const calculateProgress = (): string => {
     const differenceInMs = new Date().getTime() - props.step.startTime.getTime();
@@ -20,22 +19,34 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
     if (progress > 100) {
       progress = 100;
     }
-
+    if (traveledMinutes <= 0) {
+      progress = 0;
+    }
     return progress.toString();
   };
 
-  calculateProgress();
   return (
     <div className="container" data-testid="journey-step" >
       <div className="left">
         <IonLabel>
-          Ankunft: {formatDateTime(props.step.arrivalTime)}
+          Abfahrt
+        </IonLabel>
+        <IonLabel>
+          {formatDateTime(props.step.startTime)}
         </IonLabel>
       </div>
       <div className="middle">
         <div className="line">
           <div className="fill-line" style={{ height: calculateProgress() + "%" }} />
         </div>
+      </div>
+      <div className="line-info">
+        <IonLabel>
+          Linie: {props.step.line}
+        </IonLabel>
+        <IonLabel>
+          Fahrtzeit: {props.step.travelDurationInMinutes} Min
+        </IonLabel>
       </div>
     </div >
   );
