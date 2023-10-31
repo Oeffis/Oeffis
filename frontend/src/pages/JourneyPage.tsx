@@ -2,8 +2,8 @@ import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonT
 import React, { useEffect, useState } from "react";
 import logo from "../../public/images/train_image.png";
 import { Location, LocationTypeEnum } from "../api";
-import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import RoutePlanner from "../components/RoutePlanner";
+import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import "./JourneyPage.css";
 
 const INITIAL_LOCATION: Location = {
@@ -71,14 +71,18 @@ const JourneyPage: React.FC = () => {
   return (
     <IonPage id="main-content">
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar className="menuBar">
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Oeffis</IonTitle>
+          <IonTitle>
+            <h3>Öffis</h3>
+          </IonTitle>
+          <IonButtons slot="end">
             <IonImg className="menuLogo" src={logo} />
-          </div>
+          </IonButtons>
+
+
         </IonToolbar>
       </IonHeader>
       <IonContent id="main-content" className="journeyContent">
