@@ -7,43 +7,53 @@ export async function run(args: { stopId?: string, limit: number }): Promise<voi
   const pgPool = await createPgPool({
     host: process.env.pgHost,
     port: parseInt(process.env.pgPort ?? "5432"),
-    database: process.env.pgDatabase,
-    user: process.env.pgUser,
-    password: process.env.pgPassword
+    database: process.env.pgDatabase ?? "postgres",
+    user: process.env.pgUser ?? "postgres",
+    password: process.env.pgPassword ?? "postgres"
   }, console.log);
 
   await pgPool.withPgConnection(async pgClient => {
-    const definitiveStopId = args.stopId ?? await getStopIdFromDb(pgClient);
+    const vrrTimetableVersionId = await getLatestVrrTimetableVersionId(pgClient);
+    console.log("latest vrr timetable version id", vrrTimetableVersionId);
+
+    const definitiveStopId = args.stopId ?? await getStopIdFromDb(pgClient, vrrTimetableVersionId);
     console.log("fetching delays for stop id", definitiveStopId);
 
     const recordingTime = new Date();
     const stopEvents = await getDepartureDelays(definitiveStopId, args.limit);
 
-    await insertDepartureDelaysIntoDb(stopEvents, pgClient, recordingTime);
+    await insertDepartureDelaysIntoDb(stopEvents, pgClient, recordingTime, vrrTimetableVersionId);
   });
+
+  await pgPool.closePgConnection();
 }
 
-async function getStopIdFromDb(pgClient: Connection): Promise<string> {
+async function getStopIdFromDb(pgClient: Connection, vrrTimetableVersionId: number): Promise<string> {
   console.log("Fetching stop id from DB...");
 
   const stopIds = await pgClient.query(`
-  WITH 
+  WITH
+    stop_times_for_vrr_timetable_version AS (
+      SELECT stop_id
+      FROM stop_times
+      WHERE vrr_timetable_version_id = $1
+    ),
     counted_stops AS (
       SELECT stop_id, count(*) as count
-      FROM stop_times
+      FROM stop_times_for_vrr_timetable_version
       GROUP BY stop_id
     ),
     selected_stop AS (
       SELECT stop_id
       FROM counted_stops
-      where count > random() * 1500
+      WHERE count > random() * 1500
       ORDER BY random() DESC
       LIMIT 1
     )
   SELECT s.stop_id, s.parent_station
   FROM selected_stop
   JOIN stops as s on selected_stop.stop_id = s.stop_id;
-  `);
+  `, [vrrTimetableVersionId]);
 
   if (stopIds.rowCount === 0) {
     return Promise.reject(new Error("no stops with stop times found in DB"));
@@ -59,6 +69,14 @@ async function getStopIdFromDb(pgClient: Connection): Promise<string> {
   return stopIds.rows[0].stop_id;
 }
 
+async function getLatestVrrTimetableVersionId(pgClient: Connection): Promise<number> {
+  const result = await pgClient.query("SELECT max(vrr_timetable_version_id) as id FROM vrr_timetable_version");
+  if (result.rowCount === 0) {
+    throw new Error("no vrr timetable versions found in DB");
+  }
+  return result.rows[0].id;
+}
+
 async function getDepartureDelays(stopId: string, limit: number): Promise<StopEvent[]> {
   const departures = await new DeparturesClient(VRR_TEST_API_BASE_URL)
     .findDeparturesByStop({ stopId, limit });
@@ -72,9 +90,9 @@ async function getDepartureDelays(stopId: string, limit: number): Promise<StopEv
   return departureEvents;
 }
 
-async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], pgClient: Connection, recordingTime: Date): Promise<void> {
+async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], pgClient: Connection, recordingTime: Date, vrrTimetableVersionId: number): Promise<void> {
   console.log("inserting", stopEvents.length, "departure events into DB");
-  const promises = stopEvents.map(stop => pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data) VALUES ($1, $2, $3, $4, $5, $6, $7)", [
+  const promises = stopEvents.map(stop => pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
     stop.transportation.id,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     stop.location!.id,
@@ -82,7 +100,8 @@ async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], pgClient: Co
     true,
     stop.departureTimePlanned,
     stop.departureTimeEstimated,
-    JSON.stringify(stop)
+    JSON.stringify(stop),
+    vrrTimetableVersionId
   ])
   );
   const results = await Promise.allSettled(promises);
