@@ -277,7 +277,7 @@ export function TripOptionsDisplay(props: {
               : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation?.line : '',
+            line: "transportation" in leg ? leg.transportation.line : ""
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };

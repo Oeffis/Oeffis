@@ -56,7 +56,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
               }
               <div className="steps">
                 {
-                  <JourneyStepComponent arrivalDestination={props.journey.arrivalStation} arrivalTime={props.journey.arrivalTime} isFirst={false}></JourneyStepComponent>
+                  <JourneyStepComponent arrivalDestination={props.journey.arrivalStation} arrivalTime={props.journey.arrivalTime} isFirst={false} />
                 }
               </div>
             </div>

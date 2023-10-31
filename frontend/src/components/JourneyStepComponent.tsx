@@ -6,9 +6,8 @@ import "./JourneyStepComponent.css";
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date, isFirst: boolean }
 
-
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const checkIfArrived = () => {
+  const checkIfArrived = (): boolean => {
     let traveledMinutes;
 
     if (props.step?.startTime) {
@@ -18,12 +17,12 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
     } else {
       const differenceInMs = new Date().getTime() - props.arrivalTime.getTime();
       traveledMinutes = Math.round(((differenceInMs % 86400000) % 3600000) / 60000); // minutes    }
-    };
+    }
 
     return traveledMinutes >= 0 ? true : false;
-  }
+  };
 
-  let color = checkIfArrived() ? "gray" : "lightgray";
+  const color = checkIfArrived() ? "gray" : "lightgray";
   return (
     <div className="container" data-testid="journey-step">
       <div className="left">
@@ -50,6 +49,6 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default JourneyStepComponent;
