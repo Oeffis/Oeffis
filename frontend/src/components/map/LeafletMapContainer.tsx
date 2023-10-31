@@ -18,11 +18,11 @@ export interface MapProps {
 
 const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
   const locations = useMultipleLocationsByIdOrNull(locationIds);
-  const { currentLocation } = useCurrentLocation();
+  const usersPosition = useCurrentLocation();
   const [zoom, setZoom] = useState<number>();
 
-  const lat = currentLocation?.coords.latitude ?? 51.183334;
-  const lng = currentLocation?.coords.longitude ?? 7.200000;
+  const lat = usersPosition.state === "located" ? usersPosition.location.coords.latitude : 51.183334;
+  const lng = usersPosition.state === "located" ? usersPosition.location.coords.longitude : 7.200000;
 
   const getLocationsCoords = (): LatLngTuple[] => locations
     .map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);

@@ -296,7 +296,11 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 export default MapMarker;
 
 export const CurrentLocationMapMarker: React.FC = () => {
-  const { currentLocation } = useCurrentLocation();
+  const currentLocation = useCurrentLocation();
+  if (currentLocation.state !== "located") {
+
+    return <></>;
+  }
 
   const currentLocationIcon = new Icon({
     iconUrl: currentPositionIcon,
@@ -308,17 +312,12 @@ export const CurrentLocationMapMarker: React.FC = () => {
   });
 
   return (
-    <>
-      {
-        currentLocation ?
-          <Marker
-            position={[currentLocation.coords.latitude, currentLocation.coords.longitude]}
-            icon={currentLocationIcon}>
-            <Popup className="popup" >
-              <p className="popupHeadline">Your position</p>
-            </Popup >
-          </Marker >
-          : <></>}
-    </>
+    <Marker
+      position={[currentLocation.location.coords.latitude, currentLocation.location.coords.longitude]}
+      icon={currentLocationIcon}>
+      <Popup className="popup" >
+        <p className="popupHeadline">Your position</p>
+      </Popup >
+    </Marker >
   );
 };
