@@ -1,6 +1,8 @@
 import { Geolocation, Position } from "@capacitor/geolocation";
 import { createContext, useContext, useEffect, useState } from "react";
 
+const GEOLOCATION_POSITION_ERROR_TIMEOUT_CODE = 3;
+
 export type CurrentLocation = CurrentLocationFailed | CurrentLocationPending | CurrentLocationLocated;
 
 export interface CurrentLocationFailed {
@@ -19,6 +21,7 @@ export interface CurrentLocationLocated {
   state: "located";
   error: null;
   location: Position;
+  isStale: boolean;
 }
 
 export const CurrentLocationContext = createContext<CurrentLocation | null>(null);
@@ -36,6 +39,21 @@ export function CurrentLocationProvider(props: { children: React.ReactNode }): J
 
     void Geolocation.watchPosition({}, (position, error) => {
       if (error) {
+        // If the error is a timeout error and we already have a location, we can just mark it as stale.
+
+        if (
+          error instanceof GeolocationPositionError
+          && error.code === GEOLOCATION_POSITION_ERROR_TIMEOUT_CODE
+          && currentLocation.state === "located"
+        ) {
+          setCurrentLocation({
+            state: "located",
+            error: null,
+            location: currentLocation.location,
+            isStale: true
+          });
+        }
+
         setCurrentLocation({
           state: "failed",
           error: error as Error,
@@ -47,7 +65,8 @@ export function CurrentLocationProvider(props: { children: React.ReactNode }): J
         setCurrentLocation({
           state: "located",
           error: null,
-          location: position
+          location: position,
+          isStale: false
         });
       }
 
