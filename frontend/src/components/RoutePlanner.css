@@ -42,7 +42,8 @@ ion-modal#favorite-dialogue ion-toolbar {
   flex-direction: column;
   align-items: center;
   background-color: transparent;
-  border: 1px solid blue;
+  /* Adjust with global colors */
+  border: 1px solid darkslategray;
   border-radius: 10px;
 }
 
@@ -67,9 +68,9 @@ ion-modal#favorite-dialogue ion-toolbar {
   color: primary;
 }
 
-.button_row {
-  display: inline-flex;
+.button-row {
+  display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: 100%;
 }

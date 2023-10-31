@@ -1,4 +1,4 @@
-.buttonPrimary {
+.button-primary {
 background-color: ion-color-primary;
     border: none;
     cursor: pointer;
@@ -13,7 +13,7 @@ background-color: ion-color-primary;
     transition: color 0.2s ease-in-out;
 }
 
-.buttonSecondary {
+.button-secondary {
   background-color: ion-color-secondary;
       border: none;
       cursor: pointer;
@@ -28,7 +28,7 @@ background-color: ion-color-primary;
       transition: color 0.2s ease-in-out;
   }
 
-  .buttonColorless {
+  .button-colorless {
     background-color: transparent;
         border: none;
         cursor: pointer;

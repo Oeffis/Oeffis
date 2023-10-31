@@ -17,7 +17,7 @@ import {
   IonToolbar
 } from "@ionic/react";
 import { formatISO, isSameMinute, parseISO } from "date-fns";
-import { closeCircleOutline, heart } from "ionicons/icons";
+import { closeCircleOutline, heart, search } from "ionicons/icons";
 import { useState } from "react";
 import {
   FootpathLeg,
@@ -135,7 +135,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
   return (
     <>
       <IonList inset={true}>
-        <IonItem lines="inset">
+        <IonItem lines="none">
           <IonItem className="date-time-card">
             <IonRow>
               <IonCol className="ion-text-center">
@@ -149,7 +149,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
                 <IonRow>
                   {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
                   {/* Button to delete custom date/time inputs and use current time. */}
-                  <IonButton className="buttonPrimary"
+                  <IonButton className="button-primary"
                     fill="outline"
                     onClick={() => setCustomDeparture(formatISO(currentTime))}
                   >
@@ -201,13 +201,16 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           />
         </IonItem>
         <IonRow className="button-row">
-          <IonButton fill="outline" expand="block" color="ion-color-secondary"
+          <IonButton className="button-secondary" fill="outline" expand="block"
             onClick={() => addToFavorites()}
           >
             <IonIcon slot="start" icon={heart} />
             Merken
           </IonButton>
-          <IonButton type="submit" size="default" expand="block">Routen suchen</IonButton>
+          <IonButton className="button-primary" type="submit" size="default" expand="block">
+            <IonIcon slot="start" icon={search} />
+            Routen suchen
+          </IonButton>
         </IonRow>
 
         <IonButton expand="block" color="warning"
@@ -242,7 +245,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             </div>
           </div>
         </IonContent>
-      </IonModal>;
+      </IonModal>
       <IonModal
         isOpen={isFavoritesModalOpen}
         onDidDismiss={() => setIsFavoritesModalOpen(false)}

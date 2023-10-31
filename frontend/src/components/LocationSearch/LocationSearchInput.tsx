@@ -73,6 +73,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         value={props.selectedLocation?.name}
         label={props.inputLabel}
         labelPlacement="floating"
+        clearInput={true}
       />
 
       <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
