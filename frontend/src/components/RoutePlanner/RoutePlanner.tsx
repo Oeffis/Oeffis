@@ -32,11 +32,11 @@ import { TripOptionsDisplay } from "./TripOptionsDisplay";
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
 export interface RoutePlannerProps {
-  setSelectedOriginLocation: (location: Location) => void
-  setSelectedDestinationLocation: (location: Location) => void
+  onSelectedOriginLocationChanged: (location: Location) => void
+  onSelectedDestinationLocationChanged: (location: Location) => void
 }
 
-const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
+const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLocationChanged }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
@@ -157,7 +157,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             selectedLocation={originLocation}
             onSelectedLocationChanged={(location): void => {
               setOriginId(location.id);
-              setSelectedOriginLocation(location);
+              onSelectedOriginLocationChanged(location);
             }}
             prefixDataTestId="origin-input"
           />
@@ -168,7 +168,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             selectedLocation={destinationLocation}
             onSelectedLocationChanged={(location): void => {
               setDestinationId(location.id);
-              setSelectedDestinationLocation(location);
+              onSelectedDestinationLocationChanged(location);
             }}
             prefixDataTestId="destination-input"
           />
@@ -211,7 +211,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
           </div>
 
         </IonContent>
-      </IonModal>;
+      </IonModal>
       <IonModal
         isOpen={isFavoritesModalOpen}
         onDidDismiss={() => setIsFavoritesModalOpen(false)}
