@@ -1,8 +1,10 @@
 import { IonButton, IonCard, IonIcon, IonImg, IonLabel } from "@ionic/react";
 import { format } from "date-fns";
-import { chevronDownOutline, chevronUpOutline } from "ionicons/icons";
+import { chevronDownOutline } from "ionicons/icons";
 import { useState } from "react";
 import { IJourney } from "../interfaces/IJourney.interface";
+import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
+import FirstJourneyStepComponent from "./FirstJourneyStepComponent";
 import "./JourneyDetail.css";
 import JourneyStepComponent from "./JourneyStepComponent";
 import StepProgressComponent from "./StepProgressComponent";
@@ -43,35 +45,44 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
             </IonLabel>
           </div>
         </div>
-        {showDetails
-          ? <div className="bottom-section-opened">
-            <div className="steps">
-              {
-                //check if is last step in journey, if so -> show StepProgressComponent
-                props.journey.stops.map((step, index) =>
-                  <><JourneyStepComponent key={"journeyStep" + index} step={step} arrivalTime={index > 0 ? props.journey.stops[index - 1].arrivalTime : step.startTime} isFirst={index === 0} />
-                    <StepProgressComponent key={"stepProgress" + index} step={step} />
-                  </>
-                )
-              }
-              <div className="steps">
-                {
-                  <JourneyStepComponent arrivalDestination={props.journey.arrivalStation} arrivalTime={props.journey.arrivalTime} isFirst={false} />
-                }
-              </div>
-            </div>
-            <IonButton fill="clear" onClick={(openDetails)}>
-              <IonIcon icon={chevronUpOutline} size="small" />
-            </IonButton>
-          </div>
-          : <div className="bottom-section-closed">
-            <IonButton fill="clear" onClick={(openDetails)}>
-              <IonIcon icon={chevronDownOutline} onClick={openDetails} size="small" />
-            </IonButton>
-          </div>}
+        {showDetails && <StepDetails journey={props.journey} />}
+        <div className="bottom-section-closed">
+          <IonButton fill="clear" onClick={(openDetails)}>
+            <IonIcon icon={chevronDownOutline} onClick={openDetails} size="small" />
+          </IonButton>
+        </div>
       </IonCard>
     </div>
   );
 };
 
 export default JourneyDetail;
+
+export interface StepDetailsProps { journey: IJourney, }
+export function StepDetails(props: StepDetailsProps): JSX.Element {
+
+  return (
+    <div className="bottom-section-opened">
+      <div className="steps">
+        {
+          props.journey.stops.map((step: IJourneyStep, index) =>
+            <>
+              {index === 0 && <FirstJourneyStepComponent startTime={step.startTime} stationName={step.stationName} />}
+              {
+                index !== 0 && <JourneyStepComponent
+                  key={"journeyStep" + index}
+                  step={step}
+                  arrivalTime={props.journey.stops[index - 1].arrivalTime} />
+              }
+              <StepProgressComponent key={"stepProgress" + index} step={step} />
+            </>
+          )
+        }
+        <div className="steps">
+          {
+            <JourneyStepComponent arrivalDestination={props.journey.arrivalStation} arrivalTime={props.journey.arrivalTime} />
+          }
+        </div>
+      </div>
+    </div>);
+}
