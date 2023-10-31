@@ -81,8 +81,6 @@ const JourneyPage: React.FC = () => {
           <IonButtons slot="end">
             <IonImg className="menuLogo" src={logo} />
           </IonButtons>
-
-
         </IonToolbar>
       </IonHeader>
       <IonContent id="main-content" className="journeyContent">
