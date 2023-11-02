@@ -1,7 +1,7 @@
 CREATE TABLE historic_data (
     id SERIAL NOT NULL,
-    trip_id VARCHAR(20) NOT NULL,
-    stop_id VARCHAR(20) NOT NULL,
+    trip_id TEXT NOT NULL,
+    stop_id TEXT NOT NULL,
     recording_time TIMESTAMP NOT NULL,
     is_departure BOOLEAN NOT NULL,
     planned TIMESTAMP NOT NULL,
