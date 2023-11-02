@@ -1,6 +1,6 @@
 import { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
@@ -24,6 +24,9 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
   const usersPosition = useCurrentLocation();
   const [view, setView] = useState<View>({ bounds: NRW_BOUNDS });
 
+  const bounds: LatLngTuple[] = locations.map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);
+  const markers = locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
+
   useEffect(() => {
     if (usersPosition.state === "located") {
       const lat = usersPosition.location.coords.latitude;
@@ -33,19 +36,11 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
     }
   }, []);
 
-  const getLocationsCoords = (): LatLngTuple[] => locations
-    .map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);
-
   useEffect(() => {
-    const bounds = getLocationsCoords();
     if (bounds.length > 0) {
       setView({ bounds });
     }
   }, [locations]);
-
-  const markers = locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
-
-  const getPolygonPositions = getLocationsCoords;
 
   return <ReactiveMapContainer
     style={{ height: "100%", width: "100%" }}
@@ -58,7 +53,7 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
     {markers}
     <CurrentLocationMapMarker />
     {showLines
-      ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
+      ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={bounds} />
       : <></>}
   </ReactiveMapContainer>;
 };
