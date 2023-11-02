@@ -47,7 +47,7 @@ const JourneyPage: React.FC = () => {
           />
         </IonContent>
         <IonContent className="planner">
-          <RoutePlanner onSelectedOriginLocationChanged={setOrigin} onSelectedDestinationLocationChanged={setDestination} />
+          <RoutePlanner setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
         </IonContent>
       </IonContent>
 
