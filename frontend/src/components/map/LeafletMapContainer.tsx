@@ -17,10 +17,12 @@ export interface MapProps {
   onItemClicked?: (location: Location) => void
 }
 
+const NRW_BOUNDS: LatLngTuple[] = [[50.30527, 5.71687], [52.69499, 9.47241]];
+
 const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
   const locations = useMultipleLocationsByIdOrNull(locationIds);
   const usersPosition = useCurrentLocation();
-  const [view, setView] = useState<View>({ bounds: [[50.30527, 5.71687], [52.69499, 9.47241]] });
+  const [view, setView] = useState<View>({ bounds: NRW_BOUNDS });
 
   useEffect(() => {
     if (usersPosition.state === "located") {
@@ -41,8 +43,7 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
     }
   }, [locations]);
 
-  const renderMarker = (): ReactElement[] =>
-    locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
+  const markers = locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
 
   const getPolygonPositions = getLocationsCoords;
 
@@ -54,10 +55,11 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     />
-    {renderMarker()}
+    {markers}
     <CurrentLocationMapMarker />
-    {showLines &&
-      <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />}
+    {showLines
+      ? <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={getPolygonPositions()} />
+      : <></>}
   </ReactiveMapContainer>;
 };
 
