@@ -29,12 +29,20 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
 
       setView({ center: [lat, lng], zoom: 15 });
     }
-  }, [usersPosition]);
+  }, []);
 
   const getLocationsCoords = (): LatLngTuple[] => locations
     .map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);
 
-  const renderMarker = (): ReactElement[] => locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
+  useEffect(() => {
+    const bounds = getLocationsCoords();
+    if (bounds.length > 0) {
+      setView({ bounds });
+    }
+  }, [locations]);
+
+  const renderMarker = (): ReactElement[] =>
+    locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
 
   const getPolygonPositions = getLocationsCoords;
 
