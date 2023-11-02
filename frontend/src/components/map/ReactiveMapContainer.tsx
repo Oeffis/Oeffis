@@ -53,12 +53,15 @@ const ReactiveMapContainer: React.FC<PropsWithChildren<ReactiveContainerProps>> 
     }
   }, [props.view]);
 
-  return (<MapContainer
-    style={props.style}
-    ref={mapRef}
-    maxZoom={15}>
-    {props.children}
-  </MapContainer>);
+  return (
+    <MapContainer
+      style={props.style}
+      ref={mapRef}
+      maxZoom={15}
+    >
+      {props.children}
+    </MapContainer>
+  );
 };
 
 export default ReactiveMapContainer;
