@@ -17,26 +17,34 @@ import { formatISO, isSameMinute, parseISO } from "date-fns";
 import { closeCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
-  Location
+  FootpathLeg,
+  Journey,
+  LegOriginLocationTypeEnum,
+  Location,
+  TransportationLeg,
+  TransportationLegTypeEnum
 } from "../../api";
 import { useCurrentTime } from "../../hooks/useCurrentTime";
 import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
+import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
+import { IJourney } from "../../interfaces/IJourney.interface";
+import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import FavoritesPage from "../../pages/FavoritesPage";
 import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../../services/favorites/FavoritesContext";
+import JourneyListComponent from "../JourneyListComponent";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
-import { TripOptionsDisplay } from "./TripOptionsDisplay";
 
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
 export interface RoutePlannerProps {
-  onSelectedOriginLocationChanged: (location: Location) => void
-  onSelectedDestinationLocationChanged: (location: Location) => void
+  setSelectedOriginLocation: (location: Location) => void
+  setSelectedDestinationLocation: (location: Location) => void
 }
 
-const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLocationChanged }: RoutePlannerProps): JSX.Element => {
+const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
@@ -157,7 +165,7 @@ const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLo
             selectedLocation={originLocation}
             onSelectedLocationChanged={(location): void => {
               setOriginId(location.id);
-              onSelectedOriginLocationChanged(location);
+              setSelectedOriginLocation(location);
             }}
             prefixDataTestId="origin-input"
           />
@@ -168,7 +176,7 @@ const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLo
             selectedLocation={destinationLocation}
             onSelectedLocationChanged={(location): void => {
               setDestinationId(location.id);
-              onSelectedDestinationLocationChanged(location);
+              setSelectedDestinationLocation(location);
             }}
             prefixDataTestId="destination-input"
           />
@@ -211,7 +219,7 @@ const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLo
           </div>
 
         </IonContent>
-      </IonModal>
+      </IonModal>;
       <IonModal
         isOpen={isFavoritesModalOpen}
         onDidDismiss={() => setIsFavoritesModalOpen(false)}
@@ -226,8 +234,8 @@ const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLo
           <FavoritesPage
             launchTab={1}
             showHeader={false}
-            onRouteSelected={route => setRoute(route)}
-            onTripSelected={trip => setTrip(trip)} />
+            onRouteSelected={(route: CreateFavoriteRoute) => setRoute(route)}
+            onTripSelected={(trip: CreateFavoriteTrip) => setTrip(trip)} />
         </IonContent>
       </IonModal>
     </>
@@ -235,3 +243,78 @@ const RoutePlanner = ({ onSelectedOriginLocationChanged, onSelectedDestinationLo
 };
 
 export default RoutePlanner;
+
+export function TripOptionsDisplay(props: {
+  origin: Location,
+  destination: Location,
+  departure: Date
+}): JSX.Element {
+  const { origin, destination, departure } = props;
+
+  // TODO Add user input if datetime should be interpreted as arrival time.
+  const result = useJourneyQuery(origin, destination, departure, false);
+
+  const iJourneys: false | IJourney[] = result.type === "success"
+    && result.journeyResults
+      .map((journey): IJourney => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const legs: (TransportationLeg | FootpathLeg)[] = journey.legs;
+
+        const lastLeg = legs[legs.length - 1];
+        const firstLeg = legs[0];
+
+        return {
+          startStation: firstLeg.origin.name,
+          startTime: firstLeg.origin.departureTimeEstimated,
+          arrivalStation: lastLeg.destination.name,
+          arrivalTime: lastLeg.destination.arrivalTimeEstimated,
+          stops: legs.map((leg): IJourneyStep => ({
+            arrivalTime: leg.destination.arrivalTimeEstimated,
+            startTime: leg.origin.departureTimeEstimated,
+            stationName: leg.origin.name,
+            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
+              ? leg.origin.details.shortName
+              : "",
+            stopName: leg.destination.name,
+            travelDurationInMinutes: leg.details.duration / 60,
+            line: "transportation" in leg ? leg.transportation.line : ""
+          })),
+          travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
+        };
+      });
+
+  return (
+    <>
+      {result.type === "error" && <div>Error: {result.error.message}</div>}
+      {result.type === "pending" && <div>Searching...</div>}
+      {iJourneys &&
+        <JourneyListComponent journeys={iJourneys} />
+      }
+    </>
+  );
+}
+
+export function RenderTrip(props: { journey: Journey }): JSX.Element {
+  const { journey } = props;
+
+  return (
+    <IonItem>
+      <IonLabel>
+        <ol>
+          {
+            journey.legs.map((leg, idx) => (
+              <li key={idx}>
+                {
+                  leg.type === TransportationLegTypeEnum.Transportation
+                    ? (leg as TransportationLeg).transportation.name
+                    : "Footpath"
+                }
+                {leg.details.duration}
+              </li>
+            ))
+          }
+        </ol>
+      </IonLabel>
+    </IonItem>
+  );
+}

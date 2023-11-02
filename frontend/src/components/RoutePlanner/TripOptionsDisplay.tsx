@@ -41,7 +41,8 @@ export function TripOptionsDisplay(props: {
               ? leg.origin.details.shortName
               : "",
             stopName: leg.destination.name,
-            travelDurationInMinutes: leg.details.duration / 60
+            travelDurationInMinutes: leg.details.duration / 60,
+            line: "transportation" in leg ? leg.transportation.line : ""
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
