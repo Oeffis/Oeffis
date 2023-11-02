@@ -20,7 +20,7 @@ export interface MapProps {
 const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
   const locations = useMultipleLocationsByIdOrNull(locationIds);
   const usersPosition = useCurrentLocation();
-  const [view, setView] = useState<View>({ center: [50.30527, 5.71687], zoom: 13 });
+  const [view, setView] = useState<View>({ bounds: [[50.30527, 5.71687], [52.69499, 9.47241]] });
 
   useEffect(() => {
     if (usersPosition.state === "located") {
@@ -29,7 +29,7 @@ const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onIt
 
       setView({ center: [lat, lng], zoom: 15 });
     }
-  }, []);
+  }, [usersPosition]);
 
   const getLocationsCoords = (): LatLngTuple[] => locations
     .map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);

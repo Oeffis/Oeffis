@@ -1,6 +1,6 @@
 import { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { CSSProperties, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { CSSProperties, PropsWithChildren, useEffect, useRef } from "react";
 import { MapContainer } from "react-leaflet";
 import "./LeafletMapContainer.css";
 
@@ -26,38 +26,32 @@ interface ReactiveContainerProps {
 
 const ReactiveMapContainer: React.FC<PropsWithChildren<ReactiveContainerProps>> = (props) => {
   const mapRef = useRef<L.Map>(null);
-  const [isFirstView, setIsFirstView] = useState(true);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    applyView(map, props.view);
+
+    const view = props.view;
+    if (isCenterZoomView(view)) {
+      map.setView(view.center, view.zoom);
+    } else {
+      map.fitBounds(view.bounds);
+    }
+
+    setTimeout(() => map.invalidateSize(), 0);
   }, [mapRef.current]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
-    applyView(map, props.view);
-  }, [props.view]);
-
-  const applyView = (map: L.Map, view: View): void => {
-    if (isFirstView) {
-      setIsFirstView(false);
-      if (isCenterZoomView(view)) {
-        map.setView(view.center, view.zoom);
-        return;
-      }
-      map.fitBounds(view.bounds);
-      return;
-    }
-
+    const view = props.view;
     if (isCenterZoomView(view)) {
-      map.flyTo(view.center, view.zoom);
+      map.flyTo(view.center, view.zoom, { animate: true, duration: 0.5 });
     } else {
       map.flyToBounds(view.bounds);
     }
-  };
+  }, [props.view]);
 
   return (<MapContainer
     style={props.style}
