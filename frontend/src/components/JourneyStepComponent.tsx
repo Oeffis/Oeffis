@@ -7,7 +7,7 @@ const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const color = !isFuture(props.arrivalTime) ? "gray" : "lightgray";
+  const color = isFuture(props.arrivalTime) ? "lightgray" : "gray";
 
   return (
     <div className="container" data-testid="journey-step">
