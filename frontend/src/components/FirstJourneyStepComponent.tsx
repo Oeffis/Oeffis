@@ -6,7 +6,7 @@ const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { stationName: string, startTime: Date }
 
 const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const color = !isFuture(props.startTime) ? "gray" : "lightgray";
+  const color = isFuture(props.startTime) ? "lightgray" : "gray";
 
   return (
     <div className="container" data-testid="journey-step">
