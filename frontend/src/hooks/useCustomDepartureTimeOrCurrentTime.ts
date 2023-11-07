@@ -1,6 +1,6 @@
 import { isAfter, isValid, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
-import { DEPARTURE_TIME_NOW_PARAM } from "../components/RoutePlanner";
+import { DEPARTURE_TIME_NOW_PARAM } from "../components/RoutePlanner/RoutePlanner";
 import { useCurrentTime } from "./useCurrentTime";
 
 /**

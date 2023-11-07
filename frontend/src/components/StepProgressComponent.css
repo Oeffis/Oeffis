@@ -1,0 +1,27 @@
+
+.line {
+  border-radius: 15px;
+  width: 8px;
+  height: 130px;
+  background: lightgray;
+}
+
+.fill-line {
+  border-radius: 15px;
+  border: 1px solid black;
+  width: 9px;
+  background: gray;
+}
+
+.timeline-container {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.line-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 20px;
+}

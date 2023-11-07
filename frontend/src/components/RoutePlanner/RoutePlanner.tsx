@@ -23,18 +23,18 @@ import {
   Location,
   TransportationLeg,
   TransportationLegTypeEnum
-} from "../api";
-import { useCurrentTime } from "../hooks/useCurrentTime";
-import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../hooks/useCustomDepartureTimeOrCurrentTime";
-import { useJourneyQuery } from "../hooks/useJourneyQuery";
-import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
-import { useStateParams } from "../hooks/useStateParams";
-import { IJourney } from "../interfaces/IJourney.interface";
-import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import FavoritesPage from "../pages/FavoritesPage";
-import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../services/favorites/FavoritesContext";
-import JourneyListComponent from "./JourneyListComponent";
-import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
+} from "../../api";
+import { useCurrentTime } from "../../hooks/useCurrentTime";
+import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
+import { useJourneyQuery } from "../../hooks/useJourneyQuery";
+import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
+import { useStateParams } from "../../hooks/useStateParams";
+import { IJourney } from "../../interfaces/IJourney.interface";
+import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
+import FavoritesPage from "../../pages/FavoritesPage";
+import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../../services/favorites/FavoritesContext";
+import JourneyListComponent from "../JourneyListComponent";
+import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
 
 export const DEPARTURE_TIME_NOW_PARAM = "now";
@@ -234,8 +234,8 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
           <FavoritesPage
             launchTab={1}
             showHeader={false}
-            onRouteSelected={route => setRoute(route)}
-            onTripSelected={trip => setTrip(trip)} />
+            onRouteSelected={(route: CreateFavoriteRoute) => setRoute(route)}
+            onTripSelected={(trip: CreateFavoriteTrip) => setTrip(trip)} />
         </IonContent>
       </IonModal>
     </>
@@ -276,7 +276,8 @@ export function TripOptionsDisplay(props: {
               ? leg.origin.details.shortName
               : "",
             stopName: leg.destination.name,
-            travelDurationInMinutes: leg.details.duration / 60
+            travelDurationInMinutes: leg.details.duration / 60,
+            line: "transportation" in leg ? leg.transportation.line : ""
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
