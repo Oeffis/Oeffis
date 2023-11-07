@@ -17,7 +17,7 @@ import {
   IonToolbar
 } from "@ionic/react";
 import { formatISO, isSameMinute, parseISO } from "date-fns";
-import { closeCircleOutline, heart, search } from "ionicons/icons";
+import { calendarClearOutline, closeCircleOutline, heart, search } from "ionicons/icons";
 import { useState } from "react";
 import {
   FootpathLeg,
@@ -108,9 +108,11 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
   const [isFavoriteDialogueOpen, setIsFavoritesDialogueOpen] = useState(false);
 
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
-  const showFavorites = (): void => {
+  {/*
+    const showFavorites = (): void => {
     setIsFavoritesModalOpen(true);
   };
+  */}
 
   const updateMinDepartureTime = (): void => {
     setMinDepartureTime(currentTime);
@@ -134,47 +136,47 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
 
   return (
     <>
-      <IonList inset={true}>
-        <IonItem lines="none">
-          <IonItem className="date-time-card">
-            <IonRow>
-              <IonCol className="ion-text-center">
-                <IonLabel>Datum und Uhrzeit</IonLabel>
-                <IonRow className="toggle-button-row">
-                  <IonLabel className="toggle-button-label">Abfahrtzeit</IonLabel>
-                  <IonToggle className="toggle-button" checked={false} />
-                  <IonLabel className="toggle-button-label">Ankunftszeit</IonLabel>
-
-                </IonRow>
-                <IonRow>
-                  {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
-                  {/* Button to delete custom date/time inputs and use current time. */}
-                  <IonButton className="button-primary"
-                    fill="outline"
-                    onClick={() => setCustomDeparture(formatISO(currentTime))}
-                  >
-                    Jetzt
-                  </IonButton>
-                  <IonDatetimeButton className="date-time-button" aria-label="Date and Time" datetime="datetime" />
-                  {/* Before datetime modal is being presented min departure time is updated to current time. */}
-                  <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
-                    <IonDatetime
-                      name="date_time"
-                      id="datetime"
-                      /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
-                      min={formatISO(minDepartureTime)}
-                      value={formatISO(departureTime)}
-                      multiple={false} // Assures that value cannot be an array but a single date string only.
-                      showDefaultButtons={true}
-                      data-testid={"datetime-input"}
-                      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-                      onIonChange={e => { setCustomDeparture(e.detail.value! as string); setStartTime(e.detail.value as string); }}
-                    />
-                  </IonModal>
-                </IonRow>
-              </IonCol>
-            </IonRow>
-          </IonItem>
+      <IonList className="center-all-column" inset={true}>
+        <IonItem className="date-time-card" lines="none">
+          <IonRow>
+            <IonCol>
+              <IonRow className="center-all-row">
+                <IonIcon className="date-icon" icon={calendarClearOutline} />
+                <IonLabel className="ion-align-self-center">Datum und Uhrzeit</IonLabel>
+              </IonRow>
+              <IonRow className="toggle-button-row">
+                <IonLabel className="toggle-button-label">Abfahrtzeit</IonLabel>
+                <IonToggle className="toggle-button" checked={false} />
+                <IonLabel className="toggle-button-label">Ankunftszeit</IonLabel>
+              </IonRow>
+              <IonRow>
+                {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
+                {/* Button to delete custom date/time inputs and use current time. */}
+                <IonButton className="button-primary"
+                  fill="outline"
+                  onClick={() => setCustomDeparture(formatISO(currentTime))}
+                >
+                  Jetzt
+                </IonButton>
+                <IonDatetimeButton className="date-time-button" aria-label="Date and Time" datetime="datetime" />
+                {/* Before datetime modal is being presented min departure time is updated to current time. */}
+                <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
+                  <IonDatetime
+                    name="date_time"
+                    id="datetime"
+                    /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
+                    min={formatISO(minDepartureTime)}
+                    value={formatISO(departureTime)}
+                    multiple={false} // Assures that value cannot be an array but a single date string only.
+                    showDefaultButtons={true}
+                    data-testid={"datetime-input"}
+                    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                    onIonChange={e => { setCustomDeparture(e.detail.value! as string); setStartTime(e.detail.value as string); }}
+                  />
+                </IonModal>
+              </IonRow>
+            </IonCol>
+          </IonRow>
         </IonItem>
         <IonItem>
           <LocationSearchInput
@@ -213,9 +215,12 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           </IonButton>
         </IonRow>
 
-        <IonButton expand="block" color="warning"
-          onClick={() => showFavorites()}
-        >Favoriten anzeigen</IonButton>
+        {/**  Show favourites button is currently not needed.
+          <IonButton expand="block" color="warning"
+           onClick={() => showFavorites()}
+           >Favoriten anzeigen</IonButton>
+         */}
+
       </IonList >
       {
         originLocation !== null && destinationLocation !== null &&
