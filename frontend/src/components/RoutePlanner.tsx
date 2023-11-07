@@ -137,19 +137,19 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
   return (
     <>
       <IonList className="center-all-column" inset={true}>
-        <IonItem className="date-time-card" lines="none">
-          <IonRow>
+        <IonItem className="date-time-card" lines="none" >
+          <IonRow className="center-all-row">
             <IonCol>
               <IonRow className="center-all-row">
                 <IonIcon className="date-icon" icon={calendarClearOutline} />
                 <IonLabel className="ion-align-self-center">Datum und Uhrzeit</IonLabel>
               </IonRow>
               <IonRow className="toggle-button-row">
-                <IonLabel className="toggle-button-label">Abfahrtzeit</IonLabel>
-                <IonToggle className="toggle-button" checked={false} />
+                <IonLabel className="toggle-button-label">Abfahrtszeit</IonLabel>
+                <IonToggle className="toggle-button" />
                 <IonLabel className="toggle-button-label">Ankunftszeit</IonLabel>
               </IonRow>
-              <IonRow>
+              <IonRow className="center-all-row">
                 {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
                 {/* Button to delete custom date/time inputs and use current time. */}
                 <IonButton className="button-primary"

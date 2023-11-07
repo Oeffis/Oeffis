@@ -36,7 +36,6 @@ ion-modal#favorite-dialogue ion-toolbar {
 }
 
 .date-time-card{
-  height: 100%;
   background-color: transparent;
   /* Adjust with global colors */
   border: 1px solid darkslategray;
@@ -46,16 +45,18 @@ ion-modal#favorite-dialogue ion-toolbar {
 }
 
 .toggle-button{
-  margin-inline-start: -5%;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .toggle-button-row{
-  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .toggle-button-label{
   align-self: center;
-  margin-inline-start: 2%;
 }
 
 .date-time-button {
@@ -79,8 +80,9 @@ ion-modal#favorite-dialogue ion-toolbar {
 .center-all-row {
   display: flex;
   flex-direction: row;
-  align-content: center;
   justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .date-icon {
