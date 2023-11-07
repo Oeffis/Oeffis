@@ -1,9 +1,14 @@
 import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client/dist/Constants";
 import { DeparturesClient } from "@oeffis/vrr_client/dist/DeparturesClient";
+import { SCHEMA_CONVERTER_CONFIG, SystemMessageError } from "@oeffis/vrr_client/dist/VrrClientBase";
 import { StopEvent } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { Connection, createPgPool } from "../postgres/createPgPool";
+import * as BetterQueue from "better-queue";
+import { addSeconds, differenceInSeconds, formatDuration, intervalToDuration } from "date-fns";
+import { WithPgConnection, createPgPool } from "../postgres/createPgPool";
 
 export async function run(args: { stopId?: string, limit: number }): Promise<void> {
+  SCHEMA_CONVERTER_CONFIG.logSchemaErrors = false;
+
   const pgPool = await createPgPool({
     host: process.env.pgHost,
     port: parseInt(process.env.pgPort ?? "5432"),
@@ -12,106 +17,150 @@ export async function run(args: { stopId?: string, limit: number }): Promise<voi
     password: process.env.pgPassword ?? "postgres"
   }, console.log);
 
-  await pgPool.withPgConnection(async pgClient => {
-    const vrrTimetableVersionId = await getLatestVrrTimetableVersionId(pgClient);
-    console.log("latest vrr timetable version id", vrrTimetableVersionId);
+  const vrrTimetableVersionId = await getLatestVrrTimetableVersionId(pgPool.withPgConnection);
+  console.log("latest vrr timetable version id", vrrTimetableVersionId);
 
-    const definitiveStopId = args.stopId ?? await getStopIdFromDb(pgClient, vrrTimetableVersionId);
-    console.log("fetching delays for stop id", definitiveStopId);
+  const stopIds = args.stopId ? [args.stopId] : await getStopIdsFromDb(pgPool.withPgConnection, vrrTimetableVersionId);
+  console.log("found", stopIds.length, "definitive stop ids");
 
-    const recordingTime = new Date();
-    const stopEvents = await getDepartureDelays(definitiveStopId, args.limit);
-
-    await insertDepartureDelaysIntoDb(stopEvents, pgClient, recordingTime, vrrTimetableVersionId);
+  const processingQueue = new BetterQueue({
+    process: (task: { id: string }, cb) => {
+      processOneStopId(args.limit, task.id, vrrTimetableVersionId, pgPool.withPgConnection)
+        .then(() => cb(null))
+        .catch(cb);
+    },
+    concurrent: 100
   });
+
+  for (const stopId of stopIds) {
+    processingQueue.push({ id: stopId });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  processingQueue.on("task_failed", (taskId: any, err: any, stats: any) => {
+    console.error("task failed", { taskId, err, stats });
+  });
+
+  const startTime = new Date();
+  const timer = setInterval(() => {
+    const finished = processingQueue.getStats().total;
+    const total = stopIds.length;
+    const remaining = total - finished;
+
+    const elapsed = differenceInSeconds(new Date(), startTime);
+    const remainingTime = elapsed / finished * remaining;
+    const remainingDuration = intervalToDuration({
+      start: new Date(),
+      end: addSeconds(new Date(), remainingTime)
+    });
+
+    const formattedRemainingTime = formatDuration(remainingDuration);
+    console.log(`Finished ${finished} of ${total} stops. ${remaining} remaining. ${formattedRemainingTime} remaining`);
+  }, 5_000);
+
+  await promiseOfQueueDrained(processingQueue);
+  clearInterval(timer);
 
   await pgPool.closePgConnection();
 }
 
-async function getStopIdFromDb(pgClient: Connection, vrrTimetableVersionId: number): Promise<string> {
-  console.log("Fetching stop id from DB...");
-
-  const stopIds = await pgClient.query(`
-  WITH
-    stop_times_for_vrr_timetable_version AS (
-      SELECT stop_id
-      FROM stop_times
-      WHERE vrr_timetable_version_id = $1
-    ),
-    counted_stops AS (
-      SELECT stop_id, count(*) as count
-      FROM stop_times_for_vrr_timetable_version
-      GROUP BY stop_id
-    ),
-    selected_stop AS (
-      SELECT stop_id
-      FROM counted_stops
-      WHERE count > random() * 1500
-      ORDER BY random() DESC
-      LIMIT 1
-    )
-  SELECT s.stop_id, s.parent_station
-  FROM selected_stop
-  JOIN stops as s on selected_stop.stop_id = s.stop_id;
-  `, [vrrTimetableVersionId]);
-
-  if (stopIds.rowCount === 0) {
-    return Promise.reject(new Error("no stops with stop times found in DB"));
-  }
-
-  if (stopIds.rows[0].parent_station !== null) {
-    console.log("stop is a station, using station id instead");
-    const parentStation = stopIds.rows[0].parent_station;
-    return parentStation.replace("_Parent", "");
-  }
-
-  console.log("stop is a stop, using stop id");
-  return stopIds.rows[0].stop_id;
+async function processOneStopId(limit: number, stopId: string, vrrTimetableVersionId: number, withPgConnection: WithPgConnection): Promise<void> {
+  const recordingTime = new Date();
+  const stopEvents = await getDepartureDelays(stopId, limit);
+  await insertDepartureDelaysIntoDb(stopEvents, withPgConnection, recordingTime, vrrTimetableVersionId);
 }
 
-async function getLatestVrrTimetableVersionId(pgClient: Connection): Promise<number> {
-  const result = await pgClient.query("SELECT max(vrr_timetable_version_id) as id FROM vrr_timetable_version");
-  if (result.rowCount === 0) {
-    throw new Error("no vrr timetable versions found in DB");
-  }
-  return result.rows[0].id;
+async function getStopIdsFromDb(withPgConnection: WithPgConnection, vrrTimetableVersionId: number): Promise<string[]> {
+  return withPgConnection(async pgClient => {
+    const stopIds = await pgClient.query(`
+    WITH RECURSIVE ParentHierarchy AS (
+      SELECT stop_id, parent_station
+      FROM stops
+      WHERE stop_id IN (
+        SELECT DISTINCT stop_id FROM stop_times WHERE vrr_timetable_version_id = $1
+      )
+      UNION
+      SELECT t.stop_id, t.parent_station
+      FROM stops t
+      INNER JOIN ParentHierarchy ph ON t.stop_id = ph.parent_station
+    ),
+    valid_stops AS (
+        SELECT stop_id FROM ParentHierarchy WHERE parent_station IS NULL
+    )
+
+    SELECT stop_id
+    FROM stops
+    WHERE "NVBW_HST_DHID" LIKE 'de:%' AND
+      stop_id IN (
+        SELECT stop_id FROM valid_stops
+      )`, [vrrTimetableVersionId]);
+
+    if (stopIds.rowCount === 0) {
+      return Promise.reject(new Error("no stops with stop times found in DB"));
+    }
+
+    return stopIds.rows.map(row => row.stop_id);
+  });
+}
+
+async function getLatestVrrTimetableVersionId(withPgConnection: WithPgConnection): Promise<number> {
+  return withPgConnection(async pgClient => {
+    const result = await pgClient.query("SELECT max(vrr_timetable_version_id) as id FROM vrr_timetable_version");
+    if (result.rowCount === 0) {
+      throw new Error("no vrr timetable versions found in DB");
+    }
+    return result.rows[0].id;
+  });
 }
 
 async function getDepartureDelays(stopId: string, limit: number): Promise<StopEvent[]> {
-  const departures = await new DeparturesClient(VRR_TEST_API_BASE_URL)
-    .findDeparturesByStop({ stopId, limit });
+  try {
+    const departures = await new DeparturesClient(VRR_TEST_API_BASE_URL)
+      .findDeparturesByStop({ stopId, limit });
 
-  const departureEvents = departures.stopEvents ?? [];
-  if (departureEvents.length === 0) {
-    console.warn("no departure events found. no entries will be added to the database.");
+    const departureEvents = departures.stopEvents ?? [];
+    return departureEvents;
+
+  } catch (e) {
+    if (e instanceof SystemMessageError) {
+      const ignored = [
+        "no matching departure found",
+        "no serving lines found"
+      ];
+
+      if (e.systemMessages.length === 1) {
+        const messageText = e.systemMessages[0].text;
+        if (typeof messageText === "string" && ignored.includes(messageText)) {
+          return [];
+        }
+      }
+    }
+
+    throw e;
   }
-
-  console.log("found", departureEvents.length, "departure events");
-  return departureEvents;
 }
 
-async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], pgClient: Connection, recordingTime: Date, vrrTimetableVersionId: number): Promise<void> {
-  console.log("inserting", stopEvents.length, "departure events into DB");
-  const promises = stopEvents.map(stop => pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
-    stop.transportation.id,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    stop.location!.id,
-    recordingTime,
-    true,
-    stop.departureTimePlanned,
-    stop.departureTimeEstimated,
-    JSON.stringify(stop),
-    vrrTimetableVersionId
-  ])
-  );
-  const results = await Promise.allSettled(promises);
-  let successCount = 0;
-  results.forEach(result => {
-    if (result.status === "rejected") {
-      console.error("error inserting departure event into DB", result.reason);
-    } else {
-      successCount++;
-    }
+async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], withPgConnection: WithPgConnection, recordingTime: Date, vrrTimetableVersionId: number): Promise<void> {
+  await withPgConnection(async pgClient => {
+    const promises = stopEvents.map(stop => pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
+      stop.transportation.id,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      stop.location!.id,
+      recordingTime,
+      true,
+      stop.departureTimePlanned,
+      stop.departureTimeEstimated,
+      JSON.stringify(stop),
+      vrrTimetableVersionId
+    ]));
+
+    await Promise.all(promises);
   });
-  console.log("inserted", successCount, "departure events into DB,", results.length - successCount, "failed");
+}
+
+function promiseOfQueueDrained(queue: BetterQueue): Promise<void> {
+  return new Promise((resolve, reject) => {
+    queue.once("drain", () => resolve());
+    queue.once("error", (err) => reject(err));
+  });
 }
