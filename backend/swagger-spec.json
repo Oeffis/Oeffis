@@ -177,20 +177,6 @@
           "journey"
         ]
       }
-    },
-    "/historicData/delayEntryCount": {
-      "get": {
-        "operationId": "HistoricDataController_getDelayEntryCount",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "historicData"
-        ]
-      }
     }
   },
   "info": {
@@ -1045,6 +1031,10 @@
           "hints"
         ]
       },
+      "LegStats": {
+        "type": "object",
+        "properties": {}
+      },
       "TransportationLeg": {
         "type": "object",
         "properties": {
@@ -1088,6 +1078,14 @@
                 "$ref": "#/components/schemas/Transportation"
               }
             ]
+          },
+          "delayStats": {
+            "description": "Statistics about this leg.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LegStats"
+              }
+            ]
           }
         },
         "required": [
@@ -1095,7 +1093,8 @@
           "destination",
           "details",
           "type",
-          "transportation"
+          "transportation",
+          "delayStats"
         ]
       },
       "FootpathLeg": {

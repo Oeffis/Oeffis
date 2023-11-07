@@ -1,5 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Journey as VrrJourney, Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { subWeeks } from "date-fns";
+import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
 import {
   LocationCoordinatesMapperService
@@ -25,12 +27,14 @@ export class JourneyMapperService {
   private readonly transportationMapper: TransportationMapperService;
   private readonly legDetailsMapper: LegDetailsMapperService;
   private readonly journeyLocationMapper: JourneyLocationMapperService;
+  private readonly delayStatsService: DelayStatsService;
 
   constructor(
     @Inject(ApiService) apiService: ApiService,
     @Inject(LocationCoordinatesMapperService) locationCoordinatesMapper: LocationCoordinatesMapperService,
     @Inject(FootpathMapperService) footpathMapper: FootpathMapperService,
-    @Inject(LocationMapperService) locationMapper: LocationMapperService
+    @Inject(LocationMapperService) locationMapper: LocationMapperService,
+    @Inject(DelayStatsService) delayStatsService: DelayStatsService
   ) {
     this.footpathMapper = footpathMapper;
     this.transportationMapper = new TransportationMapperService(apiService);
@@ -41,6 +45,7 @@ export class JourneyMapperService {
         locationCoordinatesMapper,
         this.journeyLocationMapper,
         this.footpathMapper);
+    this.delayStatsService = delayStatsService;
   }
 
   /**
@@ -50,10 +55,12 @@ export class JourneyMapperService {
    *
    * @param vrrJourneys VRR journeys
    */
-  public mapVrrJourneys(vrrJourneys: VrrJourney[]): Journey[] {
-    return vrrJourneys
-      .filter(vrrJourney => this.checkVrrJourneyIntegrity(vrrJourney))
-      .map(vrrJourney => this.mapVrrJourney(vrrJourney));
+  public async mapVrrJourneys(vrrJourneys: VrrJourney[]): Promise<Journey[]> {
+    return Promise.all(
+      vrrJourneys
+        .filter(vrrJourney => this.checkVrrJourneyIntegrity(vrrJourney))
+        .map(vrrJourney => this.mapVrrJourney(vrrJourney))
+    );
   }
 
   /**
@@ -115,17 +122,19 @@ export class JourneyMapperService {
     return isValid;
   }
 
-  private mapVrrJourney(vrrJourney: VrrJourney): Journey {
+  private async mapVrrJourney(vrrJourney: VrrJourney): Promise<Journey> {
     const interchanges = vrrJourney.interchanges
       ?? this.calculateVrrJourneyInterchanges(vrrJourney.legs);
 
-    const processedLegs = vrrJourney.legs
-      ?.filter(vrrLeg => !this.transportationMapper.isGesicherterAnschlussLeg(vrrLeg))
-      ?.map(vrrLeg => this.mapVrrLeg(vrrLeg));
+    const processedLegs = await Promise.all(
+      vrrJourney.legs
+        ?.filter(vrrLeg => !this.transportationMapper.isGesicherterAnschlussLeg(vrrLeg))
+        ?.map(vrrLeg => this.mapVrrLeg(vrrLeg)) ?? JOURNEY_LEGS_FALLBACK_VAL
+    );
 
     return {
       interchanges: interchanges ?? JOURNEY_INTERCHANGES_FALLBACK_VAL,
-      legs: processedLegs ?? JOURNEY_LEGS_FALLBACK_VAL
+      legs: processedLegs
     } as Journey;
   }
 
@@ -135,7 +144,7 @@ export class JourneyMapperService {
       : undefined;
   }
 
-  private mapVrrLeg(vrrLeg: VrrLeg): (TransportationLeg | FootpathLeg) {
+  private async mapVrrLeg(vrrLeg: VrrLeg): Promise<TransportationLeg | FootpathLeg> {
     let leg: (TransportationLeg | FootpathLeg);
 
     // Integrity check ensured before that origin and destination are present.
@@ -157,8 +166,15 @@ export class JourneyMapperService {
       leg = {
         ...baseLeg,
         type: LegType.transportation,
-        transportation: this.transportationMapper.mapVrrTransportation(vrrLeg)
+        transportation: this.transportationMapper.mapVrrTransportation(vrrLeg),
+        delayStats: await this.delayStatsService.getLegStats({
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          tripId: vrrLeg.transportation!.id!,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          since: subWeeks(new Date(), 2)
+        })
       } as TransportationLeg;
+      console.log(leg.delayStats);
     }
 
     return leg;

@@ -74,6 +74,12 @@ export interface TransportationLeg {
      * @memberof TransportationLeg
      */
     transportation: Transportation;
+    /**
+     * 
+     * @type {object}
+     * @memberof TransportationLeg
+     */
+    delayStats: object;
 }
 
 
@@ -97,6 +103,7 @@ export function instanceOfTransportationLeg(value: object): boolean {
     isInstance = isInstance && "details" in value;
     isInstance = isInstance && "type" in value;
     isInstance = isInstance && "transportation" in value;
+    isInstance = isInstance && "delayStats" in value;
 
     return isInstance;
 }
@@ -116,6 +123,7 @@ export function TransportationLegFromJSONTyped(json: any, ignoreDiscriminator: b
         'details': LegDetailsFromJSON(json['details']),
         'type': json['type'],
         'transportation': TransportationFromJSON(json['transportation']),
+        'delayStats': json['delayStats'],
     };
 }
 
@@ -133,6 +141,7 @@ export function TransportationLegToJSON(value?: TransportationLeg | null): any {
         'details': LegDetailsToJSON(value.details),
         'type': value.type,
         'transportation': TransportationToJSON(value.transportation),
+        'delayStats': value.delayStats,
     };
 }
 
