@@ -142,7 +142,7 @@ async function getDepartureDelays(stopId: string, limit: number): Promise<StopEv
 
 async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], withPgConnection: WithPgConnection, recordingTime: Date, vrrTimetableVersionId: number): Promise<void> {
   await withPgConnection(async pgClient => {
-    const promises = stopEvents.map(stop => pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
+    const promises = stopEvents.map(stop => pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id, trip_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [
       stop.transportation.id,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       stop.location!.id,
@@ -151,7 +151,8 @@ async function insertDepartureDelaysIntoDb(stopEvents: StopEvent[], withPgConnec
       stop.departureTimePlanned,
       stop.departureTimeEstimated,
       JSON.stringify(stop),
-      vrrTimetableVersionId
+      vrrTimetableVersionId,
+      stop.transportation.properties?.tripCode
     ]));
 
     await Promise.all(promises);
