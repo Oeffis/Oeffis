@@ -31,12 +31,12 @@ import {
     LegOriginLocationFromJSONTyped,
     LegOriginLocationToJSON,
 } from './LegOriginLocation';
-import type { LegStats } from './LegStats';
+import type { MaybeLegStats } from './MaybeLegStats';
 import {
-    LegStatsFromJSON,
-    LegStatsFromJSONTyped,
-    LegStatsToJSON,
-} from './LegStats';
+    MaybeLegStatsFromJSON,
+    MaybeLegStatsFromJSONTyped,
+    MaybeLegStatsToJSON,
+} from './MaybeLegStats';
 import type { Transportation } from './Transportation';
 import {
     TransportationFromJSON,
@@ -81,11 +81,11 @@ export interface TransportationLeg {
      */
     transportation: Transportation;
     /**
-     * 
-     * @type {LegStats}
+     * Statistics about this leg.
+     * @type {MaybeLegStats}
      * @memberof TransportationLeg
      */
-    delayStats: LegStats;
+    delayStats: MaybeLegStats;
 }
 
 
@@ -129,7 +129,7 @@ export function TransportationLegFromJSONTyped(json: any, ignoreDiscriminator: b
         'details': LegDetailsFromJSON(json['details']),
         'type': json['type'],
         'transportation': TransportationFromJSON(json['transportation']),
-        'delayStats': LegStatsFromJSON(json['delayStats']),
+        'delayStats': MaybeLegStatsFromJSON(json['delayStats']),
     };
 }
 
@@ -147,7 +147,7 @@ export function TransportationLegToJSON(value?: TransportationLeg | null): any {
         'details': LegDetailsToJSON(value.details),
         'type': value.type,
         'transportation': TransportationToJSON(value.transportation),
-        'delayStats': LegStatsToJSON(value.delayStats),
+        'delayStats': MaybeLegStatsToJSON(value.delayStats),
     };
 }
 

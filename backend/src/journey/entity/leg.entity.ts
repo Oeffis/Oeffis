@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Equals, IsInstance, ValidateNested } from "class-validator";
-import { MaybeLegStats } from "historicData/dto/legStats.dto";
+import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
+import { Equals, IsInstance } from "class-validator";
+import { LegStats, MaybeLegStats, UnavailableLegStats } from "historicData/dto/legStats.dto";
 import { Footpath } from "../../footpath/entity/footpath.entity";
 import { LegDestinationLocation, LegOriginLocation } from "./journeyLocation.entity";
 import { LegDetails } from "./legDetails.entity";
@@ -54,6 +54,7 @@ class Leg {
 /**
  * Leg that uses a transportation to travel from origin to destination.
  */
+@ApiExtraModels(LegStats, UnavailableLegStats)
 export class TransportationLeg extends Leg {
 
   @Equals(LegType.transportation)
@@ -74,10 +75,19 @@ export class TransportationLeg extends Leg {
   })
   transportation: Transportation;
 
-  @ValidateNested()
   @ApiProperty({
     description: "Statistics about this leg.",
-    type: MaybeLegStats,
+    oneOf: [
+      { $ref: getSchemaPath(LegStats) },
+      { $ref: getSchemaPath(UnavailableLegStats) }
+    ],
+    discriminator: {
+      propertyName: "areAvailable",
+      mapping: {
+        true: getSchemaPath(LegStats),
+        false: getSchemaPath(UnavailableLegStats)
+      }
+    },
     required: true
   })
   delayStats: MaybeLegStats;

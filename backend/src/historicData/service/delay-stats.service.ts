@@ -25,11 +25,13 @@ export class DelayStatsService {
 
     if (delays.length === 0) {
       return {
+        areAvailable: false,
         reason: UnavailableReason.noData
       };
     }
 
     return {
+      areAvailable: true,
       ...this.getAverageAndStdDevDelay(delays),
       maxDelay: Math.max(...delays),
       minDelay: Math.min(...delays)

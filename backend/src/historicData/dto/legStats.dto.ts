@@ -1,9 +1,26 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNumber, IsPositive } from "class-validator";
+import { Equals, IsEnum, IsNumber, IsPositive } from "class-validator";
 
-export class MaybeLegStats { }
+export class MaybeLegStats {
+  @ApiProperty({
+    description: "Wether leg stats are available",
+    type: Boolean,
+    required: true,
+    example: true
+  })
+  public readonly areAvailable: boolean;
+
+  public constructor(
+    areAvailable: boolean
+  ) {
+    this.areAvailable = areAvailable;
+  }
+}
 
 export class LegStats extends MaybeLegStats {
+  @Equals(true)
+  public readonly areAvailable = true;
+
   @IsNumber()
   @ApiProperty({
     description: "The average delay.",
@@ -47,7 +64,7 @@ export class LegStats extends MaybeLegStats {
     maxDelay: number,
     minDelay: number
   ) {
-    super();
+    super(true);
     this.averageDelay = avgDelay;
     this.standardDeviation = stdDev;
     this.maxDelay = maxDelay;
@@ -60,17 +77,20 @@ export enum UnavailableReason {
 }
 
 export class UnavailableLegStats extends MaybeLegStats {
+  @Equals(false)
+  public readonly areAvailable = false;
+
   @IsEnum(UnavailableReason)
   @ApiProperty({
     description: "The reason, why the data is not available",
-    type: UnavailableReason,
+    type: String,
     required: true,
     example: UnavailableReason.noData
   })
   reason: UnavailableReason;
 
   public constructor(reason: UnavailableReason) {
-    super();
+    super(false);
     this.reason = reason;
   }
 }
