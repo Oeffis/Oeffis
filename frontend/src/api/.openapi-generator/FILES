@@ -22,11 +22,13 @@ src/models/LocationCoordinatesDto.ts
 src/models/LocationDetails.ts
 src/models/LocationNameDto.ts
 src/models/LocationWithAssignedStops.ts
+src/models/MaybeLegStats.ts
 src/models/ParentLocation.ts
 src/models/ParentLocationDetails.ts
 src/models/RatedLocation.ts
 src/models/Transportation.ts
 src/models/TransportationDestination.ts
 src/models/TransportationLeg.ts
+src/models/UnavailableLegStats.ts
 src/models/index.ts
 src/runtime.ts

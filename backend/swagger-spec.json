@@ -581,6 +581,62 @@
           "asArrival"
         ]
       },
+      "LegStats": {
+        "type": "object",
+        "properties": {
+          "areAvailable": {
+            "type": "boolean",
+            "description": "Wether leg stats are available",
+            "example": true
+          },
+          "averageDelay": {
+            "type": "number",
+            "description": "The average delay.",
+            "example": 7.5
+          },
+          "standardDeviation": {
+            "type": "number",
+            "description": "The standard deviation of the delay.",
+            "example": 8
+          },
+          "maxDelay": {
+            "type": "number",
+            "description": "The maximum delay of the leg.",
+            "example": 120
+          },
+          "minDelay": {
+            "type": "number",
+            "description": "The minimum delay of the leg.",
+            "example": 0
+          }
+        },
+        "required": [
+          "areAvailable",
+          "averageDelay",
+          "standardDeviation",
+          "maxDelay",
+          "minDelay"
+        ]
+      },
+      "UnavailableLegStats": {
+        "type": "object",
+        "properties": {
+          "areAvailable": {
+            "type": "boolean",
+            "description": "Wether leg stats are available",
+            "example": true
+          },
+          "reason": {
+            "type": "string",
+            "description": "The reason, why the data is not available",
+            "example": "NO_DATA"
+          }
+        },
+        "required": [
+          "areAvailable",
+          "reason"
+        ]
+      },
       "LegOriginLocation": {
         "type": "object",
         "properties": {
@@ -1033,7 +1089,16 @@
       },
       "MaybeLegStats": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "areAvailable": {
+            "type": "boolean",
+            "description": "Wether leg stats are available",
+            "example": true
+          }
+        },
+        "required": [
+          "areAvailable"
+        ]
       },
       "TransportationLeg": {
         "type": "object",
@@ -1081,6 +1146,21 @@
           },
           "delayStats": {
             "description": "Statistics about this leg.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LegStats"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableLegStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "areAvailable",
+              "mapping": {
+                "true": "#/components/schemas/LegStats",
+                "false": "#/components/schemas/UnavailableLegStats"
+              }
+            },
             "allOf": [
               {
                 "$ref": "#/components/schemas/MaybeLegStats"

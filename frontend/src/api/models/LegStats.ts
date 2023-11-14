@@ -20,6 +20,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface LegStats {
     /**
+     * Wether leg stats are available
+     * @type {boolean}
+     * @memberof LegStats
+     */
+    areAvailable: boolean;
+    /**
      * The average delay.
      * @type {number}
      * @memberof LegStats
@@ -50,6 +56,7 @@ export interface LegStats {
  */
 export function instanceOfLegStats(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "areAvailable" in value;
     isInstance = isInstance && "averageDelay" in value;
     isInstance = isInstance && "standardDeviation" in value;
     isInstance = isInstance && "maxDelay" in value;
@@ -68,6 +75,7 @@ export function LegStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
+        'areAvailable': json['areAvailable'],
         'averageDelay': json['averageDelay'],
         'standardDeviation': json['standardDeviation'],
         'maxDelay': json['maxDelay'],
@@ -84,6 +92,7 @@ export function LegStatsToJSON(value?: LegStats | null): any {
     }
     return {
         
+        'areAvailable': value.areAvailable,
         'averageDelay': value.averageDelay,
         'standardDeviation': value.standardDeviation,
         'maxDelay': value.maxDelay,

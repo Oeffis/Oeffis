@@ -385,6 +385,7 @@ function vrrJourneyGesicherterAnschlussLeg(): VrrLeg {
 
 function unavailableLegStats(): UnavailableLegStats {
   return {
+    areAvailable: false,
     reason: UnavailableReason.noData
   };
 }
