@@ -20,7 +20,6 @@ import LeafletMapContainer from "../map/LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
 export interface LocationSearchInputProps {
-  currentLocation: Location,
   onSelectedLocationChanged: (location: Location) => void;
   selectedLocation: Location | null;
   inputLabel: string;
@@ -111,7 +110,6 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           {showResults
             && showMap
             ? <LeafletMapContainer
-              currentLocation={props.currentLocation}
               locationIds={[...foundLocations.searchResults]}
               showLines={false}
               onItemClicked={setSelectedLocationAndCloseModal}

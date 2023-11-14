@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { HistoricDataModule } from "historicData/historicData.module";
 import { LocationFinderModule } from "locationFinder/locationFinder.module";
 import { VrrModule } from "vrr/vrr.module";
 import { FootpathModule } from "../footpath/footpath.module";
@@ -9,7 +10,7 @@ import { JourneyMapperService } from "./service/mapper/journeyMapper.service";
 @Module({
   providers: [JourneyService, JourneyMapperService],
   controllers: [JourneyController],
-  imports: [VrrModule, LocationFinderModule, FootpathModule]
+  imports: [VrrModule, LocationFinderModule, FootpathModule, HistoricDataModule]
 })
 export class JourneyModule {
 

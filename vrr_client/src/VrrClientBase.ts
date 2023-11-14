@@ -1,6 +1,10 @@
 import fetch, { RequestInit } from "node-fetch";
 import { Module, SystemMessage, SystemMessageType } from "./vendor/VrrApiTypes";
 
+export const SCHEMA_CONVERTER_CONFIG = {
+  logSchemaErrors: true
+};
+
 export interface BaseApiResponse {
   systemMessages?: SystemMessage[];
 }
@@ -17,7 +21,8 @@ export function warpAsFailSafeSchemaConverter<T extends BaseApiResponse>(
     try {
       return schemaConverter(json);
     } catch (e) {
-      console.error("Ignoring error while parsing response", e);
+      if (SCHEMA_CONVERTER_CONFIG.logSchemaErrors)
+        console.error("Ignoring error while parsing response", e);
       return JSON.parse(json) as T;
     }
   };
@@ -92,9 +97,17 @@ export class VrrClientBase {
         (error) =>
           `${error.type} / ${error.subType} / ${error.code}: (from ${error.module}): ${error.text}`,
       );
-      throw new Error(
-        `Request failed with system messages: ${formattedErrors.join(", ")}`,
-      );
+      const message = `Request failed with system messages: ${formattedErrors.join(", ")}`;
+      throw new SystemMessageError(message, errors);
     }
+  }
+}
+
+export class SystemMessageError extends Error {
+  public readonly systemMessages: SystemMessage[];
+
+  constructor(message: string, systemMessages: SystemMessage[]) {
+    super(message);
+    this.systemMessages = systemMessages;
   }
 }

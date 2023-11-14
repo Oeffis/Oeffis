@@ -1,4 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
+import { DelayStatsService } from "historicData/service/delay-stats.service";
+import { HistoricDataService } from "historicData/service/historicData.service";
 import { Journey } from "journey/entity/journey.entity";
 import { LocationFinderModule } from "locationFinder/locationFinder.module";
 import { LocationType } from "vrr/entity/locationType.entity";
@@ -76,7 +79,12 @@ let app: TestingModule;
 
 beforeEach(async () => {
   app = await Test.createTestingModule({
-    providers: [JourneyService, JourneyMapperService],
+    providers: [JourneyService, JourneyMapperService, {
+      provide: HistoricDataService,
+      useValue: {
+        getHistoricData: vi.fn()
+      }
+    }, DelayStatsService],
     controllers: [JourneyController],
     imports: [VrrModule, LocationFinderModule, FootpathModule]
   }).compile();
@@ -122,7 +130,8 @@ it("should query trip", async () => {
             infos: [],
             stopSequence: [],
             interchange: undefined
-          }
+          },
+          delayStats: unavailableLegStats()
         }
       ]
     }
@@ -140,3 +149,9 @@ it("should query trip", async () => {
 
   expect(response).toEqual(mockAlternatives);
 });
+
+function unavailableLegStats(): UnavailableLegStats {
+  return {
+    reason: UnavailableReason.noData
+  };
+}

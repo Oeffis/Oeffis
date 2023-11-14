@@ -177,20 +177,6 @@
           "journey"
         ]
       }
-    },
-    "/historicData/delayEntryCount": {
-      "get": {
-        "operationId": "HistoricDataController_getDelayEntryCount",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "historicData"
-        ]
-      }
     }
   },
   "info": {
@@ -593,6 +579,62 @@
           "destinationId",
           "departure",
           "asArrival"
+        ]
+      },
+      "LegStats": {
+        "type": "object",
+        "properties": {
+          "areAvailable": {
+            "type": "boolean",
+            "description": "Wether leg stats are available",
+            "example": true
+          },
+          "averageDelay": {
+            "type": "number",
+            "description": "The average delay.",
+            "example": 7.5
+          },
+          "standardDeviation": {
+            "type": "number",
+            "description": "The standard deviation of the delay.",
+            "example": 8
+          },
+          "maxDelay": {
+            "type": "number",
+            "description": "The maximum delay of the leg.",
+            "example": 120
+          },
+          "minDelay": {
+            "type": "number",
+            "description": "The minimum delay of the leg.",
+            "example": 0
+          }
+        },
+        "required": [
+          "areAvailable",
+          "averageDelay",
+          "standardDeviation",
+          "maxDelay",
+          "minDelay"
+        ]
+      },
+      "UnavailableLegStats": {
+        "type": "object",
+        "properties": {
+          "areAvailable": {
+            "type": "boolean",
+            "description": "Wether leg stats are available",
+            "example": true
+          },
+          "reason": {
+            "type": "string",
+            "description": "The reason, why the data is not available",
+            "example": "NO_DATA"
+          }
+        },
+        "required": [
+          "areAvailable",
+          "reason"
         ]
       },
       "LegOriginLocation": {
@@ -1045,6 +1087,19 @@
           "hints"
         ]
       },
+      "MaybeLegStats": {
+        "type": "object",
+        "properties": {
+          "areAvailable": {
+            "type": "boolean",
+            "description": "Wether leg stats are available",
+            "example": true
+          }
+        },
+        "required": [
+          "areAvailable"
+        ]
+      },
       "TransportationLeg": {
         "type": "object",
         "properties": {
@@ -1088,6 +1143,29 @@
                 "$ref": "#/components/schemas/Transportation"
               }
             ]
+          },
+          "delayStats": {
+            "description": "Statistics about this leg.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LegStats"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableLegStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "areAvailable",
+              "mapping": {
+                "true": "#/components/schemas/LegStats",
+                "false": "#/components/schemas/UnavailableLegStats"
+              }
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MaybeLegStats"
+              }
+            ]
           }
         },
         "required": [
@@ -1095,7 +1173,8 @@
           "destination",
           "details",
           "type",
-          "transportation"
+          "transportation",
+          "delayStats"
         ]
       },
       "FootpathLeg": {

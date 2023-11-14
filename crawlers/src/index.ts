@@ -62,6 +62,11 @@ async function main(): Promise<void> {
           description: "The maximum number of departures to fetch. ",
           default: 100
         })
+        .option("storeRawData", {
+          type: "boolean",
+          description: "Insert response of api into raw_data column of table.",
+          default: false
+        })
       , async args => {
         const { run } = await import("./delays");
         await run(args);

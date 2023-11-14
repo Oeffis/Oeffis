@@ -1,40 +1,37 @@
 import { IonLabel } from "@ionic/react";
-import { format } from "date-fns";
+import { format, isFuture } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import "./JourneyStepComponent.css";
 
-const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
+const formatDateTime = (date: Date): string => format(date, "HH:mm");
+export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date }
 
-export interface StationProps { step: IJourneyStep, first?: boolean, last?: boolean }
+const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
+  const color = isFuture(props.arrivalTime) ? "lightgray" : "gray";
 
-const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => (
-  <div className="container">
-    <div className="left">
-      {formatDateShort(props.step.arrivalTime)}
-      <div className="timeline-container">
-        <div className="circle" />
-        <div className="line" />
+  return (
+    <div className="container" data-testid="journey-step">
+      <div className="left">
+        <IonLabel>
+          {formatDateTime(props.arrivalTime)}
+        </IonLabel>
+      </div>
+      <div className="middle">
+        <div className="circle" style={{ background: color }} />
+      </div>
+      <div className="step-info">
+        <IonLabel>
+          <span data-testid="journey-step-stop-name">
+            {
+              props.step
+                ? props.step.stationName
+                : props.arrivalDestination
+            }
+          </span>
+        </IonLabel>
       </div>
     </div>
-    <div className="step-info">
-      <IonLabel>
-        <span>
-          {props.step.stopName}
-        </span>
-      </IonLabel>
-      <IonLabel>
-        Abfahrt:
-        <span>
-          {formatDateShort(props.step.startTime)}
-        </span>
-      </IonLabel>
-      <IonLabel>
-        <span>
-          {formatDateShort(props.step.arrivalTime)}
-        </span>
-      </IonLabel>
-    </div>
-  </div>
-);
+  );
+};
 
 export default JourneyStepComponent;
