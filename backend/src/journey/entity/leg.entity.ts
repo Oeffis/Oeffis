@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Equals, IsInstance } from "class-validator";
-import { LegStats, UnavailableLegStats } from "historicData/dto/legStats.dto";
+import { Equals, IsInstance, ValidateNested } from "class-validator";
+import { MaybeLegStats } from "historicData/dto/legStats.dto";
 import { Footpath } from "../../footpath/entity/footpath.entity";
 import { LegDestinationLocation, LegOriginLocation } from "./journeyLocation.entity";
 import { LegDetails } from "./legDetails.entity";
@@ -74,20 +74,20 @@ export class TransportationLeg extends Leg {
   })
   transportation: Transportation;
 
-  @IsInstance(LegStats)
+  @ValidateNested()
   @ApiProperty({
     description: "Statistics about this leg.",
-    type: LegStats,
+    type: MaybeLegStats,
     required: true
   })
-  delayStats: LegStats | UnavailableLegStats;
+  delayStats: MaybeLegStats;
 
   constructor(
     origin: LegOriginLocation,
     destination: LegDestinationLocation,
     details: LegDetails,
     transportation: Transportation,
-    delayStats: LegStats
+    delayStats: MaybeLegStats
   ) {
 
     super(origin, destination, details);
