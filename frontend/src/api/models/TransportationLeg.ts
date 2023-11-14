@@ -31,6 +31,12 @@ import {
     LegOriginLocationFromJSONTyped,
     LegOriginLocationToJSON,
 } from './LegOriginLocation';
+import type { LegStats } from './LegStats';
+import {
+    LegStatsFromJSON,
+    LegStatsFromJSONTyped,
+    LegStatsToJSON,
+} from './LegStats';
 import type { Transportation } from './Transportation';
 import {
     TransportationFromJSON,
@@ -74,6 +80,12 @@ export interface TransportationLeg {
      * @memberof TransportationLeg
      */
     transportation: Transportation;
+    /**
+     * 
+     * @type {LegStats}
+     * @memberof TransportationLeg
+     */
+    delayStats: LegStats;
 }
 
 
@@ -97,6 +109,7 @@ export function instanceOfTransportationLeg(value: object): boolean {
     isInstance = isInstance && "details" in value;
     isInstance = isInstance && "type" in value;
     isInstance = isInstance && "transportation" in value;
+    isInstance = isInstance && "delayStats" in value;
 
     return isInstance;
 }
@@ -116,6 +129,7 @@ export function TransportationLegFromJSONTyped(json: any, ignoreDiscriminator: b
         'details': LegDetailsFromJSON(json['details']),
         'type': json['type'],
         'transportation': TransportationFromJSON(json['transportation']),
+        'delayStats': LegStatsFromJSON(json['delayStats']),
     };
 }
 
@@ -133,6 +147,7 @@ export function TransportationLegToJSON(value?: TransportationLeg | null): any {
         'details': LegDetailsToJSON(value.details),
         'type': value.type,
         'transportation': TransportationToJSON(value.transportation),
+        'delayStats': LegStatsToJSON(value.delayStats),
     };
 }
 

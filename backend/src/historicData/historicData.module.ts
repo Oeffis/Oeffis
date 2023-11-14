@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { HistoricDataController } from "./controller/historicDataController";
 import { AgencyEntry } from "./entity/agencyEntry.entity";
 import { CalendarDateEntry } from "./entity/calendarDateEntry.entity";
 import { CalendarEntry } from "./entity/calendarEntry.entity";
@@ -13,11 +12,12 @@ import { StopTimeEntry } from "./entity/stopTimeEntry.entity";
 import { TransferEntry } from "./entity/transferEntry.entity";
 import { TripEntry } from "./entity/tripEntry.entity";
 import { VrrTimetableVersionEntry } from "./entity/vrrTimetableVersionEntry.entity";
+import { DelayStatsService } from "./service/delay-stats.service";
 import { HistoricDataService } from "./service/historicData.service";
 
 @Module({
-  providers: [HistoricDataService],
-  controllers: [HistoricDataController],
+  providers: [HistoricDataService, DelayStatsService],
+  controllers: [],
   imports: [TypeOrmModule.forFeature([
     AgencyEntry,
     CalendarEntry,
@@ -31,6 +31,7 @@ import { HistoricDataService } from "./service/historicData.service";
     TransferEntry,
     TripEntry,
     VrrTimetableVersionEntry
-  ])]
+  ])],
+  exports: [DelayStatsService]
 })
 export class HistoricDataModule { }
