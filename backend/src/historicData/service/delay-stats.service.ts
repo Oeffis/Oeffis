@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { differenceInMinutes } from "date-fns";
-import { LegStats } from "historicData/dto/legStats.dto";
+import { LegStats, UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayEntryWithEstimate, HistoricDataService } from "./historicData.service";
 
 export interface LegStatOptions {
@@ -16,12 +16,18 @@ export class DelayStatsService {
     this.historicDataService = historicDataService;
   }
 
-  public async getLegStats(legStatOptions: LegStatOptions): Promise<LegStats> {
+  public async getLegStats(legStatOptions: LegStatOptions): Promise<LegStats | UnavailableLegStats> {
     const entries = await this.historicDataService.getDelays(legStatOptions);
     const uniqueEntries = this.getUniqueEntries(entries);
     const delays = uniqueEntries.map(
       entry => differenceInMinutes(entry.estimated, entry.planned)
     );
+
+    if (delays.length === 0) {
+      return {
+        reason: UnavailableReason.noData
+      };
+    }
 
     return {
       ...this.getAverageAndStdDevDelay(delays),

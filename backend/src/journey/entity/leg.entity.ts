@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Equals, IsInstance } from "class-validator";
-import { LegStats } from "historicData/dto/legStats.dto";
+import { LegStats, UnavailableLegStats } from "historicData/dto/legStats.dto";
 import { Footpath } from "../../footpath/entity/footpath.entity";
 import { LegDestinationLocation, LegOriginLocation } from "./journeyLocation.entity";
 import { LegDetails } from "./legDetails.entity";
@@ -80,7 +80,7 @@ export class TransportationLeg extends Leg {
     type: LegStats,
     required: true
   })
-  delayStats: LegStats;
+  delayStats: LegStats | UnavailableLegStats;
 
   constructor(
     origin: LegOriginLocation,

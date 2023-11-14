@@ -6,6 +6,11 @@ import {
   Leg as VrrLeg,
   LocationType as VrrLocationType
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
+import { DelayEntry } from "historicData/entity/delayEntry.entity";
+import { DelayStatsService } from "historicData/service/delay-stats.service";
+import { HistoricDataService } from "historicData/service/historicData.service";
+import { Repository } from "typeorm";
 import { Footpath } from "../../../footpath/entity/footpath.entity";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
 import { Location } from "../../../locationFinder/entity/location.entity";
@@ -77,12 +82,18 @@ beforeEach(() => {
   vi.spyOn(footpathMapper, "mapVrrFootpath")
     .mockReturnValue(FOOTPATH);
 
+  const historicDataService = new HistoricDataService(undefined as unknown as Repository<DelayEntry>);
+  vi.spyOn(historicDataService, "getDelays")
+    .mockReturnValue(Promise.resolve([]));
+
   mapper =
     new JourneyMapperService(
       apiService,
       new LocationCoordinatesMapperService(),
       footpathMapper,
-      new LocationMapperService(apiService, new LocationCoordinatesMapperService()));
+      new LocationMapperService(apiService, new LocationCoordinatesMapperService()),
+      new DelayStatsService(historicDataService)
+    );
 
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationIntegrity")
     .mockReturnValue(true);
@@ -154,7 +165,7 @@ it.each([
   expect(checkResult).toBe(result);
 });
 
-it("map vrr journeys with all fields given.", () => {
+it("map vrr journeys with all fields given.", async () => {
   // Given
   const vrrJourneys: VrrJourney[] = [
     vrrJourney(2,
@@ -171,19 +182,24 @@ it("map vrr journeys with all fields given.", () => {
     {
       interchanges: 2, legs: [
         {
-          origin: LEG_ORIGIN, destination: LEG_DESTINATION,
-          type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          origin: LEG_ORIGIN,
+          destination: LEG_DESTINATION,
+          type: LegType.transportation,
+          details: LEG_DETAILS,
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.footpath, details: LEG_DETAILS,
-          footpath: FOOTPATH
+          footpath: FOOTPATH,
+          delayStats: unavailableLegStats()
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         }
       ]
     },
@@ -192,7 +208,8 @@ it("map vrr journeys with all fields given.", () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         }
       ]
     },
@@ -201,12 +218,14 @@ it("map vrr journeys with all fields given.", () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         }
       ]
     },
@@ -215,25 +234,27 @@ it("map vrr journeys with all fields given.", () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.footpath, details: LEG_DETAILS,
-          footpath: FOOTPATH
+          footpath: FOOTPATH,
+          delayStats: unavailableLegStats()
         }
       ]
     }
   ];
 
   // When
-  const mappedJourneys = mapper.mapVrrJourneys(vrrJourneys);
+  const mappedJourneys = await mapper.mapVrrJourneys(vrrJourneys);
 
   // Then
   expect(mappedJourneys).toEqual(expectedJourneys);
 });
 
-it("map vrr journey with missing optional fields.", () => {
+it("map vrr journey with missing optional fields.", async () => {
   // Given
   const vrrJourneys: VrrJourney[] = [
     vrrJourney(undefined, [vrrJourneyTransportationLeg(), vrrJourneyTransportationLeg()])
@@ -245,24 +266,26 @@ it("map vrr journey with missing optional fields.", () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION, type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         }
       ]
     }
   ];
 
   // When
-  const mappedJourneys = mapper.mapVrrJourneys(vrrJourneys);
+  const mappedJourneys = await mapper.mapVrrJourneys(vrrJourneys);
 
   // Then
   expect(mappedJourneys).toEqual(expectedJourneys);
 });
 
-it("do not map invalid vrr journeys.", () => {
+it("do not map invalid vrr journeys.", async () => {
   // Given
   const vrrJourneys: VrrJourney[] = [
     vrrJourney(0, undefined),
@@ -275,19 +298,21 @@ it("do not map invalid vrr journeys.", () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
-          transportation: TRANSPORTATION
+          transportation: TRANSPORTATION,
+          delayStats: unavailableLegStats()
         }
       ]
     }
   ];
 
   // When
-  const mappedJourneys = mapper.mapVrrJourneys(vrrJourneys);
+  const mappedJourneys = await mapper.mapVrrJourneys(vrrJourneys);
 
   // Then
   expect(mappedJourneys).toEqual(expectedJourneys);
@@ -358,4 +383,10 @@ function vrrJourneyGesicherterAnschlussLeg(): VrrLeg {
       }
     }
   } as VrrLeg;
+}
+
+function unavailableLegStats(): UnavailableLegStats {
+  return {
+    reason: UnavailableReason.noData
+  };
 }

@@ -51,3 +51,15 @@ export class LegStats {
     this.minDelay = minDelay;
   }
 }
+
+export enum UnavailableReason {
+  noData = "NO_DATA"
+}
+
+export class UnavailableLegStats {
+  reason: UnavailableReason;
+
+  public constructor(reason: UnavailableReason) {
+    this.reason = reason;
+  }
+}

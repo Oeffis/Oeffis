@@ -174,7 +174,6 @@ export class JourneyMapperService {
           since: subWeeks(new Date(), 2)
         })
       } as TransportationLeg;
-      console.log(leg.delayStats);
     }
 
     return leg;
