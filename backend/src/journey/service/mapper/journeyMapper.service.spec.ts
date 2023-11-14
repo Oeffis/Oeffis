@@ -192,8 +192,7 @@ it("map vrr journeys with all fields given.", async () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.footpath, details: LEG_DETAILS,
-          footpath: FOOTPATH,
-          delayStats: unavailableLegStats()
+          footpath: FOOTPATH
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
@@ -240,8 +239,7 @@ it("map vrr journeys with all fields given.", async () => {
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.footpath, details: LEG_DETAILS,
-          footpath: FOOTPATH,
-          delayStats: unavailableLegStats()
+          footpath: FOOTPATH
         }
       ]
     }
