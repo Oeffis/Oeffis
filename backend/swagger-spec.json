@@ -1033,7 +1033,34 @@
       },
       "LegStats": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "averageDelay": {
+            "type": "number",
+            "description": "The average delay.",
+            "example": 7.5
+          },
+          "standardDeviation": {
+            "type": "number",
+            "description": "The standard deviation of the delay.",
+            "example": 8
+          },
+          "maxDelay": {
+            "type": "number",
+            "description": "The maximum delay of the leg.",
+            "example": 120
+          },
+          "minDelay": {
+            "type": "number",
+            "description": "The minimum delay of the leg.",
+            "example": 0
+          }
+        },
+        "required": [
+          "averageDelay",
+          "standardDeviation",
+          "maxDelay",
+          "minDelay"
+        ]
       },
       "TransportationLeg": {
         "type": "object",

@@ -13,6 +13,7 @@ export * from './LegInfo';
 export * from './LegInfoValidity';
 export * from './LegInterchange';
 export * from './LegOriginLocation';
+export * from './LegStats';
 export * from './Location';
 export * from './LocationCoordinates';
 export * from './LocationCoordinatesDto';

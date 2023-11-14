@@ -15,6 +15,7 @@ src/models/LegInfo.ts
 src/models/LegInfoValidity.ts
 src/models/LegInterchange.ts
 src/models/LegOriginLocation.ts
+src/models/LegStats.ts
 src/models/Location.ts
 src/models/LocationCoordinates.ts
 src/models/LocationCoordinatesDto.ts
