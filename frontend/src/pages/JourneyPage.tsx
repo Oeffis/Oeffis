@@ -93,7 +93,7 @@ const JourneyPage: React.FC = () => {
             showLines={true}
           />
         </IonContent>
-        <IonContent className="ion-justify-content-center">
+        <IonContent className="planner">
           <RoutePlanner currentLocation={currentLocation} setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
         </IonContent>
       </IonContent>

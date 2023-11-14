@@ -90,3 +90,32 @@ ion-modal#favorite-dialogue ion-toolbar {
   margin: 2%;
 }
 
+.input-field-width {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  max-width: 100%;
+}
+
+.start-all-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+}
+
+.icon-button-sizing {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.end-all-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  width: 20%;
+}

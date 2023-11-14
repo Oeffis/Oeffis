@@ -17,7 +17,7 @@ import {
   IonToolbar
 } from "@ionic/react";
 import { formatISO, isSameMinute, parseISO } from "date-fns";
-import { calendarClearOutline, closeCircleOutline, heart, search } from "ionicons/icons";
+import { calendarClearOutline, closeCircleOutline, heart, search, swapVerticalOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
   FootpathLeg,
@@ -178,30 +178,38 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             </IonCol>
           </IonRow>
         </IonItem>
-        <IonItem>
-          <LocationSearchInput
-            currentLocation={currentLocation}
-            inputLabel="Startpunkt"
-            selectedLocation={originLocation}
-            onSelectedLocationChanged={(location): void => {
-              setOriginId(location.id);
-              setSelectedOriginLocation(location);
-            }}
-            prefixDataTestId="origin-input"
-          />
-        </IonItem>
-        <IonItem>
-          <LocationSearchInput
-            currentLocation={currentLocation}
-            inputLabel="Zielpunkt"
-            selectedLocation={destinationLocation}
-            onSelectedLocationChanged={(location): void => {
-              setDestinationId(location.id);
-              setSelectedDestinationLocation(location);
-            }}
-            prefixDataTestId="destination-input"
-          />
-        </IonItem>
+        <IonRow className="start-all-row">
+          <IonCol className="input-field-width">
+            <IonItem>
+              <LocationSearchInput
+                currentLocation={currentLocation}
+                inputLabel="Startpunkt"
+                selectedLocation={originLocation}
+                onSelectedLocationChanged={(location): void => {
+                  setOriginId(location.id);
+                  setSelectedOriginLocation(location);
+                }}
+                prefixDataTestId="origin-input"
+              />
+            </IonItem>
+            <IonItem>
+              <LocationSearchInput
+                currentLocation={currentLocation}
+                inputLabel="Zielpunkt"
+                selectedLocation={destinationLocation}
+                onSelectedLocationChanged={(location): void => {
+                  setDestinationId(location.id);
+                  setSelectedDestinationLocation(location);
+                }}
+                prefixDataTestId="destination-input"
+              />
+            </IonItem>
+          </IonCol>
+          <IonButton fill="clear" expand="block"
+          >
+            <IonIcon slot="start" icon={swapVerticalOutline} />
+          </IonButton>
+        </IonRow>
         <IonRow className="button-row">
           <IonButton className="button-secondary" fill="outline" expand="block"
             onClick={() => addToFavorites()}

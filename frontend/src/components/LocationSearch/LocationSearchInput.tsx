@@ -66,6 +66,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
+        className="input-field-width"
         onClick={() => setModalOpen(true)}
         readonly
         placeholder={props.inputLabel}
