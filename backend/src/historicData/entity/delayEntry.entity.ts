@@ -64,9 +64,9 @@ export class DelayEntry {
   public readonly estimated?: Date;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @Column("varchar")
-  public readonly rawData: string;
+  public readonly rawData?: string;
 
   @IsString()
   @IsNotEmpty()
