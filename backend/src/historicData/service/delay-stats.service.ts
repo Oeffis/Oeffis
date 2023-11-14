@@ -48,13 +48,13 @@ export class DelayStatsService {
     return entries;
   }
 
-  private getAverageAndStdDevDelay(entries: number[]): { averageDelay: number, stdDev: number } {
+  private getAverageAndStdDevDelay(entries: number[]): { averageDelay: number, standardDeviation: number } {
     const averageDelay = entries.reduce((a, b) => a + b, 0) / entries.length;
-    const stdDev = Math.sqrt(entries.map(x => Math.pow(x - averageDelay, 2)).reduce((a, b) => a + b, 0) / entries.length);
+    const standardDeviation = Math.sqrt(entries.map(x => Math.pow(x - averageDelay, 2)).reduce((a, b) => a + b, 0) / entries.length);
 
     return {
       averageDelay,
-      stdDev
+      standardDeviation
     };
   }
 }

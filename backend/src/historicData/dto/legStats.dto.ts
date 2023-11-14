@@ -9,7 +9,7 @@ export class LegStats {
     required: true,
     example: 7.5
   })
-  avgDelay: number;
+  averageDelay: number;
 
   @IsNumber()
   @IsPositive()
@@ -19,7 +19,7 @@ export class LegStats {
     required: true,
     example: 8
   })
-  stdDev: number;
+  standardDeviation: number;
 
   @IsNumber()
   @ApiProperty({
@@ -45,8 +45,8 @@ export class LegStats {
     maxDelay: number,
     minDelay: number
   ) {
-    this.avgDelay = avgDelay;
-    this.stdDev = stdDev;
+    this.averageDelay = avgDelay;
+    this.standardDeviation = stdDev;
     this.maxDelay = maxDelay;
     this.minDelay = minDelay;
   }
