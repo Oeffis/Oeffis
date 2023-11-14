@@ -53,6 +53,7 @@ ion-modal#favorite_dialogue ion-toolbar {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  padding-bottom: 0.5rem;
 }
 
 .toggle_button_label{
@@ -65,7 +66,7 @@ ion-modal#favorite_dialogue ion-toolbar {
 
 .date_icon {
   font-size: 4vh;
-  margin: 2%;
+  margin: 1%;
 }
 
 .input_field_width {
@@ -80,4 +81,13 @@ ion-modal#favorite_dialogue ion-toolbar {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+}
+
+.date_time_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 0.5rem;
 }
