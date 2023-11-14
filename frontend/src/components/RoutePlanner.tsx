@@ -36,9 +36,11 @@ import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import FavoritesPage from "../pages/FavoritesPage";
 import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../services/favorites/FavoritesContext";
+import icons from "./Icons.module.css";
 import JourneyListComponent from "./JourneyListComponent";
 import { LocationSearchInput } from "./LocationSearch/LocationSearchInput";
-import "./RoutePlanner.css";
+import rp from "./RoutePlanner.module.css";
+import rowcol from "./RowCol.module.css";
 
 export const DEPARTURE_TIME_NOW_PARAM = "now";
 
@@ -136,29 +138,29 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
 
   return (
     <>
-      <IonList className="center-all-column" inset={true}>
-        <IonItem className="date-time-card" lines="none" >
-          <IonRow className="center-all-row">
+      <IonList className={rowcol.center_all_column} inset={true}>
+        <IonItem className={rp.date_time_card} lines="none" >
+          <IonRow className={rowcol.center_all_row}>
             <IonCol>
-              <IonRow className="center-all-row">
-                <IonIcon className="date-icon" icon={calendarClearOutline} />
+              <IonRow className={rowcol.center_all_row}>
+                <IonIcon className={rp.date_icon} icon={calendarClearOutline} />
                 <IonLabel className="ion-align-self-center">Datum und Uhrzeit</IonLabel>
               </IonRow>
-              <IonRow className="toggle-button-row">
-                <IonLabel className="toggle-button-label">Abfahrtszeit</IonLabel>
-                <IonToggle className="toggle-button" />
-                <IonLabel className="toggle-button-label">Ankunftszeit</IonLabel>
+              <IonRow className={rp.toggle_button_row}>
+                <IonLabel className={rp.toggle_button_label}>Abfahrtszeit</IonLabel>
+                <IonToggle className={rp.toggle_button} />
+                <IonLabel className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
               </IonRow>
-              <IonRow className="center-all-row">
+              <IonRow className={rowcol.center_all_row}>
                 {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
                 {/* Button to delete custom date/time inputs and use current time. */}
-                <IonButton className="button-primary"
+                <IonButton className={icons.button_primary}
                   fill="outline"
                   onClick={() => setCustomDeparture(formatISO(currentTime))}
                 >
                   Jetzt
                 </IonButton>
-                <IonDatetimeButton className="date-time-button" aria-label="Date and Time" datetime="datetime" />
+                <IonDatetimeButton className={rp.date_time_button} aria-label="Date and Time" datetime="datetime" />
                 {/* Before datetime modal is being presented min departure time is updated to current time. */}
                 <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
                   <IonDatetime
@@ -178,8 +180,8 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             </IonCol>
           </IonRow>
         </IonItem>
-        <IonRow className="start-all-row">
-          <IonCol className="input-field-width">
+        <IonRow className={rowcol.start_all_row}>
+          <IonCol className={rp.input_field_width}>
             <IonItem>
               <LocationSearchInput
                 currentLocation={currentLocation}
@@ -210,25 +212,18 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
             <IonIcon slot="start" icon={swapVerticalOutline} />
           </IonButton>
         </IonRow>
-        <IonRow className="button-row">
-          <IonButton className="button-secondary" fill="outline" expand="block"
+        <IonRow className={rp.button_row}>
+          <IonButton className={icons.button_secondary} fill="outline" expand="block"
             onClick={() => addToFavorites()}
           >
             <IonIcon slot="start" icon={heart} />
             Merken
           </IonButton>
-          <IonButton className="button-primary" type="submit" size="default" expand="block">
+          <IonButton className={icons.button_primary} type="submit" size="default" expand="block">
             <IonIcon slot="start" icon={search} />
             Routen suchen
           </IonButton>
         </IonRow>
-
-        {/**  Show favourites button is currently not needed.
-          <IonButton expand="block" color="warning"
-           onClick={() => showFavorites()}
-           >Favoriten anzeigen</IonButton>
-         */}
-
       </IonList >
       {
         originLocation !== null && destinationLocation !== null &&
@@ -238,7 +233,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
           departure={departureTime}
         />
       }
-      <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
+      <IonModal id={rp.favorite_dialogue} isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
           <IonToolbar>
             <IonTitle>Add to favorites</IonTitle>
@@ -248,7 +243,7 @@ const RoutePlanner = ({ currentLocation, setSelectedOriginLocation, setSelectedD
               </IonButton>
             </IonButtons>
           </IonToolbar>
-          <div id="content-section">
+          <div id={rp.content_section}>
             <div>
               Do you want to save as Route or as Trip?
             </div>

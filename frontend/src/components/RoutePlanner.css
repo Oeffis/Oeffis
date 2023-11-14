@@ -1,21 +1,21 @@
-ion-modal#favorite-dialogue {
+ion-modal#favorite_dialogue {
   --height: 25%;
   --width: 90%;
   --border-radius: 16px;
   --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-ion-modal#favorite-dialogue::part(backdrop) {
+ion-modal#favorite_dialogue::part(backdrop) {
   background: rgba(209, 213, 219);
   opacity: 1;
 }
 
-ion-modal#favorite-dialogue ion-toolbar {
+ion-modal#favorite_dialogue ion-toolbar {
   --background: rgb(14 116 144);
   --color: white;
 }
 
-#content-section{
+#content_section{
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -33,89 +33,4 @@ ion-modal#favorite-dialogue ion-toolbar {
       --width: 20px;
     }
   }
-}
-
-.date-time-card{
-  background-color: transparent;
-  /* Adjust with global colors */
-  border: 1px solid darkslategray;
-  border-radius: 10px;
-  margin-inline-start: 4%;
-  margin-inline-end: 4%;
-}
-
-.toggle-button{
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-.toggle-button-row{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.toggle-button-label{
-  align-self: center;
-}
-
-.date-time-button {
-  color: primary;
-}
-
-.button-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.center-all-column {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-}
-
-.center-all-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.date-icon {
-  font-size: 4vh;
-  margin: 2%;
-}
-
-.input-field-width {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  max-width: 100%;
-}
-
-.start-all-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-}
-
-.icon-button-sizing {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.end-all-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: end;
-  align-items: center;
-  width: 20%;
 }
