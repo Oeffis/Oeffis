@@ -81,9 +81,9 @@ export class DelayEntry {
   ])
   public readonly vrrTimetableVersion: Relation<VrrTimetableVersionEntry>;
 
-  // @IsInt()
-  // @Column("integer")
-  // public readonly tripCode: number;
+  @IsInt()
+  @Column("integer")
+  public readonly tripCode: number;
 
   public constructor(
     id: number,
@@ -95,7 +95,7 @@ export class DelayEntry {
     rawData: string,
     vrrTimetableVersionId: string,
     vrrTimetableVersion: Relation<VrrTimetableVersionEntry>,
-    // tripCode: number,
+    tripCode: number,
     stop?: Relation<StopEntry>,
     estimated?: Date
   ) {
@@ -110,7 +110,7 @@ export class DelayEntry {
     this.rawData = rawData;
     this.vrrTimetableVersionId = vrrTimetableVersionId;
     this.vrrTimetableVersion = vrrTimetableVersion;
-    // this.tripCode = tripCode;
+    this.tripCode = tripCode;
     this.estimated = estimated;
   }
 }
