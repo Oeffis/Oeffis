@@ -24,6 +24,9 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
   console.log("found", stopIds.length, "definitive stop ids");
 
   const processingQueue = new BetterQueue({
+    maxTimeout: 5 * 60 * 1000, // 5 minutes
+    maxRetries: 3,
+    retryDelay: 1 * 60 * 1000, // 1 minute
     process: (task: { id: string }, cb) => {
       processOneStopId(args.limit, args.storeRawData, task.id, vrrTimetableVersionId, pgPool.withPgConnection)
         .then(() => cb(null))
@@ -44,6 +47,12 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
   const startTime = new Date();
   const timer = setInterval(() => {
     const finished = processingQueue.getStats().total;
+
+    if (finished === 0) {
+      console.log("no stops finished yet, skipping progress report");
+      return;
+    }
+
     const total = stopIds.length;
     const remaining = total - finished;
 
