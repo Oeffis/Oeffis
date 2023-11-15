@@ -47,6 +47,12 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
   const startTime = new Date();
   const timer = setInterval(() => {
     const finished = processingQueue.getStats().total;
+
+    if (finished === 0) {
+      console.log("no stops finished yet, skipping progress report");
+      return;
+    }
+
     const total = stopIds.length;
     const remaining = total - finished;
 
