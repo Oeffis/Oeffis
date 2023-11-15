@@ -1,29 +1,62 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { differenceInMinutes } from "date-fns";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { LegStats, UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
-import { DelayEntryWithEstimate, HistoricDataService } from "./historicData.service";
+import { DelayEntry } from "historicData/entity/delayEntry.entity";
+import { Repository } from "typeorm";
 
 export interface LegStatOptions {
   tripId: string;
   since?: Date;
 }
+interface StatQueryResult {
+  max: string;
+  min: string;
+  avg: string;
+  stddev: string;
+}
+
+const LEG_STATS_QUERY = `
+WITH 
+  historic_with_delay AS (
+    SELECT *, EXTRACT(EPOCH FROM (estimated - planned)::INTERVAL)/60 AS delay
+    FROM historic_data
+    WHERE estimated IS NOT NULL
+    AND trip_id = $1
+    AND planned > $2
+  ),
+  latest_of_day_tripcode AS (
+    SELECT DISTINCT ON (planned::date, trip_code) *
+    FROM historic_with_delay
+    ORDER BY planned::date, trip_code DESC
+  )
+
+SELECT MAX(delay), MIN(delay), AVG(delay), STDDEV(delay) FROM latest_of_day_tripcode;
+`;
 
 @Injectable()
 export class DelayStatsService {
-  private readonly historicDataService: HistoricDataService;
-
-  constructor(@Inject(HistoricDataService) historicDataService: HistoricDataService) {
-    this.historicDataService = historicDataService;
-  }
+  constructor(
+    @InjectRepository(DelayEntry)
+    private readonly delayEntryRepository: Repository<DelayEntry>
+  ) { }
 
   public async getLegStats(legStatOptions: LegStatOptions): Promise<LegStats | UnavailableLegStats> {
-    const entries = await this.historicDataService.getDelays(legStatOptions);
-    const uniqueEntries = this.getUniqueEntries(entries);
-    const delays = uniqueEntries.map(
-      entry => differenceInMinutes(entry.estimated, entry.planned)
-    );
+    const since = legStatOptions.since ?? "epoch";
+    let stats;
+    try {
+      stats = await this.delayEntryRepository.query(
+        LEG_STATS_QUERY,
+        [legStatOptions.tripId, since]
+      ) as StatQueryResult[];
+    } catch (error) {
+      console.error(error);
+      return {
+        areAvailable: false,
+        reason: UnavailableReason.internalError
+      };
+    }
 
-    if (delays.length === 0) {
+    if (Object.values(stats[0]).some(column => column === null)) {
       return {
         areAvailable: false,
         reason: UnavailableReason.noData
@@ -32,37 +65,10 @@ export class DelayStatsService {
 
     return {
       areAvailable: true,
-      ...this.getAverageAndStdDevDelay(delays),
-      maxDelay: Math.max(...delays),
-      minDelay: Math.min(...delays)
-    };
-  }
-
-  private getUniqueEntries(entries: DelayEntryWithEstimate[]): DelayEntryWithEstimate[] {
-    const latestPerDayAndTripCode = new Map<string, DelayEntryWithEstimate>();
-
-    entries.forEach(entry => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const rawData = JSON.parse(entry.rawData);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-      const tripCode: number = rawData.transportation.properties.tripCode;
-      const key = entry.planned.toDateString() + ":" + tripCode;
-      const latest = latestPerDayAndTripCode.get(key);
-      if (!latest || latest.recordingTime.getTime() < entry.recordingTime.getTime()) {
-        latestPerDayAndTripCode.set(key, entry);
-      }
-    });
-
-    return entries;
-  }
-
-  private getAverageAndStdDevDelay(entries: number[]): { averageDelay: number, standardDeviation: number } {
-    const averageDelay = entries.reduce((a, b) => a + b, 0) / entries.length;
-    const standardDeviation = Math.sqrt(entries.map(x => Math.pow(x - averageDelay, 2)).reduce((a, b) => a + b, 0) / entries.length);
-
-    return {
-      averageDelay,
-      standardDeviation
+      maxDelay: parseFloat(stats[0].max),
+      minDelay: parseFloat(stats[0].min),
+      averageDelay: parseFloat(stats[0].avg),
+      standardDeviation: parseFloat(stats[0].stddev)
     };
   }
 }

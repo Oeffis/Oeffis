@@ -73,7 +73,8 @@ export class LegStats extends MaybeLegStats {
 }
 
 export enum UnavailableReason {
-  noData = "NO_DATA"
+  noData = "NO_DATA",
+  internalError = "QUERY_ERROR"
 }
 
 export class UnavailableLegStats extends MaybeLegStats {
