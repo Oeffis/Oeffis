@@ -11,8 +11,7 @@
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/strict-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked"
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": [
