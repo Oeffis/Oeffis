@@ -1,45 +1,67 @@
-ion-modal#favorite_dialogue {
+.favorite_dialogue {
   --height: 25%;
   --width: 90%;
-  --border-radius: 16px;
-  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --border-radius: 0.1rem;
+  --box-shadow: 0 0.3rem 0.5rem -0.1rem var(--ion-color-primary-contrast-rgb), 0 0.1rem 0.2rem -0.1rem rgb(0 0 0 / 0.1);
+  backdrop-filter: blur(3%);
 }
 
-ion-modal#favorite_dialogue::part(backdrop) {
-  background: rgba(209, 213, 219);
-  opacity: 1;
+.modal_toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
 }
 
-ion-modal#favorite_dialogue ion-toolbar {
-  --background: rgb(14 116 144);
-  --color: white;
-}
-
-#content_section{
-  padding: 20px;
+.modal_content_section {
+  padding: 3%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   text-align: center;
+}
 
-  #buttons{
-    margin-top: 14px;
-    justify-content: space-around;
-    display: flex;
-    width: 100%;
+.modal_buttons {
+  margin-top: 2%;
+  justify-content: space-around;
+  display: flex;
+  width: 100%;
+}
 
-    ion-button {
-      --width: 20px;
-    }
-  }
+.center_all_column {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+
+.center_all_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.start_all_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+}
+
+.end_all_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  width: 20%;
 }
 
 .date_time_card{
   background-color: transparent;
-  /* Adjust with global colors */
-  border: 1px solid darkslategray;
-  border-radius: 10px;
+  border: 1px solid darkslategrey;
+  border-radius: 1rem;
   margin-inline-start: 4%;
   margin-inline-end: 4%;
 }
@@ -65,7 +87,7 @@ ion-modal#favorite_dialogue ion-toolbar {
 }
 
 .date_icon {
-  font-size: 4vh;
+  font-size: 2rem;
   margin: 1%;
 }
 
@@ -90,4 +112,51 @@ ion-modal#favorite_dialogue ion-toolbar {
   align-items: center;
   width: 100%;
   padding-bottom: 0.5rem;
+}
+
+.button_primary {
+  color: var(--ion-color-primary-contrast);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.button_secondary {
+  color: var(--ion-color-secondary);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.button_colorless {
+  background-color: transparent;
+  color: var(--ion-color-primary);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.icon_button_sizing {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
 }

@@ -27,7 +27,7 @@ const JourneyPage: React.FC = () => {
   return (
     <IonPage id="main-content">
       <IonHeader>
-        <IonToolbar className="menuBar">
+        <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
