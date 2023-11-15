@@ -24,6 +24,9 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
   console.log("found", stopIds.length, "definitive stop ids");
 
   const processingQueue = new BetterQueue({
+    maxTimeout: 5 * 60 * 1000, // 5 minutes
+    maxRetries: 3,
+    retryDelay: 1 * 60 * 1000, // 1 minute
     process: (task: { id: string }, cb) => {
       processOneStopId(args.limit, args.storeRawData, task.id, vrrTimetableVersionId, pgPool.withPgConnection)
         .then(() => cb(null))
