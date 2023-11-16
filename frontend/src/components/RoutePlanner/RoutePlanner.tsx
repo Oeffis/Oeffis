@@ -13,7 +13,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import { formatISO, isSameMinute, parseISO } from "date-fns";
+import { formatISO, isThisMinute, parseISO } from "date-fns";
 import { closeCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
@@ -24,7 +24,6 @@ import {
   TransportationLeg,
   TransportationLegTypeEnum
 } from "../../api";
-import { useCurrentTime } from "../../hooks/useCurrentTime";
 import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
@@ -32,7 +31,12 @@ import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import FavoritesPage from "../../pages/FavoritesPage";
-import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../../services/favorites/FavoritesContext";
+import {
+  CreateFavoriteRoute,
+  CreateFavoriteTrip,
+  useFavoriteRoutes,
+  useFavoriteTrips
+} from "../../services/favorites/FavoritesContext";
 import JourneyListComponent from "../JourneyListComponent";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
@@ -55,7 +59,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
   const currentTime = useCurrentTime();
   const [customDepartureTime, setCustomDepartureTime] = useStateParams<string>(DEPARTURE_TIME_NOW_PARAM, "departure", String, String);
-  const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
   const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
@@ -108,10 +111,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     setIsFavoritesModalOpen(true);
   };
 
-  const updateMinDepartureTime = (): void => {
-    setMinDepartureTime(currentTime);
-  };
-
   /**
    * Sets some time given as string as custom departure time.
    *
@@ -119,9 +118,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
    */
   const setCustomDeparture = (departure: string): void => {
     const parsedDeparture: Date = parseISO(departure);
-    // If min value (current time) gets selected, encode this in url param.
+    // If current time gets selected, encode this in url param.
     const customDepartureTimeString: string =
-      isSameMinute(parsedDeparture, minDepartureTime)
+      isThisMinute(parsedDeparture)
         ? DEPARTURE_TIME_NOW_PARAM
         : formatISO(parsedDeparture);
 
@@ -144,12 +143,10 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
           </IonButton>
           <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
           {/* Before datetime modal is being presented min departure time is updated to current time. */}
-          <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
+          <IonModal keepContentsMounted={true}>
             <IonDatetime
               name="date_time"
               id="datetime"
-              /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
-              min={formatISO(minDepartureTime)}
               value={formatISO(departureTime)}
               multiple={false} // Assures that value cannot be an array but a single date string only.
               showDefaultButtons={true}
