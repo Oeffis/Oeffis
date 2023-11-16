@@ -13,7 +13,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import { formatISO, isThisMinute, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { closeCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
@@ -24,7 +24,7 @@ import {
   TransportationLeg,
   TransportationLegTypeEnum
 } from "../../api";
-import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
+import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
@@ -41,8 +41,6 @@ import JourneyListComponent from "../JourneyListComponent";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
 
-export const DEPARTURE_TIME_NOW_PARAM = "now";
-
 export interface RoutePlannerProps {
   setSelectedOriginLocation: (location: Location) => void
   setSelectedDestinationLocation: (location: Location) => void
@@ -52,14 +50,10 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [startTime, setStartTime] = useStateParams<string>(new Date().toISOString(), "startTime", String, String);
+  const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
-
-  const currentTime = useCurrentTime();
-  const [customDepartureTime, setCustomDepartureTime] = useStateParams<string>(DEPARTURE_TIME_NOW_PARAM, "departure", String, String);
-  const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
@@ -69,7 +63,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     setIsFavoritesModalOpen(false);
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
-    setStartTime(trip.startTime);
+    setDepartureTime(trip.startTime);
   };
 
   const setRoute = (route: CreateFavoriteRoute): void => {
@@ -83,7 +77,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     const existing = favoriteTrips.find(c =>
       c.originId === originId
       && c.destinationId === destinationId
-      && c.startTime === startTime
+      && c.startTime === departureTime
     );
     return existing !== undefined;
   };
@@ -111,22 +105,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     setIsFavoritesModalOpen(true);
   };
 
-  /**
-   * Sets some time given as string as custom departure time.
-   *
-   * @param departure departure time (as ISO string)
-   */
-  const setCustomDeparture = (departure: string): void => {
-    const parsedDeparture: Date = parseISO(departure);
-    // If current time gets selected, encode this in url param.
-    const customDepartureTimeString: string =
-      isThisMinute(parsedDeparture)
-        ? DEPARTURE_TIME_NOW_PARAM
-        : formatISO(parsedDeparture);
-
-    setCustomDepartureTime(customDepartureTimeString);
-  };
-
   return (
     <>
       <IonList inset={true}>
@@ -137,7 +115,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
           <IonButton
             fill="outline"
             strong={true}
-            onClick={() => setCustomDeparture(formatISO(currentTime))}
+            onClick={() => resetDepartureTimeToCurrentTime()}
           >
             Now
           </IonButton>
@@ -147,12 +125,11 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             <IonDatetime
               name="date_time"
               id="datetime"
-              value={formatISO(departureTime)}
+              value={departureTime}
               multiple={false} // Assures that value cannot be an array but a single date string only.
               showDefaultButtons={true}
               data-testid={"datetime-input"}
-              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setStartTime(e.detail.value as string); }}
+              onIonChange={e => setDepartureTime(e.detail.value as string)}
             />
           </IonModal>
         </IonItem>
@@ -211,7 +188,12 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             </div>
             <div id="buttons">
               <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Route</IonButton>
-              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, startTime }); setIsFavoritesDialogueOpen(false); } }}>Trip</IonButton>
+              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => {
+                if (originId && destinationId) {
+                  addFavoriteTrip({ originId, destinationId, startTime: departureTime });
+                  setIsFavoritesDialogueOpen(false);
+                }
+              }}>Trip</IonButton>
             </div>
           </div>
 
@@ -244,12 +226,13 @@ export default RoutePlanner;
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
-  departure: Date
+  departure: string
 }): JSX.Element {
   const { origin, destination, departure } = props;
 
+  const departureDate = parseISO(departure);
   // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departure, false);
+  const result = useJourneyQuery(origin, destination, departureDate, false);
 
   const iJourneys: false | IJourney[] = result.type === "success"
     && result.journeyResults
