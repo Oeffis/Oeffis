@@ -1,0 +1,45 @@
+ion-label {
+    padding: 2px;
+}
+
+.detail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 0px 16px;
+}
+
+.content-section {
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mid-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-section-closed {
+    position: relative;
+    padding-top: 4px;
+}
+
+.bottom-section-opened {
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+}
+
+IonButton {
+    color: transparent;
+}
+
+.JourneyDetail {
+    width: 100%;
+}

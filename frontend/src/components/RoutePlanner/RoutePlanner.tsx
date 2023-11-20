@@ -26,7 +26,7 @@ import {
 } from "../../api";
 import { useCurrentTime } from "../../hooks/useCurrentTime";
 import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
-import { useJourneyQuery } from "../../hooks/useJourneyQuery";
+import { UseJourneyQueryResult, useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
@@ -42,9 +42,10 @@ export const DEPARTURE_TIME_NOW_PARAM = "now";
 export interface RoutePlannerProps {
   setSelectedOriginLocation: (location: Location) => void
   setSelectedDestinationLocation: (location: Location) => void
+  setResultRoutes: (resultRoutes: IJourney[]) => void
 }
 
-const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
+const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation, setResultRoutes }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
@@ -58,8 +59,11 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
   const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
   const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
+
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
+
+  const [showResultRoutes, setShowResultRoutes] = useState<boolean>(false);
 
   const setTrip = (trip: CreateFavoriteTrip): void => {
     setIsFavoritesDialogueOpen(false);
@@ -181,7 +185,26 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             prefixDataTestId="destination-input"
           />
         </IonItem>
-        <IonButton type="submit" size="default" expand="block">Search routes</IonButton>
+        {
+          originLocation !== null && destinationLocation !== null &&
+          <IonButton onClick={() =>
+            console.log(getResultRoutes({
+              origin: originLocation,
+              destination: destinationLocation,
+              departure: departureTime,
+              result: useJourneyQuery(originLocation, destinationLocation, departureTime, false)
+
+            }))
+          } type="submit" size="default" expand="block">Search routes</IonButton>
+
+          // < ResultRoutesModal
+          //   origin={originLocation}
+          //   destination={destinationLocation}
+          //   departure={departureTime}
+          //   isOpen={showResultRoutes}
+          //   onDidDismiss={() => setShowResultRoutes(false)}
+          // />
+        }
         <IonButton expand="block" color="warning"
 
           onClick={() => addToFavorites()}
@@ -189,15 +212,8 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
         <IonButton expand="block" color="warning"
           onClick={() => showFavorites()}
         >Show Favorites</IonButton>
-      </IonList>
-      {
-        originLocation !== null && destinationLocation !== null &&
-        <TripOptionsDisplay
-          origin={originLocation}
-          destination={destinationLocation}
-          departure={departureTime}
-        />
-      }
+      </IonList >
+
       <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
           <IonToolbar>
@@ -247,7 +263,9 @@ export default RoutePlanner;
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
-  departure: Date
+  departure: Date,
+  setResultRoutes: (resultRoutes: IJourney[]) => void
+
 }): JSX.Element {
   const { origin, destination, departure } = props;
 
@@ -317,4 +335,51 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
       </IonLabel>
     </IonItem>
   );
+}
+
+export function getResultRoutes(props: {
+  origin: Location,
+  destination: Location,
+  departure: Date
+  result: UseJourneyQueryResult
+}): IJourney[] {
+
+  const { origin, destination, departure, result } = props;
+
+  console.log('hier geht noch')
+
+  let iJourneys: IJourney[] = [];
+
+  if (result.type === "success") {
+    iJourneys = result.journeyResults
+      .map((journey): IJourney => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const legs: (TransportationLeg | FootpathLeg)[] = journey.legs;
+
+        const lastLeg = legs[legs.length - 1];
+        const firstLeg = legs[0];
+
+        return {
+          startStation: firstLeg.origin.name,
+          startTime: firstLeg.origin.departureTimeEstimated,
+          arrivalStation: lastLeg.destination.name,
+          arrivalTime: lastLeg.destination.arrivalTimeEstimated,
+          stops: legs.map((leg): IJourneyStep => ({
+            arrivalTime: leg.destination.arrivalTimeEstimated,
+            startTime: leg.origin.departureTimeEstimated,
+            stationName: leg.origin.name,
+            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
+              ? leg.origin.details.shortName
+              : "",
+            stopName: leg.destination.name,
+            travelDurationInMinutes: leg.details.duration / 60,
+            line: "transportation" in leg ? leg.transportation.line : ""
+          })),
+          travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
+        };
+      });
+  }
+
+  console.log(iJourneys, 'ijourneys')
+  return iJourneys;
 }

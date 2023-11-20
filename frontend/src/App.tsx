@@ -18,6 +18,7 @@ import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import Menu from "./components/Menu";
+import ResultRoutes from "./components/ResultRoutes/ResultRoutes";
 import { CurrentLocationProvider } from "./hooks/useCurrentLocation";
 import FavoritesPage from "./pages/FavoritesPage";
 import JourneyPage from "./pages/JourneyPage";
@@ -61,6 +62,9 @@ const App: React.FC = () => (
                       </Route>
                       <Route exact path="/journeyDemo">
                         <JourneysPage />
+                      </Route>
+                      <Route exact path="/results">
+                        <ResultRoutes />
                       </Route>
                     </IonRouterOutlet>
                   </IonReactRouter>
