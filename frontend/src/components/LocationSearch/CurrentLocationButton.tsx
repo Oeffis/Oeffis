@@ -14,12 +14,16 @@ export function CurrnetLocationButton(props: CurrentLocationButtonProps): JSX.El
   const api = useLocationFinderApi();
 
   const setCurrentLocationAsInputValue = async (): Promise<void> => {
+
     if (currentLocation.state !== "located") {
       alert("No current location detected!");
       return;
     }
 
-    const locationWithAssinedStops = await api.locationFinderControllerFindLocationsAtCoordinates({ latitude: currentLocation.location.coords.latitude, longitude: currentLocation.location.coords.longitude });
+    const locationWithAssinedStops = await api.locationFinderControllerFindLocationsAtCoordinates({
+      latitude: currentLocation.location.coords.latitude,
+      longitude: currentLocation.location.coords.longitude
+    });
 
     props.onButtonClicked({
       id: locationWithAssinedStops.id,
@@ -27,6 +31,7 @@ export function CurrnetLocationButton(props: CurrentLocationButtonProps): JSX.El
       details: locationWithAssinedStops.details,
       type: locationWithAssinedStops.type
     });
+
   }
 
   return <IonButton onClick={setCurrentLocationAsInputValue}></IonButton>

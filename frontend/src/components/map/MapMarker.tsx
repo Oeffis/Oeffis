@@ -205,7 +205,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       });
     }
 
-    let locationName = location.name.split(",");
+    const locationName = location.name.split(",");
 
     mapMarker = (
       <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
