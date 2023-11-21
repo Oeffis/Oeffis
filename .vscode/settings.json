@@ -23,7 +23,21 @@
     "./crawlers"
   ],
   "cSpell.words": [
-    "Hafas"
+    "Abfahrtszeit",
+    "Ankunftszeit",
+    "favorisierten",
+    "Hafas",
+    "ionicons",
+    "Jetzt",
+    "Keine",
+    "Merken",
+    "Öffis",
+    "Routen",
+    "Startpunkt",
+    "suchen",
+    "Uhrzeit",
+    "vorhanden",
+    "Zielpunkt"
   ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
