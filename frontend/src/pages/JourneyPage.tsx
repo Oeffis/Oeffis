@@ -31,10 +31,12 @@ const JourneyPage: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Oeffis</IonTitle>
+          <IonTitle>
+            <h3>Öffis</h3>
+          </IonTitle>
+          <IonButtons slot="end">
             <IonImg className="menuLogo" src={logo} />
-          </div>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent id="main-content" className="journeyContent">
