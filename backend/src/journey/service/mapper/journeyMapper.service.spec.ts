@@ -9,7 +9,6 @@ import {
 import { UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { DelayStatsService } from "historicData/service/delay-stats.service";
-import { HistoricDataService } from "historicData/service/historicData.service";
 import { Repository } from "typeorm";
 import { Footpath } from "../../../footpath/entity/footpath.entity";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
@@ -82,9 +81,9 @@ beforeEach(() => {
   vi.spyOn(footpathMapper, "mapVrrFootpath")
     .mockReturnValue(FOOTPATH);
 
-  const historicDataService = new HistoricDataService(undefined as unknown as Repository<DelayEntry>);
-  vi.spyOn(historicDataService, "getDelays")
-    .mockReturnValue(Promise.resolve([]));
+  const delayStatsService = new DelayStatsService(undefined as unknown as Repository<DelayEntry>);
+  vi.spyOn(delayStatsService, "getLegStats")
+    .mockReturnValue(Promise.resolve(unavailableLegStats()));
 
   mapper =
     new JourneyMapperService(
@@ -92,7 +91,7 @@ beforeEach(() => {
       new LocationCoordinatesMapperService(),
       footpathMapper,
       new LocationMapperService(apiService, new LocationCoordinatesMapperService()),
-      new DelayStatsService(historicDataService)
+      delayStatsService
     );
 
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationIntegrity")
