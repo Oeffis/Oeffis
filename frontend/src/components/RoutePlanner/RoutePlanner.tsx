@@ -17,23 +17,17 @@ import { formatISO, isSameMinute, parseISO } from "date-fns";
 import { closeCircleOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
-  FootpathLeg,
   Journey,
-  LegOriginLocationTypeEnum,
   Location,
   TransportationLeg,
   TransportationLegTypeEnum
 } from "../../api";
 import { useCurrentTime } from "../../hooks/useCurrentTime";
 import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
-import { UseJourneyQueryResult, useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
-import { IJourney } from "../../interfaces/IJourney.interface";
-import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import FavoritesPage from "../../pages/FavoritesPage";
 import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../../services/favorites/FavoritesContext";
-import JourneyListComponent from "../JourneyListComponent";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import "./RoutePlanner.css";
 
@@ -42,10 +36,9 @@ export const DEPARTURE_TIME_NOW_PARAM = "now";
 export interface RoutePlannerProps {
   setSelectedOriginLocation: (location: Location) => void
   setSelectedDestinationLocation: (location: Location) => void
-  setResultRoutes: (resultRoutes: IJourney[]) => void
 }
 
-const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation, setResultRoutes }: RoutePlannerProps): JSX.Element => {
+const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
@@ -59,11 +52,8 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
   const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
   const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
-
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
-
-  const [showResultRoutes, setShowResultRoutes] = useState<boolean>(false);
 
   const setTrip = (trip: CreateFavoriteTrip): void => {
     setIsFavoritesDialogueOpen(false);
@@ -187,23 +177,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
         </IonItem>
         {
           originLocation !== null && destinationLocation !== null &&
-          <IonButton onClick={() =>
-            console.log(getResultRoutes({
-              origin: originLocation,
-              destination: destinationLocation,
-              departure: departureTime,
-              result: useJourneyQuery(originLocation, destinationLocation, departureTime, false)
-
-            }))
-          } type="submit" size="default" expand="block">Search routes</IonButton>
-
-          // < ResultRoutesModal
-          //   origin={originLocation}
-          //   destination={destinationLocation}
-          //   departure={departureTime}
-          //   isOpen={showResultRoutes}
-          //   onDidDismiss={() => setShowResultRoutes(false)}
-          // />
+          <IonButton
+            routerLink={`/results?origin=${originId}&destination=${destinationId}&departure=${departureTime.toISOString()}`}
+            size="default" expand="block">Suche Routen</IonButton>
         }
         <IonButton expand="block" color="warning"
 
@@ -260,58 +236,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
 export default RoutePlanner;
 
-export function TripOptionsDisplay(props: {
-  origin: Location,
-  destination: Location,
-  departure: Date,
-  setResultRoutes: (resultRoutes: IJourney[]) => void
-
-}): JSX.Element {
-  const { origin, destination, departure } = props;
-
-  // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departure, false);
-
-  const iJourneys: false | IJourney[] = result.type === "success"
-    && result.journeyResults
-      .map((journey): IJourney => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const legs: (TransportationLeg | FootpathLeg)[] = journey.legs;
-
-        const lastLeg = legs[legs.length - 1];
-        const firstLeg = legs[0];
-
-        return {
-          startStation: firstLeg.origin.name,
-          startTime: firstLeg.origin.departureTimeEstimated,
-          arrivalStation: lastLeg.destination.name,
-          arrivalTime: lastLeg.destination.arrivalTimeEstimated,
-          stops: legs.map((leg): IJourneyStep => ({
-            arrivalTime: leg.destination.arrivalTimeEstimated,
-            startTime: leg.origin.departureTimeEstimated,
-            stationName: leg.origin.name,
-            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
-              ? leg.origin.details.shortName
-              : "",
-            stopName: leg.destination.name,
-            travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation.line : ""
-          })),
-          travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
-        };
-      });
-
-  return (
-    <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
-      {iJourneys &&
-        <JourneyListComponent journeys={iJourneys} />
-      }
-    </>
-  );
-}
-
 export function RenderTrip(props: { journey: Journey }): JSX.Element {
   const { journey } = props;
 
@@ -335,51 +259,4 @@ export function RenderTrip(props: { journey: Journey }): JSX.Element {
       </IonLabel>
     </IonItem>
   );
-}
-
-export function getResultRoutes(props: {
-  origin: Location,
-  destination: Location,
-  departure: Date
-  result: UseJourneyQueryResult
-}): IJourney[] {
-
-  const { origin, destination, departure, result } = props;
-
-  console.log('hier geht noch')
-
-  let iJourneys: IJourney[] = [];
-
-  if (result.type === "success") {
-    iJourneys = result.journeyResults
-      .map((journey): IJourney => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const legs: (TransportationLeg | FootpathLeg)[] = journey.legs;
-
-        const lastLeg = legs[legs.length - 1];
-        const firstLeg = legs[0];
-
-        return {
-          startStation: firstLeg.origin.name,
-          startTime: firstLeg.origin.departureTimeEstimated,
-          arrivalStation: lastLeg.destination.name,
-          arrivalTime: lastLeg.destination.arrivalTimeEstimated,
-          stops: legs.map((leg): IJourneyStep => ({
-            arrivalTime: leg.destination.arrivalTimeEstimated,
-            startTime: leg.origin.departureTimeEstimated,
-            stationName: leg.origin.name,
-            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
-              ? leg.origin.details.shortName
-              : "",
-            stopName: leg.destination.name,
-            travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation.line : ""
-          })),
-          travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
-        };
-      });
-  }
-
-  console.log(iJourneys, 'ijourneys')
-  return iJourneys;
 }

@@ -4,15 +4,12 @@ import logo from "../../public/images/train_image.png";
 import { Location } from "../api";
 import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
-import { IJourney } from "../interfaces/IJourney.interface";
 import "./JourneyPage.css";
 
 const JourneyPage: React.FC = () => {
   const [origin, setOrigin] = useState<Location>();
   const [destination, setDestination] = useState<Location>();
-  const [routeResults, setRouteResults] = useState<IJourney[]>();
 
-  console.log(routeResults, "routeResultsss")
   const getLocations = (): string[] => {
 
     const locations: string[] = [];
@@ -50,7 +47,7 @@ const JourneyPage: React.FC = () => {
           />
         </IonContent>
         <IonContent className="planner">
-          <RoutePlanner setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} setResultRoutes={setRouteResults} />
+          <RoutePlanner setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
         </IonContent>
       </IonContent>
 
