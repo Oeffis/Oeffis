@@ -69,6 +69,14 @@ export class DelayStatsService {
     return this.parseStatsFromQueryResult(queryResult);
   }
 
+  private queryForLegStats(legStatOptions: LegStatOptions): Promise<StatQueryResult[]> {
+    const since = legStatOptions.since ?? "epoch";
+    return this.delayEntryRepository.query(
+      LEG_STATS_QUERY,
+      [legStatOptions.tripId, since]
+    ) as Promise<StatQueryResult[]>;
+  }
+
   private isResultEmpty(queryResult: StatQueryResult[]): boolean {
     return queryResult.length === 0 || Object.values(queryResult[0]).every(column => column === null);
   }
@@ -81,13 +89,5 @@ export class DelayStatsService {
       averageDelay: parseFloat(stats[0].avg),
       standardDeviation: parseFloat(stats[0].stddev)
     };
-  }
-
-  private queryForLegStats(legStatOptions: LegStatOptions): Promise<StatQueryResult[]> {
-    const since = legStatOptions.since ?? "epoch";
-    return this.delayEntryRepository.query(
-      LEG_STATS_QUERY,
-      [legStatOptions.tripId, since]
-    ) as Promise<StatQueryResult[]>;
   }
 }
