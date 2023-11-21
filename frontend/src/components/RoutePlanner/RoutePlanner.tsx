@@ -180,6 +180,10 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
               const tempOriginId = originId;
               setOriginId(destinationId);
               setDestinationId(tempOriginId);
+              const tempOriginLocation = useLocationByIdOrNull(originId);
+              if (tempOriginLocation !== null) { setSelectedOriginLocation(tempOriginLocation); }
+              const tempDestinationLocation = useLocationByIdOrNull(destinationId);
+              if (tempDestinationLocation !== null) { setSelectedDestinationLocation(tempDestinationLocation); }
             }
             }
           >
