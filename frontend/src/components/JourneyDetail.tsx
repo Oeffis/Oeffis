@@ -1,7 +1,5 @@
-import { IonButton, IonCard, IonIcon, IonImg, IonLabel } from "@ionic/react";
+import { IonCard, IonImg, IonLabel } from "@ionic/react";
 import { format } from "date-fns";
-import { chevronDownOutline } from "ionicons/icons";
-import { useState } from "react";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import FirstJourneyStepComponent from "./FirstJourneyStepComponent";
@@ -14,11 +12,6 @@ export interface TravelProps { journey: IJourney }
 const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
 
 const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
-  const [showDetails, setShowDetails] = useState(false);
-
-  const openDetails = (): void => {
-    setShowDetails(!showDetails);
-  };
   return (
     <div className="JourneyDetail">
       <IonCard className="detail-card">
@@ -45,12 +38,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => {
             </IonLabel>
           </div>
         </div>
-        {showDetails && <StepDetails journey={props.journey} />}
-        <div className="bottom-section-closed">
-          <IonButton fill="clear" onClick={(openDetails)}>
-            <IonIcon icon={chevronDownOutline} onClick={openDetails} size="small" />
-          </IonButton>
-        </div>
+        <StepDetails journey={props.journey} />
       </IonCard>
     </div>
   );

@@ -1,15 +1,20 @@
-import { IonList } from "@ionic/react";
+import { IonItem, IonList } from "@ionic/react";
 import { IJourney } from "../interfaces/IJourney.interface";
-import JourneyDetail from "./JourneyDetail";
+import JourneyCard from "./JourneyCard";
 
-const JourneyListComponent: React.FC<{ journeys: IJourney[] }> = (props: { journeys: IJourney[] }) => (
-  <div className="JourneyListComponent">
-    <IonList className="detail-card">
-      {props.journeys.map((journey, index) =>
-        <JourneyDetail key={"journey" + index} journey={journey} />
-      )}
-    </IonList>
-  </div>
-);
+const JourneyListComponent: React.FC<{ journeys: IJourney[], setActiveJourney: Function }> = (props: { setActiveJourney: Function, journeys: IJourney[] }) => {
+
+  return (
+    <div className="JourneyListComponent">
+      <IonList className="detail-card">
+        {(props.journeys.map((journey, index) =>
+          <IonItem onClick={() => props.setActiveJourney(journey)}>
+            <JourneyCard key={"journey" + index} journey={journey} />
+          </IonItem>
+        ))}
+      </IonList>
+    </div>
+  )
+}
 
 export default JourneyListComponent;
