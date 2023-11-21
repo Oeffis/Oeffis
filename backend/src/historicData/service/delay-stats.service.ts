@@ -33,6 +33,16 @@ WITH
 SELECT MAX(delay), MIN(delay), AVG(delay), STDDEV(delay) FROM latest_of_day_tripcode;
 `;
 
+const NO_DATA_RESULT: UnavailableLegStats = {
+  areAvailable: false,
+  reason: UnavailableReason.noData
+};
+
+const INTERNAL_ERROR_RESULT: UnavailableLegStats = {
+  areAvailable: false,
+  reason: UnavailableReason.internalError
+};
+
 @Injectable()
 export class DelayStatsService {
   constructor(
@@ -41,28 +51,29 @@ export class DelayStatsService {
   ) { }
 
   public async getLegStats(legStatOptions: LegStatOptions): Promise<LegStats | UnavailableLegStats> {
-    const since = legStatOptions.since ?? "epoch";
-    let stats;
     try {
-      stats = await this.delayEntryRepository.query(
-        LEG_STATS_QUERY,
-        [legStatOptions.tripId, since]
-      ) as StatQueryResult[];
+      return await this.tryGetLegStats(legStatOptions);
     } catch (error) {
       console.error(error);
-      return {
-        areAvailable: false,
-        reason: UnavailableReason.internalError
-      };
+      return INTERNAL_ERROR_RESULT;
+    }
+  }
+
+  private async tryGetLegStats(legStatOptions: LegStatOptions): Promise<LegStats | UnavailableLegStats> {
+    const queryResult = await this.queryForLegStats(legStatOptions);
+
+    if (this.isResultEmpty(queryResult)) {
+      return NO_DATA_RESULT;
     }
 
-    if (Object.values(stats[0]).some(column => column === null)) {
-      return {
-        areAvailable: false,
-        reason: UnavailableReason.noData
-      };
-    }
+    return this.parseStatsFromQueryResult(queryResult);
+  }
 
+  private isResultEmpty(queryResult: StatQueryResult[]): boolean {
+    return queryResult.length === 0 || Object.values(queryResult[0]).every(column => column === null);
+  }
+
+  private parseStatsFromQueryResult(stats: StatQueryResult[]): UnavailableLegStats | LegStats | PromiseLike<UnavailableLegStats | LegStats> {
     return {
       areAvailable: true,
       maxDelay: parseFloat(stats[0].max),
@@ -70,5 +81,13 @@ export class DelayStatsService {
       averageDelay: parseFloat(stats[0].avg),
       standardDeviation: parseFloat(stats[0].stddev)
     };
+  }
+
+  private queryForLegStats(legStatOptions: LegStatOptions): Promise<StatQueryResult[]> {
+    const since = legStatOptions.since ?? "epoch";
+    return this.delayEntryRepository.query(
+      LEG_STATS_QUERY,
+      [legStatOptions.tripId, since]
+    ) as Promise<StatQueryResult[]>;
   }
 }
