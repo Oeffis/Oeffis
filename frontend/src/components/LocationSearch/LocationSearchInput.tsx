@@ -16,8 +16,8 @@ import { useDebounce } from "use-debounce";
 import { Location } from "../../api";
 import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
-import { CurrnetLocationButton } from "../CurrentLocationButton";
 import LeafletMapContainer from "../map/LeafletMapContainer";
+import { CurrnetLocationButton } from "./CurrentLocationButton";
 import { LocationSearchList } from "./LocationSearchList";
 
 export interface LocationSearchInputProps {

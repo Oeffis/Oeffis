@@ -1,8 +1,8 @@
 import { IonButton } from "@ionic/react";
 import "leaflet/dist/leaflet.css";
-import { Location } from "../api";
-import { useCurrentLocation } from "../hooks/useCurrentLocation";
-import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
+import { Location } from "../../api";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { useLocationFinderApi } from "../../services/apiClients/ApiClientsContext";
 
 export interface CurrentLocationButtonProps {
   onButtonClicked: (location: Location) => void;
