@@ -1,4 +1,4 @@
-import { Injectable, Scope } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LegStats, UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
@@ -33,33 +33,14 @@ WITH
 SELECT MAX(delay), MIN(delay), AVG(delay), STDDEV(delay) FROM latest_of_day_tripcode;
 `;
 
-type StatsRequest = Promise<LegStats | UnavailableLegStats>;
-
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class DelayStatsService {
-  private readonly cache = new Map<string, StatsRequest>();
   constructor(
     @InjectRepository(DelayEntry)
     private readonly delayEntryRepository: Repository<DelayEntry>
   ) { }
 
-  public async getLegStats(legStatOptions: LegStatOptions): StatsRequest {
-    const cached = this.cache.get(legStatOptions.tripId);
-    if (cached) {
-      console.debug("Using cached stats for trip", legStatOptions.tripId);
-      return cached;
-    }
-
-    const newStatsRequest = this.getLegStatsFromDb(legStatOptions)
-      .then(stats => {
-        console.debug("Caching stats for trip", legStatOptions.tripId);
-        return stats;
-      });
-    this.cache.set(legStatOptions.tripId, newStatsRequest);
-    return newStatsRequest;
-  }
-
-  private async getLegStatsFromDb(legStatOptions: LegStatOptions): StatsRequest {
+  public async getLegStats(legStatOptions: LegStatOptions): Promise<LegStats | UnavailableLegStats> {
     const since = legStatOptions.since ?? "epoch";
     let stats;
     try {
