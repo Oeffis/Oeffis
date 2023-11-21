@@ -30,7 +30,10 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     let icon: string = currentPositionIcon;
 
     if (type === LocationTypeEnum.Address) {
-      icon = currentPositionIcon;
+      icon = whiteLocationIcon;
+    }
+    if (type === LocationTypeEnum.Unknown) {
+      icon = whiteLocationIcon;
     }
     if (type === LocationTypeEnum.Crossing) {
       icon = whiteLocationIcon;
@@ -74,7 +77,10 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     let icon: string = currentPositionIcon;
 
     if (type === LocationTypeEnum.Address) {
-      icon = currentPositionIcon;
+      icon = redLocationIcon;
+    }
+    if (type === LocationTypeEnum.Unknown) {
+      icon = redLocationIcon;
     }
     if (type === LocationTypeEnum.Crossing) {
       icon = redLocationIcon;
@@ -118,7 +124,10 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     let icon: string = currentPositionIcon;
 
     if (type === LocationTypeEnum.Address) {
-      icon = currentPositionIcon;
+      icon = greenLocationIcon;
+    }
+    if (type === LocationTypeEnum.Unknown) {
+      icon = greenLocationIcon;
     }
     if (type === LocationTypeEnum.Crossing) {
       icon = greenLocationIcon;
@@ -163,7 +172,7 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     let designation = "";
 
     if (type === LocationTypeEnum.Address) {
-      designation = "";
+      designation = "Adresse";
     }
     if (type === LocationTypeEnum.Crossing) {
       designation = "Straße";
@@ -207,9 +216,12 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
 
     let mapMarker: JSX.Element = <></>;
 
-    if (origin === location) {
+    let icon = null;
+    let text = "";
 
-      const originLocationIcon = new Icon({
+    if (origin?.name === location.name) {
+      text = "Start";
+      icon = new Icon({
         iconUrl: getOriginIcon(location.type),
         iconSize: [25, 41],
         iconAnchor: [12.5, 38],
@@ -217,25 +229,9 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
         shadowAnchor: [12.5, 38],
         popupAnchor: [0, -32]
       });
-
-      mapMarker = (
-        <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-          icon={originLocationIcon}>
-          <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
-            <p className="popupText">{location.details.shortName}</p><br />
-            <p className="popupText">
-              <i>Start</i>
-            </p>
-            {onItemClicked !== undefined
-              ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Select</p>
-              : <></>}
-          </Popup>
-        </Marker>
-      );
-    } else if (destination === location) {
-
-      const destinationLocationIcon = new Icon({
+    } else if (destination?.name === location.name) {
+      text = "Ziel";
+      icon = new Icon({
         iconUrl: getDestinationIcon(location.type),
         iconSize: [25, 41],
         iconAnchor: [12.5, 38],
@@ -243,25 +239,8 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
         shadowAnchor: [12.5, 38],
         popupAnchor: [0, -32]
       });
-
-      mapMarker = (
-        <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-          icon={destinationLocationIcon}>
-          <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
-            <p className="popupText">{location.details.shortName}</p><br />
-            <p className="popupText">
-              <i>Ziel</i>
-            </p>
-            {onItemClicked !== undefined
-              ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Select</p>
-              : <></>}
-          </Popup>
-        </Marker>
-      );
     } else {
-
-      const locationIcon = new Icon({
+      icon = new Icon({
         iconUrl: getLocationIcon(location.type),
         iconSize: [25, 41],
         iconAnchor: [12.5, 38],
@@ -269,23 +248,25 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
         shadowAnchor: [12.5, 38],
         popupAnchor: [0, -32]
       });
-
-      mapMarker = (
-        <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-          icon={locationIcon}>
-          <Popup className="popup">
-            <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
-            <p className="popupText">{location.details.shortName}</p><br />
-            <p className="popupText">
-              <i>{getDesignation(location.type)}</i>
-            </p>
-            {onItemClicked !== undefined
-              ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Auswählen</p>
-              : <></>}
-          </Popup>
-        </Marker>
-      );
     }
+
+    console.log("Create map marker " + location.details.shortName);
+
+    mapMarker = (
+      <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+        icon={icon}>
+        <Popup className="popup">
+          <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
+          <p className="popupText">{location.details.shortName}</p><br />
+          <p className="popupText">
+            <i>{text}</i>
+          </p>
+          {onItemClicked !== undefined
+            ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Auswählen</p>
+            : <></>}
+        </Popup>
+      </Marker>
+    );
 
     return mapMarker;
   };
