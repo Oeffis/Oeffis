@@ -1,9 +1,5 @@
-import {
-  FootpathLeg,
-  LegOriginLocationTypeEnum,
-  Location,
-  TransportationLeg
-} from "../../api";
+import { parseISO } from "date-fns";
+import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg } from "../../api";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
@@ -12,12 +8,13 @@ import JourneyListComponent from "../JourneyListComponent";
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
-  departure: Date
+  departure: string
 }): JSX.Element {
   const { origin, destination, departure } = props;
 
+  const departureDate = parseISO(departure);
   // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departure, false);
+  const result = useJourneyQuery(origin, destination, departureDate, false);
 
   const iJourneys: false | IJourney[] = result.type === "success"
     && result.journeyResults
