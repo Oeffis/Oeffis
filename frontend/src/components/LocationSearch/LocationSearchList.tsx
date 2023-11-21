@@ -1,5 +1,5 @@
 import { IonIcon, IonItem, IonLabel, IonSkeletonText } from "@ionic/react";
-import { star, starOutline } from "ionicons/icons";
+import { heart, heartOutline } from "ionicons/icons";
 import React from "react";
 import { Location, LocationTypeEnum } from "../../api";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
@@ -65,12 +65,12 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
       </IonLabel>
       {isFavoriteStop
         ? <IonIcon
-          icon={star}
+          icon={heart}
           color="warning"
           onClick={() => removeFavoriteLocationById(persistedLocation.id)}
           title="Remove from favorites" />
         : <IonIcon
-          icon={starOutline}
+          icon={heartOutline}
           onClick={() => addFavoriteLocation({ locationId: location.id })}
           title="Add to favorites" />}
     </>
@@ -82,5 +82,5 @@ const PendingLocationSearchListItem: React.FC = () => <>
   <IonLabel>
     <IonSkeletonText animated={true} style={{ width: "50%" }} />
   </IonLabel>
-  <IonIcon icon={star} />
+  <IonIcon icon={heart} />
 </>;
