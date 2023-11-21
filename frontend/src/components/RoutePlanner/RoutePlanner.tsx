@@ -173,7 +173,15 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
               />
             </IonItem>
           </IonCol>
-          <IonButton fill="clear" expand="block"
+          <IonButton
+            fill="clear"
+            expand="block"
+            onClick={() => {
+              const tempOriginId = originId;
+              setOriginId(destinationId);
+              setDestinationId(tempOriginId);
+            }
+            }
           >
             <IonIcon slot="start" icon={swapVerticalOutline} />
           </IonButton>
