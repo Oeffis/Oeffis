@@ -167,51 +167,6 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     return icon;
   };
 
-  const getDesignation = (type: LocationTypeEnum): string => {
-
-    let designation = "";
-
-    if (type === LocationTypeEnum.Address) {
-      designation = "Adresse";
-    }
-    if (type === LocationTypeEnum.Crossing) {
-      designation = "Straße";
-    }
-    if (type === LocationTypeEnum.Gis) {
-      designation = "";
-    }
-    if (type === LocationTypeEnum.Locality) {
-      designation = "";
-    }
-    if (type === LocationTypeEnum.Platform) {
-      designation = "Haltestelle";
-    }
-    if (type === LocationTypeEnum.Poi) {
-      designation = "Ort";
-    }
-    if (type === LocationTypeEnum.PoiHierarchy) {
-      designation = "Ort";
-    }
-    if (type === LocationTypeEnum.Sharing) {
-      designation = "";
-    }
-    if (type === LocationTypeEnum.Stop) {
-      designation = "Haltestelle";
-    }
-    if (type === LocationTypeEnum.Street) {
-      designation = "Straße";
-    }
-    if (type === LocationTypeEnum.Suburb) {
-      designation = "";
-    }
-    // not present in vrr spec
-    if (type === LocationTypeEnum.Singlehouse) {
-      designation = "";
-    }
-
-    return designation;
-  };
-
   const createMarker = (): JSX.Element => {
 
     let mapMarker: JSX.Element = <></>;
@@ -250,14 +205,14 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
       });
     }
 
-    console.log("Create map marker " + location.details.shortName);
+    let locationName = location.name.split(",");
 
     mapMarker = (
       <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
         icon={icon}>
         <Popup className="popup">
-          <p className="popupHeadline">{location.name.split(",")[0]}</p><br />
-          <p className="popupText">{location.details.shortName}</p><br />
+          <p className="popupHeadline">{locationName[0]}</p><br />
+          <p className="popupText">{locationName[1]}</p><br />
           <p className="popupText">
             <i>{text}</i>
           </p>
