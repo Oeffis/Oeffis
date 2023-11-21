@@ -16,6 +16,7 @@ import { useDebounce } from "use-debounce";
 import { Location } from "../../api";
 import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
+import { CurrnetLocationButton } from "../CurrentLocationButton";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import { LocationSearchList } from "./LocationSearchList";
 
@@ -74,6 +75,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         labelPlacement="floating"
         clearInput={true}
       />
+      <CurrnetLocationButton onButtonClicked={props.onSelectedLocationChanged}></CurrnetLocationButton>
 
       <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
         <IonHeader>
