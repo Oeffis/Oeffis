@@ -32,8 +32,8 @@ export function CurrnetLocationButton(props: CurrentLocationButtonProps): JSX.El
       type: locationWithAssinedStops.type
     });
 
-  }
+  };
 
-  return <IonButton onClick={setCurrentLocationAsInputValue}></IonButton>
+  return <IonButton onClick={setCurrentLocationAsInputValue} />;
 
 }

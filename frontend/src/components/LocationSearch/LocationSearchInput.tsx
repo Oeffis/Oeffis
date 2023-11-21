@@ -75,7 +75,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         labelPlacement="floating"
         clearInput={true}
       />
-      <CurrnetLocationButton onButtonClicked={props.onSelectedLocationChanged}></CurrnetLocationButton>
+      <CurrnetLocationButton onButtonClicked={props.onSelectedLocationChanged} />
 
       <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
         <IonHeader>
