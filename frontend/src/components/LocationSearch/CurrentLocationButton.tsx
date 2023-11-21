@@ -21,12 +21,10 @@ export function CurrnetLocationButton(props: CurrentLocationButtonProps): JSX.El
 
     const locationWithAssinedStops = await api.locationFinderControllerFindLocationsAtCoordinates({ latitude: currentLocation.location.coords.latitude, longitude: currentLocation.location.coords.longitude });
 
-    console.log(locationWithAssinedStops.details.shortName);
-
     props.onButtonClicked({
       id: locationWithAssinedStops.id,
       name: locationWithAssinedStops.name,
-      details: { ...locationWithAssinedStops.details },
+      details: locationWithAssinedStops.details,
       type: locationWithAssinedStops.type
     });
   }
