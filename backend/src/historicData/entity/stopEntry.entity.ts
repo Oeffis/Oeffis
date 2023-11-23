@@ -9,7 +9,7 @@ import {
   IsString,
   IsUrl
 } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, Relation, Unique } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, Relation, Unique } from "typeorm";
 import { VrrTimetableVersionEntry } from "./vrrTimetableVersionEntry.entity";
 
 // See https://gtfs.org/schedule/reference/#stopstxt.
@@ -34,6 +34,7 @@ export class StopEntry {
 
   @IsString()
   @IsNotEmpty()
+  @Index("stops_stop_id_index")
   @PrimaryColumn("text")
   public readonly stopId: string;
 
@@ -67,6 +68,7 @@ export class StopEntry {
 
   @IsString()
   @IsOptional()
+  @Index("stops_parent_station_index")
   @Column({ name: "parent_station", type: "text", nullable: true })
   public readonly parentStationId?: string;
 
@@ -101,6 +103,7 @@ export class StopEntry {
 
   @IsInstance(VrrTimetableVersionEntry)
   @IsDefined()
+  @Index("stops_vrr_timetable_version_index")
   @ManyToOne(() => VrrTimetableVersionEntry, { eager: true })
   @JoinColumn([
     { name: "vrr_timetable_version_id", referencedColumnName: "vrrTimetableVersionId" }

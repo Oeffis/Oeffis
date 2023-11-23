@@ -9,7 +9,7 @@ import {
   IsPositive,
   IsString
 } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, Relation } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, Relation } from "typeorm";
 import { StopEntry } from "./stopEntry.entity";
 import { VrrTimetableVersionEntry } from "./vrrTimetableVersionEntry.entity";
 
@@ -18,14 +18,15 @@ export class DelayEntry {
 
   @IsInt()
   @IsPositive()
-  @PrimaryColumn("integer")
-  public readonly id: number;
+  @PrimaryColumn("bigint")
+  public readonly id: bigint;
 
   /**
    * trip_id syntax here is not identical to syntax in 'trips' table.
    */
   @IsString()
   @IsNotEmpty()
+  @Index("historic_data_trip_id_index")
   @Column("text")
   public readonly tripId: string;
 
@@ -55,17 +56,19 @@ export class DelayEntry {
   public readonly isDeparture: boolean;
 
   @IsDate()
+  @Index("historic_data_planned_index")
   @Column("timestamp")
   public readonly planned: Date;
 
   @IsDate()
   @IsOptional()
+  @Index("historic_data_estimated_index")
   @Column({ type: "timestamp", nullable: true })
   public readonly estimated?: Date;
 
   @IsString()
   @IsOptional()
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   public readonly rawData?: string;
 
   @IsString()
@@ -82,11 +85,17 @@ export class DelayEntry {
   public readonly vrrTimetableVersion: Relation<VrrTimetableVersionEntry>;
 
   @IsInt()
+  @Index("historic_data_trip_code_index")
   @Column("integer")
   public readonly tripCode: number;
 
+  @IsString()
+  @Index("historic_data_parent_stop_id_index")
+  @Column("text")
+  public readonly parentStopId: string;
+
   public constructor(
-    id: number,
+    id: bigint,
     tripId: string,
     stopId: string,
     recordingTime: Date,
@@ -96,6 +105,7 @@ export class DelayEntry {
     vrrTimetableVersionId: string,
     vrrTimetableVersion: Relation<VrrTimetableVersionEntry>,
     tripCode: number,
+    parentStopId: string,
     stop?: Relation<StopEntry>,
     estimated?: Date
   ) {
@@ -103,7 +113,6 @@ export class DelayEntry {
     this.id = id;
     this.tripId = tripId;
     this.stopId = stopId;
-    this.stop = stop;
     this.recordingTime = recordingTime;
     this.isDeparture = isDeparture;
     this.planned = planned;
@@ -111,6 +120,8 @@ export class DelayEntry {
     this.vrrTimetableVersionId = vrrTimetableVersionId;
     this.vrrTimetableVersion = vrrTimetableVersion;
     this.tripCode = tripCode;
+    this.parentStopId = parentStopId;
+    this.stop = stop;
     this.estimated = estimated;
   }
 }
