@@ -105,6 +105,15 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
 
+  const toggleOriginDestinationLocation = (): void => {
+    if (originLocation !== null && destinationLocation !== null) {
+      setDestinationId(originId);
+      setSelectedDestinationLocation(originLocation);
+      setOriginId(destinationId);
+      setSelectedOriginLocation(destinationLocation);
+    }
+  };
+
   return (
     <>
       <IonList className={rp.center_all_column} inset={true}>
@@ -173,8 +182,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
               />
             </IonItem>
           </IonCol>
-          <IonButton fill="clear" expand="block"
-          >
+          <IonButton fill="clear" expand="block" onClick={toggleOriginDestinationLocation}>
             <IonIcon slot="start" icon={swapVerticalOutline} />
           </IonButton>
         </IonRow>
