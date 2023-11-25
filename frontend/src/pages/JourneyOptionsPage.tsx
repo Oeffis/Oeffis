@@ -6,11 +6,9 @@ import { useStateParams } from "../hooks/useStateParams";
 
 const JourneyOptionsPage: React.FC = () => {
 
-  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [departureTime, setDepartureTime] = useStateParams<string | null>(null, "departureTime", String, String);
-
-  // const { origin, destination, departureTime } = useParams<{ origin: string; destination: string, departureTime: string }>();
+  const [originId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationId] = useStateParams<string | null>(null, "destination", String, String);
+  const [departureTime] = useStateParams<string | null>(null, "departureTime", String, String);
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
