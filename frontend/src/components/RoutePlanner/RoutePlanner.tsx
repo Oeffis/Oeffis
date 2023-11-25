@@ -11,6 +11,7 @@ import {
   IonLabel,
   IonList,
   IonModal,
+  IonRouterLink,
   IonRow,
   IonTitle,
   IonToggle,
@@ -185,10 +186,21 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             <IonIcon slot="start" icon={heart} />
             Merken
           </IonButton>
-          <IonButton className={rp.button_primary} type="submit" size="default" expand="block">
-            <IonIcon slot="start" icon={search} />
-            Routen suchen
-          </IonButton>
+          {
+            originId !== null && destinationId !== null
+              ?
+              <IonRouterLink routerLink={"/journey/options?origin=" + originId.replaceAll(":", "%3A") + "&destination=" + destinationId.replaceAll(":", "%3A") + "&departureTime=" + departureTime.replaceAll("+", "%2B")}>
+                <IonButton className={rp.button_primary} type="submit" size="default" expand="block">
+                  <IonIcon slot="start" icon={search} />
+                  Routen suchen
+                </IonButton>
+              </IonRouterLink>
+              :
+              <IonButton className={rp.button_primary} type="submit" size="default" expand="block">
+                <IonIcon slot="start" icon={search} />
+                Routen suchen
+              </IonButton>
+          }
         </IonRow>
       </IonList >
       {

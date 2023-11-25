@@ -20,6 +20,7 @@ import "@ionic/react/css/text-transformation.css";
 import Menu from "./components/Menu";
 import { CurrentLocationProvider } from "./hooks/useCurrentLocation";
 import FavoritesPage from "./pages/FavoritesPage";
+import JourneyOptionsPage from "./pages/JourneyOptionsPage";
 import JourneyPage from "./pages/JourneyPage";
 import JourneysPage from "./pages/JourneysPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
@@ -49,6 +50,9 @@ const App: React.FC = () => (
                       </Route>
                       <Route exact path="/journey">
                         <JourneyPage />
+                      </Route>
+                      <Route exact path="/journey/options">
+                        <JourneyOptionsPage />
                       </Route>
                       <Route exact path="/favorites">
                         <FavoritesPage />
