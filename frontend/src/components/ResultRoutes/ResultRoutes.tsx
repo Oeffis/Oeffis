@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonRadio, IonRadioGroup, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonRadio, IonRadioGroup, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -31,10 +31,16 @@ const ResultRoutes: React.FC = () => {
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
-  const setActiveJourney = (journey: IJourney) => {
-    swiper?.slideNext();
+  const setActiveJourney = (journey: IJourney): void => {
+    if (swiper !== null) {
+      swiper.slideNext();
+    }
     setSelectedJourney(journey);
-  }
+  };
+
+  useIonViewWillEnter(() => {
+    console.log("Enter");
+  });
 
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {
@@ -70,11 +76,11 @@ const ResultRoutes: React.FC = () => {
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>
-        <IonButton className="back-button" onClick={() => history.go(-1)}
+        <IonButton className="back-button" onClick={() => { console.log("hallo"); history.back(); }}
           size="default" expand="block">
           Zurück zum Routenplaner
         </IonButton>
-        <SwiperReact
+        <SwiperReact className="swiper-div"
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
@@ -98,7 +104,7 @@ const ResultRoutes: React.FC = () => {
           <SwiperSlide>
             {
               selectedJourney !== null &&
-              <JourneyDetail journey={selectedJourney}></JourneyDetail>
+              <JourneyDetail journey={selectedJourney} />
             }
           </SwiperSlide>
         </SwiperReact>
@@ -112,7 +118,7 @@ export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
   departure: Date,
-  setJourney: Function
+  setJourney: (journey: IJourney) => void
 }): JSX.Element {
   const { origin, destination, departure } = props;
 

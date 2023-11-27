@@ -7,8 +7,7 @@ export interface TravelProps { journey: IJourney }
 
 const formatDateShort = (date: Date): string => format(date, "dd.MM. HH:mm");
 
-const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => {
-  return (
+const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
     <div className="JourneyCard">
       <IonCard className="detail-card">
         <div className="content-section">
@@ -37,7 +36,6 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => {
       </IonCard>
     </div>
   );
-};
 
 export default JourneyCard;
 

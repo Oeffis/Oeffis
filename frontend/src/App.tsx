@@ -1,6 +1,6 @@
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -44,7 +44,7 @@ const App: React.FC = () => (
                 <IonApp>
                   <IonReactRouter>
                     <Menu />
-                    <IonRouterOutlet id="main-content">
+                    <Switch>
                       <Route exact path="/">
                         <Redirect to="/journey" />
                       </Route>
@@ -66,7 +66,7 @@ const App: React.FC = () => (
                       <Route exact path="/results">
                         <ResultRoutes />
                       </Route>
-                    </IonRouterOutlet>
+                    </Switch>
                   </IonReactRouter>
                 </IonApp>
               </FavoriteRoutesProvider>

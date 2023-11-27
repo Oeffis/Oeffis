@@ -50,3 +50,7 @@ IonButton {
     bottom: 10px;
     right: 0;
 }
+
+.swiper-div {
+    z-index: -10;
+}
