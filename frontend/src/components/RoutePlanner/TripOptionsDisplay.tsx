@@ -5,16 +5,17 @@ import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import JourneyListComponent from "../JourneyListComponent";
 
+// TODO Duplicate with TripOptionsDisplay in RoutePlanner file + this one is unused.
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
-  departure: string
+  departure: string,
+  asArrival: boolean
 }): JSX.Element {
-  const { origin, destination, departure } = props;
+  const { origin, destination, departure, asArrival } = props;
 
   const departureDate = parseISO(departure);
-  // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departureDate, false);
+  const result = useJourneyQuery(origin, destination, departureDate, asArrival);
 
   const iJourneys: false | IJourney[] = result.type === "success"
     && result.journeyResults
