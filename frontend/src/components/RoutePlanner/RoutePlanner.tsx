@@ -1,6 +1,7 @@
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
   IonDatetime,
   IonDatetimeButton,
@@ -10,11 +11,12 @@ import {
   IonLabel,
   IonList,
   IonModal,
+  IonRow,
   IonTitle,
+  IonToggle,
   IonToolbar
 } from "@ionic/react";
-import { formatISO, isSameMinute, parseISO } from "date-fns";
-import { closeCircleOutline } from "ionicons/icons";
+import { calendarClearOutline, closeCircleOutline, heart, search, swapVerticalOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
   Journey,
@@ -22,16 +24,18 @@ import {
   TransportationLeg,
   TransportationLegTypeEnum
 } from "../../api";
-import { useCurrentTime } from "../../hooks/useCurrentTime";
-import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
+import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import FavoritesPage from "../../pages/FavoritesPage";
-import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../../services/favorites/FavoritesContext";
+import {
+  CreateFavoriteRoute,
+  CreateFavoriteTrip,
+  useFavoriteRoutes,
+  useFavoriteTrips
+} from "../../services/favorites/FavoritesContext";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
-import "./RoutePlanner.css";
-
-export const DEPARTURE_TIME_NOW_PARAM = "now";
+import rp from "./RoutePlanner.module.css";
 
 export interface RoutePlannerProps {
   setSelectedOriginLocation: (location: Location) => void
@@ -42,15 +46,10 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [startTime, setStartTime] = useStateParams<string>(new Date().toISOString(), "startTime", String, String);
+  const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
-
-  const currentTime = useCurrentTime();
-  const [customDepartureTime, setCustomDepartureTime] = useStateParams<string>(DEPARTURE_TIME_NOW_PARAM, "departure", String, String);
-  const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
-  const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
@@ -60,7 +59,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     setIsFavoritesModalOpen(false);
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
-    setStartTime(trip.startTime);
+    setDepartureTime(trip.startTime);
   };
 
   const setRoute = (route: CreateFavoriteRoute): void => {
@@ -74,7 +73,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     const existing = favoriteTrips.find(c =>
       c.originId === originId
       && c.destinationId === destinationId
-      && c.startTime === startTime
+      && c.startTime === departureTime
     );
     return existing !== undefined;
   };
@@ -98,120 +97,119 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
   const [isFavoriteDialogueOpen, setIsFavoritesDialogueOpen] = useState(false);
 
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
-  const showFavorites = (): void => {
-    setIsFavoritesModalOpen(true);
-  };
-
-  const updateMinDepartureTime = (): void => {
-    setMinDepartureTime(currentTime);
-  };
-
-  /**
-   * Sets some time given as string as custom departure time.
-   *
-   * @param departure departure time (as ISO string)
-   */
-  const setCustomDeparture = (departure: string): void => {
-    const parsedDeparture: Date = parseISO(departure);
-    // If min value (current time) gets selected, encode this in url param.
-    const customDepartureTimeString: string =
-      isSameMinute(parsedDeparture, minDepartureTime)
-        ? DEPARTURE_TIME_NOW_PARAM
-        : formatISO(parsedDeparture);
-
-    setCustomDepartureTime(customDepartureTimeString);
-  };
 
   return (
     <>
-      <IonList inset={true}>
-        <IonItem lines="inset">
-          {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
-          <IonLabel>Date and Time</IonLabel>
-          {/* Button to delete custom date/time inputs and use current time. */}
-          <IonButton
-            fill="outline"
-            strong={true}
-            onClick={() => setCustomDeparture(formatISO(currentTime))}
+      <IonList className={rp.center_all_column} inset={true}>
+        <IonItem className={rp.date_time_card} lines="none">
+          <IonRow className={rp.center_all_row}>
+            <IonCol>
+              <IonRow className={rp.center_all_row}>
+                <IonIcon className={rp.date_icon} icon={calendarClearOutline} />
+                <IonLabel className="ion-align-self-center">Datum und Uhrzeit</IonLabel>
+              </IonRow>
+              <IonRow className={rp.toggle_button_row}>
+                <IonLabel className={rp.toggle_button_label}>Abfahrtszeit</IonLabel>
+                <IonToggle className={rp.toggle_button} />
+                <IonLabel className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
+              </IonRow>
+              <IonRow className={rp.date_time_row}>
+                {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
+                {/* Button to delete custom date/time inputs and use current time. */}
+                <IonButton className={rp.button_secondary}
+                  fill="outline"
+                  onClick={() => resetDepartureTimeToCurrentTime()}
+                >
+                  Jetzt
+                </IonButton>
+                <IonDatetimeButton className={rp.date_time_button} aria-label="Datum und Uhrzeit" datetime="datetime" />
+                {/* Before datetime modal is being presented min departure time is updated to current time. */}
+                <IonModal keepContentsMounted={true}>
+                  <IonDatetime
+                    name="date_time"
+                    id="datetime"
+                    /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
+                    value={departureTime}
+                    multiple={false} // Assures that value cannot be an array but a single date string only.
+                    showDefaultButtons={true}
+                    data-testid={"datetime-input"}
+                    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                    onIonChange={e => setDepartureTime(e.detail.value! as string)}
+                  />
+                </IonModal>
+              </IonRow>
+            </IonCol>
+          </IonRow>
+        </IonItem>
+        <IonRow className={rp.start_all_row}>
+          <IonCol className={rp.input_field_width}>
+            <IonItem>
+              <LocationSearchInput
+                inputLabel="Startpunkt"
+                selectedLocation={originLocation}
+                onSelectedLocationChanged={(location): void => {
+                  setOriginId(location.id);
+                  setSelectedOriginLocation(location);
+                }}
+                prefixDataTestId="origin-input"
+              />
+            </IonItem>
+            <IonItem>
+              <LocationSearchInput
+                inputLabel="Zielpunkt"
+                selectedLocation={destinationLocation}
+                onSelectedLocationChanged={(location): void => {
+                  setDestinationId(location.id);
+                  setSelectedDestinationLocation(location);
+                }}
+                prefixDataTestId="destination-input"
+              />
+            </IonItem>
+          </IonCol>
+          <IonButton fill="clear" expand="block"
           >
-            Now
+            <IonIcon slot="start" icon={swapVerticalOutline} />
           </IonButton>
-          <IonDatetimeButton aria-label="Date and Time" datetime="datetime" />
-          {/* Before datetime modal is being presented min departure time is updated to current time. */}
-          <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
-            <IonDatetime
-              name="date_time"
-              id="datetime"
-              /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
-              min={formatISO(minDepartureTime)}
-              value={formatISO(departureTime)}
-              multiple={false} // Assures that value cannot be an array but a single date string only.
-              showDefaultButtons={true}
-              data-testid={"datetime-input"}
-              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              onIonChange={e => { setCustomDeparture(e.detail.value! as string); setStartTime(e.detail.value as string); }}
-            />
-          </IonModal>
-        </IonItem>
-        <IonItem>
-          <LocationSearchInput
-            inputLabel="Origin"
-            selectedLocation={originLocation}
-            onSelectedLocationChanged={(location): void => {
-              setOriginId(location.id);
-              setSelectedOriginLocation(location);
-            }}
-            prefixDataTestId="origin-input"
-          />
-        </IonItem>
-        <IonItem>
-          <LocationSearchInput
-            inputLabel="Destination"
-            selectedLocation={destinationLocation}
-            onSelectedLocationChanged={(location): void => {
-              setDestinationId(location.id);
-              setSelectedDestinationLocation(location);
-            }}
-            prefixDataTestId="destination-input"
-          />
-        </IonItem>
-        {
-          originLocation !== null && destinationLocation !== null &&
-          <IonButton
-            routerLink={`/results?origin=${originId}&destination=${destinationId}&departure=${departureTime.toISOString()}`}
-            size="default" expand="block">Suche Routen</IonButton>
-        }
-        <IonButton expand="block" color="warning"
-
-          onClick={() => addToFavorites()}
-        >Add To Favorites</IonButton>
-        <IonButton expand="block" color="warning"
-          onClick={() => showFavorites()}
-        >Show Favorites</IonButton>
+        </IonRow>
+        <IonRow className={rp.button_row}>
+          <IonButton className={rp.button_secondary} fill="outline" expand="block"
+            onClick={() => addToFavorites()}
+          >
+            <IonIcon slot="start" icon={heart} />
+            Merken
+          </IonButton>
+          <IonButton routerLink={`/results?origin=${originId}&destination=${destinationId}&departure=${new Date(departureTime).toISOString()}`} disabled={originLocation === null && destinationLocation === null} className={rp.button_primary} size="default" expand="block">
+            <IonIcon slot="start" icon={search} />
+            Routen suchen
+          </IonButton>
+        </IonRow>
       </IonList >
-
-      <IonModal id="favorite-dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
+      <IonModal className={rp.favorite_dialogue} id="favorite_dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
-          <IonToolbar>
-            <IonTitle>Add to favorites</IonTitle>
+          <IonToolbar className={rp.modal_toolbar}>
+            <IonTitle>Zu Favoriten hinzufügen</IonTitle>
             <IonButtons slot="end">
               <IonButton color="light" onClick={() => setIsFavoritesDialogueOpen(false)}>
                 <IonIcon icon={closeCircleOutline} />
               </IonButton>
             </IonButtons>
           </IonToolbar>
-          <div id="content-section">
+          <div className={rp.modal_content_section} id="content_section">
             <div>
               Do you want to save as Route or as Trip?
             </div>
-            <div id="buttons">
+            <div className={rp.modal_buttons} id="buttons">
               <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Route</IonButton>
-              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, startTime }); setIsFavoritesDialogueOpen(false); } }}>Trip</IonButton>
+              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => {
+                if (originId && destinationId) {
+                  addFavoriteTrip({ originId, destinationId, startTime: departureTime });
+                  setIsFavoritesDialogueOpen(false);
+                }
+              }}>Trip</IonButton>
             </div>
           </div>
-
         </IonContent>
-      </IonModal>;
+      </IonModal>
       <IonModal
         isOpen={isFavoritesModalOpen}
         onDidDismiss={() => setIsFavoritesModalOpen(false)}

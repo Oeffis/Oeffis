@@ -1,0 +1,1 @@
+ALTER TABLE historic_data ALTER COLUMN raw_data DROP NOT NULL;

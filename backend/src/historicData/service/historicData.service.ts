@@ -1,7 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
-import { Repository } from "typeorm";
+import { Equal, IsNull, MoreThan, Not, Repository } from "typeorm";
+
+interface DelayOptions {
+  tripId: string;
+  since?: Date;
+}
+
+export type DelayEntryWithEstimate = Required<DelayEntry>;
 
 @Injectable()
 export class HistoricDataService {
@@ -10,7 +17,15 @@ export class HistoricDataService {
     private readonly delayEntryRepository: Repository<DelayEntry>
   ) { }
 
-  public getDelayEntryCount(): Promise<number> {
-    return this.delayEntryRepository.count();
+  public async getDelays({ tripId, since }: DelayOptions): Promise<DelayEntryWithEstimate[]> {
+    const entries = await this.delayEntryRepository.find({
+      where: {
+        estimated: Not(IsNull()),
+        tripId: Equal(tripId),
+        planned: since ? MoreThan(since) : undefined
+      }
+    });
+
+    return entries as DelayEntryWithEstimate[];
   }
 }

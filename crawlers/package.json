@@ -19,6 +19,7 @@
   "dependencies": {
     "@oeffis/vrr_client": "file:../vrr_client",
     "@types/node": "^16.18.39",
+    "better-queue": "^3.8.12",
     "date-fns": "^2.30.0",
     "node-fetch": "^2.6.12",
     "papaparse": "^5.4.1",
@@ -26,6 +27,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@types/better-queue": "^3.8.6",
     "@types/node-fetch": "^2.6.4",
     "@types/papaparse": "^5.3.8",
     "@types/pg": "^8.10.2",
