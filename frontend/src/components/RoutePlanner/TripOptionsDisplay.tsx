@@ -1,4 +1,4 @@
-import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg } from "../../api";
+import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
@@ -39,7 +39,8 @@ export function TripOptionsDisplay(props: {
               : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation.line : ""
+            line: "transportation" in leg ? leg.transportation.line : "",
+            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : { status: "unavailable", reason: "Fußpfad" }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
