@@ -111,11 +111,13 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     const tempOriginId = originId;
     setOriginId(destinationId);
     setDestinationId(tempOriginId);
-    const tempOriginLocation = useLocationByIdOrNull(originId);
-    if (tempOriginLocation !== null) { setSelectedOriginLocation(tempOriginLocation); }
-    const tempDestinationLocation = useLocationByIdOrNull(destinationId);
+    const tempOriginLocation = originLocation;
+    const tempDestinationLocation = destinationLocation;
+    if (tempOriginLocation !== null) {
+      setSelectedDestinationLocation(tempOriginLocation);
+    }
     if (tempDestinationLocation !== null) {
-      setSelectedDestinationLocation(tempDestinationLocation);
+      setSelectedOriginLocation(tempDestinationLocation);
     }
   };
 
