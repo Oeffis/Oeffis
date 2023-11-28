@@ -101,20 +101,15 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
 
   const toggleOriginDestinationLocation = (): void => {
-    const tempOriginId = originId;
     setOriginId(destinationId);
-    setDestinationId(tempOriginId);
-    const tempOriginLocation = originLocation;
-    const tempDestinationLocation = destinationLocation;
-    const tempOriginInputText = originInput;
-    const tempDestinationInputText = destinationInput;
-    if (tempOriginLocation !== null) {
-      setSelectedDestinationLocation(tempOriginLocation);
-      setOriginInput(tempDestinationInputText);
+    setDestinationId(originId);
+    if (originLocation !== null) {
+      setSelectedDestinationLocation(originLocation);
+      setOriginInput(destinationInput);
     }
-    if (tempDestinationLocation !== null) {
-      setSelectedOriginLocation(tempDestinationLocation);
-      setDestinationInput(tempOriginInputText);
+    if (destinationLocation !== null) {
+      setSelectedOriginLocation(destinationLocation);
+      setDestinationInput(originInput);
     }
   };
 
