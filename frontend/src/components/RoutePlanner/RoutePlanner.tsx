@@ -177,6 +177,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                   setSelectedOriginLocation(location);
                 }}
                 prefixDataTestId="origin-input"
+                locationName={originLocation?.name ?? "TestOrigin"}
               />
             </IonItem>
             <IonItem>
@@ -188,6 +189,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                   setSelectedDestinationLocation(location);
                 }}
                 prefixDataTestId="destination-input"
+                locationName={originLocation?.name ?? "TestDestination"}
               />
             </IonItem>
           </IonCol>

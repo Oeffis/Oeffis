@@ -25,11 +25,14 @@ export interface LocationSearchInputProps {
   selectedLocation: Location | null;
   inputLabel: string;
   prefixDataTestId?: string;
+  locationName?: string;
 }
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
   const LOCATIONS_LIMIT = 20;
   const [searchInput, setSearchInput] = useState<string>("");
+
+  useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const [showMap, setShowMap] = useState<boolean>(false);
@@ -54,6 +57,11 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);
   const showResults = searchInput !== "" && (foundLocations.type === "success" || foundLocations.type === "outdated");
 
+  const applyLocationName = (): void => {
+    setSearchInput(props.locationName ?? "");
+    setModalOpen(true);
+  };
+
   useEffect(() => {
     if (searchInput === "") {
       setIsMapBtnDisabled(true);
@@ -66,7 +74,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
-        onClick={() => setModalOpen(true)}
+        onClick={applyLocationName}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
