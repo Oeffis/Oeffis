@@ -2,17 +2,11 @@ ion-label {
     padding: 2px;
 }
 
-.content-section {
-    min-width: 100%;
-    min-height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mid-section {
+.detail-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 0px 16px;
 }
 
 .bottom-section-closed {
@@ -35,4 +29,15 @@ IonButton {
 
 .JourneyDetail {
     width: 100%;
+}
+
+.back-button {
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    right: 0;
+}
+
+.swiper-div {
+    z-index: -10;
 }

@@ -1,5 +1,7 @@
 import { JourneyLocationElement as VrrJourneyLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { ParentLocation } from "../../../locationFinder/entity/location.entity";
 import { LocationMapperService } from "../../../locationFinder/service/mapper/locationMapper.service";
+import { LocationType } from "../../../vrr/entity/locationType.entity";
 import { JourneyLocation, LegDestinationLocation, LegOriginLocation } from "../../entity/journeyLocation.entity";
 
 /**
@@ -96,7 +98,7 @@ export class JourneyLocationMapperService {
    * Checks if given VRR journey locations are present and complete or if there is something missing to map them
    * properly.
    *
-   * @param vrrJourneyLocations VRR journey locations to check
+   * @param vrrJourneyLocation VRR journey locations to check
    */
   checkVrrJourneyLocationIntegrity(vrrJourneyLocation: VrrJourneyLocation): boolean {
     const hasPlannedTime = vrrJourneyLocation.arrivalTimePlanned !== undefined
@@ -146,4 +148,28 @@ export class JourneyLocationMapperService {
     return isValid
       && this.locationMapper.checkVrrLocationIntegrity(vrrLegDestinationLocation);
   }
+
+  /**
+   * Return the parent stop of given (journey) location/stop. The parent searched for has type LocationType.Stop.
+   * Further parents (on higher levels) are ignored when parent of type Stop is found.
+   *
+   * @param stop stop to search stop parent for
+   */
+  public getStopParent(stop: (JourneyLocation | ParentLocation)): (JourneyLocation | ParentLocation) {
+    let parentStop: (JourneyLocation | ParentLocation);
+
+    if (stop.type === LocationType.stop) {
+      parentStop = stop;
+
+    } else if (!stop.details.parent) {
+      parentStop = stop; // If there is no (more) parent.
+
+    } else {
+      parentStop = this.getStopParent(stop.details.parent);
+
+    }
+
+    return parentStop;
+  }
+
 }
