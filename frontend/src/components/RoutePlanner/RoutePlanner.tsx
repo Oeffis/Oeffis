@@ -47,6 +47,8 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
+  // Using specific deserialize because using Boolean() constructor trues everything except empty string.
+  const [asArrivalTime, setAsArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
@@ -110,7 +112,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
               </IonRow>
               <IonRow className={rp.toggle_button_row}>
                 <IonLabel className={rp.toggle_button_label}>Abfahrtszeit</IonLabel>
-                <IonToggle className={rp.toggle_button} />
+                <IonToggle className={rp.toggle_button}
+                  checked={asArrivalTime}
+                  onIonChange={() => setAsArrivalTime(!asArrivalTime)} />
                 <IonLabel className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
               </IonRow>
               <IonRow className={rp.date_time_row}>

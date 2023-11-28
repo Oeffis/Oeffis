@@ -65,6 +65,7 @@ export const useJourneyQuery = (
       origin.id,
       destination.id,
       departure.valueOf(),
+      asArrival,
       setJourneyResultsOrError
     ]
   );
