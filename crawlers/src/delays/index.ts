@@ -76,7 +76,15 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
 async function processOneStopId(limit: number, storeRawData: boolean, stopId: string, vrrTimetableVersionId: number, withPgConnection: WithPgConnection): Promise<void> {
   const recordingTime = new Date();
   const stopEvents = await getDepartureDelays(stopId, limit);
-  await insertDepartureDelaysIntoDb(storeRawData, stopEvents, withPgConnection, recordingTime, vrrTimetableVersionId);
+
+  await insertDepartureDelaysIntoDb(
+    storeRawData,
+    stopEvents,
+    withPgConnection,
+    recordingTime,
+    vrrTimetableVersionId,
+    stopId,
+  );
 }
 
 async function getStopIdsFromDb(withPgConnection: WithPgConnection, vrrTimetableVersionId: number): Promise<string[]> {
@@ -155,11 +163,12 @@ async function insertDepartureDelaysIntoDb(
   withPgConnection: WithPgConnection,
   recordingTime: Date,
   vrrTimetableVersionId: number,
+  parentStopId: string,
 ): Promise<void> {
   await withPgConnection(async pgClient => {
     const promises = stopEvents.map(stop => {
       const rawData = storeRawData ? JSON.stringify(stop) : null;
-      return pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id, trip_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [
+      return pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id, trip_code, parent_stop_id, is_cancelled) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)", [
         stop.transportation.id,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         stop.location!.id,
@@ -169,7 +178,9 @@ async function insertDepartureDelaysIntoDb(
         stop.departureTimeEstimated,
         rawData,
         vrrTimetableVersionId,
-        stop.transportation.properties?.tripCode
+        stop.transportation.properties?.tripCode,
+        parentStopId,
+        (stop as { isCancelled?: boolean }).isCancelled ?? false
       ]);
     });
 
