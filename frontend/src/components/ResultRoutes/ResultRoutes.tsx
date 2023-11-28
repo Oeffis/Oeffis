@@ -29,6 +29,7 @@ import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
+import { useJourneyApi } from "../../services/apiClients/ApiClientsContext";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import LeafletMapContainer from "../map/LeafletMapContainer";
@@ -67,6 +68,9 @@ export type ResultRoutesProps = {
 const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
+  const journeyApi = useJourneyApi();
+  const [journeysLocations, setJourneysLocations] = useState<JourneyLocation[]>();
+
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
