@@ -106,13 +106,20 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     setDestinationId(tempOriginId);
     const tempOriginLocation = originLocation;
     const tempDestinationLocation = destinationLocation;
+    const tempOriginInputText = originInput;
+    const tempDestinationInputText = destinationInput;
     if (tempOriginLocation !== null) {
       setSelectedDestinationLocation(tempOriginLocation);
+      setOriginInput(tempDestinationInputText);
     }
     if (tempDestinationLocation !== null) {
       setSelectedOriginLocation(tempDestinationLocation);
+      setDestinationInput(tempOriginInputText);
     }
   };
+
+  const [originInput, setOriginInput] = useState<string>("");
+  const [destinationInput, setDestinationInput] = useState<string>("");
 
   return (
     <>
@@ -169,8 +176,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                   setOriginId(location.id);
                   setSelectedOriginLocation(location);
                 }}
+                onInputGiven={(input): void => setOriginInput(input)}
                 prefixDataTestId="origin-input"
-                locationName={originLocation?.name ?? "TestOrigin"}
+                searchName={originInput ?? "TestOrigin"}
               />
             </IonItem>
             <IonItem>
@@ -181,8 +189,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                   setDestinationId(location.id);
                   setSelectedDestinationLocation(location);
                 }}
+                onInputGiven={(input): void => setDestinationInput(input)}
                 prefixDataTestId="destination-input"
-                locationName={originLocation?.name ?? "TestDestination"}
+                searchName={destinationInput ?? "TestDestination"}
               />
             </IonItem>
           </IonCol>
