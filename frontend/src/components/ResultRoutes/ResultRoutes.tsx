@@ -21,11 +21,14 @@ import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../../public/images/OeffisLogo1.svg";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
+import { JourneyLocation } from "../../api";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
+import { useJourneyApi } from "../../services/apiClients/ApiClientsContext";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
+import LeafletMapContainer from "../map/LeafletMapContainer";
 import "./ResultRoutes.css";
 
 const ResultRoutes: React.FC = () => {
@@ -38,10 +41,29 @@ const ResultRoutes: React.FC = () => {
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
 
+  const journeyApi = useJourneyApi();
+  const [journeysLocations, setJourneysLocations] = useState<JourneyLocation[]>();
+
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
   const [swiper, setSwiper] = useState<Swiper | null>(null);
+
+  const getJourneysLocations = (): void => {
+    if (originId !== null && destinationId !== null && departureTime !== null) {
+      journeyApi.journeyControllerQueryJourney({
+        originId: originId,
+        destinationId: destinationId,
+        departure: new Date(departureTime),
+        asArrival: false
+      }).then(journeys => journeys.map(jorueny => jorueny.legs.map(leg => setJourneysLocations(leg.details.stopSequence))))
+        .catch(error => alert(error));
+    }
+  }
+
+  const getLocationIds = (index: number): string[] => {
+    return journeysLocations?.map(jl => jl.id) ?? [];
+  }
 
   const setActiveJourney = (journey: IJourney): void => {
     if (swiper !== null) {
@@ -78,6 +100,14 @@ const ResultRoutes: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <div className="map">
+          <LeafletMapContainer
+            origin={originLocation ?? undefined}
+            destination={destinationLocation ?? undefined}
+            locationIds={getLocationIds()}
+            showLines={true}
+          />
+        </div>
         <div className="result-header">
           <div className="result-swiper">
             <IonRadioGroup value={slideName}>

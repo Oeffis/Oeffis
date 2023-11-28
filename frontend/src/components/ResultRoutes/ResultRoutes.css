@@ -69,3 +69,7 @@ IonButton {
     position: absolute;
     right: 2%;
 }
+
+.map {
+    height: 50%;
+}
