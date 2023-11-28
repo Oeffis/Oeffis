@@ -10,8 +10,8 @@ import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
 import ReactiveMapContainer, { View } from "./ReactiveMapContainer";
 
 export interface MapProps {
-  origin?: Location,
-  destination?: Location,
+  origin: Location | null,
+  destination: Location | null,
   locationIds: string[],
   showLines: boolean,
   onItemClicked?: (location: Location) => void

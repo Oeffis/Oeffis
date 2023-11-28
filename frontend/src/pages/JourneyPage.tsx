@@ -7,17 +7,17 @@ import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import "./JourneyPage.css";
 
 const JourneyPage: React.FC = () => {
-  const [origin, setOrigin] = useState<Location>();
-  const [destination, setDestination] = useState<Location>();
+  const [origin, setOrigin] = useState<Location | null>(null);
+  const [destination, setDestination] = useState<Location | null>(null);
 
   const getLocations = (): string[] => {
 
     const locations: string[] = [];
 
-    if (origin !== undefined) {
+    if (origin !== null) {
       locations.push(origin.id);
     }
-    if (destination !== undefined) {
+    if (destination !== null) {
       locations.push(destination.id);
     }
 
