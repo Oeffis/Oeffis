@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonRadio, IonRadioGroup, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonRadio, IonRadioGroup, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -37,10 +37,6 @@ const ResultRoutes: React.FC = () => {
     }
     setSelectedJourney(journey);
   };
-
-  useIonViewWillEnter(() => {
-    console.log("Enter");
-  });
 
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {

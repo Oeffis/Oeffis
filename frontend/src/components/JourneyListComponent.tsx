@@ -11,12 +11,14 @@ const JourneyListComponent: React.FC<IJourneyListProps> = (props: IJourneyListPr
   <div className="JourneyListComponent">
     <IonList className="detail-card">
       {(props.journeys.map((journey, index) =>
-        <IonItem onClick={() => props.setActiveJourney(journey)}>
-          <JourneyCard key={"journey" + index} journey={journey} />
-        </IonItem>
+        <>
+          <IonItem onClick={() => props.setActiveJourney(journey)}>
+            <JourneyCard key={"journey" + index} journey={journey} />
+          </IonItem>
+        </>
       ))}
     </IonList>
   </div>
-);
+)
 
 export default JourneyListComponent;
