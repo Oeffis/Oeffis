@@ -116,7 +116,7 @@ export class LegStats {
     },
     required: true
   })
-  originDelayStats: MaybeDelayStats;
+  originDelayStats: DelayStats | UnavailableDelayStats;
 
   @IsInstance(DelayStats)
   @ApiProperty({
@@ -134,7 +134,7 @@ export class LegStats {
     },
     required: true
   })
-  destinationDelayStats: MaybeDelayStats;
+  destinationDelayStats: DelayStats | UnavailableDelayStats;
 
   public constructor(
     originDelayStats: DelayStats,

@@ -1,19 +1,60 @@
 import { IonLabel } from "@ionic/react";
-import { LegStats, UnavailableLegStats } from "../api";
+import { DelayStats, LegStats } from "../api";
 
-export function DisplayDelayStats({ stats }: { stats: LegStats | UnavailableLegStats }): JSX.Element {
-  if (stats.status === "unavailable") {
-    return <DisplayDelayStatsUnavailabe stats={stats as UnavailableLegStats} />;
+export function DisplayDelayStats({ stats, destinationName, originName }: { stats: LegStats, destinationName: string, originName: string }): JSX.Element {
+  const statusBulletPoints: JSX.Element[] = [];
+
+  if (stats.destinationDelayStats.status === "available") {
+    const { averageDelay, maxDelay } = stats.destinationDelayStats as DelayStats;
+
+    statusBulletPoints.push(
+      <li key="dest_averageDelay">
+        Ist durchschnittlich {formatToMinutesToHumanReadableString(averageDelay)} später in {destinationName}.
+      </li>
+    );
+    statusBulletPoints.push(
+      <li key="dest_maxDelay">
+        Ist maximal {formatToMinutesToHumanReadableString(maxDelay)} später in {destinationName}.
+      </li>
+    );
+  } else {
+    statusBulletPoints.push(
+      <li key="dest_unavailable">
+        Verspätungsdaten zum Ziel {destinationName} nicht verfügbar.
+      </li>
+    );
   }
 
-  const { averageDelay, maxDelay } = stats as LegStats;
+  if (stats.originDelayStats.status === "available") {
+    const { averageDelay, maxDelay } = stats.originDelayStats as DelayStats;
+
+    statusBulletPoints.push(
+      <li key="origin_averageDelay">
+        Fährt durchschnittlich {formatToMinutesToHumanReadableString(averageDelay)} später bei {originName} ab.
+      </li>
+    );
+    statusBulletPoints.push(
+      <li key="origin_maxDelay">
+        Fährt maximal {formatToMinutesToHumanReadableString(maxDelay)} später bei {originName} ab.
+      </li>
+    );
+  } else {
+    statusBulletPoints.push(
+      <li key="origin_unavailable">
+        Verspätungsdaten vom Start {originName} nicht verfügbar.
+      </li>
+    );
+  }
+
+  if (stats.destinationDelayStats.status === "unavailable" && stats.originDelayStats.status === "unavailable") {
+    return <DisplayDelayStatsUnavailabe />;
+  }
 
   return (
     <div>
       <IonLabel>Historischen Verspätungsdaten der letzten zwei Wochen:</IonLabel>
       <ul>
-        <li>Durchschnittlich {formatToMinutesToHumanReadableString(averageDelay)} später</li>
-        <li>Maximal {formatToMinutesToHumanReadableString(maxDelay)} später</li>
+        {statusBulletPoints}
       </ul>
     </div>
   );
@@ -32,24 +73,13 @@ function formatToMinutesToHumanReadableString(minutes: number): string {
   return `ca. ${fullMinutes} Minuten`;
 }
 
-function DisplayDelayStatsUnavailabe({ stats }: { stats: UnavailableLegStats }): JSX.Element {
-  const { reason } = stats as UnavailableLegStats;
-  if (reason === "NO_DATA") {
-    return (
-      <div>
-        <IonLabel>
-          Keine historischen Verspätungsdaten für diesen Streckenabschnitt verfügbar.
-        </IonLabel>
-      </div>
-    );
-  }
+function DisplayDelayStatsUnavailabe(): JSX.Element {
 
   return (
     <div>
       <IonLabel>
-        Ein Fehler ist beim Laden der historischen Verspätungsdaten aufgetreten.
+        Keine historischen Verspätungsdaten für diesen Streckenabschnitt verfügbar.
       </IonLabel>
     </div>
   );
-
 }

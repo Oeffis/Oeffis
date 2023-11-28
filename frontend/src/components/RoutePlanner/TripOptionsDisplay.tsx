@@ -40,7 +40,10 @@ export function TripOptionsDisplay(props: {
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
             line: "transportation" in leg ? leg.transportation.line : "",
-            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : { status: "unavailable", reason: "Fußpfad" }
+            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
+              destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+              originDelayStats: { status: "unavailable", reason: "Fußpfad" }
+            }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };

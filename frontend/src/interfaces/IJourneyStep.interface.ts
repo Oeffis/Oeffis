@@ -1,4 +1,4 @@
-import { LegStats, UnavailableLegStats } from "../api";
+import { LegStats } from "../api";
 
 export interface IJourneyStep {
   stopName: string;
@@ -8,5 +8,5 @@ export interface IJourneyStep {
   travelDurationInMinutes: number;
   track: string;
   line: string;
-  stats: LegStats | UnavailableLegStats;
+  stats: LegStats;
 }
