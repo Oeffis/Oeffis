@@ -31,8 +31,6 @@ export interface LocationSearchInputProps {
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
   const LOCATIONS_LIMIT = 20;
   const [searchInput, setSearchInput] = useState<string>("");
-
-  useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const [showMap, setShowMap] = useState<boolean>(false);
