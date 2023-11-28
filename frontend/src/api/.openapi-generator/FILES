@@ -17,13 +17,14 @@ src/models/LegInfoValidity.ts
 src/models/LegInterchange.ts
 src/models/LegOriginLocation.ts
 src/models/LegStats.ts
+src/models/LegStatsDestinationDelayStats.ts
+src/models/LegStatsOriginDelayStats.ts
 src/models/Location.ts
 src/models/LocationCoordinates.ts
 src/models/LocationCoordinatesDto.ts
 src/models/LocationDetails.ts
 src/models/LocationNameDto.ts
 src/models/LocationWithAssignedStops.ts
-src/models/MaybeDelayStats.ts
 src/models/ParentLocation.ts
 src/models/ParentLocationDetails.ts
 src/models/RatedLocation.ts
