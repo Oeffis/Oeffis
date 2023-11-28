@@ -54,6 +54,8 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
+  // Using specific deserialize because using Boolean() constructor trues everything except empty string.
+  const [asArrivalTime, setAsArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
@@ -117,7 +119,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
               </IonRow>
               <IonRow className={rp.toggle_button_row}>
                 <IonLabel className={rp.toggle_button_label}>Abfahrtszeit</IonLabel>
-                <IonToggle className={rp.toggle_button} />
+                <IonToggle className={rp.toggle_button}
+                           checked={asArrivalTime}
+                           onIonChange={() => setAsArrivalTime(!asArrivalTime)}/>
                 <IonLabel className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
               </IonRow>
               <IonRow className={rp.date_time_row}>
@@ -197,6 +201,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
           origin={originLocation}
           destination={destinationLocation}
           departure={departureTime}
+          asArrival={asArrivalTime}
         />
       }
       <IonModal className={rp.favorite_dialogue} id="favorite_dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
@@ -249,16 +254,17 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
 export default RoutePlanner;
 
+// TODO Duplicate with TripOptionsDisplay file.
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
-  departure: string
+  departure: string,
+  asArrival: boolean
 }): JSX.Element {
-  const { origin, destination, departure } = props;
+  const { origin, destination, departure, asArrival } = props;
 
   const departureDate = parseISO(departure);
-  // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departureDate, false);
+  const result = useJourneyQuery(origin, destination, departureDate, asArrival);
 
   const iJourneys: false | IJourney[] = result.type === "success"
     && result.journeyResults

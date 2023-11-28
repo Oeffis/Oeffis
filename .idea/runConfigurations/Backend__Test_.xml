@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Backend (Test)" type="CompoundRunConfigurationType">
-    <toRun name="Prepare Backend" type="CompoundRunConfigurationType" />
+    <toRun name="build:watch vrr_client" type="js.build_tools.npm" />
     <toRun name="test backend" type="js.build_tools.npm" />
     <method v="2" />
   </configuration>
