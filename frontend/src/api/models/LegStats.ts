@@ -13,12 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { MaybeDelayStats } from './MaybeDelayStats';
+import type { LegStatsDestinationDelayStats } from './LegStatsDestinationDelayStats';
 import {
-    MaybeDelayStatsFromJSON,
-    MaybeDelayStatsFromJSONTyped,
-    MaybeDelayStatsToJSON,
-} from './MaybeDelayStats';
+    LegStatsDestinationDelayStatsFromJSON,
+    LegStatsDestinationDelayStatsFromJSONTyped,
+    LegStatsDestinationDelayStatsToJSON,
+} from './LegStatsDestinationDelayStats';
+import type { LegStatsOriginDelayStats } from './LegStatsOriginDelayStats';
+import {
+    LegStatsOriginDelayStatsFromJSON,
+    LegStatsOriginDelayStatsFromJSONTyped,
+    LegStatsOriginDelayStatsToJSON,
+} from './LegStatsOriginDelayStats';
 
 /**
  * 
@@ -27,17 +33,17 @@ import {
  */
 export interface LegStats {
     /**
-     * Delay statistics at origin.
-     * @type {MaybeDelayStats}
+     * 
+     * @type {LegStatsOriginDelayStats}
      * @memberof LegStats
      */
-    originDelayStats: MaybeDelayStats;
+    originDelayStats: LegStatsOriginDelayStats;
     /**
-     * Delay statistics at destination.
-     * @type {MaybeDelayStats}
+     * 
+     * @type {LegStatsDestinationDelayStats}
      * @memberof LegStats
      */
-    destinationDelayStats: MaybeDelayStats;
+    destinationDelayStats: LegStatsDestinationDelayStats;
 }
 
 /**
@@ -61,8 +67,8 @@ export function LegStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'originDelayStats': MaybeDelayStatsFromJSON(json['originDelayStats']),
-        'destinationDelayStats': MaybeDelayStatsFromJSON(json['destinationDelayStats']),
+        'originDelayStats': LegStatsOriginDelayStatsFromJSON(json['originDelayStats']),
+        'destinationDelayStats': LegStatsDestinationDelayStatsFromJSON(json['destinationDelayStats']),
     };
 }
 
@@ -75,8 +81,8 @@ export function LegStatsToJSON(value?: LegStats | null): any {
     }
     return {
         
-        'originDelayStats': MaybeDelayStatsToJSON(value.originDelayStats),
-        'destinationDelayStats': MaybeDelayStatsToJSON(value.destinationDelayStats),
+        'originDelayStats': LegStatsOriginDelayStatsToJSON(value.originDelayStats),
+        'destinationDelayStats': LegStatsDestinationDelayStatsToJSON(value.destinationDelayStats),
     };
 }
 
