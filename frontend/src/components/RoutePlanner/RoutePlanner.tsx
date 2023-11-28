@@ -38,8 +38,8 @@ import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import rp from "./RoutePlanner.module.css";
 
 export interface RoutePlannerProps {
-  setSelectedOriginLocation: (location: Location) => void
-  setSelectedDestinationLocation: (location: Location) => void
+  setSelectedOriginLocation: (location: Location | null) => void
+  setSelectedDestinationLocation: (location: Location | null) => void
 }
 
 const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
@@ -52,6 +52,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
+
+  setSelectedOriginLocation(originLocation);
+  setSelectedDestinationLocation(destinationLocation);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();

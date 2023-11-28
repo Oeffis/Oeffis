@@ -18,8 +18,8 @@ import { Location, LocationTypeEnum } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 
 export interface MarkerProps {
-  origin?: Location,
-  destination?: Location,
+  origin: Location | null,
+  destination: Location | null,
   location: Location,
   onItemClicked?: (location: Location) => void
 }
