@@ -13,6 +13,7 @@ ion-label {
 .mid-section {
     display: flex;
     flex-direction: column;
+    width: 60%;
 }
 
 .bottom-section-closed {
