@@ -1,5 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
+import { UnavailableDelayStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { Journey } from "journey/entity/journey.entity";
 import { LocationFinderModule } from "locationFinder/locationFinder.module";
@@ -130,7 +130,10 @@ it("should query trip", async () => {
             stopSequence: [],
             interchange: undefined
           },
-          delayStats: unavailableLegStats()
+          delayStats: {
+            originDelayStats: unavailableLegStats(),
+            destinationDelayStats: unavailableLegStats()
+          }
         }
       ]
     }
@@ -149,7 +152,7 @@ it("should query trip", async () => {
   expect(response).toEqual(mockAlternatives);
 });
 
-function unavailableLegStats(): UnavailableLegStats {
+function unavailableLegStats(): UnavailableDelayStats {
   return {
     reason: UnavailableReason.noData,
     areAvailable: false
