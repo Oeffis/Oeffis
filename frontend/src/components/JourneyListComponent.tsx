@@ -19,6 +19,6 @@ const JourneyListComponent: React.FC<IJourneyListProps> = (props: IJourneyListPr
       ))}
     </IonList>
   </div>
-)
+);
 
 export default JourneyListComponent;
