@@ -17,7 +17,7 @@ import { Location } from "../../api";
 import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import LeafletMapContainer from "../map/LeafletMapContainer";
-import { CurrnetLocationButton } from "./CurrentLocationButton";
+import { CurrentLocationButton } from "./CurrentLocationButton";
 import { LocationSearchList } from "./LocationSearchList";
 
 export interface LocationSearchInputProps {
@@ -75,7 +75,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         labelPlacement="floating"
         clearInput={true}
       />
-      <CurrnetLocationButton onButtonClicked={props.onSelectedLocationChanged} />
+      <CurrentLocationButton onButtonClicked={props.onSelectedLocationChanged} />
 
       <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
         <IonHeader>
