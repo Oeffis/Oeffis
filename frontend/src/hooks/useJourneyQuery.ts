@@ -41,6 +41,8 @@ export const useJourneyQuery = (
         setJourneyResultsOrError({ type: "error", error });
 
       } else {
+        setJourneyResultsOrError({ type: "pending", journeyResults: null });
+
         journeyApi.journeyControllerQueryJourney({
           originId: origin.id,
           destinationId: destination.id,
@@ -52,6 +54,10 @@ export const useJourneyQuery = (
             setJourneyResultsOrError({ type: "success", journeyResults });
           })
           .catch((error: Error) => {
+            if (abortController.signal.aborted) {
+              return;
+            }
+
             setJourneyResultsOrError({ type: "error", error });
           });
 
@@ -65,6 +71,7 @@ export const useJourneyQuery = (
       origin.id,
       destination.id,
       departure.valueOf(),
+      asArrival,
       setJourneyResultsOrError
     ]
   );
