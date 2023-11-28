@@ -3,6 +3,7 @@ src/apis/LocationFinderApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/BadRequest.ts
+src/models/DelayStats.ts
 src/models/Footpath.ts
 src/models/FootpathLeg.ts
 src/models/Journey.ts
@@ -22,13 +23,13 @@ src/models/LocationCoordinatesDto.ts
 src/models/LocationDetails.ts
 src/models/LocationNameDto.ts
 src/models/LocationWithAssignedStops.ts
-src/models/MaybeLegStats.ts
+src/models/MaybeDelayStats.ts
 src/models/ParentLocation.ts
 src/models/ParentLocationDetails.ts
 src/models/RatedLocation.ts
 src/models/Transportation.ts
 src/models/TransportationDestination.ts
 src/models/TransportationLeg.ts
-src/models/UnavailableLegStats.ts
+src/models/UnavailableDelayStats.ts
 src/models/index.ts
 src/runtime.ts

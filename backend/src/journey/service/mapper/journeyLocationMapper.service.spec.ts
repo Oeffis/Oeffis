@@ -15,6 +15,13 @@ import { ApiService } from "../../../vrr/service/api.service";
 import { JourneyLocation, LegDestinationLocation, LegOriginLocation } from "../../entity/journeyLocation.entity";
 import { JourneyLocationMapperService } from "./journeyLocationMapper.service";
 
+const BASE_LOCALITY = {
+  id: "placeID:5513000:9",
+  name: "Gelsenkirchen",
+  type: LocationType.locality,
+  details: {}
+} as Location;
+
 const BASE_LOCATION = {
   id: "de:05513:5613",
   name: "Gelsenkirchen, Hbf",
@@ -22,7 +29,7 @@ const BASE_LOCATION = {
   details: {
     shortName: "Hbf",
     coordinates: { latitude: 51.50, longitude: 7.10 },
-    parent: { id: "placeID:5513000:9", name: "Gelsenkirchen", type: LocationType.locality, details: {} }
+    parent: BASE_LOCALITY
   }
 } as Location;
 
@@ -272,6 +279,26 @@ it("throw error if invalid leg destination.", () => {
   // When & Then
   expect(() => journeyLocationMapper.mapLegDestinationLocation(vrrLegDestinationWithoutPlanned))
     .toThrowError("missing planned arrival time");
+});
+
+it.each([
+  ["child of stop parent", {
+    id: "de:05513:5613:1:2", name: "Gelsenkirchen, Hbf", type: LocationType.platform,
+    details: { shortName: "2", coordinates: { latitude: 51.50, longitude: 7.10 }, parent: BASE_LOCATION }
+  }, BASE_LOCATION],
+  ["already parent", BASE_LOCATION, BASE_LOCATION],
+  ["no stop parent", {
+    id: "de:05513:5613:1:2", name: "Gelsenkirchen, Hbf", type: LocationType.platform,
+    details: { shortName: "2", coordinates: { latitude: 51.50, longitude: 7.10 }, parent: BASE_LOCALITY }
+  }, BASE_LOCALITY],
+  ["no parent", BASE_LOCALITY, BASE_LOCALITY]
+])("return parent stop for given (journey) location (%s).", (_descr, location, expectedParentStop) => {
+  // Given
+  // When
+  const actualParentStop = journeyLocationMapper.getStopParent(location);
+
+  // Then
+  expect(actualParentStop).toEqual(expectedParentStop);
 });
 
 function vrrJourneyLocation(
