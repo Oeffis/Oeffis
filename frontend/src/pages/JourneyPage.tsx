@@ -1,31 +1,14 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import React, { useState } from "react";
+import React from "react";
 import logo from "../../public/images/train_image.png";
-import { Location } from "../api";
 import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
+import { OriginDestinationProvider } from "../services/locations/originDestinationContext";
 import "./JourneyPage.css";
 
-const JourneyPage: React.FC = () => {
-  const [origin, setOrigin] = useState<Location | null>(null);
-  const [destination, setDestination] = useState<Location | null>(null);
-
-  const getLocations = (): string[] => {
-
-    const locations: string[] = [];
-
-    if (origin !== null) {
-      locations.push(origin.id);
-    }
-    if (destination !== null) {
-      locations.push(destination.id);
-    }
-
-    return locations;
-  };
-
-  return (
-    <IonPage id="main-content">
+const JourneyPage: React.FC = () => (
+  <IonPage id="main-content">
+    <OriginDestinationProvider>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -42,19 +25,15 @@ const JourneyPage: React.FC = () => {
       <IonContent id="main-content" className="journeyContent">
         <IonContent className="map">
           <LeafletMapContainer
-            origin={origin}
-            destination={destination}
-            locationIds={getLocations()}
             showLines={true}
           />
         </IonContent>
         <IonContent className="planner">
-          <RoutePlanner setSelectedOriginLocation={setOrigin} setSelectedDestinationLocation={setDestination} />
+          <RoutePlanner />
         </IonContent>
       </IonContent>
-
-    </IonPage>
-  );
-};
+    </OriginDestinationProvider>
+  </IonPage>
+);
 
 export default JourneyPage;

@@ -112,8 +112,6 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           {showResults
             && showMap
             ? <LeafletMapContainer
-              origin={null}
-              destination={null}
               locationIds={[...foundLocations.searchResults]}
               showLines={false}
               onItemClicked={setSelectedLocationAndCloseModal}

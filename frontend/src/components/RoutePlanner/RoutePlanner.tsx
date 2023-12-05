@@ -20,7 +20,6 @@ import { calendarClearOutline, closeCircleOutline, heart, search, swapVerticalOu
 import { useState } from "react";
 import {
   Journey,
-  Location,
   TransportationLeg,
   TransportationLegTypeEnum
 } from "../../api";
@@ -34,27 +33,20 @@ import {
   useFavoriteRoutes,
   useFavoriteTrips
 } from "../../services/favorites/FavoritesContext";
+import { useDestinationId, useOriginId } from "../../services/locations/originDestinationContext";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import rp from "./RoutePlanner.module.css";
 
-export interface RoutePlannerProps {
-  setSelectedOriginLocation: (location: Location | null) => void
-  setSelectedDestinationLocation: (location: Location | null) => void
-}
 
-const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
-
-  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
+const RoutePlanner = (): JSX.Element => {
+  const [originId, setOriginId] = useOriginId();
+  const [destinationId, setDestinationId] = useDestinationId();
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
   const [asArrivalTime, setAsArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
-
-  setSelectedOriginLocation(originLocation);
-  setSelectedDestinationLocation(destinationLocation);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
@@ -156,7 +148,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                 selectedLocation={originLocation}
                 onSelectedLocationChanged={(location): void => {
                   setOriginId(location.id);
-                  setSelectedOriginLocation(location);
                 }}
                 prefixDataTestId="origin-input"
               />
@@ -167,7 +158,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                 selectedLocation={destinationLocation}
                 onSelectedLocationChanged={(location): void => {
                   setDestinationId(location.id);
-                  setSelectedDestinationLocation(location);
                 }}
                 prefixDataTestId="destination-input"
               />
