@@ -37,7 +37,6 @@ import { useDestinationId, useOriginId } from "../../services/locations/originDe
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import rp from "./RoutePlanner.module.css";
 
-
 const RoutePlanner = (): JSX.Element => {
   const [originId, setOriginId] = useOriginId();
   const [destinationId, setDestinationId] = useDestinationId();
