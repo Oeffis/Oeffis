@@ -10,8 +10,8 @@ import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
 import ReactiveMapContainer, { View } from "./ReactiveMapContainer";
 
 export interface MapProps {
-  origin?: Location,
-  destination?: Location,
+  origin: Location | null,
+  destination: Location | null,
   locationIds: string[],
   showLines: boolean,
   onItemClicked?: (location: Location) => void
@@ -20,12 +20,20 @@ export interface MapProps {
 const NRW_BOUNDS: LatLngTuple[] = [[50.30527, 5.71687], [52.69499, 9.47241]];
 
 const LeafletMapContainer = ({ origin, destination, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
+
   const locations = useMultipleLocationsByIdOrNull(locationIds);
   const usersPosition = useCurrentLocation();
   const [view, setView] = useState<View>({ bounds: NRW_BOUNDS });
 
   const bounds: LatLngTuple[] = locations.map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);
-  const markers = locations.map((location, index) => <MapMarker key={"marker" + index} origin={origin} destination={destination} location={location} onItemClicked={onItemClicked} />);
+  const markers = locations.map((location, index) =>
+    <MapMarker
+      key={"marker" + index}
+      origin={origin}
+      destination={destination}
+      location={location}
+      onItemClicked={onItemClicked}
+    />);
 
   useEffect(() => {
     if (usersPosition.state === "located") {

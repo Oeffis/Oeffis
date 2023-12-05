@@ -1,12 +1,12 @@
 // Needed to mock private field behaviour.
 /* eslint-disable @typescript-eslint/dot-notation */
 import {
-  JourneyLocationElement,
   Journey as VrrJourney,
+  JourneyLocationElement,
   Leg as VrrLeg,
   LocationType as VrrLocationType
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { UnavailableLegStats, UnavailableReason } from "historicData/dto/legStats.dto";
+import { UnavailableDelayStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { Repository } from "typeorm";
@@ -82,7 +82,7 @@ beforeEach(() => {
     .mockReturnValue(FOOTPATH);
 
   const delayStatsService = new DelayStatsService(undefined as unknown as Repository<DelayEntry>);
-  vi.spyOn(delayStatsService, "getLegStats")
+  vi.spyOn(delayStatsService, "getPartialRouteStats")
     .mockReturnValue(Promise.resolve(unavailableLegStats()));
 
   mapper =
@@ -382,7 +382,7 @@ function vrrJourneyGesicherterAnschlussLeg(): VrrLeg {
   } as VrrLeg;
 }
 
-function unavailableLegStats(): UnavailableLegStats {
+function unavailableLegStats(): UnavailableDelayStats {
   return {
     areAvailable: false,
     reason: UnavailableReason.noData

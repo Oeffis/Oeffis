@@ -16,50 +16,45 @@ import {
   IonToggle,
   IonToolbar
 } from "@ionic/react";
-import { formatISO, isSameMinute, parseISO } from "date-fns";
 import { calendarClearOutline, closeCircleOutline, heart, search, swapVerticalOutline } from "ionicons/icons";
 import { useState } from "react";
 import {
-  FootpathLeg,
   Journey,
-  LegOriginLocationTypeEnum,
   Location,
   TransportationLeg,
   TransportationLegTypeEnum
 } from "../../api";
-import { useCurrentTime } from "../../hooks/useCurrentTime";
-import { useCustomDepartureTimeUrlParamOrCurrentTime } from "../../hooks/useCustomDepartureTimeOrCurrentTime";
-import { useJourneyQuery } from "../../hooks/useJourneyQuery";
+import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
-import { IJourney } from "../../interfaces/IJourney.interface";
-import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import FavoritesPage from "../../pages/FavoritesPage";
-import { CreateFavoriteRoute, CreateFavoriteTrip, useFavoriteRoutes, useFavoriteTrips } from "../../services/favorites/FavoritesContext";
-import JourneyListComponent from "../JourneyListComponent";
+import {
+  CreateFavoriteRoute,
+  CreateFavoriteTrip,
+  useFavoriteRoutes,
+  useFavoriteTrips
+} from "../../services/favorites/FavoritesContext";
 import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import rp from "./RoutePlanner.module.css";
 
-export const DEPARTURE_TIME_NOW_PARAM = "now";
-
 export interface RoutePlannerProps {
-  setSelectedOriginLocation: (location: Location) => void
-  setSelectedDestinationLocation: (location: Location) => void
+  setSelectedOriginLocation: (location: Location | null) => void
+  setSelectedDestinationLocation: (location: Location | null) => void
 }
 
 const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
 
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [startTime, setStartTime] = useStateParams<string>(new Date().toISOString(), "startTime", String, String);
+  const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
+  // Using specific deserialize because using Boolean() constructor trues everything except empty string.
+  const [asArrivalTime, setAsArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
 
-  const currentTime = useCurrentTime();
-  const [customDepartureTime, setCustomDepartureTime] = useStateParams<string>(DEPARTURE_TIME_NOW_PARAM, "departure", String, String);
-  const [minDepartureTime, setMinDepartureTime] = useState<Date>(currentTime);
-  const departureTime = useCustomDepartureTimeUrlParamOrCurrentTime(customDepartureTime);
+  setSelectedOriginLocation(originLocation);
+  setSelectedDestinationLocation(destinationLocation);
 
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
@@ -69,7 +64,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     setIsFavoritesModalOpen(false);
     setOriginId(trip.originId);
     setDestinationId(trip.destinationId);
-    setStartTime(trip.startTime);
+    setDepartureTime(trip.startTime);
   };
 
   const setRoute = (route: CreateFavoriteRoute): void => {
@@ -83,7 +78,7 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
     const existing = favoriteTrips.find(c =>
       c.originId === originId
       && c.destinationId === destinationId
-      && c.startTime === startTime
+      && c.startTime === departureTime
     );
     return existing !== undefined;
   };
@@ -108,26 +103,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
 
-  const updateMinDepartureTime = (): void => {
-    setMinDepartureTime(currentTime);
-  };
-
-  /**
-   * Sets some time given as string as custom departure time.
-   *
-   * @param departure departure time (as ISO string)
-   */
-  const setCustomDeparture = (departure: string): void => {
-    const parsedDeparture: Date = parseISO(departure);
-    // If min value (current time) gets selected, encode this in url param.
-    const customDepartureTimeString: string =
-      isSameMinute(parsedDeparture, minDepartureTime)
-        ? DEPARTURE_TIME_NOW_PARAM
-        : formatISO(parsedDeparture);
-
-    setCustomDepartureTime(customDepartureTimeString);
-  };
-
   return (
     <>
       <IonList className={rp.center_all_column} inset={true}>
@@ -140,7 +115,9 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
               </IonRow>
               <IonRow className={rp.toggle_button_row}>
                 <IonLabel className={rp.toggle_button_label}>Abfahrtszeit</IonLabel>
-                <IonToggle className={rp.toggle_button} />
+                <IonToggle className={rp.toggle_button}
+                  checked={asArrivalTime}
+                  onIonChange={() => setAsArrivalTime(!asArrivalTime)} />
                 <IonLabel className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
               </IonRow>
               <IonRow className={rp.date_time_row}>
@@ -148,24 +125,23 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                 {/* Button to delete custom date/time inputs and use current time. */}
                 <IonButton className={rp.button_secondary}
                   fill="outline"
-                  onClick={() => setCustomDeparture(formatISO(currentTime))}
+                  onClick={() => resetDepartureTimeToCurrentTime()}
                 >
                   Jetzt
                 </IonButton>
                 <IonDatetimeButton className={rp.date_time_button} aria-label="Datum und Uhrzeit" datetime="datetime" />
                 {/* Before datetime modal is being presented min departure time is updated to current time. */}
-                <IonModal keepContentsMounted={true} onWillPresent={() => updateMinDepartureTime()}>
+                <IonModal keepContentsMounted={true}>
                   <IonDatetime
                     name="date_time"
                     id="datetime"
                     /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
-                    min={formatISO(minDepartureTime)}
-                    value={formatISO(departureTime)}
+                    value={departureTime}
                     multiple={false} // Assures that value cannot be an array but a single date string only.
                     showDefaultButtons={true}
                     data-testid={"datetime-input"}
                     /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-                    onIonChange={e => { setCustomDeparture(e.detail.value! as string); setStartTime(e.detail.value as string); }}
+                    onIonChange={e => setDepartureTime(e.detail.value! as string)}
                   />
                 </IonModal>
               </IonRow>
@@ -209,24 +185,16 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             <IonIcon slot="start" icon={heart} />
             Merken
           </IonButton>
-          <IonButton className={rp.button_primary} type="submit" size="default" expand="block">
+          <IonButton routerLink={`/results?origin=${originId}&destination=${destinationId}&departure=${new Date(departureTime).toISOString()}`} disabled={originLocation === null || destinationLocation === null} className={rp.button_primary} size="default" expand="block">
             <IonIcon slot="start" icon={search} />
             Routen suchen
           </IonButton>
         </IonRow>
       </IonList >
-      {
-        originLocation !== null && destinationLocation !== null &&
-        <TripOptionsDisplay
-          origin={originLocation}
-          destination={destinationLocation}
-          departure={departureTime}
-        />
-      }
       <IonModal className={rp.favorite_dialogue} id="favorite_dialogue" isOpen={isFavoriteDialogueOpen} onDidDismiss={() => setIsFavoritesDialogueOpen(false)}>
         <IonContent>
           <IonToolbar className={rp.modal_toolbar}>
-            <IonTitle>Add to favorites</IonTitle>
+            <IonTitle>Zu Favoriten hinzufügen</IonTitle>
             <IonButtons slot="end">
               <IonButton color="light" onClick={() => setIsFavoritesDialogueOpen(false)}>
                 <IonIcon icon={closeCircleOutline} />
@@ -239,7 +207,12 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             </div>
             <div className={rp.modal_buttons} id="buttons">
               <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Route</IonButton>
-              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteTrip({ originId, destinationId, startTime }); setIsFavoritesDialogueOpen(false); } }}>Trip</IonButton>
+              <IonButton disabled={!canCurrentTripBeFavorited()} onClick={() => {
+                if (originId && destinationId) {
+                  addFavoriteTrip({ originId, destinationId, startTime: departureTime });
+                  setIsFavoritesDialogueOpen(false);
+                }
+              }}>Trip</IonButton>
             </div>
           </div>
         </IonContent>
@@ -267,56 +240,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
 };
 
 export default RoutePlanner;
-
-export function TripOptionsDisplay(props: {
-  origin: Location,
-  destination: Location,
-  departure: Date
-}): JSX.Element {
-  const { origin, destination, departure } = props;
-
-  // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departure, false);
-
-  const iJourneys: false | IJourney[] = result.type === "success"
-    && result.journeyResults
-      .map((journey): IJourney => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const legs: (TransportationLeg | FootpathLeg)[] = journey.legs;
-
-        const lastLeg = legs[legs.length - 1];
-        const firstLeg = legs[0];
-
-        return {
-          startStation: firstLeg.origin.name,
-          startTime: firstLeg.origin.departureTimeEstimated,
-          arrivalStation: lastLeg.destination.name,
-          arrivalTime: lastLeg.destination.arrivalTimeEstimated,
-          stops: legs.map((leg): IJourneyStep => ({
-            arrivalTime: leg.destination.arrivalTimeEstimated,
-            startTime: leg.origin.departureTimeEstimated,
-            stationName: leg.origin.name,
-            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
-              ? leg.origin.details.shortName
-              : "",
-            stopName: leg.destination.name,
-            travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation.line : ""
-          })),
-          travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
-        };
-      });
-
-  return (
-    <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
-      {iJourneys &&
-        <JourneyListComponent journeys={iJourneys} />
-      }
-    </>
-  );
-}
 
 export function RenderTrip(props: { journey: Journey }): JSX.Element {
   const { journey } = props;

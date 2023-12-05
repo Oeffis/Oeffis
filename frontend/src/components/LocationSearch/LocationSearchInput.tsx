@@ -16,6 +16,7 @@ import { Location } from "../../api";
 import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
 import LeafletMapContainer from "../map/LeafletMapContainer";
+import { CurrentLocationButton } from "./CurrentLocationButton";
 import { LocationSearchList } from "./LocationSearchList";
 import { mapOutline, readerOutline } from "ionicons/icons";
 import { FloatingActionButton } from "../controls/FloatingActionButton";
@@ -76,6 +77,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         labelPlacement="floating"
         clearInput={true}
       />
+      <CurrentLocationButton onButtonClicked={props.onSelectedLocationChanged} />
 
       <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
         <IonHeader>
@@ -110,6 +112,8 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           {showResults
             && showMap
             ? <LeafletMapContainer
+              origin={null}
+              destination={null}
               locationIds={[...foundLocations.searchResults]}
               showLines={false}
               onItemClicked={setSelectedLocationAndCloseModal}

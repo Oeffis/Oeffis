@@ -167,9 +167,11 @@ export class JourneyMapperService {
         ...baseLeg,
         type: LegType.transportation,
         transportation: this.transportationMapper.mapVrrTransportation(vrrLeg),
-        delayStats: await this.delayStatsService.getLegStats({
+        delayStats: await this.delayStatsService.getPartialRouteStats({
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           tripId: vrrLeg.transportation!.id!,
+          originId: this.journeyLocationMapper.getStopParent(baseLeg.origin).id,
+          destinationId: this.journeyLocationMapper.getStopParent(baseLeg.destination).id,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           since: subWeeks(new Date(), 2)
         })

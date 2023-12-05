@@ -13,6 +13,19 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { LegStatsDestinationDelayStats } from './LegStatsDestinationDelayStats';
+import {
+    LegStatsDestinationDelayStatsFromJSON,
+    LegStatsDestinationDelayStatsFromJSONTyped,
+    LegStatsDestinationDelayStatsToJSON,
+} from './LegStatsDestinationDelayStats';
+import type { LegStatsOriginDelayStats } from './LegStatsOriginDelayStats';
+import {
+    LegStatsOriginDelayStatsFromJSON,
+    LegStatsOriginDelayStatsFromJSONTyped,
+    LegStatsOriginDelayStatsToJSON,
+} from './LegStatsOriginDelayStats';
+
 /**
  * 
  * @export
@@ -20,35 +33,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface LegStats {
     /**
-     * Wether leg stats are available
-     * @type {boolean}
+     * 
+     * @type {LegStatsOriginDelayStats}
      * @memberof LegStats
      */
-    areAvailable: boolean;
+    originDelayStats: LegStatsOriginDelayStats;
     /**
-     * The average delay.
-     * @type {number}
+     * 
+     * @type {LegStatsDestinationDelayStats}
      * @memberof LegStats
      */
-    averageDelay: number;
-    /**
-     * The standard deviation of the delay.
-     * @type {number}
-     * @memberof LegStats
-     */
-    standardDeviation: number;
-    /**
-     * The maximum delay of the leg.
-     * @type {number}
-     * @memberof LegStats
-     */
-    maxDelay: number;
-    /**
-     * The minimum delay of the leg.
-     * @type {number}
-     * @memberof LegStats
-     */
-    minDelay: number;
+    destinationDelayStats: LegStatsDestinationDelayStats;
 }
 
 /**
@@ -56,11 +51,8 @@ export interface LegStats {
  */
 export function instanceOfLegStats(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "areAvailable" in value;
-    isInstance = isInstance && "averageDelay" in value;
-    isInstance = isInstance && "standardDeviation" in value;
-    isInstance = isInstance && "maxDelay" in value;
-    isInstance = isInstance && "minDelay" in value;
+    isInstance = isInstance && "originDelayStats" in value;
+    isInstance = isInstance && "destinationDelayStats" in value;
 
     return isInstance;
 }
@@ -75,11 +67,8 @@ export function LegStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'areAvailable': json['areAvailable'],
-        'averageDelay': json['averageDelay'],
-        'standardDeviation': json['standardDeviation'],
-        'maxDelay': json['maxDelay'],
-        'minDelay': json['minDelay'],
+        'originDelayStats': LegStatsOriginDelayStatsFromJSON(json['originDelayStats']),
+        'destinationDelayStats': LegStatsDestinationDelayStatsFromJSON(json['destinationDelayStats']),
     };
 }
 
@@ -92,11 +81,8 @@ export function LegStatsToJSON(value?: LegStats | null): any {
     }
     return {
         
-        'areAvailable': value.areAvailable,
-        'averageDelay': value.averageDelay,
-        'standardDeviation': value.standardDeviation,
-        'maxDelay': value.maxDelay,
-        'minDelay': value.minDelay,
+        'originDelayStats': LegStatsOriginDelayStatsToJSON(value.originDelayStats),
+        'destinationDelayStats': LegStatsDestinationDelayStatsToJSON(value.destinationDelayStats),
     };
 }
 

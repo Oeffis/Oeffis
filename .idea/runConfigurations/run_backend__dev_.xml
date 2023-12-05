@@ -6,9 +6,7 @@
       <script value="start:dev" />
     </scripts>
     <node-interpreter value="project" />
-    <envs>
-      <env name="VRR_BASE_URL" value="http://127.0.0.1:3100" />
-    </envs>
+    <envs />
     <method v="2" />
   </configuration>
 </component>

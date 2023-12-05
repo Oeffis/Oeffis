@@ -1,25 +1,51 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Equals, IsEnum, IsNumber, IsPositive } from "class-validator";
+import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
+import { Equals, IsEnum, IsInstance, IsNumber, IsPositive } from "class-validator";
 
-export class MaybeLegStats {
+export class MaybeDelayStats {
   @ApiProperty({
-    description: "Wether leg stats are available",
-    type: Boolean,
+    description: "Status of the leg stats.",
+    type: String,
+    enum: ["available", "unavailable"],
     required: true,
-    example: true
+    example: "available"
   })
-  public readonly areAvailable: boolean;
+  public readonly status: string;
 
   public constructor(
-    areAvailable: boolean
+    status: string
   ) {
-    this.areAvailable = areAvailable;
+    this.status = status;
   }
 }
 
-export class LegStats extends MaybeLegStats {
-  @Equals(true)
-  public readonly areAvailable = true;
+export enum UnavailableReason {
+  noData = "NO_DATA",
+  internalError = "QUERY_ERROR"
+}
+
+export class UnavailableDelayStats extends MaybeDelayStats {
+  @Equals("unavailable")
+  public readonly status: string = "unavailable";
+
+  @IsEnum(UnavailableReason)
+  @ApiProperty({
+    description: "The reason, why the data is not available",
+    type: String,
+    required: true,
+    example: UnavailableReason.noData
+  })
+  reason: UnavailableReason;
+
+  public constructor(reason: UnavailableReason) {
+    super("unavailable");
+    this.reason = reason;
+  }
+}
+
+export class DelayStats extends MaybeDelayStats {
+
+  @Equals("available")
+  public readonly status: string = "available";
 
   @IsNumber()
   @ApiProperty({
@@ -42,7 +68,7 @@ export class LegStats extends MaybeLegStats {
 
   @IsNumber()
   @ApiProperty({
-    description: "The maximum delay of the leg.",
+    description: "The maximum delay.",
     type: Number,
     required: true,
     example: 120
@@ -51,7 +77,7 @@ export class LegStats extends MaybeLegStats {
 
   @IsNumber()
   @ApiProperty({
-    description: "The minimum delay of the leg.",
+    description: "The minimum delay.",
     type: Number,
     required: true,
     example: 0
@@ -64,7 +90,7 @@ export class LegStats extends MaybeLegStats {
     maxDelay: number,
     minDelay: number
   ) {
-    super(true);
+    super("available");
     this.averageDelay = avgDelay;
     this.standardDeviation = stdDev;
     this.maxDelay = maxDelay;
@@ -72,26 +98,49 @@ export class LegStats extends MaybeLegStats {
   }
 }
 
-export enum UnavailableReason {
-  noData = "NO_DATA",
-  internalError = "QUERY_ERROR"
-}
+@ApiExtraModels(DelayStats, UnavailableDelayStats)
+export class LegStats {
 
-export class UnavailableLegStats extends MaybeLegStats {
-  @Equals(false)
-  public readonly areAvailable = false;
-
-  @IsEnum(UnavailableReason)
   @ApiProperty({
-    description: "The reason, why the data is not available",
-    type: String,
-    required: true,
-    example: UnavailableReason.noData
+    description: "Delay statistics at origin.",
+    oneOf: [
+      { $ref: getSchemaPath(DelayStats) },
+      { $ref: getSchemaPath(UnavailableDelayStats) }
+    ],
+    discriminator: {
+      propertyName: "status",
+      mapping: {
+        "available": getSchemaPath(DelayStats),
+        "unavailable": getSchemaPath(UnavailableDelayStats)
+      }
+    },
+    required: true
   })
-  reason: UnavailableReason;
+  originDelayStats: DelayStats | UnavailableDelayStats;
 
-  public constructor(reason: UnavailableReason) {
-    super(false);
-    this.reason = reason;
+  @IsInstance(DelayStats)
+  @ApiProperty({
+    description: "Delay statistics at destination.",
+    oneOf: [
+      { $ref: getSchemaPath(DelayStats) },
+      { $ref: getSchemaPath(UnavailableDelayStats) }
+    ],
+    discriminator: {
+      propertyName: "status",
+      mapping: {
+        "available": getSchemaPath(DelayStats),
+        "unavailable": getSchemaPath(UnavailableDelayStats)
+      }
+    },
+    required: true
+  })
+  destinationDelayStats: DelayStats | UnavailableDelayStats;
+
+  public constructor(
+    originDelayStats: DelayStats,
+    destinationDelayStats: DelayStats
+  ) {
+    this.originDelayStats = originDelayStats;
+    this.destinationDelayStats = destinationDelayStats;
   }
 }

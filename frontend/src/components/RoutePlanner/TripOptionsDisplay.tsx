@@ -1,18 +1,15 @@
-import {
-  FootpathLeg,
-  LegOriginLocationTypeEnum,
-  Location,
-  TransportationLeg
-} from "../../api";
+import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import JourneyListComponent from "../JourneyListComponent";
 
+// TODO Duplicate with TripOptionsDisplay in RoutePlanner file + this one is unused.
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
-  departure: Date
+  departure: Date,
+  setJourney: (journey: IJourney) => void
 }): JSX.Element {
   const { origin, destination, departure } = props;
 
@@ -42,7 +39,11 @@ export function TripOptionsDisplay(props: {
               : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation.line : ""
+            line: "transportation" in leg ? leg.transportation.line : "",
+            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
+              destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+              originDelayStats: { status: "unavailable", reason: "Fußpfad" }
+            }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
@@ -53,7 +54,7 @@ export function TripOptionsDisplay(props: {
       {result.type === "error" && <div>Error: {result.error.message}</div>}
       {result.type === "pending" && <div>Searching...</div>}
       {iJourneys &&
-        <JourneyListComponent journeys={iJourneys} />
+        <JourneyListComponent setActiveJourney={props.setJourney} journeys={iJourneys} />
       }
     </>
   );

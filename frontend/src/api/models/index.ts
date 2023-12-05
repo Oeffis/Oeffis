@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './BadRequest';
+export * from './DelayStats';
 export * from './Footpath';
 export * from './FootpathLeg';
 export * from './Journey';
@@ -14,17 +15,18 @@ export * from './LegInfoValidity';
 export * from './LegInterchange';
 export * from './LegOriginLocation';
 export * from './LegStats';
+export * from './LegStatsDestinationDelayStats';
+export * from './LegStatsOriginDelayStats';
 export * from './Location';
 export * from './LocationCoordinates';
 export * from './LocationCoordinatesDto';
 export * from './LocationDetails';
 export * from './LocationNameDto';
 export * from './LocationWithAssignedStops';
-export * from './MaybeLegStats';
 export * from './ParentLocation';
 export * from './ParentLocationDetails';
 export * from './RatedLocation';
 export * from './Transportation';
 export * from './TransportationDestination';
 export * from './TransportationLeg';
-export * from './UnavailableLegStats';
+export * from './UnavailableDelayStats';
