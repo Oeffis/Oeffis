@@ -11,6 +11,8 @@ WORKDIR /app
 
 # The dependencies will be cached unless package.json changes.
 COPY package*.json ./
+# Install npm 9 becaue npm 10 will fail ARM builds
+RUN npm install -g npm@next-9
 RUN npm ci
 RUN npm install ${VRR_CLIENT_PACKAGE}@${VRR_CLIENT_VERSION}
 
