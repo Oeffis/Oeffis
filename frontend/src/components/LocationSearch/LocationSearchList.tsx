@@ -66,7 +66,7 @@ function LoadedLocationSearchListItem({ location, onItemClicked }: LocationSearc
       {isFavoriteStop
         ? <IonIcon
           icon={heart}
-          color="warning"
+          color="primary"
           onClick={() => removeFavoriteLocationById(persistedLocation.id)}
           title="Remove from favorites" />
         : <IonIcon
