@@ -66,9 +66,25 @@ export class VrrClientBase {
 
     const jsonResult = schemaConverter(body);
 
-    this.checkSystemMessagesForErrors(jsonResult.systemMessages);
+    try {
+      this.checkSystemMessagesForErrors(jsonResult.systemMessages);
+    } catch (error: unknown) {
+
+      // Only throw Error if there are no results present.
+      if (error instanceof SystemMessageError
+        && !this.areResultsPresent(jsonResult)) {
+
+        throw error;
+      }
+    }
 
     return jsonResult;
+  }
+
+  private areResultsPresent<T extends BaseApiResponse>(jsonResult: T): boolean {
+    return (jsonResult as unknown as { locations: [] }).locations?.length > 0 // a) locations + departureMonitor request
+      || (jsonResult as unknown as { journeys: [] }).journeys?.length > 0 // b) trip request
+      || (jsonResult as unknown as { lines: [] }).lines?.length > 0; // c) serving lines request
   }
 
   private checkSystemMessagesForErrors(
