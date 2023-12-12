@@ -20,7 +20,8 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../../public/images/train_image.png";
-import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg } from "../../api";
+import { FootpathLeg, LegOriginLocationTypeEnum, TransportationLeg } from "../../api";
+import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { JourneyLocation } from "../../api";
@@ -29,7 +30,6 @@ import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
-import { useJourneyApi } from "../../services/apiClients/ApiClientsContext";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import LeafletMapContainer from "../map/LeafletMapContainer";
@@ -71,6 +71,12 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const journeyApi = useJourneyApi();
   const [journeysLocations, setJourneysLocations] = useState<JourneyLocation[]>();
 
+  // TODO Add user input if datetime should be interpreted as arrival time.
+  let result = null;
+  if (originLocation !== null && destinationLocation !== null) {
+    result = useJourneyQuery(originLocation, destinationLocation, new Date(departureTime), false);
+  }
+
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
@@ -79,8 +85,20 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
-  const result = useJourneyQuery(origin, destination, new Date(departureTime), false);
-  const iJourneys = result.type === "success"
+  /* const getJourneysLocations = (): void => {
+    if (originId !== null && destinationId !== null && departureTime !== null) {
+      journeyApi.journeyControllerQueryJourney({
+        originId: originId,
+        destinationId: destinationId,
+        departure: new Date(departureTime),
+        asArrival: false
+      }).then(journeys => journeys.map(jorueny => jorueny.legs.map(leg => setJourneysLocations(leg.details.stopSequence))))
+        .catch(error => alert(error));
+    }
+  }
+*/
+
+  const iJourneys: false | IJourney[] = result.type === "success"
     && result.journeyResults
       .map((journey): IJourney => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -117,7 +135,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     selectedJourney?.stops.map(stop => {
       stop.stopIds.map(id => {
         ids.push(id);
-        //console.log(id);
+        console.log(id);
       });
     });
 
@@ -143,11 +161,10 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   useEffect(() => {
     console.log("ResultRoutes");
+    /*     getJourneysLocations(); */
+    selectedJourney(journey);
     setSlideNames();
-    if (iJourneys !== false) {
-      setSelectedJourney(iJourneys[activeJourneyIndex]);
-      getLocationIds();
-    }
+    /*     console.log(journeysLocations?.length); */
   }, [activeSlideIndex]);
 
   return (
