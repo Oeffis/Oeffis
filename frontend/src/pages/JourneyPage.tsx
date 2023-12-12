@@ -25,21 +25,23 @@ const JourneyPage: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent id="main-content" className="journeyContent">
-        <IonContent className="map">
-          <LeafletMapContainer
-            originId={originId}
-            destinationId={destinationId}
-            showLines={true}
-          />
-        </IonContent>
-        <IonContent className="planner">
-          <RoutePlanner
-            originId={originId}
-            setOriginId={setOriginId}
-            destinationId={destinationId}
-            setDestinationId={setDestinationId} />
-        </IonContent>
+      <IonContent>
+        <div className="journey-content">
+          <div className="map">
+            <LeafletMapContainer
+              originId={originId}
+              destinationId={destinationId}
+              showLines={true}
+            />
+          </div>
+          <div className="planner">
+            <RoutePlanner
+              originId={originId}
+              destinationId={destinationId}
+              setOriginId={setOriginId}
+              setDestinationId={setDestinationId} />
+          </div>
+        </div>
       </IonContent>
     </IonPage >
   );
