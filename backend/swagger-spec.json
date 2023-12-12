@@ -1071,7 +1071,7 @@
           "minDelay"
         ]
       },
-      "UnavailableDelayStats": {
+      "UnavailableStats": {
         "type": "object",
         "properties": {
           "status": {
@@ -1094,6 +1094,23 @@
           "reason"
         ]
       },
+      "MaybeStats": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the leg stats.",
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "example": "available"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
       "LegStats": {
         "type": "object",
         "properties": {
@@ -1104,16 +1121,21 @@
                 "$ref": "#/components/schemas/DelayStats"
               },
               {
-                "$ref": "#/components/schemas/UnavailableDelayStats"
+                "$ref": "#/components/schemas/UnavailableStats"
               }
             ],
             "discriminator": {
               "propertyName": "status",
               "mapping": {
                 "available": "#/components/schemas/DelayStats",
-                "unavailable": "#/components/schemas/UnavailableDelayStats"
+                "unavailable": "#/components/schemas/UnavailableStats"
               }
-            }
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MaybeStats"
+              }
+            ]
           },
           "destinationDelayStats": {
             "description": "Delay statistics at destination.",
@@ -1122,16 +1144,21 @@
                 "$ref": "#/components/schemas/DelayStats"
               },
               {
-                "$ref": "#/components/schemas/UnavailableDelayStats"
+                "$ref": "#/components/schemas/UnavailableStats"
               }
             ],
             "discriminator": {
               "propertyName": "status",
               "mapping": {
                 "available": "#/components/schemas/DelayStats",
-                "unavailable": "#/components/schemas/UnavailableDelayStats"
+                "unavailable": "#/components/schemas/UnavailableStats"
               }
-            }
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MaybeStats"
+              }
+            ]
           }
         },
         "required": [
@@ -1184,7 +1211,7 @@
             ]
           },
           "delayStats": {
-            "description": "Statistics about this leg.",
+            "description": "Delay statistics about this leg.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/LegStats"
@@ -1254,6 +1281,78 @@
           "footpath"
         ]
       },
+      "QualityStats": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the leg stats.",
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "example": "available"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "JourneyStats": {
+        "type": "object",
+        "properties": {
+          "aggregatedDelayStats": {
+            "description": "Aggregated delay statistics of all journey's legs.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DelayStats"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/DelayStats",
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MaybeStats"
+              }
+            ]
+          },
+          "journeyQualityStats": {
+            "description": "Stats about quality of journey (e.g. connections).",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/QualityStats"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/QualityStats",
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MaybeStats"
+              }
+            ]
+          }
+        },
+        "required": [
+          "aggregatedDelayStats",
+          "journeyQualityStats"
+        ]
+      },
       "Journey": {
         "type": "object",
         "properties": {
@@ -1282,11 +1381,20 @@
                 }
               }
             }
+          },
+          "journeyStats": {
+            "description": "Statistics for the journey as a whole.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JourneyStats"
+              }
+            ]
           }
         },
         "required": [
           "interchanges",
-          "legs"
+          "legs",
+          "journeyStats"
         ]
       }
     }

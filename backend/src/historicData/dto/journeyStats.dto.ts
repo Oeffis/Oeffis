@@ -1,13 +1,13 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
-import { IsInstance } from "class-validator";
 import { DelayStats } from "./delayStats.dto";
 import { MaybeStats, UnavailableStats } from "./maybeStats.dto";
+import { QualityStats } from "./qualityStats.dto";
 
-@ApiExtraModels(DelayStats, UnavailableStats)
-export class LegStats {
+@ApiExtraModels(DelayStats, QualityStats, UnavailableStats)
+export class JourneyStats {
 
   @ApiProperty({
-    description: "Delay statistics at origin.",
+    description: "Aggregated delay statistics of all journey's legs.",
     oneOf: [
       { $ref: getSchemaPath(DelayStats) },
       { $ref: getSchemaPath(UnavailableStats) }
@@ -21,31 +21,30 @@ export class LegStats {
     },
     required: true
   })
-  originDelayStats: MaybeStats;
+  aggregatedDelayStats: MaybeStats;
 
-  @IsInstance(DelayStats)
   @ApiProperty({
-    description: "Delay statistics at destination.",
+    description: "Stats about quality of journey (e.g. connections).",
     oneOf: [
-      { $ref: getSchemaPath(DelayStats) },
+      { $ref: getSchemaPath(QualityStats) },
       { $ref: getSchemaPath(UnavailableStats) }
     ],
     discriminator: {
       propertyName: "status",
       mapping: {
-        "available": getSchemaPath(DelayStats),
+        "available": getSchemaPath(QualityStats),
         "unavailable": getSchemaPath(UnavailableStats)
       }
     },
     required: true
   })
-  destinationDelayStats: MaybeStats;
+  journeyQualityStats: MaybeStats;
 
   public constructor(
-    originDelayStats: DelayStats,
-    destinationDelayStats: DelayStats
+    aggregatedDelayStats: MaybeStats,
+    journeyQualityStats: MaybeStats
   ) {
-    this.originDelayStats = originDelayStats;
-    this.destinationDelayStats = destinationDelayStats;
+    this.aggregatedDelayStats = aggregatedDelayStats;
+    this.journeyQualityStats = journeyQualityStats;
   }
 }

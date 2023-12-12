@@ -6,12 +6,14 @@ import {
   Leg as VrrLeg,
   LocationType as VrrLocationType
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { UnavailableDelayStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { Repository } from "typeorm";
 import { Footpath } from "../../../footpath/entity/footpath.entity";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
+import { JourneyStats } from "../../../historicData/dto/journeyStats.dto";
+import { LegStats } from "../../../historicData/dto/legStats.dto";
+import { UnavailableReason, UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
 import { Location } from "../../../locationFinder/entity/location.entity";
 import {
   LocationCoordinatesMapperService
@@ -179,14 +181,18 @@ it("map vrr journeys with all fields given.", async () => {
 
   const expectedJourneys: Journey[] = [
     {
-      interchanges: 2, legs: [
+      interchanges: 2,
+      legs: [
         {
           origin: LEG_ORIGIN,
           destination: LEG_DESTINATION,
           type: LegType.transportation,
           details: LEG_DETAILS,
           transportation: TRANSPORTATION,
-          delayStats: unavailableLegStats()
+          delayStats: {
+            destinationDelayStats: unavailableStats(),
+            originDelayStats: unavailableStats()
+          }
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
@@ -199,20 +205,24 @@ it("map vrr journeys with all fields given.", async () => {
           transportation: TRANSPORTATION,
           delayStats: unavailableLegStats()
         }
-      ]
+      ],
+      journeyStats: unavailableJourneyStats()
     },
     {
-      interchanges: 0, legs: [
+      interchanges: 0,
+      legs: [
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
           transportation: TRANSPORTATION,
           delayStats: unavailableLegStats()
         }
-      ]
+      ],
+      journeyStats: unavailableJourneyStats()
     },
     {
-      interchanges: 1, legs: [
+      interchanges: 1,
+      legs: [
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
@@ -225,7 +235,8 @@ it("map vrr journeys with all fields given.", async () => {
           transportation: TRANSPORTATION,
           delayStats: unavailableLegStats()
         }
-      ]
+      ],
+      journeyStats: unavailableJourneyStats()
     },
     {
       interchanges: 1, legs: [
@@ -240,7 +251,8 @@ it("map vrr journeys with all fields given.", async () => {
           type: LegType.footpath, details: LEG_DETAILS,
           footpath: FOOTPATH
         }
-      ]
+      ],
+      journeyStats: unavailableJourneyStats()
     }
   ];
 
@@ -259,19 +271,30 @@ it("map vrr journey with missing optional fields.", async () => {
 
   const expectedJourneys: Journey[] = [
     {
-      interchanges: 1, legs: [
+      interchanges: 1,
+      legs: [
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
           transportation: TRANSPORTATION,
-          delayStats: unavailableLegStats()
+          delayStats: {
+            originDelayStats: unavailableStats(),
+            destinationDelayStats: unavailableStats()
+          }
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION, type: LegType.transportation, details: LEG_DETAILS,
           transportation: TRANSPORTATION,
-          delayStats: unavailableLegStats()
+          delayStats: {
+            originDelayStats: unavailableStats(),
+            destinationDelayStats: unavailableStats()
+          }
         }
-      ]
+      ],
+      journeyStats: {
+        aggregatedDelayStats: unavailableStats(),
+        journeyQualityStats: unavailableStats()
+      }
     }
   ];
 
@@ -291,20 +314,28 @@ it("do not map invalid vrr journeys.", async () => {
 
   const expectedJourneys: Journey[] = [
     {
-      interchanges: 1, legs: [
+      interchanges: 1,
+      legs: [
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
           transportation: TRANSPORTATION,
-          delayStats: unavailableLegStats()
+          delayStats: {
+            originDelayStats: unavailableStats(),
+            destinationDelayStats: unavailableStats()
+          }
         },
         {
           origin: LEG_ORIGIN, destination: LEG_DESTINATION,
           type: LegType.transportation, details: LEG_DETAILS,
           transportation: TRANSPORTATION,
-          delayStats: unavailableLegStats()
+          delayStats: {
+            originDelayStats: unavailableStats(),
+            destinationDelayStats: unavailableStats()
+          }
         }
-      ]
+      ],
+      journeyStats: unavailableJourneyStats()
     }
   ];
 
@@ -382,9 +413,23 @@ function vrrJourneyGesicherterAnschlussLeg(): VrrLeg {
   } as VrrLeg;
 }
 
-function unavailableLegStats(): UnavailableDelayStats {
+function unavailableLegStats(): LegStats {
   return {
-    areAvailable: false,
-    reason: UnavailableReason.noData
+    originDelayStats: unavailableStats(),
+    destinationDelayStats: unavailableStats()
+  } as LegStats;
+}
+
+function unavailableJourneyStats(): JourneyStats {
+  return {
+    aggregatedDelayStats: unavailableStats(),
+    journeyQualityStats: unavailableStats()
+  } as JourneyStats;
+}
+
+function unavailableStats(): UnavailableStats {
+  return {
+      reason: UnavailableReason.noData,
+      status: "unavailable"
   };
 }

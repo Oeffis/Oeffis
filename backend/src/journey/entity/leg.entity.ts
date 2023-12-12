@@ -76,7 +76,7 @@ export class TransportationLeg extends Leg {
 
   @IsInstance(LegStats)
   @ApiProperty({
-    description: "Statistics about this leg.",
+    description: "Delay statistics about this leg.",
     type: LegStats,
     required: true
   })

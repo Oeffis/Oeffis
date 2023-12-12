@@ -1,11 +1,11 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { UnavailableDelayStats, UnavailableReason } from "historicData/dto/legStats.dto";
 import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { Journey } from "journey/entity/journey.entity";
 import { LocationFinderModule } from "locationFinder/locationFinder.module";
 import { LocationType } from "vrr/entity/locationType.entity";
 import { VrrModule } from "vrr/vrr.module";
 import { FootpathModule } from "../../footpath/footpath.module";
+import { UnavailableReason, UnavailableStats } from "../../historicData/dto/maybeStats.dto";
 import { Location } from "../../locationFinder/entity/location.entity";
 import { JourneyRequestDto } from "../dto/journeyRequest.dto";
 import { LegType } from "../entity/leg.entity";
@@ -131,11 +131,15 @@ it("should query trip", async () => {
             interchange: undefined
           },
           delayStats: {
-            originDelayStats: unavailableLegStats(),
-            destinationDelayStats: unavailableLegStats()
+            originDelayStats: unavailableStats(),
+            destinationDelayStats: unavailableStats()
           }
         }
-      ]
+      ],
+      journeyStats: {
+        aggregatedDelayStats: unavailableStats(),
+        journeyQualityStats: unavailableStats()
+      }
     }
   ];
 
@@ -152,9 +156,9 @@ it("should query trip", async () => {
   expect(response).toEqual(mockAlternatives);
 });
 
-function unavailableLegStats(): UnavailableDelayStats {
+function unavailableStats(): UnavailableStats {
   return {
     reason: UnavailableReason.noData,
-    areAvailable: false
+    status: "unavailable"
   };
 }

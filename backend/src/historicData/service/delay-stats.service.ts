@@ -1,8 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DelayStats, LegStats, UnavailableDelayStats, UnavailableReason } from "historicData/dto/legStats.dto";
+import { LegStats } from "historicData/dto/legStats.dto";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { Repository } from "typeorm";
+import { DelayStats } from "../dto/delayStats.dto";
+import { UnavailableReason, UnavailableStats } from "../dto/maybeStats.dto";
 
 export interface PartialRouteStatOptions {
   tripId: string;
@@ -35,12 +37,12 @@ const PARTIAL_ROUTE_STATS_QUERY = `
     FROM latest_of_day_tripcode;
 `;
 
-const NO_DATA_RESULT: UnavailableDelayStats = {
+const NO_DATA_RESULT: UnavailableStats = {
   status: "unavailable",
   reason: UnavailableReason.noData
 };
 
-const INTERNAL_ERROR_RESULT: UnavailableDelayStats = {
+const INTERNAL_ERROR_RESULT: UnavailableStats = {
   status: "unavailable",
   reason: UnavailableReason.internalError
 };
@@ -64,7 +66,7 @@ export class DelayStatsService {
     } as LegStats;
   }
 
-  private async tryGetDelayAtStationStats(tripId: string, stationId: string, since?: Date | undefined): Promise<DelayStats | UnavailableDelayStats> {
+  private async tryGetDelayAtStationStats(tripId: string, stationId: string, since?: Date | undefined): Promise<DelayStats | UnavailableStats> {
     try {
       const queryResult = await this.queryForDelayAtStationStats(tripId, stationId, since);
 
@@ -93,7 +95,7 @@ export class DelayStatsService {
     return queryResult.length === 0 || Object.values(queryResult[0]).every(column => column === null);
   }
 
-  private parseDelayStatsFromQueryResult(stats: StatQueryResult[]): UnavailableDelayStats | DelayStats | PromiseLike<UnavailableDelayStats | DelayStats> {
+  private parseDelayStatsFromQueryResult(stats: StatQueryResult[]): UnavailableStats | DelayStats | PromiseLike<UnavailableStats | DelayStats> {
     return {
       status: "available",
       maxDelay: parseFloat(stats[0].max),
