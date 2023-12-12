@@ -1,10 +1,10 @@
 import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client/dist/Constants";
 import { DeparturesClient } from "@oeffis/vrr_client/dist/DeparturesClient";
-import { SCHEMA_CONVERTER_CONFIG, SystemMessageError } from "@oeffis/vrr_client/dist/VrrClientBase";
 import { StopEvent } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
+import { SCHEMA_CONVERTER_CONFIG, SystemMessageError } from "@oeffis/vrr_client/dist/VrrClientBase";
 import * as BetterQueue from "better-queue";
 import { addSeconds, differenceInSeconds, formatDuration, intervalToDuration } from "date-fns";
-import { WithPgConnection, createPgPool } from "../postgres/createPgPool";
+import { createPgPool, WithPgConnection } from "../postgres/createPgPool";
 
 export async function run(args: { stopId?: string, limit: number, storeRawData: boolean }): Promise<void> {
   SCHEMA_CONVERTER_CONFIG.logSchemaErrors = false;
@@ -77,6 +77,10 @@ async function processOneStopId(limit: number, storeRawData: boolean, stopId: st
   const recordingTime = new Date();
   const stopEvents = await getDepartureDelays(stopId, limit);
 
+  if (stopEvents.length === 0) {
+    console.warn("No stop events found for stop ", stopId);
+  }
+
   await insertDepartureDelaysIntoDb(
     storeRawData,
     stopEvents,
@@ -89,7 +93,7 @@ async function processOneStopId(limit: number, storeRawData: boolean, stopId: st
 
 async function getStopIdsFromDb(withPgConnection: WithPgConnection, vrrTimetableVersionId: number): Promise<string[]> {
   return withPgConnection(async pgClient => {
-    const stopIds = await pgClient.query(`
+    const stops = await pgClient.query(`
     WITH RECURSIVE ParentHierarchy AS (
       SELECT stop_id, parent_station
       FROM stops
@@ -105,18 +109,18 @@ async function getStopIdsFromDb(withPgConnection: WithPgConnection, vrrTimetable
         SELECT stop_id FROM ParentHierarchy WHERE parent_station IS NULL
     )
 
-    SELECT stop_id
+    SELECT DISTINCT "NVBW_HST_DHID"
     FROM stops
     WHERE "NVBW_HST_DHID" LIKE 'de:%' AND
       stop_id IN (
         SELECT stop_id FROM valid_stops
       )`, [vrrTimetableVersionId]);
 
-    if (stopIds.rowCount === 0) {
+    if (stops.rowCount === 0) {
       return Promise.reject(new Error("no stops with stop times found in DB"));
     }
 
-    return stopIds.rows.map(row => row.stop_id);
+    return stops.rows.map(row => row.NVBW_HST_DHID);
   });
 }
 
