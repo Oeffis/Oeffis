@@ -1,3 +1,4 @@
+import { Location } from "../../api";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import JourneyListComponent from "../JourneyListComponent";
 

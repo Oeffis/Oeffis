@@ -69,7 +69,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
     <CurrentLocationMapMarker />
     <OriginMapMarker originId={originId} />
     <DestinationMapMarker destinationId={destinationId} />
-    {showLines && <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={bounds} />}
+    {showLines && renderPolygons()}
   </ReactiveMapContainer>;
 };
 
