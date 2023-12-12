@@ -1,28 +1,14 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import React, { useState } from "react";
+import React from "react";
 import logo from "../../public/images/train_image.png";
-import { Location } from "../api";
 import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
+import { useStateParams } from "../hooks/useStateParams";
 import "./JourneyPage.css";
 
 const JourneyPage: React.FC = () => {
-  const [origin, setOrigin] = useState<Location | null>(null);
-  const [destination, setDestination] = useState<Location | null>(null);
-
-  const getLocations = (): string[] => {
-
-    const locations: string[] = [];
-
-    if (origin !== null) {
-      locations.push(origin.id);
-    }
-    if (destination !== null) {
-      locations.push(destination.id);
-    }
-
-    return locations;
-  };
+  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
+  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
 
   return (
     <IonPage id="main-content">
@@ -39,22 +25,21 @@ const JourneyPage: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="journey-content">
-          <div className="map">
-            <LeafletMapContainer
-              origin={origin}
-              destination={destination}
-              locationIds={getLocations()}
-              showLines={true}
-            />
-          </div>
-          <div className="planner">
-            <RoutePlanner
-              setSelectedOriginLocation={setOrigin}
-              setSelectedDestinationLocation={setDestination} />
-          </div>
-        </div>
+      <IonContent id="main-content" className="journeyContent">
+        <IonContent className="map">
+          <LeafletMapContainer
+            originId={originId}
+            destinationId={destinationId}
+            showLines={true}
+          />
+        </IonContent>
+        <IonContent className="planner">
+          <RoutePlanner
+            originId={originId}
+            setOriginId={setOriginId}
+            destinationId={destinationId}
+            setDestinationId={setDestinationId} />
+        </IonContent>
       </IonContent>
     </IonPage >
   );
