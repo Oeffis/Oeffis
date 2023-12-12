@@ -1,0 +1,5 @@
+.button {
+  margin: 0;
+  align-items: center;
+  transition: color 0.2s ease-in-out;
+}
