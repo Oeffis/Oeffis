@@ -867,8 +867,7 @@
           }
         },
         "required": [
-          "totalDuration",
-          "totalDistance"
+          "totalDuration"
         ]
       },
       "LegInterchange": {
