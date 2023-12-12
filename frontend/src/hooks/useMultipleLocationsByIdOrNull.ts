@@ -28,7 +28,10 @@ export function useMultipleLocationsByIdOrNull(locationIds: string[]): Location[
     });
     Promise
       .all(locationPromises)
-      .then(setLocations, console.error);
+      .then(setLocations, (error) => {
+        if (abortController.signal.aborted) return;
+        console.error(error);
+      });
 
     function processLocationResult(locationId: string, matchingLocations: RatedLocation[]): Location {
       checkIfAborted();
