@@ -1,20 +1,17 @@
-.journeyContent {
-  height: 100%;
+.journey-content {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .map {
   display: flex;
-  max-height: 40%;
+  flex-grow: 1;
 }
 
 .planner {
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.swiper-wrapper {
-  height: 100vh;
 }
