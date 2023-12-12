@@ -77,6 +77,10 @@ async function processOneStopId(limit: number, storeRawData: boolean, stopId: st
   const recordingTime = new Date();
   const stopEvents = await getDepartureDelays(stopId, limit);
 
+  if (stopEvents.length === 0) {
+    console.warn("No stop events found for stop ", stopId);
+  }
+
   await insertDepartureDelaysIntoDb(
     storeRawData,
     stopEvents,
