@@ -1,10 +1,10 @@
 import { VRR_TEST_API_BASE_URL } from "@oeffis/vrr_client/dist/Constants";
 import { DeparturesClient } from "@oeffis/vrr_client/dist/DeparturesClient";
-import { StopEvent } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { SCHEMA_CONVERTER_CONFIG, SystemMessageError } from "@oeffis/vrr_client/dist/VrrClientBase";
+import { StopEvent } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import * as BetterQueue from "better-queue";
 import { addSeconds, differenceInSeconds, formatDuration, intervalToDuration } from "date-fns";
-import { createPgPool, WithPgConnection } from "../postgres/createPgPool";
+import { WithPgConnection, createPgPool } from "../postgres/createPgPool";
 
 export async function run(args: { stopId?: string, limit: number, storeRawData: boolean }): Promise<void> {
   SCHEMA_CONVERTER_CONFIG.logSchemaErrors = false;
@@ -66,8 +66,8 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
     const formattedRemainingTime = formatDuration(remainingDuration);
     console.log(`Finished ${finished} of ${total} stops. ${remaining} remaining. ${formattedRemainingTime} remaining`);
 
-    if (elapsedInSeconds > 1 * 60 * 60) {
-      console.log("Exitting after 1 hour of processing.");
+    if (elapsedInSeconds > 2 * 60 * 60) {
+      console.log("Exitting after 2 hours of processing.");
       process.exit(1);
     }
   }, 5_000);
