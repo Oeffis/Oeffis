@@ -16,6 +16,7 @@ import currentPositionIcon from "../../../src/images/position-map-marker.svg";
 
 import { Location, LocationTypeEnum } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { Button } from "../controls/Button";
 
 export interface MarkerProps {
   origin: Location | null,
@@ -210,15 +211,17 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     mapMarker = (
       <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
         icon={icon}>
-        <Popup className="popup">
-          <p className="popupHeadline">{locationName[0]}</p><br />
-          <p className="popupText">{locationName[1]}</p><br />
+        <Popup>
+          <p className="popupHeadline">{locationName[0]}</p>
+          <p className="popupText">{locationName[1]}</p>
           <p className="popupText">
             <i>{text}</i>
           </p>
+          <div className="buttonWrapper">
           {onItemClicked !== undefined
-            ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Auswählen</p>
+            ? <Button title="Auswählen" onClick={() => onItemClicked(location)}/> 
             : <></>}
+          </div>
         </Popup>
       </Marker>
     );
@@ -251,7 +254,7 @@ export const CurrentLocationMapMarker: React.FC = () => {
     <Marker
       position={[currentLocation.location.coords.latitude, currentLocation.location.coords.longitude]}
       icon={currentLocationIcon}>
-      <Popup className="popup" >
+      <Popup>
         <p className="popupHeadline">Your position</p>
       </Popup >
     </Marker >
