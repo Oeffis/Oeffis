@@ -30,7 +30,7 @@ export interface Footpath {
      * @type {number}
      * @memberof Footpath
      */
-    totalDistance: number;
+    totalDistance?: number;
 }
 
 /**
@@ -39,7 +39,6 @@ export interface Footpath {
 export function instanceOfFootpath(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "totalDuration" in value;
-    isInstance = isInstance && "totalDistance" in value;
 
     return isInstance;
 }
@@ -55,7 +54,7 @@ export function FootpathFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     return {
         
         'totalDuration': json['totalDuration'],
-        'totalDistance': json['totalDistance'],
+        'totalDistance': !exists(json, 'totalDistance') ? undefined : json['totalDistance'],
     };
 }
 

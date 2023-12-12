@@ -33,11 +33,11 @@ export class FootpathMapperService {
   public checkVrrFootpathIntegrity(vrrLeg: VrrLeg): boolean {
     let isValid = true;
 
-    // Check if path descriptions are present (with needed final cumDistance and cumDuration).
-    if (!vrrLeg.pathDescriptions) {
+    // Check if path description or footpath info is present.
+    if (!vrrLeg.pathDescriptions && !vrrLeg.footPathInfo) {
 
-      console.error("VRR leg is missing path descriptions which are needed to determine footpath's distance " +
-        "and therefore linked journey won´t be processed further: " + JSON.stringify(vrrLeg));
+      console.error("VRR leg is missing path descriptions or footpath infos which are needed to determine footpath's " +
+        "distance and therefore linked journey won´t be processed further: " + JSON.stringify(vrrLeg));
       isValid = false;
     }
 
@@ -54,11 +54,13 @@ export class FootpathMapperService {
       : pathDescriptions[pathDescriptions.length - 1].cumDuration!;
   }
 
-  private mapVrrLegFootpathDistance(vrrLeg: VrrLeg): number {
+  private mapVrrLegFootpathDistance(vrrLeg: VrrLeg): number | undefined {
     const pathDescriptions = (vrrLeg.pathDescriptions as PathDescriptionClass[]);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return pathDescriptions[pathDescriptions.length - 1].cumDistance!;
+    return pathDescriptions
+      ? pathDescriptions[pathDescriptions.length - 1].cumDistance!
+      : undefined; // If no distance is present, return undefined.
   }
 
 }
