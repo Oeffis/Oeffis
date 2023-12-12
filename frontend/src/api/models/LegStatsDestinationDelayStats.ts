@@ -20,19 +20,19 @@ import {
     DelayStatsToJSON,
 } from './DelayStats';
 import {
-    UnavailableDelayStats,
-    instanceOfUnavailableDelayStats,
-    UnavailableDelayStatsFromJSON,
-    UnavailableDelayStatsFromJSONTyped,
-    UnavailableDelayStatsToJSON,
-} from './UnavailableDelayStats';
+    UnavailableStats,
+    instanceOfUnavailableStats,
+    UnavailableStatsFromJSON,
+    UnavailableStatsFromJSONTyped,
+    UnavailableStatsToJSON,
+} from './UnavailableStats';
 
 /**
  * @type LegStatsDestinationDelayStats
- * Delay statistics at destination.
+ * Delay statistics at destination of leg/trip.
  * @export
  */
-export type LegStatsDestinationDelayStats = { status: 'available' } & DelayStats | { status: 'unavailable' } & UnavailableDelayStats;
+export type LegStatsDestinationDelayStats = { status: 'available' } & DelayStats | { status: 'unavailable' } & UnavailableStats;
 
 export function LegStatsDestinationDelayStatsFromJSON(json: any): LegStatsDestinationDelayStats {
     return LegStatsDestinationDelayStatsFromJSONTyped(json, false);
@@ -46,7 +46,7 @@ export function LegStatsDestinationDelayStatsFromJSONTyped(json: any, ignoreDisc
         case 'available':
             return {...DelayStatsFromJSONTyped(json, true), status: 'available'};
         case 'unavailable':
-            return {...UnavailableDelayStatsFromJSONTyped(json, true), status: 'unavailable'};
+            return {...UnavailableStatsFromJSONTyped(json, true), status: 'unavailable'};
         default:
             throw new Error(`No variant of LegStatsDestinationDelayStats exists with 'status=${json['status']}'`);
     }
@@ -63,7 +63,7 @@ export function LegStatsDestinationDelayStatsToJSON(value?: LegStatsDestinationD
         case 'available':
             return DelayStatsToJSON(value);
         case 'unavailable':
-            return UnavailableDelayStatsToJSON(value);
+            return UnavailableStatsToJSON(value);
         default:
             throw new Error(`No variant of LegStatsDestinationDelayStats exists with 'status=${value['status']}'`);
     }
