@@ -1,5 +1,4 @@
 import {
-  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -19,6 +18,9 @@ import { useFavoriteLocations } from "../../services/favorites/FavoritesContext"
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import { CurrentLocationButton } from "./CurrentLocationButton";
 import { LocationSearchList } from "./LocationSearchList";
+import { mapOutline, readerOutline } from "ionicons/icons";
+import { FloatingActionButton } from "../controls/FloatingActionButton";
+import { Button } from "../controls/Button";
 
 export interface LocationSearchInputProps {
   onSelectedLocationChanged: (location: Location) => void;
@@ -80,20 +82,13 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
       <IonModal isOpen={modalOpen} onWillDismiss={closeModalWithoutSelection}>
         <IonHeader>
           <IonToolbar>
-            <IonTitle> Search for {props.inputLabel}</IonTitle>
+            <IonTitle> {props.inputLabel} suchen</IonTitle>
             <IonButtons slot="end">
-              <IonButton
-                onClick={() => showMap ? setShowMap(false) : setShowMap(true)}
-                disabled={isMapBtnDisabled}
-              >
-                Map
-              </IonButton>
-              <IonButton
-                color={"danger"}
+              <Button
+                color={"primary"}
                 onClick={closeModalWithoutSelection}
-              >
-                Cancel
-              </IonButton>
+                title="Abbrechen"
+              />
             </IonButtons>
           </IonToolbar>
           <IonSearchbar
@@ -101,7 +96,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
             onInput={(e) => setSearchInput(e.currentTarget.value ?? "")}
             type="text"
             animated={true}
-            placeholder={"Enter " + props.inputLabel}
+            placeholder={props.inputLabel + " eingeben"}
             data-testid={"location-search-input"}
             autocomplete="street-address"
             onIonClear={() => setSearchInput("")}
@@ -109,6 +104,11 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
           {showLoadingIndicator && <IonProgressBar type="indeterminate" />}
         </IonHeader>
         <IonContent>
+          <FloatingActionButton
+            icon={showMap? readerOutline : mapOutline}
+            color="primary"
+            disabled={isMapBtnDisabled}
+            onClick={() => showMap ? setShowMap(false) : setShowMap(true)}/>
           {showResults
             && showMap
             ? <LeafletMapContainer
