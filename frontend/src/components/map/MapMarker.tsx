@@ -16,111 +16,15 @@ import currentPositionIcon from "../../../src/images/position-map-marker.svg";
 
 import { Location, LocationTypeEnum } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { Button } from "../controls/Button";
 
 export interface MarkerProps {
-  origin: Location | null,
-  destination: Location | null,
   location: Location,
   onItemClicked?: (location: Location) => void
 }
 
-const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps): JSX.Element => {
-
-  const getOriginIcon = (type: LocationTypeEnum): string => {
-    let icon: string = currentPositionIcon;
-
-    if (type === LocationTypeEnum.Address) {
-      icon = whiteLocationIcon;
-    }
-    if (type === LocationTypeEnum.Unknown) {
-      icon = whiteLocationIcon;
-    }
-    if (type === LocationTypeEnum.Crossing) {
-      icon = whiteLocationIcon;
-    }
-    if (type === LocationTypeEnum.Gis) {
-      icon = currentPositionIcon;
-    }
-    if (type === LocationTypeEnum.Locality) {
-      icon = currentPositionIcon;
-    }
-    if (type === LocationTypeEnum.Platform) {
-      icon = whiteBusIcon;
-    }
-    if (type === LocationTypeEnum.Poi) {
-      icon = whitePinIcon;
-    }
-    if (type === LocationTypeEnum.PoiHierarchy) {
-      icon = whitePinIcon;
-    }
-    if (type === LocationTypeEnum.Sharing) {
-      icon = currentPositionIcon;
-    }
-    if (type === LocationTypeEnum.Stop) {
-      icon = whiteBusIcon;
-    }
-    if (type === LocationTypeEnum.Street) {
-      icon = whiteLocationIcon;
-    }
-    if (type === LocationTypeEnum.Suburb) {
-      icon = currentPositionIcon;
-    }
-    // not present in vrr spec
-    if (type === LocationTypeEnum.Singlehouse) {
-      icon = currentPositionIcon;
-    }
-
-    return icon;
-  };
-
-  const getDestinationIcon = (type: LocationTypeEnum): string => {
-    let icon: string = currentPositionIcon;
-
-    if (type === LocationTypeEnum.Address) {
-      icon = redLocationIcon;
-    }
-    if (type === LocationTypeEnum.Unknown) {
-      icon = redLocationIcon;
-    }
-    if (type === LocationTypeEnum.Crossing) {
-      icon = redLocationIcon;
-    }
-    if (type === LocationTypeEnum.Gis) {
-      icon = currentPositionIcon;
-    }
-    if (type === LocationTypeEnum.Locality) {
-      icon = currentPositionIcon;
-    }
-    if (type === LocationTypeEnum.Platform) {
-      icon = redBusIcon;
-    }
-    if (type === LocationTypeEnum.Poi) {
-      icon = redPinIcon;
-    }
-    if (type === LocationTypeEnum.PoiHierarchy) {
-      icon = redPinIcon;
-    }
-    if (type === LocationTypeEnum.Sharing) {
-      icon = currentPositionIcon;
-    }
-    if (type === LocationTypeEnum.Stop) {
-      icon = redBusIcon;
-    }
-    if (type === LocationTypeEnum.Street) {
-      icon = redLocationIcon;
-    }
-    if (type === LocationTypeEnum.Suburb) {
-      icon = currentPositionIcon;
-    }
-    // not present in vrr spec
-    if (type === LocationTypeEnum.Singlehouse) {
-      icon = currentPositionIcon;
-    }
-
-    return icon;
-  };
-
+const MapMarker = ({ location, onItemClicked }: MarkerProps): JSX.Element => {
   const getLocationIcon = (type: LocationTypeEnum): string => {
     let icon: string = currentPositionIcon;
 
@@ -168,76 +72,158 @@ const MapMarker = ({ origin, destination, location, onItemClicked }: MarkerProps
     return icon;
   };
 
-  const createMarker = (): JSX.Element => {
+  const icon = new Icon({
+    iconUrl: getLocationIcon(location.type),
+    iconSize: [25, 41],
+    iconAnchor: [12.5, 38],
+    shadowUrl: markerShadow,
+    shadowAnchor: [12.5, 38],
+    popupAnchor: [0, -32]
+  });
 
-    let mapMarker: JSX.Element = <></>;
+  const text = "";
+  const locationName = location.name.split(",");
 
-    let icon = null;
-    let text = "";
-
-    if (origin?.name === location.name) {
-      text = "Start";
-      icon = new Icon({
-        iconUrl: getOriginIcon(location.type),
-        iconSize: [25, 41],
-        iconAnchor: [12.5, 38],
-        shadowUrl: markerShadow,
-        shadowAnchor: [12.5, 38],
-        popupAnchor: [0, -32]
-      });
-    } else if (destination?.name === location.name) {
-      text = "Ziel";
-      icon = new Icon({
-        iconUrl: getDestinationIcon(location.type),
-        iconSize: [25, 41],
-        iconAnchor: [12.5, 38],
-        shadowUrl: markerShadow,
-        shadowAnchor: [12.5, 38],
-        popupAnchor: [0, -32]
-      });
-    } else {
-      icon = new Icon({
-        iconUrl: getLocationIcon(location.type),
-        iconSize: [25, 41],
-        iconAnchor: [12.5, 38],
-        shadowUrl: markerShadow,
-        shadowAnchor: [12.5, 38],
-        popupAnchor: [0, -32]
-      });
-    }
-
-    const locationName = location.name.split(",");
-
-    mapMarker = (
-      <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
-        icon={icon}>
-        <Popup>
-          <p className="popupHeadline">{locationName[0]}</p>
-          <p className="popupText">{locationName[1]}</p>
-          <p className="popupText">
-            <i>{text}</i>
-          </p>
-          <div className="buttonWrapper">
-          {onItemClicked !== undefined
-            ? <Button title="Auswählen" onClick={() => onItemClicked(location)}/> 
-            : <></>}
-          </div>
-        </Popup>
-      </Marker>
-    );
-
-    return mapMarker;
-  };
-
-  return (createMarker());
+  return <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+    icon={icon}>
+    <Popup className="popup">
+      <p className="popupHeadline">{locationName[0]}</p><br />
+      <p className="popupText">{locationName[1]}</p><br />
+      <p className="popupText">
+        <i>{text}</i>
+      </p>
+      {onItemClicked !== undefined
+        ? <Button title="Auswählen" onClick={() => onItemClicked(location)} />
+        : <></>}
+    </Popup>
+  </Marker>;
 };
 
 export default MapMarker;
 
+export const OriginMapMarker: React.FC<{
+  originId: string | null,
+  onItemClicked?: (location: Location) => void
+}> = ({ originId, onItemClicked }) => {
+  const location = useLocationByIdOrNull(originId);
+
+  if (location === null) {
+    return <></>;
+  }
+  const text = "Start";
+  const icon = new Icon({
+    iconUrl: getOriginIcon(location.type),
+    iconSize: [25, 41],
+    iconAnchor: [12.5, 38],
+    shadowUrl: markerShadow,
+    shadowAnchor: [12.5, 38],
+    popupAnchor: [0, -32]
+  });
+
+  const locationName = location.name.split(",");
+  return (
+    <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+      icon={icon}>
+      <Popup className="popup">
+        <p className="popupHeadline">{locationName[0]}</p><br />
+        <p className="popupText">{locationName[1]}</p><br />
+        <p className="popupText">
+          <i>{text}</i>
+        </p>
+        {onItemClicked !== undefined
+          ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Auswählen</p>
+          : <></>}
+      </Popup>
+    </Marker>
+  );
+};
+
+function getOriginIcon(type: string): string {
+  switch (type) {
+    case LocationTypeEnum.Address:
+    case LocationTypeEnum.Unknown:
+    case LocationTypeEnum.Crossing:
+    case LocationTypeEnum.Street:
+      return whiteLocationIcon;
+    case LocationTypeEnum.Platform:
+    case LocationTypeEnum.Stop:
+      return whiteBusIcon;
+    case LocationTypeEnum.Poi:
+    case LocationTypeEnum.PoiHierarchy:
+      return whitePinIcon;
+    case LocationTypeEnum.Gis:
+    case LocationTypeEnum.Locality:
+    case LocationTypeEnum.Sharing:
+    case LocationTypeEnum.Suburb:
+    case LocationTypeEnum.Singlehouse:
+    default:
+      return currentPositionIcon;
+  }
+}
+
+export const DestinationMapMarker: React.FC<{
+  destinationId: string | null,
+  onItemClicked?: (location: Location) => void
+}> = ({ destinationId, onItemClicked }) => {
+  const location = useLocationByIdOrNull(destinationId);
+
+  if (location === null) {
+    return <></>;
+  }
+  const text = "Ziel";
+  const icon = new Icon({
+    iconUrl: getDestinationIcon(location.type),
+    iconSize: [25, 41],
+    iconAnchor: [12.5, 38],
+    shadowUrl: markerShadow,
+    shadowAnchor: [12.5, 38],
+    popupAnchor: [0, -32]
+  });
+
+  const locationName = location.name.split(",");
+  return (
+    <Marker position={[location.details.coordinates.latitude, location.details.coordinates.longitude]}
+      icon={icon}>
+      <Popup className="popup">
+        <p className="popupHeadline">{locationName[0]}</p><br />
+        <p className="popupText">{locationName[1]}</p><br />
+        <p className="popupText">
+          <i>{text}</i>
+        </p>
+        {onItemClicked !== undefined
+          ? <p className="selectLocation" onClick={() => onItemClicked(location)}>Auswählen</p>
+          : <></>}
+      </Popup>
+    </Marker>
+  );
+};
+
+function getDestinationIcon(type: string): string {
+  switch (type) {
+    case LocationTypeEnum.Address:
+    case LocationTypeEnum.Unknown:
+    case LocationTypeEnum.Crossing:
+    case LocationTypeEnum.Street:
+      return redLocationIcon;
+    case LocationTypeEnum.Platform:
+    case LocationTypeEnum.Stop:
+      return redBusIcon;
+    case LocationTypeEnum.Poi:
+    case LocationTypeEnum.PoiHierarchy:
+      return redPinIcon;
+    case LocationTypeEnum.Gis:
+    case LocationTypeEnum.Locality:
+    case LocationTypeEnum.Sharing:
+    case LocationTypeEnum.Suburb:
+    case LocationTypeEnum.Singlehouse:
+    default:
+      return currentPositionIcon;
+  }
+}
+
 export const CurrentLocationMapMarker: React.FC = () => {
   const currentLocation = useCurrentLocation();
   if (currentLocation.state !== "located") {
-
     return <></>;
   }
 
