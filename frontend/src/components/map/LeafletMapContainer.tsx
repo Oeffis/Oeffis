@@ -1,6 +1,6 @@
 import { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
@@ -31,6 +31,16 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
       location={location}
       onItemClicked={onItemClicked}
     />);
+
+  const renderPolygons = () => {
+    let polygons: ReactElement[] = [];
+    for (let i = 0; i < bounds.length - 1; i++) {
+      polygons.push(
+        <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"30,20"} weight={2} positions={[bounds[i], bounds[i + 1]]} />
+      );
+    }
+    return polygons;
+  };
 
   useEffect(() => {
     if (usersPosition.state === "located") {
