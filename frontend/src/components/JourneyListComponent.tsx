@@ -9,7 +9,7 @@ interface IJourneyListProps {
 
 const JourneyListComponent: React.FC<IJourneyListProps> = (props: IJourneyListProps) => (
   <div className="JourneyListComponent">
-    <IonList className="detail-card">
+    <IonList className="detail_list_sizing" inset={false} lines="none">
       {(props.journeys.map((journey, index) =>
         <IonItem key={"item" + index} onClick={() => props.setActiveJourney(journey)}>
           <JourneyCard key={"journey" + index} journey={journey} />
