@@ -56,8 +56,8 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
     const total = stopIds.length;
     const remaining = total - finished;
 
-    const elapsed = differenceInSeconds(new Date(), startTime);
-    const remainingTime = elapsed / finished * remaining;
+    const elapsedInSeconds = differenceInSeconds(new Date(), startTime);
+    const remainingTime = elapsedInSeconds / finished * remaining;
     const remainingDuration = intervalToDuration({
       start: new Date(),
       end: addSeconds(new Date(), remainingTime)
@@ -65,6 +65,11 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
 
     const formattedRemainingTime = formatDuration(remainingDuration);
     console.log(`Finished ${finished} of ${total} stops. ${remaining} remaining. ${formattedRemainingTime} remaining`);
+
+    if (elapsedInSeconds > 1 * 60 * 60) {
+      console.log("Exitting after 1 hour of processing.");
+      process.exit(1);
+    }
   }, 5_000);
 
   await promiseOfQueueDrained(processingQueue);
