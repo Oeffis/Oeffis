@@ -18,11 +18,7 @@ import {
 } from "@ionic/react";
 import { calendarClearOutline, closeCircleOutline, heart, search, swapVerticalOutline } from "ionicons/icons";
 import { useState } from "react";
-import {
-  Journey,
-  TransportationLeg,
-  TransportationLegTypeEnum
-} from "../../api";
+import { Journey, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
@@ -183,7 +179,10 @@ const RoutePlanner = ({
             <IonIcon slot="start" icon={heart} />
             Merken
           </IonButton>
-          <IonButton routerLink={`/results?origin=${originId}&destination=${destinationId}&departure=${new Date(departureTime).toISOString()}`} disabled={originLocation === null || destinationLocation === null} className={rp.button_primary} size="default" expand="block">
+          <IonButton
+            routerLink={`/results?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`}
+            disabled={originLocation === null || destinationLocation === null} className={rp.button_primary}
+            size="default" expand="block">
             <IonIcon slot="start" icon={search} />
             Routen suchen
           </IonButton>

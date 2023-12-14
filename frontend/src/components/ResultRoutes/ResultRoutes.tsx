@@ -1,4 +1,15 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonRadio, IonRadioGroup, IonTitle, IonToolbar } from "@ionic/react";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonImg,
+  IonMenuButton,
+  IonRadio,
+  IonRadioGroup,
+  IonTitle,
+  IonToolbar
+} from "@ionic/react";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -7,6 +18,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../../public/images/train_image.png";
+import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
@@ -17,7 +29,9 @@ import "./ResultRoutes.css";
 const ResultRoutes: React.FC = () => {
   const [originId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [departureTime] = useStateParams<string>("now", "departure", String, String);
+  const [departureTime] = useDepartureTimeParamOrCurrentTime();
+  // Using specific deserialize because using Boolean() constructor trues everything except empty string.
+  const [asArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
@@ -91,6 +105,7 @@ const ResultRoutes: React.FC = () => {
                 origin={originLocation}
                 destination={destinationLocation}
                 departure={new Date(departureTime)}
+                asArrival={asArrivalTime}
                 setJourney={setActiveJourney}
               />
             }
