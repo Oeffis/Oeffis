@@ -10,17 +10,17 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
+import { mapOutline, readerOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Location } from "../../api";
 import { useLocationIdSearchByName } from "../../hooks/useLocationIdSearchByName";
 import { useFavoriteLocations } from "../../services/favorites/FavoritesContext";
+import { Button } from "../controls/Button";
+import { FloatingActionButton } from "../controls/FloatingActionButton";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import { CurrentLocationButton } from "./CurrentLocationButton";
 import { LocationSearchList } from "./LocationSearchList";
-import { mapOutline, readerOutline } from "ionicons/icons";
-import { FloatingActionButton } from "../controls/FloatingActionButton";
-import { Button } from "../controls/Button";
 
 export interface LocationSearchInputProps {
   onSelectedLocationChanged: (location: Location) => void;
@@ -105,13 +105,14 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
         </IonHeader>
         <IonContent>
           <FloatingActionButton
-            icon={showMap? readerOutline : mapOutline}
+            icon={showMap ? readerOutline : mapOutline}
             color="primary"
             disabled={isMapBtnDisabled}
-            onClick={() => showMap ? setShowMap(false) : setShowMap(true)}/>
+            onClick={() => showMap ? setShowMap(false) : setShowMap(true)} />
           {showResults
             && showMap
-            ? <LeafletMapContainer
+            ?
+            <LeafletMapContainer
               originId={null}
               destinationId={null}
               locationIds={[...foundLocations.searchResults]}

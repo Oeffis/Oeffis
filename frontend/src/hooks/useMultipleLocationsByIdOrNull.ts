@@ -4,13 +4,15 @@ import { useLocationFinderApi } from "../services/apiClients/ApiClientsContext";
 
 const locationCache = new Map<string, Location>();
 
-export function useMultipleLocationsByIdOrNull(locationIds: string[]): Location[] {
+const noIds: string[] = [];
+export function useMultipleLocationsByIdOrNull(locationIds?: string[]): Location[] {
   const locationFinderApi = useLocationFinderApi();
   const [locations, setLocations] = useState<Location[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
 
+    locationIds = locationIds ?? noIds;
     const locationPromises = locationIds.map(locationId => {
       const cachedLocation = locationCache.get(locationId);
       if (cachedLocation) {

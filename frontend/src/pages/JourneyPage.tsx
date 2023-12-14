@@ -28,6 +28,7 @@ const JourneyPage: React.FC = () => {
       <IonContent>
         <div className="journey-content">
           <div className="map">
+            {void console.log("Journey Page caused rerender")}
             <LeafletMapContainer
               originId={originId}
               destinationId={destinationId}
