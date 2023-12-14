@@ -21,8 +21,6 @@ export function AppConfigProvider(props: { children: React.ReactNode }): JSX.Ele
     return <div>Loading config...</div>;
   }
 
-  console.debug("appConfig", { data });
-
   return (
     <AppConfigContext.Provider value={data}>
       {props.children}

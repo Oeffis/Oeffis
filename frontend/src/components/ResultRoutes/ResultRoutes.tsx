@@ -70,7 +70,7 @@ const ResultRoutes: React.FC = () => {
           <p>{slideName}</p>
           <IonButton routerLink="livenavigation"> Play </IonButton>
         </div>
-        <IonButton className="back-button" onClick={() => { console.log("hallo"); history.back(); }}
+        <IonButton className="back-button" onClick={() => { history.back(); }}
           size="default" expand="block">
           Zurück zum Routenplaner
         </IonButton>
