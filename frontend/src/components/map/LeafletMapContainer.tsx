@@ -6,7 +6,7 @@ import { Location } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocationsByIdOrNull";
 import "./LeafletMapContainer.css";
-import MapMarker, { CurrentLocationMapMarker } from "./MapMarker";
+import MapMarker, { CurrentLocationMapMarker, DestinationMapMarker, OriginMapMarker } from "./MapMarker";
 import ReactiveMapContainer, { View } from "./ReactiveMapContainer";
 
 export interface MapProps {
@@ -19,8 +19,8 @@ export interface MapProps {
 
 const NRW_BOUNDS: LatLngTuple[] = [[50.30527, 5.71687], [52.69499, 9.47241]];
 
-const LeafletMapContainer = ({ locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
-  const locations = useMultipleLocationsByIdOrNull(locationIds || []);
+const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
+  const locations = useMultipleLocationsByIdOrNull(locationIds);
   const usersPosition = useCurrentLocation();
   const [view, setView] = useState<View>({ bounds: NRW_BOUNDS });
 
@@ -57,6 +57,8 @@ const LeafletMapContainer = ({ locationIds, showLines, onItemClicked }: MapProps
     />
     {markers}
     <CurrentLocationMapMarker />
+    <OriginMapMarker originId={originId} />
+    <DestinationMapMarker destinationId={destinationId} />
     {showLines && <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={bounds} />}
   </ReactiveMapContainer>;
 };

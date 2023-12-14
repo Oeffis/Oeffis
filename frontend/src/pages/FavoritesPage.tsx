@@ -75,10 +75,10 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
             Stations
           </SwiperSlide>
           <SwiperSlide>
-            <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { props.onRouteSelected ? props.onRouteSelected(route) : console.log("no prop"); }} />
+            <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { props.onRouteSelected ? props.onRouteSelected(route) : void 0; }} />
           </SwiperSlide>
           <SwiperSlide>
-            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { props.onTripSelected ? props.onTripSelected(trip) : console.log("no prop"); }} />
+            <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { props.onTripSelected ? props.onTripSelected(trip) : void 0; }} />
           </SwiperSlide>
         </SwiperReact>
       </IonContent>

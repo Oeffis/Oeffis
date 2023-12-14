@@ -69,7 +69,7 @@ const ResultRoutes: React.FC = () => {
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>
-        <IonButton className="back-button" onClick={() => { console.log("hallo"); history.back(); }}
+        <IonButton className="back-button" onClick={() => { history.back(); }}
           size="default" expand="block">
           Zurück zum Routenplaner
         </IonButton>
