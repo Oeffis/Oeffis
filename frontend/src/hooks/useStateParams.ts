@@ -18,13 +18,11 @@ export function useStateParams<T>(
   useEffect(() => {
     // Updates state when user navigates backwards or forwards in browser history
     if (existingValue && deserialize(existingValue) !== state) {
-      console.log("Updating state from URL params");
       setState(deserialize(existingValue));
     }
   }, [existingValue]);
 
   const onChange = (s: T): void => {
-    console.log("Setting state from call");
     setState(s);
     const searchParams = new URLSearchParams(history.location.search);
     searchParams.set(paramsName, serialize(s));

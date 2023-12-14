@@ -59,7 +59,6 @@ export function useMultipleLocationsByIdOrNull(locationIds?: string[]): Location
     }
 
     function processSingleLocationFound(locationId: string, matchingLocations: RatedLocation[]): Location {
-      console.debug(`Single location found with id ${locationId}`);
       const location = matchingLocations[0] as Location;
       locationCache.set(location.id, location);
       return location;
