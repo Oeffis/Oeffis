@@ -1,11 +1,14 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
+import { IsInstance } from "class-validator";
+import { CancellationStat } from "./cancellationStat.dto";
 import { DelayStats } from "./delayStats.dto";
+import { InterchangeReachableStat } from "./interchangeReachableStat.dto";
 import { MaybeStats, UnavailableStats } from "./maybeStats.dto";
-import { QualityStats } from "./qualityStats.dto";
 
-@ApiExtraModels(DelayStats, QualityStats, UnavailableStats)
+@ApiExtraModels(DelayStats, InterchangeReachableStat, CancellationStat, UnavailableStats)
 export class JourneyStats {
 
+  @IsInstance(MaybeStats)
   @ApiProperty({
     description: "Aggregated delay statistics of all journey's legs.",
     oneOf: [
@@ -23,28 +26,49 @@ export class JourneyStats {
   })
   aggregatedDelayStats: MaybeStats;
 
+  @IsInstance(MaybeStats)
   @ApiProperty({
-    description: "Stats about quality of journey (e.g. connections).",
+    description: "Aggregated probability of reaching interchanges on journey.",
     oneOf: [
-      { $ref: getSchemaPath(QualityStats) },
+      { $ref: getSchemaPath(InterchangeReachableStat) },
       { $ref: getSchemaPath(UnavailableStats) }
     ],
     discriminator: {
       propertyName: "status",
       mapping: {
-        "available": getSchemaPath(QualityStats),
+        "available": getSchemaPath(InterchangeReachableStat),
         "unavailable": getSchemaPath(UnavailableStats)
       }
     },
     required: true
   })
-  journeyQualityStats: MaybeStats;
+  aggregatedInterchangeReachableStat: MaybeStats;
+
+  @IsInstance(MaybeStats)
+  @ApiProperty({
+    description: "Aggregated probability of cancellation to happen on journey.",
+    oneOf: [
+      { $ref: getSchemaPath(CancellationStat) },
+      { $ref: getSchemaPath(UnavailableStats) }
+    ],
+    discriminator: {
+      propertyName: "status",
+      mapping: {
+        "available": getSchemaPath(CancellationStat),
+        "unavailable": getSchemaPath(UnavailableStats)
+      }
+    },
+    required: true
+  })
+  aggregatedCancellationStat: MaybeStats;
 
   public constructor(
-    aggregatedDelayStats: MaybeStats,
-    journeyQualityStats: MaybeStats
+    aggregatedDelayStats: DelayStats,
+    aggregatedInterchangeReachableStat: InterchangeReachableStat,
+    aggregatedCancellationStat: CancellationStat
   ) {
     this.aggregatedDelayStats = aggregatedDelayStats;
-    this.journeyQualityStats = journeyQualityStats;
+    this.aggregatedInterchangeReachableStat = aggregatedInterchangeReachableStat;
+    this.aggregatedCancellationStat = aggregatedCancellationStat;
   }
 }

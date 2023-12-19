@@ -1,22 +1,16 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Journey as VrrJourney, Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { subWeeks } from "date-fns";
-import { HistoricDataService } from "historicData/service/historicData.service";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
-import { JourneyStats } from "../../../historicData/dto/journeyStats.dto";
-import { UnavailableReason, UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
-import { HistoricDataProcessorService } from "../../../historicData/service/historicDataProcessor.service";
-import {
-  LocationCoordinatesMapperService
-} from "../../../locationFinder/service/mapper/locationCoordinatesMapper.service";
-import { LocationMapperService } from "../../../locationFinder/service/mapper/locationMapper.service";
-import { ApiService } from "../../../vrr/service/api.service";
 import { Journey } from "../../entity/journey.entity";
 import { FootpathLeg, LegType, TransportationLeg } from "../../entity/leg.entity";
 import { JourneyLocationMapperService } from "./journeyLocationMapper.service";
+import { JourneyStatsFactoryService, TransportationLegWithoutStats } from "./journeyStatsFactory.service";
 import { LegDetailsMapperService } from "./legDetailsMapper.service";
 import { TransportationMapperService } from "./transportationMapper.service";
 
+/*
+ * Fallback values to use if original data does not contain some value.
+ */
 const JOURNEY_INTERCHANGES_FALLBACK_VAL = 0;
 const JOURNEY_LEGS_FALLBACK_VAL: (TransportationLeg | FootpathLeg)[] = [];
 
@@ -30,28 +24,20 @@ export class JourneyMapperService {
   private readonly transportationMapper: TransportationMapperService;
   private readonly legDetailsMapper: LegDetailsMapperService;
   private readonly journeyLocationMapper: JourneyLocationMapperService;
-  private readonly historicDataService: HistoricDataService;
-  private readonly historicDataProcessor: HistoricDataProcessorService;
+  private readonly journeyStatsFactory: JourneyStatsFactoryService;
 
   constructor(
-    @Inject(ApiService) apiService: ApiService,
-    @Inject(LocationCoordinatesMapperService) locationCoordinatesMapper: LocationCoordinatesMapperService,
     @Inject(FootpathMapperService) footpathMapper: FootpathMapperService,
-    @Inject(LocationMapperService) locationMapper: LocationMapperService,
-    @Inject(HistoricDataService) delayStatsService: HistoricDataService,
-    @Inject(HistoricDataProcessorService) historicDataProcessor: HistoricDataProcessorService
+    @Inject(TransportationMapperService) transportationMapper: TransportationMapperService,
+    @Inject(LegDetailsMapperService) legDetailsMapper: LegDetailsMapperService,
+    @Inject(JourneyLocationMapperService) journeyLocationMapper: JourneyLocationMapperService,
+    @Inject(JourneyStatsFactoryService) journeyStatsFactory: JourneyStatsFactoryService
   ) {
     this.footpathMapper = footpathMapper;
-    this.transportationMapper = new TransportationMapperService(apiService);
-    this.journeyLocationMapper = new JourneyLocationMapperService(locationMapper);
-    this.legDetailsMapper =
-      new LegDetailsMapperService(
-        apiService,
-        locationCoordinatesMapper,
-        this.journeyLocationMapper,
-        this.footpathMapper);
-    this.historicDataService = delayStatsService;
-    this.historicDataProcessor = historicDataProcessor;
+    this.transportationMapper = transportationMapper;
+    this.legDetailsMapper = legDetailsMapper;
+    this.journeyLocationMapper = journeyLocationMapper;
+    this.journeyStatsFactory = journeyStatsFactory;
   }
 
   /**
@@ -129,38 +115,43 @@ export class JourneyMapperService {
   }
 
   private async mapVrrJourney(vrrJourney: VrrJourney): Promise<Journey> {
+    // Filter legs of type "gesicherter Anschluss" as they should not be processed further (no useful information).
+    const legsWithoutGesicherterAnschluss = vrrJourney.legs
+      ?.filter(vrrLeg => !this.transportationMapper.isGesicherterAnschlussLeg(vrrLeg));
+
+    const mappedLegs = legsWithoutGesicherterAnschluss
+        ?.map(vrrLeg => this.mapVrrLeg(vrrLeg))
+      ?? JOURNEY_LEGS_FALLBACK_VAL;
+
     const interchanges = vrrJourney.interchanges
-      ?? this.calculateVrrJourneyInterchanges(vrrJourney.legs);
+      ?? this.calculateVrrJourneyInterchanges(legsWithoutGesicherterAnschluss)
+      ?? JOURNEY_INTERCHANGES_FALLBACK_VAL;
 
-    const processedLegs = await Promise.all(
-      vrrJourney.legs
-        ?.filter(vrrLeg => !this.transportationMapper.isGesicherterAnschlussLeg(vrrLeg))
-        ?.map(vrrLeg => this.mapVrrLeg(vrrLeg)) ?? JOURNEY_LEGS_FALLBACK_VAL
-    );
-
-    const journeyStats = {
-      aggregatedDelayStats: this.historicDataProcessor.getAggregatedLegDelayStats(
-        processedLegs
-          .filter(leg => leg.type === LegType.transportation)
-          .map(leg => (leg as TransportationLeg).delayStats)),
-      journeyQualityStats: new UnavailableStats(UnavailableReason.noData)
-    } as JourneyStats;
+    const mappedLegsWithStats = await this.journeyStatsFactory.enrichLegsWithStats(mappedLegs);
+    const journeyStats = this.journeyStatsFactory.createJourneyStats(mappedLegsWithStats);
 
     return {
-      interchanges: interchanges ?? JOURNEY_INTERCHANGES_FALLBACK_VAL,
-      legs: processedLegs,
+      interchanges: interchanges,
+      legs: mappedLegsWithStats,
       journeyStats: journeyStats
     } as Journey;
   }
 
+  /**
+   * Calculates the number of interchanges for given journey legs. Result is the number of legs minus one. If there are
+   * no legs, undefined is returned.
+   *
+   * @param vrrLegs vrr legs
+   * @private
+   */
   private calculateVrrJourneyInterchanges(vrrLegs: (VrrLeg[] | undefined)): (number | undefined) {
     return vrrLegs?.length && vrrLegs.length - 1 >= 0
       ? vrrLegs.length - 1
       : undefined;
   }
 
-  private async mapVrrLeg(vrrLeg: VrrLeg): Promise<TransportationLeg | FootpathLeg> {
-    let leg: (TransportationLeg | FootpathLeg);
+  private mapVrrLeg(vrrLeg: VrrLeg): (TransportationLegWithoutStats | FootpathLeg) {
+    let leg: (TransportationLegWithoutStats | FootpathLeg);
 
     // Integrity check ensured before that origin and destination are present.
     const baseLeg = {
@@ -181,19 +172,10 @@ export class JourneyMapperService {
       leg = {
         ...baseLeg,
         type: LegType.transportation,
-        transportation: this.transportationMapper.mapVrrTransportation(vrrLeg),
-        delayStats: await this.historicDataService.getPartialRouteStats({
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          tripId: vrrLeg.transportation!.id!,
-          originId: this.journeyLocationMapper.getStopParent(baseLeg.origin).id,
-          destinationId: this.journeyLocationMapper.getStopParent(baseLeg.destination).id,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          since: subWeeks(new Date(), 2)
-        })
-      } as TransportationLeg;
+        transportation: this.transportationMapper.mapVrrTransportation(vrrLeg)
+      } as TransportationLegWithoutStats;
     }
 
     return leg;
   }
-
 }

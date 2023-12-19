@@ -1,108 +1,134 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { LegStats } from "historicData/dto/legStats.dto";
-import { DelayEntry } from "historicData/entity/delayEntry.entity";
-import { Repository } from "typeorm";
+import { Inject, Injectable } from "@nestjs/common";
+import { CancellationStat } from "../dto/cancellationStat.dto";
 import { DelayStats } from "../dto/delayStats.dto";
-import { UnavailableReason, UnavailableStats } from "../dto/maybeStats.dto";
+import { InterchangeReachableStat } from "../dto/interchangeReachableStat.dto";
+import { UnavailableStats } from "../dto/maybeStats.dto";
+import {
+  CANCELLATION_QUERY,
+  DELAY_AT_STATION_QUERY,
+  HistoricDataQueryRunner,
+  INTERCHANGE_REACHABLE_QUERY,
+  QueryOptions,
+  QueryResult
+} from "./historicDataQueryRunner.service";
 
-export interface PartialRouteStatOptions {
+/*
+ * Specification of options for queries.
+ */
+
+export interface DelayAtStationOptions extends QueryOptions {
   tripId: string;
-  originId: string;
-  destinationId: string;
-  since?: Date;
+  stopId: string;
 }
 
-interface StatQueryResult {
+export interface DelayAtStationAndTimeSubOptions {
+  tripId: string;
+  stopId: string;
+  plannedTime: Date;
+}
+
+interface InterchangeReachableOptions extends QueryOptions {
+  delayAtCurrentTripDestinationOptions: DelayAtStationAndTimeSubOptions;
+  delayAtNextTripOriginOptions: DelayAtStationAndTimeSubOptions;
+  interchangeFootpathTime: number;
+}
+
+interface CancellationOptions extends QueryOptions {
+  tripId: string;
+  originStopId: string;
+  destinationStopId: string;
+}
+
+/*
+ * Specification of query results.
+ */
+
+interface DelayAtStationQueryResult extends QueryResult {
   max: string;
   min: string;
   avg: string;
   stddev: string;
 }
 
-const PARTIAL_ROUTE_STATS_QUERY = `
-    WITH historic_with_delay AS (SELECT *, EXTRACT(EPOCH FROM (estimated - planned)::INTERVAL) / 60 AS delay
-                                 FROM historic_data
-                                 WHERE estimated IS NOT NULL
-                                   AND trip_id = $1
-                                   AND stop_id IN (SELECT DISTINCT stop_id
-                                                   FROM stops
-                                                   WHERE "NVBW_HST_DHID" = $2)
-                                   AND planned > $3),
+function parseDelayAtStationQueryResult(result: DelayAtStationQueryResult[]): DelayStats {
 
-         latest_of_day_tripcode AS (SELECT DISTINCT ON (planned:: date, trip_code) *
-                                    FROM historic_with_delay
-                                    ORDER BY planned:: date, trip_code DESC)
+  return {
+    status: "available",
+    maxDelay: parseFloat(result[0].max),
+    minDelay: parseFloat(result[0].min),
+    averageDelay: parseFloat(result[0].avg),
+    standardDeviation: parseFloat(result[0].stddev)
+  } as DelayStats;
+}
 
-    SELECT MAX(delay), MIN(delay), AVG(delay), STDDEV(delay)
-    FROM latest_of_day_tripcode;
-`;
+interface InterchangeReachableQueryResult extends QueryResult {
+// TODO
+}
 
-const NO_DATA_RESULT: UnavailableStats = {
-  status: "unavailable",
-  reason: UnavailableReason.noData
-};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function parseInterchangeReachableQueryResult(result: InterchangeReachableQueryResult[]): InterchangeReachableStat {
 
-const INTERNAL_ERROR_RESULT: UnavailableStats = {
-  status: "unavailable",
-  reason: UnavailableReason.internalError
-};
+  return {
+    status: "available",
+    interchangeReachableProbability: 0.0 // TODO
+  } as InterchangeReachableStat;
+}
+
+interface CancellationQueryResult extends QueryResult {
+// TODO
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function parseCancellationQueryResult(result: CancellationQueryResult[]): CancellationStat {
+
+  return {
+    status: "available",
+    cancellationProbability: 100.0 // TODO
+  } as CancellationStat;
+}
 
 @Injectable()
 export class HistoricDataService {
   constructor(
-    @InjectRepository(DelayEntry)
-    private readonly delayEntryRepository: Repository<DelayEntry>
+    @Inject(HistoricDataQueryRunner)
+    private readonly historicDataQueryRunner: HistoricDataQueryRunner
   ) { }
 
-  public async getPartialRouteStats(partialRouteStatOptions: PartialRouteStatOptions): Promise<LegStats> {
-    const originDelayStats = await this.tryGetDelayAtStationStats(
-      partialRouteStatOptions.tripId, partialRouteStatOptions.originId, partialRouteStatOptions.since);
-    const destinationDelayStats = await this.tryGetDelayAtStationStats(
-      partialRouteStatOptions.tripId, partialRouteStatOptions.destinationId, partialRouteStatOptions.since);
+  /**
+   * Return delay stats for specified stats options (if relevant data is available).
+   *
+   * @param options options for stats
+   */
+  public async getDelayStatsAtStation(options: DelayAtStationOptions): Promise<DelayStats | UnavailableStats> {
 
-    return {
-      originDelayStats: originDelayStats,
-      destinationDelayStats: destinationDelayStats
-    } as LegStats;
+    return await this.historicDataQueryRunner.runQuery(
+      DELAY_AT_STATION_QUERY,
+      options,
+      parseDelayAtStationQueryResult);
   }
 
-  private async tryGetDelayAtStationStats(tripId: string, stationId: string, since?: Date | undefined): Promise<DelayStats | UnavailableStats> {
-    try {
-      const queryResult = await this.queryForDelayAtStationStats(tripId, stationId, since);
+  /**
+   * Retrieves the probability of interchanges reached for given relation of current and next trip and specified
+   * stop(s) where the interchange takes place based on available historic data. If there are no relevant historic
+   * data, undefined gets returned.
+   *
+   * @param options options for stats
+   */
+  public async getInterchangeReachableStat(options: InterchangeReachableOptions): Promise<InterchangeReachableStat | UnavailableStats> {
 
-      if (this.isResultEmpty(queryResult)) {
-        return NO_DATA_RESULT;
-      }
-
-      return this.parseDelayStatsFromQueryResult(queryResult);
-
-    } catch (error) {
-      console.error(error);
-      return INTERNAL_ERROR_RESULT;
-
-    }
+    return await this.historicDataQueryRunner.runQuery(
+      INTERCHANGE_REACHABLE_QUERY,
+      options,
+      parseInterchangeReachableQueryResult
+    );
   }
 
-  private queryForDelayAtStationStats(tripId: string, stationId: string, since?: Date | undefined): Promise<StatQueryResult[]> {
-    const parsedSince = since ?? "epoch";
-    return this.delayEntryRepository.query(
-      PARTIAL_ROUTE_STATS_QUERY,
-      [tripId, stationId, parsedSince]
-    ) as Promise<StatQueryResult[]>;
-  }
+  public async getCancellationStat(options: CancellationOptions): Promise<CancellationStat | UnavailableStats> {
 
-  private isResultEmpty(queryResult: StatQueryResult[]): boolean {
-    return queryResult.length === 0 || Object.values(queryResult[0]).every(column => column === null);
-  }
-
-  private parseDelayStatsFromQueryResult(stats: StatQueryResult[]): UnavailableStats | DelayStats | PromiseLike<UnavailableStats | DelayStats> {
-    return {
-      status: "available",
-      maxDelay: parseFloat(stats[0].max),
-      minDelay: parseFloat(stats[0].min),
-      averageDelay: parseFloat(stats[0].avg),
-      standardDeviation: parseFloat(stats[0].stddev)
-    };
+    return await this.historicDataQueryRunner.runQuery(
+      CANCELLATION_QUERY,
+      options,
+      parseCancellationQueryResult
+    );
   }
 }

@@ -11,7 +11,11 @@ import { Location } from "../../locationFinder/entity/location.entity";
 import { JourneyRequestDto } from "../dto/journeyRequest.dto";
 import { LegType } from "../entity/leg.entity";
 import { JourneyService } from "../service/journey.service";
+import { JourneyLocationMapperService } from "../service/mapper/journeyLocationMapper.service";
 import { JourneyMapperService } from "../service/mapper/journeyMapper.service";
+import { JourneyStatsFactoryService } from "../service/mapper/journeyStatsFactory.service";
+import { LegDetailsMapperService } from "../service/mapper/legDetailsMapper.service";
+import { TransportationMapperService } from "../service/mapper/transportationMapper.service";
 import { JourneyController } from "./journey.controller";
 
 const LOCATION1: Location = {
@@ -79,17 +83,19 @@ let app: TestingModule;
 
 beforeEach(async () => {
   app = await Test.createTestingModule({
-    providers: [JourneyService, JourneyMapperService, {
-      provide: HistoricDataService,
-      useValue: {
-        getLegStats: vi.fn()
-      }
-    }, {
-      provide: HistoricDataProcessorService,
-      useValue: {
-        getAggregatedLegDelayStats: vi.fn()
-      }
-    }],
+    providers: [JourneyService, TransportationMapperService,
+      JourneyLocationMapperService, LegDetailsMapperService,
+      JourneyStatsFactoryService, JourneyMapperService, {
+        provide: HistoricDataService,
+        useValue: {
+          getLegStats: vi.fn()
+        }
+      }, {
+        provide: HistoricDataProcessorService,
+        useValue: {
+          getAggregatedLegDelayStats: vi.fn()
+        }
+      }],
     controllers: [JourneyController],
     imports: [VrrModule, LocationFinderModule, FootpathModule]
   }).compile();
@@ -136,15 +142,18 @@ it("should query trip", async () => {
             stopSequence: [],
             interchange: undefined
           },
-          delayStats: {
+          legStats: {
             originDelayStats: unavailableStats(),
-            destinationDelayStats: unavailableStats()
+            destinationDelayStats: unavailableStats(),
+            interchangeReachableStat: unavailableStats(),
+            cancellationStat: unavailableStats()
           }
         }
       ],
       journeyStats: {
         aggregatedDelayStats: unavailableStats(),
-        journeyQualityStats: unavailableStats()
+        aggregatedInterchangeReachableStat: unavailableStats(),
+        aggregatedCancellationStat: unavailableStats()
       }
     }
   ];
