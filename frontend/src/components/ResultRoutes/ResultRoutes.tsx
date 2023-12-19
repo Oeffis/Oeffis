@@ -20,7 +20,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../../public/images/OeffisLogo1.svg";
-import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg } from "../../api";
+import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
@@ -128,7 +128,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
               : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
-            line: "transportation" in leg ? leg.transportation.line : ""
+            line: "transportation" in leg ? leg.transportation.line : "",
+            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
+              destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+              originDelayStats: { status: "unavailable", reason: "Fußpfad" }
+            }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
@@ -192,8 +196,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
       <IonContent>
         <div className="map">
           <LeafletMapContainer
-            origin={origin ?? undefined}
-            destination={destination ?? undefined}
+            originId={origin.id}
+            destinationId={destination.id}
             locationIds={getLocationIds()}
             showLines={true}
           />
