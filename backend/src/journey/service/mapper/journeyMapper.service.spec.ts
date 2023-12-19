@@ -7,13 +7,14 @@ import {
   LocationType as VrrLocationType
 } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
-import { DelayStatsService } from "historicData/service/delay-stats.service";
+import { HistoricDataService } from "historicData/service/historicData.service";
 import { Repository } from "typeorm";
 import { Footpath } from "../../../footpath/entity/footpath.entity";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
 import { JourneyStats } from "../../../historicData/dto/journeyStats.dto";
 import { LegStats } from "../../../historicData/dto/legStats.dto";
 import { UnavailableReason, UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
+import { HistoricDataProcessorService } from "../../../historicData/service/historicDataProcessor.service";
 import { Location } from "../../../locationFinder/entity/location.entity";
 import {
   LocationCoordinatesMapperService
@@ -83,9 +84,13 @@ beforeEach(() => {
   vi.spyOn(footpathMapper, "mapVrrFootpath")
     .mockReturnValue(FOOTPATH);
 
-  const delayStatsService = new DelayStatsService(undefined as unknown as Repository<DelayEntry>);
-  vi.spyOn(delayStatsService, "getPartialRouteStats")
+  const historicDataService = new HistoricDataService(undefined as unknown as Repository<DelayEntry>);
+  vi.spyOn(historicDataService, "getPartialRouteStats")
     .mockReturnValue(Promise.resolve(unavailableLegStats()));
+
+  const historicDataProcessor = new HistoricDataProcessorService();
+  vi.spyOn(historicDataProcessor, "getAggregatedLegDelayStats")
+    .mockReturnValue(unavailableStats());
 
   mapper =
     new JourneyMapperService(
@@ -93,7 +98,8 @@ beforeEach(() => {
       new LocationCoordinatesMapperService(),
       footpathMapper,
       new LocationMapperService(apiService, new LocationCoordinatesMapperService()),
-      delayStatsService
+      historicDataService,
+      historicDataProcessor
     );
 
   vi.spyOn(mapper["journeyLocationMapper"], "checkVrrJourneyLocationIntegrity")

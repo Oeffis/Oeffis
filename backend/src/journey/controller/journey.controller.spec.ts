@@ -1,11 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { Journey } from "journey/entity/journey.entity";
 import { LocationFinderModule } from "locationFinder/locationFinder.module";
 import { LocationType } from "vrr/entity/locationType.entity";
 import { VrrModule } from "vrr/vrr.module";
 import { FootpathModule } from "../../footpath/footpath.module";
 import { UnavailableReason, UnavailableStats } from "../../historicData/dto/maybeStats.dto";
+import { HistoricDataService } from "../../historicData/service/historicData.service";
+import { HistoricDataProcessorService } from "../../historicData/service/historicDataProcessor.service";
 import { Location } from "../../locationFinder/entity/location.entity";
 import { JourneyRequestDto } from "../dto/journeyRequest.dto";
 import { LegType } from "../entity/leg.entity";
@@ -79,9 +80,14 @@ let app: TestingModule;
 beforeEach(async () => {
   app = await Test.createTestingModule({
     providers: [JourneyService, JourneyMapperService, {
-      provide: DelayStatsService,
+      provide: HistoricDataService,
       useValue: {
         getLegStats: vi.fn()
+      }
+    }, {
+      provide: HistoricDataProcessorService,
+      useValue: {
+        getAggregatedLegDelayStats: vi.fn()
       }
     }],
     controllers: [JourneyController],

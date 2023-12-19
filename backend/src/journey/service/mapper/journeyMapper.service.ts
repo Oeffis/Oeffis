@@ -1,8 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Journey as VrrJourney, Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { subWeeks } from "date-fns";
-import { DelayStatsService } from "historicData/service/delay-stats.service";
+import { HistoricDataService } from "historicData/service/historicData.service";
 import { FootpathMapperService } from "../../../footpath/service/mapper/footpathMapper.service";
+import { JourneyStats } from "../../../historicData/dto/journeyStats.dto";
+import { UnavailableReason, UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
+import { HistoricDataProcessorService } from "../../../historicData/service/historicDataProcessor.service";
 import {
   LocationCoordinatesMapperService
 } from "../../../locationFinder/service/mapper/locationCoordinatesMapper.service";
@@ -27,14 +30,16 @@ export class JourneyMapperService {
   private readonly transportationMapper: TransportationMapperService;
   private readonly legDetailsMapper: LegDetailsMapperService;
   private readonly journeyLocationMapper: JourneyLocationMapperService;
-  private readonly delayStatsService: DelayStatsService;
+  private readonly historicDataService: HistoricDataService;
+  private readonly historicDataProcessor: HistoricDataProcessorService;
 
   constructor(
     @Inject(ApiService) apiService: ApiService,
     @Inject(LocationCoordinatesMapperService) locationCoordinatesMapper: LocationCoordinatesMapperService,
     @Inject(FootpathMapperService) footpathMapper: FootpathMapperService,
     @Inject(LocationMapperService) locationMapper: LocationMapperService,
-    @Inject(DelayStatsService) delayStatsService: DelayStatsService
+    @Inject(HistoricDataService) delayStatsService: HistoricDataService,
+    @Inject(HistoricDataProcessorService) historicDataProcessor: HistoricDataProcessorService
   ) {
     this.footpathMapper = footpathMapper;
     this.transportationMapper = new TransportationMapperService(apiService);
@@ -45,7 +50,8 @@ export class JourneyMapperService {
         locationCoordinatesMapper,
         this.journeyLocationMapper,
         this.footpathMapper);
-    this.delayStatsService = delayStatsService;
+    this.historicDataService = delayStatsService;
+    this.historicDataProcessor = historicDataProcessor;
   }
 
   /**
@@ -132,9 +138,18 @@ export class JourneyMapperService {
         ?.map(vrrLeg => this.mapVrrLeg(vrrLeg)) ?? JOURNEY_LEGS_FALLBACK_VAL
     );
 
+    const journeyStats = {
+      aggregatedDelayStats: this.historicDataProcessor.getAggregatedLegDelayStats(
+        processedLegs
+          .filter(leg => leg.type === LegType.transportation)
+          .map(leg => (leg as TransportationLeg).delayStats)),
+      journeyQualityStats: new UnavailableStats(UnavailableReason.noData)
+    } as JourneyStats;
+
     return {
       interchanges: interchanges ?? JOURNEY_INTERCHANGES_FALLBACK_VAL,
-      legs: processedLegs
+      legs: processedLegs,
+      journeyStats: journeyStats
     } as Journey;
   }
 
@@ -167,7 +182,7 @@ export class JourneyMapperService {
         ...baseLeg,
         type: LegType.transportation,
         transportation: this.transportationMapper.mapVrrTransportation(vrrLeg),
-        delayStats: await this.delayStatsService.getPartialRouteStats({
+        delayStats: await this.historicDataService.getPartialRouteStats({
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           tripId: vrrLeg.transportation!.id!,
           originId: this.journeyLocationMapper.getStopParent(baseLeg.origin).id,
