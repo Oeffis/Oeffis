@@ -73,6 +73,11 @@ async function main(): Promise<void> {
           describe: "Concurrency limit for vrr queries and database inserts",
           type: "number"
         })
+        .option("targetTable", {
+          type: "string",
+          description: "The table to insert the data into.",
+          default: "historic_data"
+        })
       , async args => {
         const { run } = await import("./delays");
         await run(args);
