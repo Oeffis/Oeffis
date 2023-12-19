@@ -67,6 +67,11 @@ async function main(): Promise<void> {
           description: "Insert response of api into raw_data column of table.",
           default: false
         })
+        .option("concurrency", {
+          default: 100,
+          describe: "Concurrency limit for vrr queries and database inserts",
+          type: "number"
+        })
       , async args => {
         const { run } = await import("./delays");
         await run(args);
