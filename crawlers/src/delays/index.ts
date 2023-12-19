@@ -66,11 +66,11 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
     const formattedRemainingTime = formatDuration(remainingDuration);
     console.log(`Finished ${finished} of ${total} stops. ${remaining} remaining. ${formattedRemainingTime} remaining`);
 
-    const totalSeconds = seconds_getDepartureDelays + seconds_insertDepartureDelaysIntoDb;
-    const percent_getDepartureDelays = seconds_getDepartureDelays / totalSeconds * 100;
-    const percent_insertDepartureDelaysIntoDb = seconds_insertDepartureDelaysIntoDb / totalSeconds * 100;
+    const totalSeconds = secondsGetDepartureDelays + secondsInsertDepartureDelaysIntoDb;
+    const percentGetDepartureDelays = secondsGetDepartureDelays / totalSeconds * 100;
+    const percentInsertDepartureDelaysIntoDb = secondsInsertDepartureDelaysIntoDb / totalSeconds * 100;
 
-    console.log(`getDepartureDelays: ${seconds_getDepartureDelays.toFixed(2)}s (${percent_getDepartureDelays.toFixed(2)}%)`, `insertDepartureDelaysIntoDb: ${seconds_insertDepartureDelaysIntoDb.toFixed(2)}s (${percent_insertDepartureDelaysIntoDb.toFixed(2)}%)`);
+    console.log(`getDepartureDelays: ${secondsGetDepartureDelays.toFixed(2)}s (${percentGetDepartureDelays.toFixed(2)}%)`, `insertDepartureDelaysIntoDb: ${secondsInsertDepartureDelaysIntoDb.toFixed(2)}s (${percentInsertDepartureDelaysIntoDb.toFixed(2)}%)`);
 
     if (elapsedInSeconds > 2 * 60 * 60) {
       console.log("Exitting after 2 hours of processing.");
@@ -84,15 +84,15 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
   await pgPool.closePgConnection();
 }
 
-let seconds_getDepartureDelays = 0;
-let seconds_insertDepartureDelaysIntoDb = 0;
+let secondsGetDepartureDelays = 0;
+let secondsInsertDepartureDelaysIntoDb = 0;
 
 async function processOneStopId(limit: number, storeRawData: boolean, stopId: string, vrrTimetableVersionId: number, withPgConnection: WithPgConnection): Promise<void> {
   const recordingTime = new Date();
 
   const getDepartureDelaysStart = new Date();
   const stopEvents = await getDepartureDelays(stopId, limit);
-  seconds_getDepartureDelays += differenceInSeconds(new Date(), getDepartureDelaysStart);
+  secondsGetDepartureDelays += differenceInSeconds(new Date(), getDepartureDelaysStart);
 
   if (stopEvents.length === 0) {
     console.warn("No stop events found for stop ", stopId);
@@ -107,7 +107,7 @@ async function processOneStopId(limit: number, storeRawData: boolean, stopId: st
     vrrTimetableVersionId,
     stopId,
   );
-  seconds_insertDepartureDelaysIntoDb += differenceInSeconds(new Date(), insertDepartureDelaysIntoDbStart);
+  secondsInsertDepartureDelaysIntoDb += differenceInSeconds(new Date(), insertDepartureDelaysIntoDbStart);
 }
 
 async function getStopIdsFromDb(withPgConnection: WithPgConnection, vrrTimetableVersionId: number): Promise<string[]> {
