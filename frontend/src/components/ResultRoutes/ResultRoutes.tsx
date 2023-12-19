@@ -20,7 +20,8 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../../public/images/train_image.png";
-import { FootpathLeg, LegOriginLocationTypeEnum, TransportationLeg } from "../../api";
+import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg } from "../../api";
+import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
@@ -35,12 +36,10 @@ import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import "./ResultRoutes.css";
 
-const ResultRoutes: React.FC = () => {
-  const [originId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationId] = useStateParams<string | null>(null, "destination", String, String);
-  const [departureTime] = useDepartureTimeParamOrCurrentTime();
-  // Using specific deserialize because using Boolean() constructor trues everything except empty string.
-  const [asArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
+export const JoruneyLocationResolver: React.FC = () => {
+
+  const [originId] = useStateParams<string>("", "origin", String, String);
+  const [destinationId] = useStateParams<string>("", "destination", String, String);
 
   const originLocation = useLocationByIdOrNull(originId) as Location;
   const destinationLocation = useLocationByIdOrNull(destinationId) as Location;
@@ -74,9 +73,28 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   // TODO Add user input if datetime should be interpreted as arrival time.
   let result = null;
   if (originLocation !== null && destinationLocation !== null) {
-    result = useJourneyQuery(originLocation, destinationLocation, new Date(departureTime), false);
+    return (
+      <>
+        <ResultRoutes
+          origin={originLocation}
+          destination={destinationLocation}
+        />
+      </>
+    );
   }
 
+  return (<p>Lade daten ...</p>);
+
+}
+
+export type ResultRoutesProps = {
+  origin: Location,
+  destination: Location
+}
+
+const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
+
+  const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
@@ -85,20 +103,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
-  /* const getJourneysLocations = (): void => {
-    if (originId !== null && destinationId !== null && departureTime !== null) {
-      journeyApi.journeyControllerQueryJourney({
-        originId: originId,
-        destinationId: destinationId,
-        departure: new Date(departureTime),
-        asArrival: false
-      }).then(journeys => journeys.map(jorueny => jorueny.legs.map(leg => setJourneysLocations(leg.details.stopSequence))))
-        .catch(error => alert(error));
-    }
-  }
-*/
-
-  const iJourneys: false | IJourney[] = result.type === "success"
+  const result = useJourneyQuery(origin, destination, new Date(departureTime), false);
+  const iJourneys = result.type === "success"
     && result.journeyResults
       .map((journey): IJourney => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -135,7 +141,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     selectedJourney?.stops.map(stop => {
       stop.stopIds.map(id => {
         ids.push(id);
-        console.log(id);
+        //console.log(id);
       });
     });
 
@@ -161,10 +167,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   useEffect(() => {
     console.log("ResultRoutes");
-    /*     getJourneysLocations(); */
-    selectedJourney(journey);
     setSlideNames();
-    /*     console.log(journeysLocations?.length); */
+    if (iJourneys !== false) {
+      setSelectedJourney(iJourneys[activeJourneyIndex]);
+      getLocationIds();
+    }
   }, [activeSlideIndex]);
 
   return (
