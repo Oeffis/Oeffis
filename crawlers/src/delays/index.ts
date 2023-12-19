@@ -6,7 +6,7 @@ import * as BetterQueue from "better-queue";
 import { addSeconds, differenceInSeconds, formatDuration, intervalToDuration } from "date-fns";
 import { WithPgConnection, createPgPool } from "../postgres/createPgPool";
 
-export async function run(args: { stopId?: string, limit: number, storeRawData: boolean }): Promise<void> {
+export async function run(args: { stopId?: string, limit: number, storeRawData: boolean, concurrency: number }): Promise<void> {
   SCHEMA_CONVERTER_CONFIG.logSchemaErrors = false;
 
   const pgPool = await createPgPool({
@@ -32,7 +32,7 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
         .then(() => cb(null))
         .catch(cb);
     },
-    concurrent: 100
+    concurrent: args.concurrency
   });
 
   for (const stopId of stopIds) {
@@ -66,6 +66,12 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
     const formattedRemainingTime = formatDuration(remainingDuration);
     console.log(`Finished ${finished} of ${total} stops. ${remaining} remaining. ${formattedRemainingTime} remaining`);
 
+    const totalSeconds = seconds_getDepartureDelays + seconds_insertDepartureDelaysIntoDb;
+    const percent_getDepartureDelays = seconds_getDepartureDelays / totalSeconds * 100;
+    const percent_insertDepartureDelaysIntoDb = seconds_insertDepartureDelaysIntoDb / totalSeconds * 100;
+
+    console.log(`getDepartureDelays: ${seconds_getDepartureDelays.toFixed(2)}s (${percent_getDepartureDelays.toFixed(2)}%)`, `insertDepartureDelaysIntoDb: ${seconds_insertDepartureDelaysIntoDb.toFixed(2)}s (${percent_insertDepartureDelaysIntoDb.toFixed(2)}%)`);
+
     if (elapsedInSeconds > 2 * 60 * 60) {
       console.log("Exitting after 2 hours of processing.");
       process.exit(1);
@@ -78,14 +84,21 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
   await pgPool.closePgConnection();
 }
 
+let seconds_getDepartureDelays = 0;
+let seconds_insertDepartureDelaysIntoDb = 0;
+
 async function processOneStopId(limit: number, storeRawData: boolean, stopId: string, vrrTimetableVersionId: number, withPgConnection: WithPgConnection): Promise<void> {
   const recordingTime = new Date();
+
+  const getDepartureDelaysStart = new Date();
   const stopEvents = await getDepartureDelays(stopId, limit);
+  seconds_getDepartureDelays += differenceInSeconds(new Date(), getDepartureDelaysStart);
 
   if (stopEvents.length === 0) {
     console.warn("No stop events found for stop ", stopId);
   }
 
+  const insertDepartureDelaysIntoDbStart = new Date();
   await insertDepartureDelaysIntoDb(
     storeRawData,
     stopEvents,
@@ -94,6 +107,7 @@ async function processOneStopId(limit: number, storeRawData: boolean, stopId: st
     vrrTimetableVersionId,
     stopId,
   );
+  seconds_insertDepartureDelaysIntoDb += differenceInSeconds(new Date(), insertDepartureDelaysIntoDbStart);
 }
 
 async function getStopIdsFromDb(withPgConnection: WithPgConnection, vrrTimetableVersionId: number): Promise<string[]> {
