@@ -6,7 +6,7 @@ import * as BetterQueue from "better-queue";
 import { addSeconds, differenceInSeconds, formatDuration, intervalToDuration } from "date-fns";
 import { WithPgConnection, createPgPool } from "../postgres/createPgPool";
 
-export async function run(args: { stopId?: string, limit: number, storeRawData: boolean, concurrency: number }): Promise<void> {
+export async function run(args: { stopId?: string, limit: number, storeRawData: boolean, concurrency: number, targetTable: string }): Promise<void> {
   SCHEMA_CONVERTER_CONFIG.logSchemaErrors = false;
 
   const pgPool = await createPgPool({
@@ -28,7 +28,7 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
     maxRetries: 3,
     retryDelay: 1 * 60 * 1000, // 1 minute
     process: (task: { id: string }, cb) => {
-      processOneStopId(args.limit, args.storeRawData, task.id, vrrTimetableVersionId, pgPool.withPgConnection)
+      processOneStopId(args.limit, args.storeRawData, args.targetTable, task.id, vrrTimetableVersionId, pgPool.withPgConnection)
         .then(() => cb(null))
         .catch(cb);
     },
@@ -87,7 +87,7 @@ export async function run(args: { stopId?: string, limit: number, storeRawData: 
 let secondsGetDepartureDelays = 0;
 let secondsInsertDepartureDelaysIntoDb = 0;
 
-async function processOneStopId(limit: number, storeRawData: boolean, stopId: string, vrrTimetableVersionId: number, withPgConnection: WithPgConnection): Promise<void> {
+async function processOneStopId(limit: number, storeRawData: boolean, targetTable: string, stopId: string, vrrTimetableVersionId: number, withPgConnection: WithPgConnection): Promise<void> {
   const recordingTime = new Date();
 
   const getDepartureDelaysStart = new Date();
@@ -106,6 +106,7 @@ async function processOneStopId(limit: number, storeRawData: boolean, stopId: st
     recordingTime,
     vrrTimetableVersionId,
     stopId,
+    targetTable,
   );
   secondsInsertDepartureDelaysIntoDb += differenceInSeconds(new Date(), insertDepartureDelaysIntoDbStart);
 }
@@ -187,24 +188,28 @@ async function insertDepartureDelaysIntoDb(
   recordingTime: Date,
   vrrTimetableVersionId: number,
   parentStopId: string,
+  targetTable: string,
 ): Promise<void> {
   await withPgConnection(async pgClient => {
     const promises = stopEvents.map(stop => {
       const rawData = storeRawData ? JSON.stringify(stop) : null;
-      return pgClient.query("INSERT INTO historic_data (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id, trip_code, parent_stop_id, is_cancelled) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)", [
-        stop.transportation.id,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        stop.location!.id,
-        recordingTime,
-        true,
-        stop.departureTimePlanned,
-        stop.departureTimeEstimated,
-        rawData,
-        vrrTimetableVersionId,
-        stop.transportation.properties?.tripCode,
-        parentStopId,
-        (stop as { isCancelled?: boolean }).isCancelled ?? false
-      ]);
+      return pgClient.query(
+        `INSERT INTO ${targetTable} (trip_id, stop_id, recording_time, is_departure, planned, estimated, raw_data, vrr_timetable_version_id, trip_code, parent_stop_id, is_cancelled) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+        [
+          stop.transportation.id,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          stop.location!.id,
+          recordingTime,
+          true,
+          stop.departureTimePlanned,
+          stop.departureTimeEstimated,
+          rawData,
+          vrrTimetableVersionId,
+          stop.transportation.properties?.tripCode,
+          parentStopId,
+          (stop as { isCancelled?: boolean }).isCancelled ?? false
+        ]
+      );
     });
 
     await Promise.all(promises);
