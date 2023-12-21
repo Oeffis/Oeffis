@@ -15,7 +15,6 @@ import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import "./ResultRoutes.css";
 
 const ResultRoutes: React.FC = () => {
-
   const [originId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId] = useStateParams<string | null>(null, "destination", String, String);
   const [departureTime] = useStateParams<string>("now", "departure", String, String);
@@ -32,6 +31,7 @@ const ResultRoutes: React.FC = () => {
     if (swiper !== null) {
       swiper.slideNext();
     }
+    window.localStorage.setItem('selectedJourney', JSON.stringify(journey));
     setSelectedJourney(journey);
   };
 
@@ -68,6 +68,7 @@ const ResultRoutes: React.FC = () => {
             <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
           </IonRadioGroup>
           <p>{slideName}</p>
+          <IonButton routerLink="livenavigation"> Play </IonButton>
         </div>
         <IonButton className="back-button" onClick={() => { console.log("hallo"); history.back(); }}
           size="default" expand="block">
