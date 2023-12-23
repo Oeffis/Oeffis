@@ -47,7 +47,7 @@ const ResultRoutes: React.FC = () => {
     if (swiper !== null) {
       swiper.slideNext();
     }
-    window.localStorage.setItem('selectedJourney', JSON.stringify(journey));
+    window.localStorage.setItem("selectedJourney", JSON.stringify(journey));
     setSelectedJourney(journey);
   };
 
@@ -124,7 +124,7 @@ const ResultRoutes: React.FC = () => {
           <SwiperSlide>
             {
               selectedJourney !== null &&
-              <JourneyDetail showProgress={false} journey={selectedJourney} />
+              <JourneyDetail journey={selectedJourney} />
             }
           </SwiperSlide>
         </SwiperReact>
