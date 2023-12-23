@@ -8,7 +8,6 @@ export interface StationProps { stationName: string, startTime: Date }
 const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
   const color = isFuture(props.startTime) ? "lightgray" : "gray";
 
-  console.log(props.startTime, 'starttime in first')
   return (
     <div className="container" data-testid="journey-step">
       <div className="left">

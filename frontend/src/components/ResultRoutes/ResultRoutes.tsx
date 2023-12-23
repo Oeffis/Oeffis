@@ -3,6 +3,7 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonImg,
   IonMenuButton,
   IonRadio,
@@ -10,6 +11,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
+import { playOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -76,13 +78,22 @@ const ResultRoutes: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="selection">
-          <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
-            <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
-          </IonRadioGroup>
-          <p>{slideName}</p>
-          <IonButton routerLink="livenavigation"> Play </IonButton>
+        <div className="result-header">
+          <div className="result-swiper">
+            <IonRadioGroup value={slideName}>
+              <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
+            </IonRadioGroup>
+            <p>{slideName}</p>
+          </div>
+          {
+            selectedJourney && <div className="right-align">
+              <IonButton className="circle-button" routerLink="livenavigation">
+                <IonIcon icon={playOutline} />
+              </IonButton>
+            </div>
+          }
+
         </div>
         <IonButton className="back-button" onClick={() => { history.back(); }}
           size="default" expand="block">
@@ -113,7 +124,7 @@ const ResultRoutes: React.FC = () => {
           <SwiperSlide>
             {
               selectedJourney !== null &&
-              <JourneyDetail journey={selectedJourney} />
+              <JourneyDetail showProgress={false} journey={selectedJourney} />
             }
           </SwiperSlide>
         </SwiperReact>
