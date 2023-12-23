@@ -9,10 +9,7 @@ import StepProgressComponent from "./StepProgressComponent";
 
 export interface TravelProps { journey: IJourney }
 
-const formatDateShort = (date: Date): string => {
-  console.log(date, 'date in journeydetail')
-  return format(date, "HH:mm");
-}
+const formatDateShort = (date: Date): string => format(date, "HH:mm");
 
 const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
   <div className="JourneyDetail">

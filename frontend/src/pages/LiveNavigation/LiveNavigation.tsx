@@ -3,21 +3,19 @@ import logo from "../../../public/images/train_image.png";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
-import "./LiveNavigation.css";
 
 const LiveNavigation: React.FC = () => {
-  const selectedJourneyAsString = window.localStorage.getItem('selectedJourney');
+  const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
   let selectedJourney: IJourney | null = null;
   if (selectedJourneyAsString !== null) {
     selectedJourney = JSON.parse(selectedJourneyAsString) as IJourney;
     selectedJourney.arrivalTime = new Date(selectedJourney.arrivalTime);
     selectedJourney.startTime = new Date(selectedJourney.startTime);
 
-    for (let step of selectedJourney.stops) {
+    for (const step of selectedJourney.stops) {
       step.arrivalTime = new Date(step.arrivalTime);
       step.startTime = new Date(step.startTime);
     }
-    console.log(selectedJourney);
   }
 
   return (
@@ -36,16 +34,14 @@ const LiveNavigation: React.FC = () => {
       <IonContent>
         {
           selectedJourney !== null &&
-          <LiveNavigationInfoComponent arrivalTime={selectedJourney?.arrivalTime}></LiveNavigationInfoComponent> &&
-          <JourneyDetail journey={selectedJourney} />
+          <>
+            <LiveNavigationInfoComponent arrivalTime={selectedJourney?.arrivalTime} />
+            <JourneyDetail journey={selectedJourney} />
+          </>
         }
-        <IonButton className="back-button" onClick={() => { window.localStorage.removeItem('selectedJourney') }}
+        <IonButton className="back-button" onClick={() => { window.localStorage.removeItem("selectedJourney"); history.back(); }}
           size="default" expand="block">
           Navigation Beenden
-        </IonButton>
-        <IonButton className="back-button" onClick={() => { history.back(); }}
-          size="default" expand="block">
-          Zurück zum Routenplaner
         </IonButton>
       </IonContent>
     </>);
