@@ -1,12 +1,17 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { useState } from "react";
 import logo from "../../../public/images/train_image.png";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
+import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
+import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
   const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
   let selectedJourney: IJourney | null = null;
+  const [showModal, setshowModal] = useState<boolean>(true);
+
   if (selectedJourneyAsString !== null) {
     selectedJourney = JSON.parse(selectedJourneyAsString) as IJourney;
     selectedJourney.arrivalTime = new Date(selectedJourney.arrivalTime);
@@ -44,6 +49,9 @@ const LiveNavigation: React.FC = () => {
           Navigation Beenden
         </IonButton>
       </IonContent>
+      <IonModal className={styles.suggestionModal} isOpen={showModal} >
+        <SuggestionModalComponent dismiss={() => setshowModal(false)} />
+      </IonModal>
     </>);
 };
 
