@@ -5,22 +5,16 @@ import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
+import { findRouteFromNextStop, getSelectedJourney } from "../../services/smartSuggestion/smartSuggestionFunctions";
 import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
   const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
-  let selectedJourney: IJourney | null = null;
+  const selectedJourney: IJourney | null = getSelectedJourney();
   const [showModal, setshowModal] = useState<boolean>(true);
 
   if (selectedJourneyAsString !== null) {
-    selectedJourney = JSON.parse(selectedJourneyAsString) as IJourney;
-    selectedJourney.arrivalTime = new Date(selectedJourney.arrivalTime);
-    selectedJourney.startTime = new Date(selectedJourney.startTime);
-
-    for (const step of selectedJourney.stops) {
-      step.arrivalTime = new Date(step.arrivalTime);
-      step.startTime = new Date(step.startTime);
-    }
+    findRouteFromNextStop();
   }
 
   return (
