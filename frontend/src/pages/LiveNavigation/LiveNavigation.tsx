@@ -5,17 +5,21 @@ import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
-import { findRouteFromNextStop, getSelectedJourney } from "../../services/smartSuggestion/smartSuggestionFunctions";
+import { blackListJourney, findJourneyFromNextStop, parseJSONToJourney } from "../../services/smartSuggestion/smartSuggestionFunctions";
 import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
-  const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
-  const selectedJourney: IJourney | null = getSelectedJourney();
-  const [showModal, setshowModal] = useState<boolean>(true);
+  const selectedJourney: IJourney | null = parseJSONToJourney(window.localStorage.getItem("selectedJourney"));
+  const [showModal, setshowModal] = useState<boolean>(false);
+  const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
 
-  if (selectedJourneyAsString !== null) {
-    findRouteFromNextStop();
-  }
+  setInterval(async () => {
+    await findJourneyFromNextStop();
+    setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
+    if (window.localStorage.getItem("recJourney") !== null) {
+      setshowModal(true);
+    }
+  }, 10000);
 
   return (
     <>
@@ -44,9 +48,10 @@ const LiveNavigation: React.FC = () => {
         </IonButton>
       </IonContent>
       <IonModal className={styles.suggestionModal} isOpen={showModal} >
-        <SuggestionModalComponent dismiss={() => setshowModal(false)} />
+        <SuggestionModalComponent dismiss={() => { setshowModal(false); blackListJourney(); }} recommendedJourney={recommendedJourney} />
       </IonModal>
     </>);
 };
 
 export default LiveNavigation;
+

@@ -1,10 +1,13 @@
 import { IonButton, IonContent, IonHeader, IonIcon, IonLabel } from "@ionic/react";
 import { checkmarkOutline, closeOutline, navigateOutline } from "ionicons/icons";
+import { IJourney } from "../../interfaces/IJourney.interface";
 import styles from "./SuggestionModalComponent.module.css";
 
 export interface SuggestionModalComponentProps {
   dismiss: () => void;
+  recommendedJourney: IJourney | null;
 }
+
 export const SuggestionModalComponent: React.FC<SuggestionModalComponentProps> = (props) => (
   <>
     <IonHeader className={styles.header}>
@@ -19,6 +22,7 @@ export const SuggestionModalComponent: React.FC<SuggestionModalComponentProps> =
           Sie können eine bessere Route auswählen
         </IonLabel>
         <div className={styles.newLines}>
+          <LegList journey={props.recommendedJourney} />
           <IonLabel>
             Neue Verbindungen
           </IonLabel>
@@ -38,3 +42,15 @@ export const SuggestionModalComponent: React.FC<SuggestionModalComponentProps> =
     </IonContent>
   </>
 );
+
+function LegList(props: {
+  journey: IJourney | null
+}): JSX.Element {
+  console.log(props.journey);
+
+  return (
+    <>
+
+    </>
+  );
+}

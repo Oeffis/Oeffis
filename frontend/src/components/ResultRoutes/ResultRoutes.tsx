@@ -47,6 +47,8 @@ const ResultRoutes: React.FC = () => {
     if (swiper !== null) {
       swiper.slideNext();
     }
+    window.localStorage.removeItem("selectedJourney");
+    window.localStorage.removeItem("recJourney");
     window.localStorage.setItem("selectedJourney", JSON.stringify(journey));
     setSelectedJourney(journey);
   };
