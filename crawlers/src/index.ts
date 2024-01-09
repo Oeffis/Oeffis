@@ -1,3 +1,4 @@
+import { addWeeks, addYears, getISOWeek, isBefore, startOfMonth } from "date-fns";
 import yargs from "yargs";
 import { importVrrTimetables } from "./importVrrTimetable/entrypoint";
 import { TABLE_SCHEMAS } from "./importVrrTimetable/tableSchema";
@@ -67,9 +68,62 @@ async function main(): Promise<void> {
           description: "Insert response of api into raw_data column of table.",
           default: false
         })
+        .option("concurrency", {
+          default: 100,
+          describe: "Concurrency limit for vrr queries and database inserts",
+          type: "number"
+        })
+        .option("targetTable", {
+          type: "string",
+          description: "The table to insert the data into.",
+          default: "historic_data"
+        })
       , async args => {
         const { run } = await import("./delays");
         await run(args);
+        process.exit(0);
+      })
+    .command("generate-partition-sql", "Generates sql for creating partitions for a table", yargs =>
+      yargs
+        .option("year", {
+          alias: "y",
+          type: "number",
+          description: "The year to generate partitions for.",
+          demandOption: true,
+          default: 2023
+        })
+      , async ({ year }) => {
+
+        const startOfCurrent = startOfMonth(new Date(year, 0, 1));
+        const startOfNext = addYears(startOfCurrent, 1);
+
+        const createTableSql = [];
+        const migrateTableSql = [];
+
+        for (let i = startOfCurrent; isBefore(i, startOfNext); i = addWeeks(i, 1)) {
+
+          const weekNumber = getISOWeek(i);
+          const startOfWeek = i;
+          const endOfWeek = addWeeks(i, 1);
+
+          const create = `CREATE TABLE historic_data_y${startOfWeek.getUTCFullYear()}_w${weekNumber} PARTITION OF historic_data
+          FOR VALUES FROM ('${startOfWeek.toISOString()}') TO ('${endOfWeek.toISOString()}');
+          `;
+
+          createTableSql.push(create);
+
+          const migrate = `INSERT INTO historic_data
+          SELECT * FROM historic_data_old
+          WHERE recording_time BETWEEN ('${startOfWeek.toISOString()}') AND ('${endOfWeek.toISOString()}');`;
+
+          migrateTableSql.push(migrate);
+        }
+
+        console.log("Migration SQL:");
+        console.log(migrateTableSql.join("\n"));
+
+        console.log("Create SQL:");
+        console.log(createTableSql.join("\n"));
         process.exit(0);
       })
     .showHelpOnFail(true)

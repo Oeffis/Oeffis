@@ -1,7 +1,3 @@
-.popup {
-    width: fit-content;
-}
-
 #map {
     height: 100%;
     width: 100%;
@@ -11,14 +7,12 @@
 
 .leaflet-popup-content {
     line-height: 0.8;
+    width: min-content;
+    font-size: 16px;
 }
 
 p.popupHeadline {
     font-weight: bold;
-    margin: 0px;
-}
-
-p.popupText {
     margin: 0px;
 }
 
@@ -27,6 +21,15 @@ p.selectLocation {
     text-decoration: underline;
     margin-top: 7px;
     text-align: center;
+}
+
+p.popupText {
+    margin: 1em 0em;
+}
+
+.buttonWrapper {
+    display: flex;
+    justify-content: center;
 }
 
 

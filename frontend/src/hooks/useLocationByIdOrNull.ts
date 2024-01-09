@@ -49,7 +49,6 @@ export function useLocationByIdOrNull(locationId: string | null): Location | nul
     }
 
     function processSingleLocationFound(matchingLocations: RatedLocation[]): true {
-      console.debug(`Single location found with id ${locationId}`);
       const location = matchingLocations[0] as Location;
       locationCache.set(location.id, location);
       setLocation(location);

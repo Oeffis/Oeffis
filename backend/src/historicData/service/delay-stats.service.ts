@@ -22,14 +22,14 @@ const PARTIAL_ROUTE_STATS_QUERY = `
                                  FROM historic_data
                                  WHERE estimated IS NOT NULL
                                    AND trip_id = $1
-                                   AND parent_stop_id = $2
+                                   AND stop_id IN (SELECT DISTINCT stop_id
+                                                   FROM stops
+                                                   WHERE "NVBW_HST_DHID" = $2)
                                    AND planned > $3),
 
-         latest_of_day_tripcode AS (SELECT DISTINCT
-    ON (planned:: date, trip_code) *
-    FROM historic_with_delay
-    ORDER BY planned:: date, trip_code DESC
-        )
+         latest_of_day_tripcode AS (SELECT DISTINCT ON (planned:: date, trip_code) *
+                                    FROM historic_with_delay
+                                    ORDER BY planned:: date, trip_code DESC)
 
     SELECT MAX(delay), MIN(delay), AVG(delay), STDDEV(delay)
     FROM latest_of_day_tripcode;

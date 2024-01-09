@@ -18,12 +18,7 @@ import {
 } from "@ionic/react";
 import { calendarClearOutline, closeCircleOutline, heart, search, swapVerticalOutline } from "ionicons/icons";
 import { useState } from "react";
-import {
-  Journey,
-  Location,
-  TransportationLeg,
-  TransportationLegTypeEnum
-} from "../../api";
+import { Journey, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
@@ -38,14 +33,18 @@ import { LocationSearchInput } from "../LocationSearch/LocationSearchInput";
 import rp from "./RoutePlanner.module.css";
 
 export interface RoutePlannerProps {
-  setSelectedOriginLocation: (location: Location) => void
-  setSelectedDestinationLocation: (location: Location) => void
+  originId: string | null
+  destinationId: string | null
+  setOriginId: (location: string | null) => void
+  setDestinationId: (location: string | null) => void
 }
 
-const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocation }: RoutePlannerProps): JSX.Element => {
-
-  const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
-  const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
+const RoutePlanner = ({
+  originId,
+  destinationId,
+  setOriginId,
+  setDestinationId
+}: RoutePlannerProps): JSX.Element => {
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
   const [asArrivalTime, setAsArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
@@ -169,7 +168,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                 selectedLocation={originLocation}
                 onSelectedLocationChanged={(location): void => {
                   setOriginId(location.id);
-                  setSelectedOriginLocation(location);
                 }}
                 onInputGiven={(input): void => setOriginInput(input)}
                 prefixDataTestId="origin-input"
@@ -182,7 +180,6 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
                 selectedLocation={destinationLocation}
                 onSelectedLocationChanged={(location): void => {
                   setDestinationId(location.id);
-                  setSelectedDestinationLocation(location);
                 }}
                 onInputGiven={(input): void => setDestinationInput(input)}
                 prefixDataTestId="destination-input"
@@ -205,7 +202,10 @@ const RoutePlanner = ({ setSelectedOriginLocation, setSelectedDestinationLocatio
             <IonIcon slot="start" icon={heart} />
             Merken
           </IonButton>
-          <IonButton routerLink={`/results?origin=${originId}&destination=${destinationId}&departure=${new Date(departureTime).toISOString()}`} disabled={originLocation === null || destinationLocation === null} className={rp.button_primary} size="default" expand="block">
+          <IonButton
+            routerLink={`/results?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`}
+            disabled={originLocation === null || destinationLocation === null} className={rp.button_primary}
+            size="default" expand="block">
             <IonIcon slot="start" icon={search} />
             Routen suchen
           </IonButton>

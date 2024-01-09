@@ -867,8 +867,7 @@
           }
         },
         "required": [
-          "totalDuration",
-          "totalDistance"
+          "totalDuration"
         ]
       },
       "LegInterchange": {
@@ -1095,23 +1094,6 @@
           "reason"
         ]
       },
-      "MaybeDelayStats": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "Status of the leg stats.",
-            "enum": [
-              "available",
-              "unavailable"
-            ],
-            "example": "available"
-          }
-        },
-        "required": [
-          "status"
-        ]
-      },
       "LegStats": {
         "type": "object",
         "properties": {
@@ -1131,12 +1113,7 @@
                 "available": "#/components/schemas/DelayStats",
                 "unavailable": "#/components/schemas/UnavailableDelayStats"
               }
-            },
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MaybeDelayStats"
-              }
-            ]
+            }
           },
           "destinationDelayStats": {
             "description": "Delay statistics at destination.",
@@ -1154,12 +1131,7 @@
                 "available": "#/components/schemas/DelayStats",
                 "unavailable": "#/components/schemas/UnavailableDelayStats"
               }
-            },
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MaybeDelayStats"
-              }
-            ]
+            }
           }
         },
         "required": [
