@@ -1,3 +1,4 @@
+import { differenceInMinutes } from "date-fns";
 import {
   FootpathLeg,
   LegOriginLocationTypeEnum,
@@ -50,7 +51,7 @@ export function TripOptionsDisplay(props: {
               originDelayStats: { status: "unavailable", reason: "Fußpfad" }
             }
           })),
-          travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
+          travelDurationInMinutes: differenceInMinutes(lastLeg.destination.arrivalTimeEstimated, firstLeg.origin.departureTimeEstimated)
         };
       });
 
