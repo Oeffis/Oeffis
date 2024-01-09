@@ -142,12 +142,23 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
     let ids: string[] = [];
 
+    ids.push(origin.id);
+
     selectedJourney?.stops.map(stop => {
-      stop.stopIds.map(id => {
-        ids.push(id);
-        //console.log(id);
-      });
+      stop.stopIds.map(id => ids.push(id));
     });
+
+    ids[ids.length - 1] = destination.id;
+
+
+    //ids.push(destination.id);
+
+
+
+    /* console.log("Contains originId?: " + ids.forEach(id => (id === origin.id) ? console.log("true") : console.log("false")));
+    console.log(origin.id);
+    console.log("Contains destinationId?: " + ids.forEach(id => (id === destination.id) ? console.log("true") : console.log("false")));
+    console.log(destination.id); */
 
     return ids;
   }
