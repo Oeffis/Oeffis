@@ -34,7 +34,6 @@ export function CurrentLocationProvider(props: { children: React.ReactNode }): J
   });
 
   useEffect(() => {
-    console.log("use effect context provider location");
     let jobsWatchId: string | null = null;
 
     void Geolocation.watchPosition({}, (position, error) => {
@@ -71,7 +70,6 @@ export function CurrentLocationProvider(props: { children: React.ReactNode }): J
       }
 
     }).then((watchId) => {
-      console.debug("Started location watch with id: ", watchId);
       jobsWatchId = watchId;
     }, (error) => {
       console.error("Failed to start location watch: ", error);
@@ -85,7 +83,6 @@ export function CurrentLocationProvider(props: { children: React.ReactNode }): J
 
     return () => {
       if (jobsWatchId) {
-        console.debug("Stopping location watch with id: ", jobsWatchId);
         void Geolocation.clearWatch({ id: jobsWatchId });
       }
     };

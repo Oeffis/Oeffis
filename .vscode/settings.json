@@ -26,6 +26,6 @@
     "Hafas"
   ],
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true
+    "source.organizeImports": "always"
   }
 }

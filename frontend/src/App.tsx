@@ -1,6 +1,5 @@
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route, Switch } from "react-router-dom";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -17,6 +16,7 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Menu from "./components/Menu";
 import ResultRoutes from "./components/ResultRoutes/ResultRoutes";
 import { CurrentLocationProvider } from "./hooks/useCurrentLocation";
@@ -62,9 +62,6 @@ const App: React.FC = () => (
                       </Route>
                       <Route exact path="/userPreferences">
                         <UserPreferencesPage />
-                      </Route>
-                      <Route exact path="/journeyDemo">
-                        <JourneyPage />
                       </Route>
                       <Route exact path="/results">
                         <ResultRoutes />

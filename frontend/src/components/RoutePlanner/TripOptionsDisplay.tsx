@@ -1,20 +1,25 @@
-import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
+import {
+  FootpathLeg,
+  LegOriginLocationTypeEnum,
+  Location,
+  TransportationLeg,
+  TransportationLegTypeEnum
+} from "../../api";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import JourneyListComponent from "../JourneyListComponent";
 
-// TODO Duplicate with TripOptionsDisplay in RoutePlanner file + this one is unused.
 export function TripOptionsDisplay(props: {
   origin: Location,
   destination: Location,
   departure: Date,
+  asArrival: boolean,
   setJourney: (journey: IJourney) => void
 }): JSX.Element {
-  const { origin, destination, departure } = props;
+  const { origin, destination, departure, asArrival } = props;
 
-  // TODO Add user input if datetime should be interpreted as arrival time.
-  const result = useJourneyQuery(origin, destination, departure, false);
+  const result = useJourneyQuery(origin, destination, departure, asArrival);
 
   const iJourneys: false | IJourney[] = result.type === "success"
     && result.journeyResults

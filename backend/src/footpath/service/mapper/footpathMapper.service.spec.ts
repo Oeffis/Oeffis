@@ -17,7 +17,7 @@ beforeEach(() => {
 
 it.each([
   ["missing path descriptions",
-    vrrFootpathLeg(vrrFootpathInfos(), undefined), false],
+    vrrFootpathLeg(vrrFootpathInfos(), undefined), true],
   ["missing footpath infos",
     vrrFootpathLeg(undefined, vrrPathDescriptions()), true],
   ["missing path descriptions + footpath infos",
@@ -35,7 +35,7 @@ it.each([
 
 it.each([
   ["missing path descriptions",
-    vrrInterchangeLeg(vrrFootpathInfos(), undefined), false],
+    vrrInterchangeLeg(vrrFootpathInfos(), undefined), true],
   ["missing footpath infos",
     vrrInterchangeLeg(undefined, vrrPathDescriptions()), true],
   ["missing path descriptions + footpath infos",
@@ -65,7 +65,7 @@ it.each([
   expect(mappedFootpath).toEqual(expectedFootpath);
 });
 
-it("map footpath with missing optional fields.", () => {
+it("map footpath with path description only.", () => {
   // Given
   const vrrLegWithMissingFootpathInfo: VrrLeg = vrrInterchangeLeg(undefined, vrrPathDescriptions());
 
@@ -81,9 +81,25 @@ it("map footpath with missing optional fields.", () => {
   expect(mappedFootpath).toEqual(expectedFootpath);
 });
 
+it("map footpath with footpath infos only.", () => {
+  // Given
+  const vrrLegWithMissingPathDescription: VrrLeg = vrrInterchangeLeg(vrrFootpathInfos(), undefined);
+
+  const expectedFootpath: Footpath = {
+    totalDistance: undefined,
+    totalDuration: 50
+  } as Footpath;
+
+  // When
+  const mappedFootpath = footpathMapper.mapVrrFootpath(vrrLegWithMissingPathDescription);
+
+  // Then
+  expect(mappedFootpath).toEqual(expectedFootpath);
+});
+
 it("throw error if invalid footpath information.", () => {
   // Given
-  const vrrInterchangeLegWithoutPathDescriptions: VrrLeg = vrrInterchangeLeg(vrrFootpathInfos(), undefined);
+  const vrrInterchangeLegWithoutPathDescriptions: VrrLeg = vrrInterchangeLeg(undefined, undefined);
 
   // When & Then
   expect(() => footpathMapper.mapVrrFootpath(vrrInterchangeLegWithoutPathDescriptions))
