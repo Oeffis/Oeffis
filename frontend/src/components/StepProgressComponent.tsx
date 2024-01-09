@@ -25,9 +25,7 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
     </div>
     <div className="line-info">
       <IonLabel>
-        {
-          props.step.line && "Linie:" + props.step.line
-        }
+        {props.step.line && "Linie:" + props.step.line}
       </IonLabel>
       <IonLabel>
         {props.step.line && "Fahrtzeit: "}
