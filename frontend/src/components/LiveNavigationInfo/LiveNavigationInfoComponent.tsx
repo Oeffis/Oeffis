@@ -8,7 +8,6 @@ interface LiveNavigationInfoComponentProps {
 }
 
 const getHours = (arrivalTime: Date): string => {
-  // format returns duration + 1 hour thats why we subtract 60
 
   const hours = differenceInHours(arrivalTime, new Date());
   return hours.toString();
