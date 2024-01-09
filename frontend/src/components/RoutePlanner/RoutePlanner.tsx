@@ -103,11 +103,9 @@ const RoutePlanner = ({
     setOriginId(destinationId);
     setDestinationId(originId);
     if (originLocation !== null) {
-      setSelectedDestinationLocation(originLocation);
       setOriginInput(destinationInput);
     }
     if (destinationLocation !== null) {
-      setSelectedOriginLocation(destinationLocation);
       setDestinationInput(originInput);
     }
   };
