@@ -30,9 +30,7 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
           </div>
 
           <IonLabel>
-            {
-              props.journey.startStation
-            }
+            {props.journey.startStation}
           </IonLabel>
           <IonLabel>
             {props.journey.arrivalStation}
