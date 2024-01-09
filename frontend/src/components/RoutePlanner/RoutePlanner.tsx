@@ -99,6 +99,20 @@ const RoutePlanner = ({
 
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
 
+  const toggleOriginDestinationLocation = (): void => {
+    setOriginId(destinationId);
+    setDestinationId(originId);
+    if (originLocation !== null) {
+      setOriginInput(destinationInput);
+    }
+    if (destinationLocation !== null) {
+      setDestinationInput(originInput);
+    }
+  };
+
+  const [originInput, setOriginInput] = useState<string>("");
+  const [destinationInput, setDestinationInput] = useState<string>("");
+
   return (
     <>
       <IonList className={rp.center_all_column} inset={true}>
@@ -153,7 +167,9 @@ const RoutePlanner = ({
                 onSelectedLocationChanged={(location): void => {
                   setOriginId(location.id);
                 }}
+                onSearchInputChanged={(input): void => setOriginInput(input)}
                 prefixDataTestId="origin-input"
+                searchInput={originInput ?? ""}
               />
             </IonItem>
             <IonItem>
@@ -163,11 +179,16 @@ const RoutePlanner = ({
                 onSelectedLocationChanged={(location): void => {
                   setDestinationId(location.id);
                 }}
+                onSearchInputChanged={(input): void => setDestinationInput(input)}
                 prefixDataTestId="destination-input"
+                searchInput={destinationInput ?? ""}
               />
             </IonItem>
           </IonCol>
-          <IonButton fill="clear" expand="block"
+          <IonButton
+            fill="clear"
+            expand="block"
+            onClick={toggleOriginDestinationLocation}
           >
             <IonIcon slot="start" icon={swapVerticalOutline} />
           </IonButton>
