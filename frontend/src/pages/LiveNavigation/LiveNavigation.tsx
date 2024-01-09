@@ -5,16 +5,18 @@ import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
+import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import { blackListJourney, findJourneyFromNextStop, parseJSONToJourney } from "../../services/smartSuggestion/smartSuggestionFunctions";
 import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
-  const selectedJourney: IJourney | null = parseJSONToJourney(window.localStorage.getItem("selectedJourney"));
+  const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(parseJSONToJourney(window.localStorage.getItem("selectedJourney")));
   const [showModal, setshowModal] = useState<boolean>(false);
   const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
 
-  setInterval(async () => {
-    await findJourneyFromNextStop();
+  void findJourneyFromNextStop();
+
+  setInterval(() => {
     setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
     if (window.localStorage.getItem("recJourney") !== null) {
       setshowModal(true);
@@ -48,10 +50,26 @@ const LiveNavigation: React.FC = () => {
         </IonButton>
       </IonContent>
       <IonModal className={styles.suggestionModal} isOpen={showModal} >
-        <SuggestionModalComponent dismiss={() => { setshowModal(false); blackListJourney(); }} recommendedJourney={recommendedJourney} />
+        <SuggestionModalComponent updateSelectedJourney={() => { updateSelectedJourney(recommendedJourney, setSelectedJourney, selectedJourney); setshowModal(false); }} dismiss={() => { setshowModal(false); blackListJourney(); }} recommendedJourney={recommendedJourney} />
       </IonModal>
     </>);
 };
 
 export default LiveNavigation;
 
+function updateSelectedJourney(recJourney: IJourney | null, setSelectedJourney: (journey: IJourney | null) => void, selectedJourney: IJourney | null): void {
+  let updatedStops: IJourneyStep[] = [];
+  if (recJourney && selectedJourney) {
+    updatedStops = selectedJourney?.stops.filter(
+      stop => stop.startTime < recJourney?.stops[0].startTime
+    );
+    updatedStops = updatedStops?.concat(recJourney?.stops);
+  }
+
+  if (recJourney) {
+    recJourney.stops = updatedStops;
+  }
+  window.localStorage.removeItem("selectedJourney");
+  window.localStorage.setItem("selectedJourney", JSON.stringify(recJourney));
+  setSelectedJourney(recJourney);
+}

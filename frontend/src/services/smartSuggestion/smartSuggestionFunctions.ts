@@ -4,28 +4,27 @@ import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import { useJourneyApi, useLocationFinderApi } from "../apiClients/ApiClientsContext";
 
 let selectedJourneyJSON: string | null;
-let blackList: IJourney[];
+const blackList: number[] = [];
 
 export function parseJSONToJourney(journey: string | null): IJourney {
-  let selectedJourney: IJourney;
+  let iJourney: IJourney;
   if (journey !== null) {
-    selectedJourney = JSON.parse(journey) as IJourney;
-    selectedJourney.arrivalTime = new Date(selectedJourney.arrivalTime);
-    selectedJourney.startTime = new Date(selectedJourney.startTime);
+    iJourney = JSON.parse(journey) as IJourney;
+    iJourney.arrivalTime = new Date(iJourney.arrivalTime);
+    iJourney.startTime = new Date(iJourney.startTime);
 
-    for (const step of selectedJourney.stops) {
+    for (const step of iJourney.stops) {
       step.arrivalTime = new Date(step.arrivalTime);
       step.startTime = new Date(step.startTime);
     }
 
-    return selectedJourney;
+    return iJourney;
   }
 
   return {} as IJourney;
 }
 
 export async function findJourneyFromNextStop(): Promise<void> {
-  console.log("jetzt");
   const nextStop = getNextStop();
   if (!nextStop) {
     return;
@@ -49,7 +48,8 @@ export async function findJourneyFromNextStop(): Promise<void> {
   }
 
   const iJourney = parseJourneyToIJourney(filteredJourneys[0]);
-  if (blackList.includes(iJourney)) {
+
+  if (blackList.includes(iJourney.travelDurationInMinutes)) {
     return;
   }
 
@@ -57,15 +57,20 @@ export async function findJourneyFromNextStop(): Promise<void> {
 }
 
 export function blackListJourney(): void {
-  window.localStorage.removeItem("recJourney");
 
+  const journey: IJourney = parseJSONToJourney(window.localStorage.getItem("recJourney"));
+
+  blackList.push(journey.travelDurationInMinutes);
+  window.localStorage.removeItem("recJourney");
 }
 
 function getNextStop(): IJourneyStep | undefined {
   selectedJourneyJSON = window.localStorage.getItem("selectedJourney");
   const journey = parseJSONToJourney(selectedJourneyJSON);
   const stops = journey.stops;
-  stops.pop();
+  if (stops) {
+    stops.pop();
+  }
 
   const filteredStops = stops.filter(stop =>
     stop.arrivalTime > new Date()
