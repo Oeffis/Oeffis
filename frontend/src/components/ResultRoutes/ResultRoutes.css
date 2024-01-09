@@ -6,7 +6,7 @@ ion-label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 16px 16px 16px;
+    padding: 16px;
     margin-bottom: 60px;
 }
 
