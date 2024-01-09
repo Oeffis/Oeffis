@@ -167,9 +167,9 @@ const RoutePlanner = ({
                 onSelectedLocationChanged={(location): void => {
                   setOriginId(location.id);
                 }}
-                onInputGiven={(input): void => setOriginInput(input)}
+                onSearchInputChanged={(input): void => setOriginInput(input)}
                 prefixDataTestId="origin-input"
-                searchName={originInput ?? ""}
+                searchInput={originInput ?? ""}
               />
             </IonItem>
             <IonItem>
@@ -179,9 +179,9 @@ const RoutePlanner = ({
                 onSelectedLocationChanged={(location): void => {
                   setDestinationId(location.id);
                 }}
-                onInputGiven={(input): void => setDestinationInput(input)}
+                onSearchInputChanged={(input): void => setDestinationInput(input)}
                 prefixDataTestId="destination-input"
-                searchName={destinationInput ?? ""}
+                searchInput={destinationInput ?? ""}
               />
             </IonItem>
           </IonCol>

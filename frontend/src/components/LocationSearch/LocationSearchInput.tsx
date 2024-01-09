@@ -24,11 +24,11 @@ import { LocationSearchList } from "./LocationSearchList";
 
 export interface LocationSearchInputProps {
   onSelectedLocationChanged: (location: Location) => void;
-  onInputGiven: (input: string) => void;
+  onSearchInputChanged: (input: string) => void;
   selectedLocation: Location | null;
   inputLabel: string;
   prefixDataTestId?: string;
-  searchName?: string;
+  searchInput?: string;
 }
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
@@ -41,7 +41,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   const setSelectedLocationAndCloseModal = (location: Location): void => {
     props.onSelectedLocationChanged(location);
-    props.onInputGiven(searchInput);
+    props.onSearchInputChanged(searchInput);
     setModalOpen(false);
     setShowMap(false);
   };
@@ -60,7 +60,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const showResults = searchInput !== "" && (foundLocations.type === "success" || foundLocations.type === "outdated");
 
   const applyLocationName = (): void => {
-    setSearchInput(props.searchName ?? "");
+    setSearchInput(props.searchInput ?? "");
     setModalOpen(true);
   };
 
