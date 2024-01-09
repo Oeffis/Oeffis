@@ -61,20 +61,30 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
         {
           props.journey.stops.map((step: IJourneyStep, index) =>
             <>
-              {index === 0 && <FirstJourneyStepComponent startTime={step.startTime} stationName={step.stationName} />}
               {
-                index !== 0 && <JourneyStepComponent
+                index === 0
+                && <FirstJourneyStepComponent
+                  key={"firstJourney" + index}
+                  startTime={step.startTime}
+                  stationName={step.stationName} />}
+              {
+                index !== 0
+                && <JourneyStepComponent
                   key={"journeyStep" + index}
                   step={step}
                   arrivalTime={props.journey.stops[index - 1].arrivalTime} />
               }
-              <StepProgressComponent key={"stepProgress" + index} step={step} />
+              <StepProgressComponent
+                key={"stepProgress" + index}
+                step={step} />
             </>
           )
         }
         <div className="steps">
           {
-            <JourneyStepComponent arrivalDestination={props.journey.arrivalStation} arrivalTime={props.journey.arrivalTime} />
+            <JourneyStepComponent
+              arrivalDestination={props.journey.arrivalStation}
+              arrivalTime={props.journey.arrivalTime} />
           }
         </div>
       </div>

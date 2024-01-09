@@ -41,6 +41,7 @@ IonButton {
 
 .swiper-div {
     z-index: -10;
+    height: 50%;
 }
 
 .circle-button {

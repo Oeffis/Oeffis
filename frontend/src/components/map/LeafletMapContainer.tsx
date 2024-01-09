@@ -36,7 +36,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
     let polygons: ReactElement[] = [];
     for (let i = 0; i < bounds.length - 1; i++) {
       polygons.push(
-        <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"30,20"} weight={2} positions={[bounds[i], bounds[i + 1]]} />
+        <Polygon key={"line" + i} color={"rgb(77, 77, 77)"} opacity={1} dashArray={"30,20"} weight={2} positions={[bounds[i], bounds[i + 1]]} />
       );
     }
     return polygons;
