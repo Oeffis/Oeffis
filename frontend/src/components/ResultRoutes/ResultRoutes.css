@@ -6,7 +6,8 @@ ion-label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 16px 0px 16px;
+    padding: 16px;
+    margin-bottom: 60px;
 }
 
 .bottom-section-closed {
@@ -40,4 +41,31 @@ IonButton {
 
 .swiper-div {
     z-index: -10;
+}
+
+.circle-button {
+    --border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.result-swiper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+}
+
+.right-align {
+    position: absolute;
+    right: 2%;
 }

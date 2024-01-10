@@ -12,9 +12,6 @@ const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) 
     <div className="container" data-testid="journey-step">
       <div className="left">
         <IonLabel>
-          Ankunft
-        </IonLabel>
-        <IonLabel>
           {formatDateTime(props.startTime)}
         </IonLabel>
       </div>
