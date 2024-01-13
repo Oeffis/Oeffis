@@ -223,7 +223,7 @@ export const CurrentLocationMapMarker: React.FC = () => {
       position={[currentLocation.location.coords.latitude, currentLocation.location.coords.longitude]}
       icon={currentLocationIcon}>
       <Popup>
-        <p className="popupHeadline">Your position</p>
+        <p className="popupHeadline">Aktuelle Position</p>
       </Popup >
     </Marker >
   );
