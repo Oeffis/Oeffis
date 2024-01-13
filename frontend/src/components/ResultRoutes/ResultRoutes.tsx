@@ -57,49 +57,21 @@ export const JoruneyLocationResolver: React.FC = () => {
 
   return (<p>Lade daten ...</p>);
 
-}
+};
 
 export type ResultRoutesProps = {
   origin: Location,
   destination: Location
-}
+};
 
 const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
-  const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
-  const journeyApi = useJourneyApi();
-  const [journeysLocations, setJourneysLocations] = useState<JourneyLocation[]>();
-
-  // TODO Add user input if datetime should be interpreted as arrival time.
-  let result = null;
-  if (originLocation !== null && destinationLocation !== null) {
-    return (
-      <>
-        <ResultRoutes
-          origin={originLocation}
-          destination={destinationLocation}
-        />
-      </>
-    );
-  }
-
-  return (<p>Lade daten ...</p>);
-
-}
-
-export type ResultRoutesProps = {
-  origin: Location,
-  destination: Location
-}
-
-const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
-
-  const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
+  const [departureTime] = useDepartureTimeParamOrCurrentTime();
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
-  const [activeJourneyIndex, setActiveJourneyIndex] = useState<number>(0);
+  const [activeJourneyIndex] = useState<number>(0);
 
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
@@ -140,7 +112,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const getLocationIds = (): string[] => {
 
-    let ids: string[] = [];
+    const ids: string[] = [];
 
     ids.push(origin.id);
 
@@ -150,18 +122,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
     ids[ids.length - 1] = destination.id;
 
-
-    //ids.push(destination.id);
-
-
-
-    /* console.log("Contains originId?: " + ids.forEach(id => (id === origin.id) ? console.log("true") : console.log("false")));
-    console.log(origin.id);
-    console.log("Contains destinationId?: " + ids.forEach(id => (id === destination.id) ? console.log("true") : console.log("false")));
-    console.log(destination.id); */
-
     return ids;
-  }
+  };
 
   const setActiveJourney = (journey: IJourney): void => {
     if (swiper !== null) {
@@ -209,7 +171,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           <LeafletMapContainer
             originId={origin.id}
             destinationId={destination.id}
-            locationIds={getLocationIds()}
+            locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
             showLines={true}
           />
         </div>
