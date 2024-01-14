@@ -1,4 +1,3 @@
-import { IonLabel } from "@ionic/react";
 import { format, isFuture } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import "./JourneyStepComponent.css";
@@ -7,30 +6,26 @@ const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const color = isFuture(props.arrivalTime) ? "lightgray" : "gray";
+  const arrived = isFuture(props.arrivalTime) ? false : true;
 
   return (
-    <div className="container" data-testid="journey-step">
-      <div className="left">
-        <IonLabel>
-          {formatDateTime(props.arrivalTime)}
-        </IonLabel>
-      </div>
-      <div className="middle">
-        <div className="circle" style={{ background: color }} />
-      </div>
-      <div className="step-info">
-        <IonLabel>
-          <span data-testid="journey-step-stop-name">
-            {
-              props.step
-                ? props.step.stationName
-                : props.arrivalDestination
-            }
-          </span>
-        </IonLabel>
-      </div>
+    <>
+    <div className="centerBlock">
+      <p className="m0">Ankunft</p>
+      <p className="m0">{formatDateTime(props.arrivalTime)}</p>
     </div>
+    <div className={arrived? "arrived circle center" : " circle center"}/>
+    <div>
+      <p className="centerVertically m0 bold">{
+        props.step
+          ? props.step.stationName
+          : props.arrivalDestination
+      }</p>
+      <p className="m0">Umstiegszeit</p>
+      <p className="m0">Fußweg</p>
+    </div>
+    <p className="centerVertically">Gl. 00</p>
+    </>
   );
 };
 

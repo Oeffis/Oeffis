@@ -34,10 +34,17 @@ IonButton {
 .back-button {
     position: fixed;
     left: 0;
-    bottom: 10px;
+    bottom: 0;
     right: 0;
 }
 
 .swiper-div {
     z-index: -10;
+}
+
+.floatingActionButton {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 2em;
 }

@@ -1,14 +1,7 @@
 import {
-  IonButton,
-  IonButtons,
   IonContent,
-  IonHeader,
-  IonImg,
-  IonMenuButton,
   IonRadio,
-  IonRadioGroup,
-  IonTitle,
-  IonToolbar
+  IonRadioGroup
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
@@ -17,7 +10,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
-import logo from "../../../public/images/train_image.png";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
@@ -25,6 +17,8 @@ import { IJourney } from "../../interfaces/IJourney.interface";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import "./ResultRoutes.css";
+import { Button } from "../controls/Button";
+import { Header } from "../Header";
 
 const ResultRoutes: React.FC = () => {
 
@@ -33,11 +27,13 @@ const ResultRoutes: React.FC = () => {
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
   const [asArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
+  const availableRoutesString = "Verfügbare Routen";
+  const selectedRouteString = "Ausgewählte Route";
 
   const originLocation = useLocationByIdOrNull(originId);
   const destinationLocation = useLocationByIdOrNull(destinationId);
 
-  const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
+  const [slideName, setSlideName] = useState<string>(availableRoutesString);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
   const [swiper, setSwiper] = useState<Swiper | null>(null);
@@ -51,10 +47,10 @@ const ResultRoutes: React.FC = () => {
 
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {
-      setSlideName("Verfügbare Routen");
+      setSlideName(availableRoutesString);
     }
     if (activeSlideIndex === 1) {
-      setSlideName("Ausgewählte Routen");
+      setSlideName(selectedRouteString);
     }
   };
 
@@ -64,29 +60,18 @@ const ResultRoutes: React.FC = () => {
 
   return (
     <>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Oeffies</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
-      </IonHeader>
+      <Header/>
       <IonContent>
         <div className="selection">
           <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
-            <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
+            <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value={availableRoutesString} mode="md"/>
+            <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value={selectedRouteString} mode="md"/>
           </IonRadioGroup>
-          <p>{slideName}</p>
+          <h4 className="headline">{slideName}</h4>
         </div>
-        <IonButton className="back-button" onClick={() => { history.back(); }}
-          size="default" expand="block">
-          Zurück zum Routenplaner
-        </IonButton>
+        <div className="back-button">
+          <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner"/>
+        </div>
         <SwiperReact className="swiper-div"
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
@@ -111,8 +96,9 @@ const ResultRoutes: React.FC = () => {
           </SwiperSlide>
           <SwiperSlide>
             {
-              selectedJourney !== null &&
+              selectedJourney !== null && <>
               <JourneyDetail journey={selectedJourney} />
+              </>
             }
           </SwiperSlide>
         </SwiperReact>

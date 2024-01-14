@@ -3,14 +3,15 @@
   border-radius: 15px;
   width: 8px;
   height: 130px;
-  background: lightgray;
+  background: var(--ion-color-light-shade);
+  margin: auto;
 }
 
 .fill-line {
   border-radius: 15px;
-  border: 1px solid black;
+  border: 1px solid var(--ion-color-dark-shade);
   width: 9px;
-  background: gray;
+  background: var(--ion-color-primary);
 }
 
 .timeline-container {

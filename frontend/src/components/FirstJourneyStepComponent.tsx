@@ -3,35 +3,26 @@ import { format, isFuture } from "date-fns";
 import "./JourneyStepComponent.css";
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
-export interface StationProps { stationName: string, startTime: Date }
+export interface StationProps { stationName: string, time: Date, isFirst: boolean}
 
-const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const color = isFuture(props.startTime) ? "lightgray" : "gray";
+const SimpleJourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
+  const arrived = isFuture(props.time) ? false : true;
 
   return (
-    <div className="container" data-testid="journey-step">
-      <div className="left">
-        <IonLabel>
-          Ankunft
-        </IonLabel>
-        <IonLabel>
-          {formatDateTime(props.startTime)}
-        </IonLabel>
+    <>
+      <div className="centerBlock">
+        {props.isFirst 
+          ? "" 
+          : <p className="m0">Ankunft</p>
+          }
+          <p className="m0">{formatDateTime(props.time)}</p>
       </div>
-      <div className="middle">
-        <div className="circle" style={{ background: color }} />
-      </div>
-      <div className="step-info">
-        <IonLabel>
-          <span data-testid="journey-step-stop-name">
-            {
-              props.stationName
-            }
-          </span>
-        </IonLabel>
-      </div>
-    </div>
+      
+      <div className={arrived ? "arrived circle center" : " circle center"} />
+      <IonLabel className="centerVertically bold">{props.stationName}</IonLabel>
+      <IonLabel className="centerVertically">Gl. 00</IonLabel>
+    </>
   );
 };
 
-export default FirstJourneyStepComponent;
+export default SimpleJourneyStepComponent;
