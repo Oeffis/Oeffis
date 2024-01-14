@@ -16,11 +16,13 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
     </div>
     <div className={arrived? "arrived circle center" : " circle center"}/>
     <div>
-      <p className="centerVertically m0 bold">{
-        props.step
-          ? props.step.stationName
-          : props.arrivalDestination
-      }</p>
+      <p className="centerVertically m0 bold">
+        {
+          props.step
+            ? props.step.stationName
+            : props.arrivalDestination
+        }
+      </p>
       <p className="m0">Umstiegszeit</p>
       <p className="m0">Fußweg</p>
     </div>

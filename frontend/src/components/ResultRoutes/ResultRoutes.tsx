@@ -1,8 +1,11 @@
 import {
+  IonButton,
   IonContent,
+  IonIcon,
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
+import { playOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -21,7 +24,6 @@ import { Button } from "../controls/Button";
 import { Header } from "../Header";
 
 const ResultRoutes: React.FC = () => {
-
   const [originId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId] = useStateParams<string | null>(null, "destination", String, String);
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
@@ -42,6 +44,7 @@ const ResultRoutes: React.FC = () => {
     if (swiper !== null) {
       swiper.slideNext();
     }
+    window.localStorage.setItem("selectedJourney", JSON.stringify(journey));
     setSelectedJourney(journey);
   };
 
@@ -62,15 +65,24 @@ const ResultRoutes: React.FC = () => {
     <>
       <Header/>
       <IonContent>
-        <div className="selection">
-          <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value={availableRoutesString} mode="md"/>
-            <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value={selectedRouteString} mode="md"/>
-          </IonRadioGroup>
-          <h4 className="headline">{slideName}</h4>
-        </div>
-        <div className="back-button">
-          <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner"/>
+        <div className="result-header">
+          <div className="result-swiper">
+            <IonRadioGroup value={slideName}>
+              <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value={availableRoutesString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value={selectedRouteString} mode="md" />
+            </IonRadioGroup>
+            <h4 className="headline">{slideName}</h4>
+          </div>
+          <div className="back-button">
+            <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner"/>
+          </div>
+          {
+            swiper?.activeIndex === 1 && selectedJourney && <div className="right-align">
+              <IonButton className="circle-button" routerLink="livenavigation">
+                <IonIcon icon={playOutline} />
+              </IonButton>
+            </div>
+          }
         </div>
         <SwiperReact className="swiper-div"
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access

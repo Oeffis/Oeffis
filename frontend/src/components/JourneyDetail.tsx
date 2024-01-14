@@ -40,7 +40,7 @@ export interface StepDetailsProps { journey: IJourney, }
 export function StepDetails(props: StepDetailsProps): JSX.Element {
 
   return (
-    <div className="content">
+    <div className="contentGrid">
       {
         props.journey.stops.map((step: IJourneyStep, index) =>
           <>

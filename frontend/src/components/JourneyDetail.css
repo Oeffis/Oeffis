@@ -42,7 +42,7 @@ IonButton {
     margin: 0;
 }
 
-.content {
+.contentGrid {
     display: grid;
     row-gap: 0.5em;
     width: 100%;
