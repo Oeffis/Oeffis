@@ -25,10 +25,12 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
     </div>
     <div className="line-info">
       <IonLabel>
-        Linie: {props.step.line}
+        {props.step.line && "Linie:" + props.step.line}
       </IonLabel>
       <IonLabel>
-        Fahrtzeit: {props.step.travelDurationInMinutes} Min
+        {props.step.line && "Fahrtzeit: "}
+        {!props.step.line && "Fußweg: "}
+        {props.step.travelDurationInMinutes} Min
       </IonLabel>
 
       <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
