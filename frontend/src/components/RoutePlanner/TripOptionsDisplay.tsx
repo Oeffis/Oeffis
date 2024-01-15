@@ -5,7 +5,7 @@ export function TripOptionsDisplay(props: {
   iJourneys: false | IJourney[],
   setJourney: (journey: IJourney) => void
 }): JSX.Element {
-  const { iJourneys, setJourney } = props;
+  const { iJourneys } = props;
 
   return (
     <>
