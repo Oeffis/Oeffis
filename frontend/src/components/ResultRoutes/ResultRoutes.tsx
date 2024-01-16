@@ -5,7 +5,7 @@ import {
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
-import { playOutline } from "ionicons/icons";
+import { heart, playOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -22,6 +22,7 @@ import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import "./ResultRoutes.css";
 import { Button } from "../controls/Button";
 import { Header } from "../Header";
+import { FloatingActionButton } from "../controls/FloatingActionButton";
 
 const ResultRoutes: React.FC = () => {
   const [originId] = useStateParams<string | null>(null, "origin", String, String);
@@ -114,6 +115,10 @@ const ResultRoutes: React.FC = () => {
             }
           </SwiperSlide>
         </SwiperReact>
+        {swiper?.activeIndex === 1 && selectedJourney &&         
+        <div className="floatingActionButton">
+          <FloatingActionButton icon={heart} className="floatingActionButton"/>
+        </div>}
       </IonContent>
     </>);
 };

@@ -11,7 +11,8 @@ export const FloatingActionButton = (props: FloatingActionButtonProps): JSX.Elem
     <IonFabButton
       color={props.color}
       disabled={props.disabled}
-      onClick={props.onClick}>
+      onClick={props.onClick}
+      routerLink={props.routerLink}>
       <IonIcon icon={props.icon}/>
     </IonFabButton>
   </IonFab>;
