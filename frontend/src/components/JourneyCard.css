@@ -5,15 +5,18 @@ ion-label {
 .mid-section {
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    width: 60%;
+    justify-content: center;
+    width: 57%;
+    padding-top: 3%;
 }
 
 .duration {
+    width: 20%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 20%;
+    justify-content: center;
+    align-items: end;
+    padding: 0% 0% 0% 0%;
 }
 
 .bottom-section-closed {
@@ -42,7 +45,7 @@ IonButton {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 .center_all_row_2 {
@@ -54,8 +57,15 @@ IonButton {
   }
 
   .train_icon {
-    width: 3rem;
-    height: 3rem;
-    margin-right: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--ion-color-primary-tint);
+    padding-right: 0.5rem;
+  }
+
+  .traveltime {
+    width: 100%;
+    font-size: 0.8rem;
+    font-weight: bold;
     color: var(--ion-color-primary-tint);
   }
