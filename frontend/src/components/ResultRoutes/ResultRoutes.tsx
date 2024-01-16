@@ -19,7 +19,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
-import logo from "../../../public/images/train_image.png";
+import logo from "../../../public/images/OeffisLogo1.svg";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";

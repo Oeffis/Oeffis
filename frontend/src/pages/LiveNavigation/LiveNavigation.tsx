@@ -1,5 +1,5 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonTitle, IonToolbar } from "@ionic/react";
-import logo from "../../../public/images/train_image.png";
+import logo from "../../../public/images/OeffisLogo1.svg";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
