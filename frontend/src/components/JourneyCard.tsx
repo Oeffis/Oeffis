@@ -44,13 +44,13 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
           {props.journey.travelDurationInMinutes >= 60 && (
             <IonRow className="traveltime">
               <IonCol>
-                <IonLabel className="hourTime">
+                <IonLabel>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[0]}</h1>
                 </IonLabel>
                 <IonLabel>Std</IonLabel>
               </IonCol>
               <IonCol>
-                <IonLabel className="minuteTime">
+                <IonLabel>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[1]}</h1>
                 </IonLabel>
                 <IonLabel>Min</IonLabel>
