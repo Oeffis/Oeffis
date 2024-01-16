@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/react";
-import { playOutline } from "ionicons/icons";
+import { mapOutline, playOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -65,6 +65,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
+
+  const [mapHeight, setMapHeight] = useState<number>(30);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
   const [activeJourneyIndex] = useState<number>(0);
@@ -157,7 +159,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="map">
+        <div id="map" style={{ height: mapHeight + "%" }}>
           <LeafletMapContainer
             originId={origin.id}
             destinationId={destination.id}
@@ -166,6 +168,15 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           />
         </div>
         <div className="result-header">
+          {
+            <div className="left-align">
+              <IonButton className="circle-button"
+              //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
+              >
+                <IonIcon icon={mapOutline} />
+              </IonButton>
+            </div>
+          }
           <div className="result-swiper">
             <IonRadioGroup value={slideName}>
               <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
@@ -173,14 +184,15 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             </IonRadioGroup>
             <p>{slideName}</p>
           </div>
-          {
-            selectedJourney && <div className="right-align">
+          <div className="right-align">
+            {
+              selectedJourney &&
               <IonButton className="circle-button" routerLink="livenavigation">
                 <IonIcon icon={playOutline} />
               </IonButton>
-            </div>
-          }
 
+            }
+          </div>
         </div>
         <IonButton className="back-button" onClick={() => { history.back(); }}
           size="default" expand="block">
