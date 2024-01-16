@@ -4,7 +4,7 @@ import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import "./JourneyDetail.css";
 import JourneyStepComponent from "./JourneyStepComponent";
-import SimpleJourneyStepComponent from "./FirstJourneyStepComponent";
+import FirstJourneyStepComponent from "./FirstJourneyStepComponent";
 import StepProgressComponent from "./StepProgressComponent";
 
 export interface TravelProps { journey: IJourney }
@@ -44,8 +44,7 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
       {
         props.journey.stops.map((step: IJourneyStep, index) =>
           <>
-            {index === 0 && <SimpleJourneyStepComponent time={step.startTime} stationName={step.stationName} isFirst={true}/>
-            }
+            {index === 0 && <FirstJourneyStepComponent time={step.startTime} stationName={step.stationName} isFirst={true} trackOrigin={step.trackOrigin} trackDestination={step.trackDestination}/>}
             {
               index !== 0 &&
               <JourneyStepComponent
@@ -54,9 +53,10 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
                 arrivalTime={props.journey.stops[index - 1].arrivalTime} />
             }
             <StepProgressComponent key={"stepProgress" + index} step={step} />
+            {index === props.journey.stops.length - 1 && <FirstJourneyStepComponent stationName={props.journey.arrivalStation} time={props.journey.arrivalTime} isFirst={false} trackOrigin={step.trackOrigin} trackDestination={step.trackDestination}/>}
           </>
         )}
-      <SimpleJourneyStepComponent stationName={props.journey.arrivalStation} time={props.journey.arrivalTime} isFirst={false} />
+      
     </div>
   );
 }

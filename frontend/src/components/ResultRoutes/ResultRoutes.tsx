@@ -5,7 +5,7 @@ import {
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
-import { heart, playOutline } from "ionicons/icons";
+import { heart, play } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -80,7 +80,7 @@ const ResultRoutes: React.FC = () => {
           {
             swiper?.activeIndex === 1 && selectedJourney && <div className="right-align">
               <IonButton className="circle-button" routerLink="livenavigation">
-                <IonIcon icon={playOutline} />
+                <IonIcon icon={play} />
               </IonButton>
             </div>
           }

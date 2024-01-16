@@ -1,6 +1,7 @@
 import { differenceInMinutes } from "date-fns";
 import {
   FootpathLeg,
+  LegDestinationLocationTypeEnum,
   LegOriginLocationTypeEnum,
   Location,
   TransportationLeg,
@@ -40,8 +41,11 @@ export function TripOptionsDisplay(props: {
             arrivalTime: leg.destination.arrivalTimeEstimated,
             startTime: leg.origin.departureTimeEstimated,
             stationName: leg.origin.name,
-            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
+            trackOrigin: leg.origin.type === LegOriginLocationTypeEnum.Platform
               ? leg.origin.details.shortName
+              : "",
+            trackDestination: leg.destination.type === LegDestinationLocationTypeEnum.Platform
+              ? leg.destination.details.shortName
               : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,

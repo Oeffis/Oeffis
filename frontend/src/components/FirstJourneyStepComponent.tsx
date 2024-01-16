@@ -3,7 +3,7 @@ import { format, isFuture } from "date-fns";
 import "./JourneyStepComponent.css";
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
-export interface StationProps { stationName: string, time: Date, isFirst: boolean}
+export interface StationProps { stationName: string, time: Date, isFirst: boolean, trackOrigin: string, trackDestination: string}
 
 const SimpleJourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
   const arrived = isFuture(props.time) ? false : true;
@@ -20,7 +20,11 @@ const SimpleJourneyStepComponent: React.FC<StationProps> = (props: StationProps)
       
       <div className={arrived ? "arrived circle center" : " circle center"} />
       <IonLabel className="centerVertically bold">{props.stationName}</IonLabel>
-      <IonLabel className="centerVertically">Gl. 00</IonLabel>
+      <IonLabel className="centerVertically">Gl. 
+        {props.isFirst
+          ? props.trackOrigin
+          : props.trackDestination
+      }</IonLabel>
     </>
   );
 };
