@@ -54,3 +54,9 @@ IonButton {
 .headline {
     font-weight: bold;
 }
+
+.trainIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--ion-color-primary);
+}

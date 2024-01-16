@@ -1,4 +1,4 @@
-import { IonImg } from "@ionic/react";
+import { IonIcon, IonImg } from "@ionic/react";
 import { format } from "date-fns";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
@@ -6,6 +6,7 @@ import "./JourneyDetail.css";
 import JourneyStepComponent from "./JourneyStepComponent";
 import FirstJourneyStepComponent from "./FirstJourneyStepComponent";
 import StepProgressComponent from "./StepProgressComponent";
+import { trainOutline } from "ionicons/icons";
 
 export interface TravelProps { journey: IJourney }
 
@@ -14,7 +15,7 @@ const formatDateShort = (date: Date): string => format(date, "HH:mm");
 const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
   <div className="journeyDetail">
     <div className="header">
-      <IonImg className="headerImg" src="./images/train_image.png" />
+      <IonIcon className="trainIcon" icon={trainOutline} />
       <div className="headerDetails">
         <p>
           <span>{formatDateShort(props.journey.startTime)} -</span>
