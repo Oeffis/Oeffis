@@ -1,5 +1,5 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import logo from "../../public/images/train_image.png";
+import logo from "../../public/images/OeffisLogo1.svg";
 import "./UserPreferencesPage.css";
 
 const UserPreferencesPage: React.FC = () => (
