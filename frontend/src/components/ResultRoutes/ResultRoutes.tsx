@@ -81,8 +81,8 @@ const ResultRoutes: React.FC = () => {
         <div className="result-header">
           <div className="result-swiper">
             <IonRadioGroup value={slideName}>
-              <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
-              <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
+              <IonRadio mode="md" onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
+              <IonRadio mode="md" onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
             </IonRadioGroup>
             <p>{slideName}</p>
           </div>

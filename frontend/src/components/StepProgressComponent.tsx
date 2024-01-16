@@ -32,8 +32,9 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
         {!props.step.line && "Fußweg: "}
         {props.step.travelDurationInMinutes} Min
       </IonLabel>
-
-      <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
+      {
+        props.step.line && <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
+      }
     </div>
   </div >
 );

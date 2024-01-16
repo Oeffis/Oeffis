@@ -55,9 +55,9 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
       <IonContent>
         <div className="selection">
           <IonRadioGroup value={slideName}>
-            <IonRadio className="radio" value="Stations" />
-            <IonRadio className="radio" value="Routes" />
-            <IonRadio className="radio" value="Journeys" />
+            <IonRadio mode="md" className="radio" value="Stations" />
+            <IonRadio mode="md" className="radio" value="Routes" />
+            <IonRadio mode="md" className="radio" value="Journeys" />
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>

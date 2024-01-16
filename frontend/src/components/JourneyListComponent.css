@@ -1,0 +1,10 @@
+.no-border-item {
+  --inner-border-width: 0px;
+}
+
+.detail-card {
+  --ion-item-background: transparent;
+  padding: 8px 16px;
+  margin: 12px;
+  margin-bottom: 100px;
+}
