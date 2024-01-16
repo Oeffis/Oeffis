@@ -10,7 +10,7 @@ const UserPreferencesPage: React.FC = () => (
           <IonMenuButton />
         </IonButtons>
         <div className="menuBar">
-          <IonTitle>Oeffies</IonTitle>
+          <IonTitle>Öffis</IonTitle>
           <IonImg className="menuLogo" src={logo} />
         </div>
       </IonToolbar>
