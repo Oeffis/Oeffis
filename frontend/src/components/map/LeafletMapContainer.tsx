@@ -43,7 +43,13 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
     const polygons: ReactElement[] = [];
     for (let i = 0; i < bounds.length - 1; i++) {
       polygons.push(
-        <Polygon key={"line" + i} color={"rgb(77, 77, 77)"} opacity={1} dashArray={"30,20"} weight={2} positions={[bounds[i], bounds[i + 1]]} />
+        <Polygon
+          key={"line" + i}
+          color={window.matchMedia('(prefers-color-scheme: dark)') ? "rgb(0,148,236)" : "rgb(77, 77, 77)"}
+          opacity={1}
+          dashArray={"30,20"}
+          weight={2}
+          positions={[bounds[i], bounds[i + 1]]} />
       );
     }
     return polygons;
@@ -71,6 +77,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      className="map-tiles"
     />
     <CurrentLocationMapMarker />
     <OriginMapMarker originId={originId} />

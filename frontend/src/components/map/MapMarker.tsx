@@ -53,13 +53,22 @@ const MapMarker = ({ location, onItemClicked }: MarkerProps): JSX.Element => {
     }
   };
 
-  const icon = new Icon({
+  /* const icon = new Icon({
     iconUrl: getLocationIcon(location.type),
     iconSize: [25, 41],
     iconAnchor: [12.5, 38],
     shadowUrl: markerShadow,
     shadowAnchor: [12.5, 38],
     popupAnchor: [0, -32]
+  }); */
+
+  const icon = new Icon({
+    iconUrl: currentPositionIcon,
+    iconSize: [10, 10],
+    iconAnchor: [5, 5],
+    shadowUrl: markerShadow,
+    shadowAnchor: [0, 3],
+    popupAnchor: [0, 0]
   });
 
   const locationName = location.name.split(",");
