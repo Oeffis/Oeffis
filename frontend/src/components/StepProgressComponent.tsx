@@ -1,9 +1,12 @@
 import { IonLabel } from "@ionic/react";
-import { differenceInMilliseconds, minutesToMilliseconds } from "date-fns";
+import { format, differenceInMilliseconds, minutesToMilliseconds } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import "./StepProgressComponent.css";
+import { DisplayDelayStats } from "./DisplayDelayStats";
 
 export interface StepProgressProps { step: IJourneyStep }
+
+const formatDateTime = (date: Date): string => format(date, "HH:mm");
 
 const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressProps) => 
   
@@ -11,19 +14,22 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
   <>
     <div className="centerBlock">
       <p className="m0">Abfahrt</p>
-      <p className="m0">00:00</p>
+      <p className="m0">{formatDateTime(props.step.startTime)}</p>
     </div>
-    
-    <div className="centerBlock">
-      <div className="line">
-          <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
-      </div>
-      {/* <div className={arrived? "littleCircle arrived" : "littleCircle"}/> */}
+    <div className="line centerBlock">
+      <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
     </div>
-    
     <div className="centerVertically">
       <p className="m0 bold">{props.step.line}</p>
-      <p className="m0">{"Fahrtzeit: " + props.step.travelDurationInMinutes + " Min"}</p>
+      <IonLabel>
+        {props.step.line && "Fahrtzeit: "}
+        {!props.step.line && "Fußweg: "}
+        {props.step.travelDurationInMinutes} Min
+      </IonLabel>
+      <div className="delayStats">
+        <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
+      </div>
+      
     </div>
     <IonLabel/>
   </>
