@@ -1,5 +1,6 @@
-import { IonCard, IonCol, IonImg, IonLabel, IonRow } from "@ionic/react";
+import { IonCard, IonCol, IonIcon, IonLabel, IonRow } from "@ionic/react";
 import { format } from "date-fns";
+import { trainOutline } from "ionicons/icons";
 import { IJourney } from "../interfaces/IJourney.interface";
 import "./JourneyCard.css";
 
@@ -11,7 +12,7 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
   <IonCard className="detail-card-sizing">
     <IonRow className="center_all_row_2">
       <IonCol>
-        <IonImg className="train_icon" src="./images/train_image.png" />
+        <IonIcon className="train_icon" icon={trainOutline} />
       </IonCol>
       <IonCol className="mid-section">
         <IonLabel>
