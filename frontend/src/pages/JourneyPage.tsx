@@ -1,6 +1,6 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import React from "react";
-import logo from "../../public/images/train_image.png";
+import logo from "../../public/images/OeffisLogo1.svg";
 import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import { useStateParams } from "../hooks/useStateParams";
