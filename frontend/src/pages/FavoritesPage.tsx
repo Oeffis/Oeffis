@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
-import logo from "../../public/images/train_image.png";
+import logo from "../../public/images/OeffisLogo1.svg";
 import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
 import { CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
