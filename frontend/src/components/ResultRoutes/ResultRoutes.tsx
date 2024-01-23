@@ -26,7 +26,7 @@ import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
-import "./ResultRoutes.css";
+import rr from "./ResultRoutes.module.css";
 
 const ResultRoutes: React.FC = () => {
   const [originId] = useStateParams<string | null>(null, "origin", String, String);
@@ -82,28 +82,28 @@ const ResultRoutes: React.FC = () => {
         </IonHeader>
       </IonHeader>
       <IonContent>
-        <div className="result-header">
-          <div className="result-swiper">
+        <div className={rr.result_header}>
+          <div className={rr.result_swiper}>
             <IonRadioGroup value={slideName}>
-              <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
-              <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
+              <IonRadio onClick={() => swiper?.slideTo(0)} value="Verfügbare Routen" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} value="Ausgewählte Routen" />
             </IonRadioGroup>
             <p>{slideName}</p>
           </div>
           {
-            selectedJourney && <div className="right-align">
-              <IonButton className="circle-button" routerLink="livenavigation">
+            selectedJourney && <div className={rr.right_align}>
+              <IonButton className={rr.circle_button} routerLink="livenavigation">
                 <IonIcon icon={playOutline} />
               </IonButton>
             </div>
           }
 
         </div>
-        <IonButton className="back-button" onClick={() => { history.back(); }}
+        <IonButton className={rr.back_button} onClick={() => { history.back(); }}
           size="default" expand="block">
           Zurück zum Routenplaner
         </IonButton>
-        <SwiperReact className="swiper-div"
+        <SwiperReact className={rr.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
