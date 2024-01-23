@@ -67,15 +67,19 @@ const ResultRoutes: React.FC = () => {
   return (
     <>
       <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Öffis</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>
+              <h3>Öffis</h3>
+            </IonTitle>
+            <IonButtons slot="end">
+              <IonImg className="menuLogo" src={logo} />
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
       </IonHeader>
       <IonContent>
         <div className="result-header">
