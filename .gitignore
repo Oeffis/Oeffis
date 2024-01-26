@@ -1,2 +1,6 @@
 .localdev
 .ipynb_checkpoints/
+perIssue.csv
+perIssueAndLogin.csv
+perLogin.csv
+prod-db.env
