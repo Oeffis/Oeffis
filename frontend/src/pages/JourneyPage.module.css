@@ -1,4 +1,4 @@
-.journey-content {
+.journey_content {
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -10,6 +10,10 @@
 .map {
   display: flex;
   flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 
 .planner {
