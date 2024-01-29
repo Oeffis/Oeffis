@@ -14,7 +14,7 @@ import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/FavoritesContext";
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
-import "./FavoriteTripsComponent.css";
+import styles from "./FavoriteTripsComponent.module.css";
 
 export interface FavoriteTripsComponentProps {
   onTripSelected: (trip: CreateFavoriteTrip) => void;
@@ -91,7 +91,7 @@ interface LoadedFavouriteTripEntryProps {
 
 const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> = (props) => (
   <>
-    <div className="trip-information">
+    <div className={styles.trip_information}>
       <IonLabel>
         {props.startTime.getDate() < 10 ? "0" + props.startTime.getDate() : props.startTime.getDate()}.
         {props.startTime.getMonth() < 10 ? "0" + props.startTime.getMonth() : props.startTime.getMonth()}.
@@ -99,7 +99,7 @@ const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> 
         {props.startTime.getHours() < 10 ? "0" + props.startTime.getHours() : props.startTime.getHours()}:
         {props.startTime.getMinutes() < 10 ? "0" + props.startTime.getMinutes() : props.startTime.getMinutes()} Uhr
       </IonLabel>
-      <div className="trip-destinations">
+      <div>
         <IonLabel>
           {props.origin.name}
         </IonLabel>
@@ -121,7 +121,7 @@ const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> 
 
 const PendingFavoriteTripEntry: React.FC = () => <>
   <IonLabel>
-    <IonSkeletonText animated={true} style={{ width: "50%" }} />
+    <IonSkeletonText animated={true} className={styles.pending} />
   </IonLabel>
   <IonIcon icon={star} />
   <IonReorder slot="start" />

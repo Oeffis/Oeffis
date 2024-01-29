@@ -3,7 +3,7 @@ import React from "react";
 import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import { useStateParams } from "../hooks/useStateParams";
-import "./JourneyPage.css";
+import styles from "./JourneyPage.module.css";
 import { Header } from "../components/Header";
 
 const JourneyPage: React.FC = () => {
@@ -13,16 +13,16 @@ const JourneyPage: React.FC = () => {
   return (
     <IonPage id="main-content">
       <Header/>
-      <IonContent>
-        <div className="journey-content">
-          <div className="map">
+      <IonContent scrollY={false}>
+        <div className={styles.journey_content}>
+          <div className={styles.map}>
             <LeafletMapContainer
               originId={originId}
               destinationId={destinationId}
               showLines={true}
             />
           </div>
-          <div className="planner">
+          <div className={styles.planner}>
             <RoutePlanner
               originId={originId}
               destinationId={destinationId}

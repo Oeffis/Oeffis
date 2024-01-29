@@ -2,9 +2,9 @@ import { IonIcon } from "@ionic/react";
 import { format } from "date-fns";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import "./JourneyDetail.css";
-import JourneyStepComponent from "./JourneyStepComponent";
 import FirstJourneyStepComponent from "./FirstJourneyStepComponent";
+import styles from "./JourneyDetail.module.css";
+import JourneyStepComponent from "./JourneyStepComponent";
 import StepProgressComponent from "./StepProgressComponent";
 import { trainOutline } from "ionicons/icons";
 
@@ -13,10 +13,10 @@ export interface TravelProps { journey: IJourney }
 const formatDateShort = (date: Date): string => format(date, "HH:mm");
 
 const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
-  <div className="journeyDetail">
-    <div className="header">
-      <IonIcon className="trainIcon" icon={trainOutline} />
-      <div className="headerDetails">
+  <div className={styles.journeyDetail}>
+    <div className={styles.header}>
+      <IonIcon className={styles.trainIcon} icon={trainOutline} />
+      <div className={styles.headerDetails}>
         <p>
           <span>{formatDateShort(props.journey.startTime)} -</span>
           <span>{formatDateShort(props.journey.arrivalTime)}</span>
@@ -26,8 +26,8 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
           <span>{props.journey.arrivalStation}</span>
         </p>
       </div>
-      <div className="headerDuration">
-        <p className="headerDurationAmount">{props.journey.travelDurationInMinutes}</p>
+      <div className={styles.headerDuration}>
+        <p className={styles.headerDurationAmount}>{props.journey.travelDurationInMinutes}</p>
         <p>Min</p>
       </div>
     </div>
@@ -41,7 +41,7 @@ export interface StepDetailsProps { journey: IJourney, }
 export function StepDetails(props: StepDetailsProps): JSX.Element {
 
   return (
-    <div className="contentGrid">
+    <div className={styles.contentGrid}>
       {
         props.journey.stops.map((step: IJourneyStep, index) =>
           <>
@@ -57,7 +57,6 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
             {index === props.journey.stops.length - 1 && <FirstJourneyStepComponent stationName={props.journey.arrivalStation} time={props.journey.arrivalTime} isFirst={false} trackOrigin={step.trackOrigin} trackDestination={step.trackDestination}/>}
           </>
         )}
-      
     </div>
   );
 }
