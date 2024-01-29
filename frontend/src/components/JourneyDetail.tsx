@@ -1,4 +1,4 @@
-import { IonIcon, IonImg } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { format } from "date-fns";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";

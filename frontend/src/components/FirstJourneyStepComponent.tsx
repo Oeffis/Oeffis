@@ -1,4 +1,3 @@
-import { IonLabel } from "@ionic/react";
 import { format, isFuture } from "date-fns";
 import "./JourneyStepComponent.css";
 
@@ -19,12 +18,12 @@ const SimpleJourneyStepComponent: React.FC<StationProps> = (props: StationProps)
       </div>
       
       <div className={arrived ? "arrived circle center" : " circle center"} />
-      <IonLabel className="centerVertically bold">{props.stationName}</IonLabel>
-      <IonLabel className="centerVertically">Gl. 
+      <p className="centerVertically bold">{props.stationName}</p>
+      <p className="centerVertically textAlignCenter">Gl. 
         {props.isFirst
           ? props.trackOrigin
           : props.trackDestination
-      }</IonLabel>
+      }</p>
     </>
   );
 };

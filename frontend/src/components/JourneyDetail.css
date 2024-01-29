@@ -48,7 +48,7 @@ IonButton {
     width: 100%;
     grid-template-columns: 18% 10% 57% 15%;
     grid-auto-rows: auto;
-    padding: 1em 0.5em 7em;
+    padding: 1em 1em 7em;
 }
 
 .headline {

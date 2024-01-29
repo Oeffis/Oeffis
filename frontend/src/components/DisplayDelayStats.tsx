@@ -1,4 +1,3 @@
-import { IonLabel } from "@ionic/react";
 import { DelayStats, LegStats } from "../api";
 
 export function DisplayDelayStats({ stats, destinationName, originName }: { stats: LegStats, destinationName: string, originName: string }): JSX.Element {
@@ -52,7 +51,7 @@ export function DisplayDelayStats({ stats, destinationName, originName }: { stat
 
   return (
     <div>
-      <IonLabel>Historischen Verspätungsdaten der letzten zwei Wochen:</IonLabel>
+      <p>Historischen Verspätungsdaten der letzten zwei Wochen:</p>
       <ul>
         {statusBulletPoints}
       </ul>
@@ -77,9 +76,9 @@ function DisplayDelayStatsUnavailabe(): JSX.Element {
 
   return (
     <div>
-      <IonLabel>
+      <p>
         Keine historischen Verspätungsdaten für diesen Streckenabschnitt verfügbar.
-      </IonLabel>
+      </p>
     </div>
   );
 }

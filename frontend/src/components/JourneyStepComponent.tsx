@@ -22,7 +22,7 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
             : props.arrivalDestination
         }
       </p>
-    <p className="centerVertically">{"Gl. " + props.step?.trackOrigin}</p>
+    <p className="centerVertically textAlignCenter">{"Gl. " + props.step?.trackOrigin}</p>
     </>
   );
 };

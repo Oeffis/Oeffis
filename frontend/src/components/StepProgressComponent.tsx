@@ -21,15 +21,12 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
     </div>
     <div className="centerVertically">
       <p className="m0 bold">{props.step.line}</p>
-      <IonLabel>
+      <p className="m0">
         {props.step.line && "Fahrtzeit: "}
         {!props.step.line && "Fußweg: "}
         {props.step.travelDurationInMinutes} Min
-      </IonLabel>
-      <div className="delayStats">
-        <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
-      </div>
-      
+      </p>
+      <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
     </div>
     <IonLabel/>
   </>
@@ -54,32 +51,3 @@ export function FillLine(props: FillLineProps): JSX.Element {
     <div className="fill-line" style={{ height: progress.toString() + "%" }} />
   );
 }
-/*
-<div className="container" data-testid="journey-step" >
-    <div className="left">
-      <IonLabel>
-        Abfahrt
-      </IonLabel>
-      <IonLabel>
-        {formatDateTime(props.step.startTime)}
-      </IonLabel>
-    </div>
-    <div className="middle">
-      <div className="line">
-        <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
-      </div>
-    </div>
-    <div className="line-info">
-      <IonLabel>
-        {props.step.line && "Linie:" + props.step.line}
-      </IonLabel>
-      <IonLabel>
-        {props.step.line && "Fahrtzeit: "}
-        {!props.step.line && "Fußweg: "}
-        {props.step.travelDurationInMinutes} Min
-      </IonLabel>
-
-      <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
-    </div>
-  </div >
-*/
