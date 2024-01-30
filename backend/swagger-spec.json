@@ -184,9 +184,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Stats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Stats"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "stats"
+        ]
       }
     }
   },
@@ -1455,6 +1465,41 @@
           "interchanges",
           "legs",
           "journeyStats"
+        ]
+      },
+      "RouteEntry": {
+        "type": "object",
+        "properties": {}
+      },
+      "DelayWithRoute": {
+        "type": "object",
+        "properties": {
+          "route": {
+            "description": "Route this delay entry is associated with.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RouteEntry"
+              }
+            ]
+          }
+        },
+        "required": [
+          "route"
+        ]
+      },
+      "Stats": {
+        "type": "object",
+        "properties": {
+          "delays": {
+            "description": "The most delayed trips",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DelayWithRoute"
+            }
+          }
+        },
+        "required": [
+          "delays"
         ]
       }
     }

@@ -1,10 +1,11 @@
 import React, { createContext, useContext } from "react";
-import { Configuration, JourneyApi, LocationFinderApi } from "../../api";
+import { Configuration, JourneyApi, LocationFinderApi, StatsApi } from "../../api";
 import { useAppConfig } from "../config/AppConfigContext";
 
 export interface ApiClients {
   journeyApi: JourneyApi;
   locationFinderApi: LocationFinderApi;
+  statsApi: StatsApi;
 }
 
 export const ApiClientsContext = createContext<ApiClients | null>(null);
@@ -16,7 +17,8 @@ export function ApiClientsProvider(props: { children: React.ReactNode }): JSX.El
 
   const apiClients: ApiClients = {
     journeyApi: new JourneyApi(configuration),
-    locationFinderApi: new LocationFinderApi(configuration)
+    locationFinderApi: new LocationFinderApi(configuration),
+    statsApi: new StatsApi(configuration)
   };
 
   return (
@@ -43,4 +45,9 @@ export function useJourneyApi(): JourneyApi {
 export function useLocationFinderApi(): LocationFinderApi {
   const { locationFinderApi } = useApiClients();
   return locationFinderApi;
+}
+
+export function useStatsApi(): StatsApi {
+  const { statsApi } = useApiClients();
+  return statsApi;
 }

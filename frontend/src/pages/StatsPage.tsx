@@ -1,7 +1,10 @@
-import { IonButtons, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import logo from "../../public/images/OeffisLogo1.svg";
+import { useStats } from "../hooks/useStats";
 
 const StatsPage: React.FC = () => {
+  const stats = useStats();
+
   return (<IonPage id="main-content">
     <IonHeader>
       <IonToolbar>
@@ -16,6 +19,9 @@ const StatsPage: React.FC = () => {
         </IonButtons>
       </IonToolbar>
     </IonHeader>
+    <IonContent>
+      {JSON.stringify(stats)}
+    </IonContent>
   </IonPage>);
 };
 

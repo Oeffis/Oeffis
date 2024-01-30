@@ -3,9 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { RouteEntry } from "historicData/entity/routeEntry.entity";
+import { Stats, WithDelay, WithRoute } from "stats/entity/stats";
 import { Like, Repository } from "typeorm";
-
-type WithDelay<T> = T & { delay: number };
 
 @Injectable()
 export class StatsService {
@@ -17,15 +16,12 @@ export class StatsService {
   ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public async getStats(): Promise<any> {
+  public async getStats(): Promise<Stats> {
     const delays = await this.getMostDelayedTrips();
     const uniqueDelays = this.removeDuplicateDelays(delays);
-    const routes = await this.addRoutes(uniqueDelays);
-    return `<h1>Stats</h1>`
-      + `<h2>Most delayed trips (all record time)</h2>`
-      + `<table><thead><tr><th>Route</th><th>Delay</th><th>Planned</th><th>Estimated</th></tr></thead><tbody>`
-      + routes.map(route => `<tr><td>${(route as any).route.routeId}</td><td>${route.delay.toFixed(2)}</td><td>${route.planned.toLocaleDateString("de")}</td><td>${route.estimated?.toLocaleDateString("de")}</td></tr>`).join("")
-      + `</tbody></table>`;
+    return {
+      delays: await this.addRoutes(uniqueDelays)
+    };
   }
 
   private async getMostDelayedTrips(): Promise<WithDelay<DelayEntry>[]> {
@@ -59,7 +55,7 @@ export class StatsService {
     return Array.from(map.values());
   }
 
-  private addRoutes(delays: WithDelay<DelayEntry>[]): Promise<WithDelay<DelayEntry>[]> {
+  private addRoutes<T extends DelayEntry>(delays: T[]): Promise<WithRoute<T>[]> {
     return Promise.all(delays.map(async delay => {
       const tripId = delay.tripId;
       const eva = tripId.substring(0, 6);

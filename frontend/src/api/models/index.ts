@@ -3,6 +3,7 @@
 export * from './BadRequest';
 export * from './CancellationStat';
 export * from './DelayStats';
+export * from './DelayWithRoute';
 export * from './Footpath';
 export * from './FootpathLeg';
 export * from './InterchangeReachableStat';
@@ -34,6 +35,7 @@ export * from './LocationWithAssignedStops';
 export * from './ParentLocation';
 export * from './ParentLocationDetails';
 export * from './RatedLocation';
+export * from './Stats';
 export * from './Transportation';
 export * from './TransportationDestination';
 export * from './TransportationLeg';
