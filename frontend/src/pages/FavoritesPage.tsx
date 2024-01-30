@@ -10,15 +10,12 @@ import logo from "../../public/images/OeffisLogo1.svg";
 import { FavoriteLocationsComponent } from "../components/FavoriteLocationsComponent";
 import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
-import { CreateFavoriteLocation, CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
+import { CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
 import "./FavoritesPage.css";
 
 export interface FavoritesPageProps {
   launchTab?: number;
   showHeader?: boolean;
-  onTripSelected?: (trip: CreateFavoriteTrip) => void;
-  onRouteSelected?: (trip: CreateFavoriteRoute) => void;
-  onLocationSelected?: (trip: CreateFavoriteLocation) => void;
 }
 const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
@@ -78,13 +75,13 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
         >
           <div>
             <SwiperSlide>
-              <FavoriteLocationsComponent onLocationSelected={(route: CreateFavoriteLocation) => { props.onLocationSelected ? props.onLocationSelected(route) : void 0; }} />
+              <FavoriteLocationsComponent />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { props.onRouteSelected ? props.onRouteSelected(route) : void 0; }} />
+              <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { console.log(route); }} />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { props.onTripSelected ? props.onTripSelected(trip) : void 0; }} />
+              <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { console.log(trip); }} />
             </SwiperSlide>
           </div>
         </SwiperReact>

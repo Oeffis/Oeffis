@@ -8,7 +8,7 @@ import {
   IonSkeletonText,
   ItemReorderEventDetail
 } from "@ionic/react";
-import { star } from "ionicons/icons";
+import { heart } from "ionicons/icons";
 import React from "react";
 import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
@@ -16,11 +16,7 @@ import { CreateFavoriteRoute, useFavoriteRoutes } from "../services/favorites/Fa
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
 import styles from "./FavoriteRoutesComponent.module.css";
 
-export interface FavoriteRoutesComponentProps {
-  onRouteSelected?: (route: CreateFavoriteRoute) => void;
-}
-
-export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (props) => {
+export const FavoriteRoutesComponent: React.FC = () => {
   const { favoriteRoutes, setFavoriteRoutes } = useFavoriteRoutes();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
@@ -40,7 +36,6 @@ export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (
               ? favoriteRoutes.map((route, idx) => (
                 <FavoriteRouteEntryComponent
                   identifier={idx}
-                  onRouteSelected={props.onRouteSelected}
                   route={route} />
               ))
               : <IonLabel>Keine favorisierten Routen vorhanden</IonLabel>
@@ -52,7 +47,6 @@ export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (
 };
 
 export interface FavoriteRouteEntryComponentProps {
-  onRouteSelected?: (route: CreateFavoriteRoute) => void;
   route: PersistedObject<CreateFavoriteRoute>;
   identifier: number;
 }
@@ -63,10 +57,9 @@ const FavoriteRouteEntryComponent: React.FC<FavoriteRouteEntryComponentProps> = 
   const { removeFavoriteRoute } = useFavoriteRoutes();
 
   const isReady = origin !== null && destination !== null;
-
-  return <IonItem
+  console.log(props.route);
+  return <IonItem routerLink={`/journey?origin=${origin?.id}&destination=${destination?.id}`}
     key={props.identifier}
-    onClick={() => props.onRouteSelected ? props.onRouteSelected(props.route) : {}}
   >
     {
       isReady ?
@@ -98,8 +91,8 @@ const LoadedFavoriteRouteEntryComponent: React.FC<LoadedFavouriteRouteEntryProps
     </div>
 
     <IonIcon
-      icon={star}
-      color="warning"
+      icon={heart}
+      color="primary"
       onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
       title="Remove from favorites"
     />
@@ -111,6 +104,6 @@ const PendingFavoriteRouteEntry: React.FC = () => <>
   <IonLabel>
     <IonSkeletonText animated={true} className={styles.pending} />
   </IonLabel>
-  <IonIcon icon={star} />
+  <IonIcon icon={heart} />
   <IonReorder slot="start" />
 </>;

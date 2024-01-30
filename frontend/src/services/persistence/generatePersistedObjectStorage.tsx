@@ -74,15 +74,17 @@ export function generatePersistedObjectStorage<TCreateObject, TObjectName extend
 
     const removePersistedObjectById = useCallback(
       (id: string): boolean => {
+        let found = false;
         const newPersistedObjects = persistedObjects.filter(favorite => {
           if (favorite.id === id) {
+            found = true;
             return false;
           }
 
           return true;
         });
 
-        if (newPersistedObjects.length > 0) {
+        if (!found) {
           return false;
         }
 
