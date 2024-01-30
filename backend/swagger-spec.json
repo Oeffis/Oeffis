@@ -1490,6 +1490,15 @@
       "Stats": {
         "type": "object",
         "properties": {
+          "filled": {
+            "type": "boolean",
+            "description": "Whether the stats are filled."
+          },
+          "time": {
+            "format": "date-time",
+            "type": "string",
+            "description": "When the stats were last updated."
+          },
           "delays": {
             "description": "The most delayed trips",
             "type": "array",
@@ -1499,6 +1508,8 @@
           }
         },
         "required": [
+          "filled",
+          "time",
           "delays"
         ]
       }

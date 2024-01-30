@@ -14,7 +14,7 @@ export const useStats = (): Stats => {
       .then((stats) => {
         setStats(stats);
       });
-  });
+  }, []);
 
   return stats;
 };

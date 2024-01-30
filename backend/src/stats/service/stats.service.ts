@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { RouteEntry } from "historicData/entity/routeEntry.entity";
@@ -8,18 +8,63 @@ import { Like, Repository } from "typeorm";
 
 @Injectable()
 export class StatsService {
+  protected logger = new Logger(StatsService.name);
+  protected cachedResults: Stats = {
+    filled: false,
+    time: new Date(),
+    delays: []
+  };
+  protected currentRequest?: Promise<Stats>;
+  protected lastRequestTime?: number;
+
   public constructor(
     @InjectRepository(DelayEntry)
     private readonly delayEntryRepository: Repository<DelayEntry>,
     @InjectRepository(RouteEntry)
     private readonly routeEntryRepository: Repository<RouteEntry>
-  ) { }
+  ) {
+    this.checkUpdateStats();
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async getStats(): Promise<Stats> {
+    this.checkUpdateStats();
+
+    return this.cachedResults;
+  }
+
+  protected checkUpdateStats(): void {
+    const anHour = 1000 * 60 * 60;
+    if (this.currentRequest === undefined
+      && (this.lastRequestTime === undefined
+        || this.lastRequestTime + anHour < Date.now())) {
+      void this.updateStats().catch(error => {
+        console.error(error);
+        this.lastRequestTime = undefined;
+        this.currentRequest = undefined;
+      });
+    }
+  }
+
+  protected async updateStats(): Promise<void> {
+    this.logger.log("Updating stats");
+    this.lastRequestTime = Date.now();
+    this.currentRequest = this.getNewStats();
+    const stats = await this.currentRequest;
+    const end = new Date();
+    const durationInSeconds = (end.getTime() - this.lastRequestTime) / 1000;
+    this.logger.log("Updated stats in " + durationInSeconds + "s");
+    this.cachedResults = stats;
+    this.currentRequest = undefined;
+  }
+
+  protected async getNewStats(): Promise<Stats> {
+    const start = new Date();
     const delays = await this.getMostDelayedTrips();
     const uniqueDelays = this.removeDuplicateDelays(delays);
     return {
+      filled: true,
+      time: start,
       delays: await this.addRoutes(uniqueDelays)
     };
   }

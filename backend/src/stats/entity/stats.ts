@@ -52,6 +52,20 @@ export class DelayWithRoute extends DelayEntry {
 
 export class Stats {
   @ApiProperty({
+    description: "Whether the stats are filled.",
+    type: Boolean,
+    required: true
+  })
+  filled: boolean = false;
+
+  @ApiProperty({
+    description: "When the stats were last updated.",
+    type: Date,
+    required: true
+  })
+  time: Date = new Date();
+
+  @ApiProperty({
     description: "The most delayed trips",
     type: [DelayWithRoute],
     required: true
