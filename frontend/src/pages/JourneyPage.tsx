@@ -10,6 +10,19 @@ const JourneyPage: React.FC = () => {
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
 
+  const getLocationIds = (): string[] => {
+    const ids: string[] = [];
+
+    if (originId !== null) {
+      ids.push(originId);
+    }
+    if (destinationId !== null) {
+      ids.push(destinationId);
+    }
+
+    return ids;
+  };
+
   return (
     <IonPage id="main-content">
       <IonHeader>
@@ -31,6 +44,7 @@ const JourneyPage: React.FC = () => {
             <LeafletMapContainer
               originId={originId}
               destinationId={destinationId}
+              locationIds={getLocationIds()}
               showLines={true}
             />
           </div>
