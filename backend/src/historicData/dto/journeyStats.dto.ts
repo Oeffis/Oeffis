@@ -24,7 +24,7 @@ export class JourneyStats {
     },
     required: true
   })
-  aggregatedDelayStats: MaybeStats;
+  aggregatedDelayStats: DelayStats | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
@@ -42,7 +42,7 @@ export class JourneyStats {
     },
     required: true
   })
-  aggregatedInterchangeReachableStat: MaybeStats;
+  aggregatedInterchangeReachableStat: InterchangeReachableStat | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
@@ -60,12 +60,12 @@ export class JourneyStats {
     },
     required: true
   })
-  aggregatedCancellationStat: MaybeStats;
+  aggregatedCancellationStat: CancellationStat | UnavailableStats;
 
   public constructor(
-    aggregatedDelayStats: DelayStats,
-    aggregatedInterchangeReachableStat: InterchangeReachableStat,
-    aggregatedCancellationStat: CancellationStat
+    aggregatedDelayStats: DelayStats | UnavailableStats,
+    aggregatedInterchangeReachableStat: InterchangeReachableStat | UnavailableStats,
+    aggregatedCancellationStat: CancellationStat | UnavailableStats
   ) {
     this.aggregatedDelayStats = aggregatedDelayStats;
     this.aggregatedInterchangeReachableStat = aggregatedInterchangeReachableStat;

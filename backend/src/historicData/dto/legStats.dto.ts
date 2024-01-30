@@ -24,7 +24,7 @@ export class LegStats {
     },
     required: true
   })
-  originDelayStats: MaybeStats;
+  originDelayStats: DelayStats | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
@@ -42,7 +42,7 @@ export class LegStats {
     },
     required: true
   })
-  destinationDelayStats: MaybeStats;
+  destinationDelayStats: DelayStats | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
@@ -60,7 +60,7 @@ export class LegStats {
     },
     required: true
   })
-  interchangeReachableStat: MaybeStats;
+  interchangeReachableStat: InterchangeReachableStat | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
@@ -78,13 +78,13 @@ export class LegStats {
     },
     required: true
   })
-  cancellationStat: MaybeStats;
+  cancellationStat: CancellationStat | UnavailableStats;
 
   public constructor(
-    originDelayStats: DelayStats,
-    destinationDelayStats: DelayStats,
-    interchangeReachableStat: InterchangeReachableStat,
-    cancellationStat: CancellationStat
+    originDelayStats: DelayStats | UnavailableStats,
+    destinationDelayStats: DelayStats | UnavailableStats,
+    interchangeReachableStat: InterchangeReachableStat | UnavailableStats,
+    cancellationStat: CancellationStat | UnavailableStats
   ) {
     this.originDelayStats = originDelayStats;
     this.destinationDelayStats = destinationDelayStats;
