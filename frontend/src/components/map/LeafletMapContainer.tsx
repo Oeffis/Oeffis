@@ -28,7 +28,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
 
   const markers: ReactElement[] = [];
   for (let i = 0; i < locations.length; i++) {
-    if (i !== 0 && i !== locations.length - 1) {
+    if (locations[i].id !== originId && locations[i].id !== destinationId) {
       markers.push(
         <MapMarker
           key={"marker" + i}
