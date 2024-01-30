@@ -66,7 +66,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
-  const [mapHeight, setMapHeight] = useState<number>(30);
+  const [mapHeight] = useState<number>(30);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
   const [activeJourneyIndex] = useState<number>(0);
@@ -189,7 +189,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
               <IonButton className="circle-button" routerLink="livenavigation">
                 <IonIcon icon={playOutline} />
               </IonButton>
-
             }
           </div>
         </div>
