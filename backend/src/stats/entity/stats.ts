@@ -1,53 +1,72 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { RouteEntry } from "historicData/entity/routeEntry.entity";
-import { StopEntry } from "historicData/entity/stopEntry.entity";
-import { VrrTimetableVersionEntry } from "historicData/entity/vrrTimetableVersionEntry.entity";
-import { Relation } from "typeorm";
 
 export type WithDelay<T> = T & { delay: number };
 export type WithRoute<T> = T & { route: RouteEntry };
 
-export class DelayWithRoute extends DelayEntry {
-  @ApiProperty({
-    description: "Route this delay entry is associated with.",
-    type: RouteEntry
-  })
-  route: RouteEntry;
+export class WorstDelayEntry {
+  // @ApiProperty({
+  //   description: "The name of the route start",
+  //   type: String,
+  //   required: true
+  // })
+  // routeStart: string = "";
 
-  public constructor(
-    id: bigint,
-    tripId: string,
-    stopId: string,
-    recordingTime: Date,
-    isDeparture: boolean,
-    planned: Date,
-    rawData: string,
-    vrrTimetableVersionId: string,
-    vrrTimetableVersion: Relation<VrrTimetableVersionEntry>,
-    tripCode: number,
-    parentStopId: string,
-    routeEntry: RouteEntry,
-    stop?: Relation<StopEntry>,
-    estimated?: Date,
-  ) {
-    super(
-      id,
-      tripId,
-      stopId,
-      recordingTime,
-      isDeparture,
-      planned,
-      rawData,
-      vrrTimetableVersionId,
-      vrrTimetableVersion,
-      tripCode,
-      parentStopId,
-      stop,
-      estimated
-    );
-    this.route = routeEntry;
-  }
+  // @ApiProperty({
+  //   description: "The name of the route end",
+  //   type: String,
+  //   required: true
+  // })
+  // routeEnd: string = "";
+
+  // @ApiProperty({
+  //   description: "The reference to the route",
+  //   type: String,
+  //   required: true
+  // })
+  // routeRef: string = "";
+
+  @ApiProperty({
+    description: "The short name of the route",
+    type: String,
+    required: true
+  })
+  routeShortName: string = "";
+
+  @ApiProperty({
+    description: "The long name of the route",
+    type: String,
+    required: true
+  })
+  routeLongName: string = "";
+
+  @ApiProperty({
+    description: "The id to the route",
+    type: String,
+    required: true
+  })
+  routeId: string = "";
+
+  @ApiProperty({
+    description: "The delay",
+    type: Number,
+    required: true
+  })
+  delay: number = 0;
+
+  @ApiProperty({
+    description: "The planned time",
+    type: Date,
+    required: true
+  })
+  planned: Date = new Date();
+
+  @ApiProperty({
+    description: "The estimated time",
+    type: Date,
+    required: true
+  })
+  estimated: Date = new Date();
 }
 
 export class Stats {
@@ -67,8 +86,8 @@ export class Stats {
 
   @ApiProperty({
     description: "The most delayed trips",
-    type: [DelayWithRoute],
+    type: [WorstDelayEntry],
     required: true
   })
-  delays: DelayWithRoute[] = [];
+  delays: WorstDelayEntry[] = [];
 }

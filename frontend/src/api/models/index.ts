@@ -3,7 +3,6 @@
 export * from './BadRequest';
 export * from './CancellationStat';
 export * from './DelayStats';
-export * from './DelayWithRoute';
 export * from './Footpath';
 export * from './FootpathLeg';
 export * from './InterchangeReachableStat';
@@ -40,3 +39,4 @@ export * from './Transportation';
 export * from './TransportationDestination';
 export * from './TransportationLeg';
 export * from './UnavailableStats';
+export * from './WorstDelayEntry';

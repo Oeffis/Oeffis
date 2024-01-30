@@ -1,12 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { RouteEntry } from "historicData/entity/routeEntry.entity";
 import { join } from "path";
-import { Stats, WithDelay, WithRoute } from "stats/entity/stats";
+import { Stats, WithRoute } from "stats/entity/stats";
 import { Like, Repository } from "typeorm";
+
+interface RawDelayStatEntry {
+  delay: string;
+  estimated: Date;
+  planned: Date;
+  /* eslint-disable @typescript-eslint/naming-convention */
+  route_id: string;
+  trip_id: string;
+  trip_code: string;
+  /* eslint-enable @typescript-eslint/naming-convention */
+}
+
+interface DelayStatEntry {
+  delay: number;
+  estimated: Date;
+  planned: Date;
+  routeId: string;
+  tripCode: string;
+  tripId: string;
+}
 
 @Injectable()
 export class StatsService {
@@ -31,8 +50,6 @@ export class StatsService {
   }
 
   protected async readFileCache(): Promise<void> {
-
-    //huh
     const filePath = join(process.cwd(), "cache", "stats.json");
     try {
       const file = await readFile(filePath, "utf-8");
@@ -40,6 +57,7 @@ export class StatsService {
       const json = JSON.parse(file);
       this.cachedResults = json.stats;
       this.lastRequestTime = json.lastRequestTime;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.code === "ENOENT") {
         this.logger.log("No stats file cache found");
@@ -50,7 +68,6 @@ export class StatsService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async getStats(): Promise<Stats> {
     this.checkUpdateStats();
 
@@ -96,33 +113,44 @@ export class StatsService {
     const start = new Date();
     const delays = await this.getMostDelayedTrips();
     const uniqueDelays = this.removeDuplicateDelays(delays);
+    const topTen = uniqueDelays.slice(0, 10);
+    const withRoutes = await this.addRoutes(topTen);
     return {
       filled: true,
       time: start,
-      delays: await this.addRoutes(uniqueDelays)
+      delays: withRoutes.map(delay => ({
+        routeShortName: delay.route.routeShortName!,
+        routeLongName: delay.route.routeLongName!,
+        routeId: delay.route.routeId,
+        delay: delay.delay,
+        planned: delay.planned,
+        estimated: delay.estimated!
+      }))
     };
   }
 
-  private async getMostDelayedTrips(): Promise<WithDelay<DelayEntry>[]> {
-    const maxDelays = await this.delayEntryRepository.query(sql`
+  private async getMostDelayedTrips(): Promise<DelayStatEntry[]> {
+    const maxDelays: RawDelayStatEntry[] = await this.delayEntryRepository.query(sql`
     WITH historic_with_delay AS (
       SELECT *, EXTRACT(EPOCH FROM (estimated - planned)::INTERVAL) / 60 AS delay 
       FROM historic_data
       WHERE estimated IS NOT NULL
     )
-    SELECT * FROM historic_with_delay WHERE delay > 1000 ORDER BY delay DESC LIMIT 10;
+    SELECT * FROM historic_with_delay WHERE delay > 1000 ORDER BY delay DESC LIMIT 50;
     `);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    maxDelays.forEach((delay: any) => {
-      for (const key in delay) {
-        delay[key.replace(/_\w/g, (m) => m[1].toUpperCase())] = delay[key];
-      }
-    });
-    return maxDelays;
+
+    return maxDelays.map((delay) => ({
+      delay: parseFloat(delay.delay),
+      planned: delay.planned,
+      estimated: delay.estimated,
+      routeId: delay.route_id,
+      tripId: delay.trip_id,
+      tripCode: delay.trip_code
+    }));
   }
 
-  private removeDuplicateDelays(delays: WithDelay<DelayEntry>[]): WithDelay<DelayEntry>[] {
-    const map = new Map<string, WithDelay<DelayEntry>>();
+  private removeDuplicateDelays(delays: DelayStatEntry[]): DelayStatEntry[] {
+    const map = new Map<string, DelayStatEntry>();
     delays.forEach(delay => {
       const key = `${delay.tripId}-${delay.tripCode}-${delay.planned.toLocaleDateString()}`;
       const existing = map.get(key);
@@ -134,7 +162,7 @@ export class StatsService {
     return Array.from(map.values());
   }
 
-  private addRoutes<T extends DelayEntry>(delays: T[]): Promise<WithRoute<T>[]> {
+  private addRoutes<T extends DelayStatEntry>(delays: T[]): Promise<WithRoute<T>[]> {
     return Promise.all(delays.map(async delay => {
       const tripId = delay.tripId;
       const eva = tripId.substring(0, 6);

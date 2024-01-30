@@ -1467,24 +1467,43 @@
           "journeyStats"
         ]
       },
-      "RouteEntry": {
-        "type": "object",
-        "properties": {}
-      },
-      "DelayWithRoute": {
+      "WorstDelayEntry": {
         "type": "object",
         "properties": {
-          "route": {
-            "description": "Route this delay entry is associated with.",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/RouteEntry"
-              }
-            ]
+          "routeShortName": {
+            "type": "string",
+            "description": "The short name of the route"
+          },
+          "routeLongName": {
+            "type": "string",
+            "description": "The long name of the route"
+          },
+          "routeId": {
+            "type": "string",
+            "description": "The id to the route"
+          },
+          "delay": {
+            "type": "number",
+            "description": "The delay"
+          },
+          "planned": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The planned time"
+          },
+          "estimated": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The estimated time"
           }
         },
         "required": [
-          "route"
+          "routeShortName",
+          "routeLongName",
+          "routeId",
+          "delay",
+          "planned",
+          "estimated"
         ]
       },
       "Stats": {
@@ -1503,7 +1522,7 @@
             "description": "The most delayed trips",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/DelayWithRoute"
+              "$ref": "#/components/schemas/WorstDelayEntry"
             }
           }
         },

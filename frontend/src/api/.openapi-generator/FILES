@@ -6,7 +6,6 @@ src/index.ts
 src/models/BadRequest.ts
 src/models/CancellationStat.ts
 src/models/DelayStats.ts
-src/models/DelayWithRoute.ts
 src/models/Footpath.ts
 src/models/FootpathLeg.ts
 src/models/InterchangeReachableStat.ts
@@ -43,5 +42,6 @@ src/models/Transportation.ts
 src/models/TransportationDestination.ts
 src/models/TransportationLeg.ts
 src/models/UnavailableStats.ts
+src/models/WorstDelayEntry.ts
 src/models/index.ts
 src/runtime.ts

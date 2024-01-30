@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { DelayWithRoute } from './DelayWithRoute';
+import type { WorstDelayEntry } from './WorstDelayEntry';
 import {
-    DelayWithRouteFromJSON,
-    DelayWithRouteFromJSONTyped,
-    DelayWithRouteToJSON,
-} from './DelayWithRoute';
+    WorstDelayEntryFromJSON,
+    WorstDelayEntryFromJSONTyped,
+    WorstDelayEntryToJSON,
+} from './WorstDelayEntry';
 
 /**
  * 
@@ -40,10 +40,10 @@ export interface Stats {
     time: Date;
     /**
      * The most delayed trips
-     * @type {Array<DelayWithRoute>}
+     * @type {Array<WorstDelayEntry>}
      * @memberof Stats
      */
-    delays: Array<DelayWithRoute>;
+    delays: Array<WorstDelayEntry>;
 }
 
 /**
@@ -70,7 +70,7 @@ export function StatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         
         'filled': json['filled'],
         'time': (new Date(json['time'])),
-        'delays': ((json['delays'] as Array<any>).map(DelayWithRouteFromJSON)),
+        'delays': ((json['delays'] as Array<any>).map(WorstDelayEntryFromJSON)),
     };
 }
 
@@ -85,7 +85,7 @@ export function StatsToJSON(value?: Stats | null): any {
         
         'filled': value.filled,
         'time': (value.time.toISOString()),
-        'delays': ((value.delays as Array<any>).map(DelayWithRouteToJSON)),
+        'delays': ((value.delays as Array<any>).map(WorstDelayEntryToJSON)),
     };
 }
 
