@@ -2,14 +2,11 @@ import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import React from "react";
 import { Marker, Popup } from "react-leaflet";
-import greenBusIcon from "../../../src/images/bus-green-map-marker.svg";
 import redBusIcon from "../../../src/images/bus-red-map-marker.svg";
 import whiteBusIcon from "../../../src/images/bus-white-map-marker.svg";
-import greenLocationIcon from "../../../src/images/location-green-map-marker.svg";
 import redLocationIcon from "../../../src/images/location-red-map-marker.svg";
 import whiteLocationIcon from "../../../src/images/location-white-map-marker.svg";
 import markerShadow from "../../../src/images/marker-shadow.png";
-import greenPinIcon from "../../../src/images/pin-green-map-marker.svg";
 import redPinIcon from "../../../src/images/pin-red-map-marker.svg";
 import whitePinIcon from "../../../src/images/pin-white-map-marker.svg";
 import currentPositionIcon from "../../../src/images/position-map-marker.svg";
@@ -25,42 +22,6 @@ export interface MarkerProps {
 }
 
 const MapMarker = ({ location, onItemClicked }: MarkerProps): JSX.Element => {
-  const getLocationIcon = (type: LocationTypeEnum): string => {
-    switch (type) {
-      case LocationTypeEnum.Address:
-        return greenLocationIcon;
-      case LocationTypeEnum.Unknown:
-        return greenLocationIcon;
-      case LocationTypeEnum.Crossing:
-        return greenLocationIcon;
-      case LocationTypeEnum.Street:
-        return greenLocationIcon;
-      case LocationTypeEnum.Platform:
-      case LocationTypeEnum.Stop:
-        return greenBusIcon;
-      case LocationTypeEnum.Poi:
-      case LocationTypeEnum.PoiHierarchy:
-        return greenPinIcon;
-      case LocationTypeEnum.Gis:
-      case LocationTypeEnum.Locality:
-      case LocationTypeEnum.Sharing:
-      case LocationTypeEnum.Suburb:
-        return currentPositionIcon;
-      case LocationTypeEnum.Singlehouse:
-        return currentPositionIcon;
-      default:
-        return currentPositionIcon;
-    }
-  };
-
-  /* const icon = new Icon({
-    iconUrl: getLocationIcon(location.type),
-    iconSize: [25, 41],
-    iconAnchor: [12.5, 38],
-    shadowUrl: markerShadow,
-    shadowAnchor: [12.5, 38],
-    popupAnchor: [0, -32]
-  }); */
 
   const icon = new Icon({
     iconUrl: currentPositionIcon,
@@ -133,22 +94,14 @@ function getOriginIcon(type: string): string {
       return whiteLocationIcon;
     case LocationTypeEnum.Unknown:
       return whiteLocationIcon;
-    case LocationTypeEnum.Crossing:
     case LocationTypeEnum.Street:
       return whiteLocationIcon;
-    case LocationTypeEnum.Platform:
     case LocationTypeEnum.Stop:
       return whiteBusIcon;
-    case LocationTypeEnum.Poi:
     case LocationTypeEnum.PoiHierarchy:
       return whitePinIcon;
-    case LocationTypeEnum.Gis:
-    case LocationTypeEnum.Locality:
-    case LocationTypeEnum.Sharing:
-    case LocationTypeEnum.Suburb:
-    case LocationTypeEnum.Singlehouse:
     default:
-      return currentPositionIcon;
+      return whiteLocationIcon;
   }
 }
 
@@ -192,23 +145,17 @@ export const DestinationMapMarker: React.FC<{
 function getDestinationIcon(type: string): string {
   switch (type) {
     case LocationTypeEnum.Address:
+      return redLocationIcon;
     case LocationTypeEnum.Unknown:
-    case LocationTypeEnum.Crossing:
+      return redLocationIcon;
     case LocationTypeEnum.Street:
       return redLocationIcon;
-    case LocationTypeEnum.Platform:
     case LocationTypeEnum.Stop:
       return redBusIcon;
-    case LocationTypeEnum.Poi:
     case LocationTypeEnum.PoiHierarchy:
       return redPinIcon;
-    case LocationTypeEnum.Gis:
-    case LocationTypeEnum.Locality:
-    case LocationTypeEnum.Sharing:
-    case LocationTypeEnum.Suburb:
-    case LocationTypeEnum.Singlehouse:
     default:
-      return currentPositionIcon;
+      return redLocationIcon;
   }
 }
 
