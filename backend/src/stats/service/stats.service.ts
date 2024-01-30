@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { RouteEntry } from "historicData/entity/routeEntry.entity";
+import { join } from "path";
 import { Stats, WithDelay, WithRoute } from "stats/entity/stats";
 import { Like, Repository } from "typeorm";
 
@@ -23,7 +25,29 @@ export class StatsService {
     @InjectRepository(RouteEntry)
     private readonly routeEntryRepository: Repository<RouteEntry>
   ) {
-    this.checkUpdateStats();
+    this.readFileCache().then(() => {
+      this.checkUpdateStats();
+    }).catch(error => this.logger.error(error));
+  }
+
+  protected async readFileCache(): Promise<void> {
+
+    //huh
+    const filePath = join(process.cwd(), "cache", "stats.json");
+    try {
+      const file = await readFile(filePath, "utf-8");
+      this.logger.log("Reading stats from file cache");
+      const json = JSON.parse(file);
+      this.cachedResults = json.stats;
+      this.lastRequestTime = json.lastRequestTime;
+    } catch (error: any) {
+      if (error.code === "ENOENT") {
+        this.logger.log("No stats file cache found");
+        return;
+      }
+
+      throw error;
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,7 +63,7 @@ export class StatsService {
       && (this.lastRequestTime === undefined
         || this.lastRequestTime + anHour < Date.now())) {
       void this.updateStats().catch(error => {
-        console.error(error);
+        this.logger.error(error);
         this.lastRequestTime = undefined;
         this.currentRequest = undefined;
       });
@@ -55,7 +79,17 @@ export class StatsService {
     const durationInSeconds = (end.getTime() - this.lastRequestTime) / 1000;
     this.logger.log("Updated stats in " + durationInSeconds + "s");
     this.cachedResults = stats;
+    await this.writeFileCache();
     this.currentRequest = undefined;
+  }
+
+  protected async writeFileCache(): Promise<void> {
+    await mkdir(join(process.cwd(), "cache"), { recursive: true });
+    const filePath = join(process.cwd(), "cache", "stats.json");
+    await writeFile(filePath, JSON.stringify({
+      stats: this.cachedResults,
+      lastRequestTime: this.lastRequestTime
+    }));
   }
 
   protected async getNewStats(): Promise<Stats> {
