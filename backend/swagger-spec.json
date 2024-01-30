@@ -177,6 +177,17 @@
           "journey"
         ]
       }
+    },
+    "/stats": {
+      "get": {
+        "operationId": "StatsController_getStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
