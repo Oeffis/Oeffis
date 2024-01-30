@@ -42,21 +42,37 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
 
   return (
     <div className={styles.contentGrid}>
-      {
-        props.journey.stops.map((step: IJourneyStep, index) =>
-          <>
-            {index === 0 && <FirstJourneyStepComponent time={step.startTime} stationName={step.stationName} isFirst={true} trackOrigin={step.trackOrigin} trackDestination={step.trackDestination}/>}
-            {
-              index !== 0 &&
-              <JourneyStepComponent
-                key={"journeyStep" + index}
-                step={step}
-                arrivalTime={props.journey.stops[index - 1].arrivalTime} />
-            }
-            <StepProgressComponent key={"stepProgress" + index} step={step} />
-            {index === props.journey.stops.length - 1 && <FirstJourneyStepComponent stationName={props.journey.arrivalStation} time={props.journey.arrivalTime} isFirst={false} trackOrigin={step.trackOrigin} trackDestination={step.trackDestination}/>}
-          </>
-        )}
+        {
+          props.journey.stops.map((step: IJourneyStep, index) =>
+            <>
+              {
+                index === 0 
+                && <FirstJourneyStepComponent
+                  key={"firstJourney" + index}
+                  startTime={step.startTime} 
+                  stationName={step.stationName}
+                  isFirst={true}
+                  trackOrigin={step.trackOrigin}
+                  trackDestination={step.trackDestination} />}
+              {
+                index !== 0 
+                && <JourneyStepComponent
+                  key={"journeyStep" + index}
+                  step={step}
+                  arrivalTime={props.journey.stops[index - 1].arrivalTime} />}
+              <StepProgressComponent 
+                key={"stepProgress" + index}
+                step={step} />
+              {index === props.journey.stops.length - 1 
+                && <FirstJourneyStepComponent
+                  key={"firstJourney" + index}
+                  stationName={props.journey.arrivalStation} 
+                  startTime={props.journey.arrivalTime} 
+                  isFirst={false} 
+                  trackOrigin={step.trackOrigin} 
+                  trackDestination={step.trackDestination}/>}
+            </>
+      )}
     </div>
   );
 }
