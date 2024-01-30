@@ -1,6 +1,6 @@
 import { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Polygon, TileLayer } from "react-leaflet";
 import { Location } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
@@ -25,12 +25,35 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
   const [view, setView] = useState<View>({ bounds: NRW_BOUNDS });
 
   const bounds: LatLngTuple[] = locations.map((location) => [location.details.coordinates.latitude, location.details.coordinates.longitude]);
-  const markers = locations.map((location, index) =>
-    <MapMarker
-      key={"marker" + index}
-      location={location}
-      onItemClicked={onItemClicked}
-    />);
+
+  const markers: ReactElement[] = [];
+  for (let i = 0; i < locations.length; i++) {
+    if (i !== 0 && i !== locations.length - 1) {
+      markers.push(
+        <MapMarker
+          key={"marker" + i}
+          location={locations[i]}
+          onItemClicked={onItemClicked}
+        />
+      );
+    }
+  }
+
+  const renderPolygons = (): ReactElement[] => {
+    const polygons: ReactElement[] = [];
+    for (let i = 0; i < bounds.length - 1; i++) {
+      polygons.push(
+        <Polygon
+          key={"line" + i}
+          color={window.matchMedia("(prefers-color-scheme: dark)") ? "rgb(0,148,236)" : "rgb(77, 77, 77)"}
+          opacity={1}
+          dashArray={"30,20"}
+          weight={2}
+          positions={[bounds[i], bounds[i + 1]]} />
+      );
+    }
+    return polygons;
+  };
 
   useEffect(() => {
     if (usersPosition.state === "located") {
@@ -54,12 +77,13 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      className="map-tiles"
     />
-    {markers}
     <CurrentLocationMapMarker />
     <OriginMapMarker originId={originId} />
+    {markers}
     <DestinationMapMarker destinationId={destinationId} />
-    {showLines && <Polygon color={"rgb(77, 77, 77)"} opacity={1} dashArray={"20,15"} weight={2} positions={bounds} />}
+    {showLines && renderPolygons()}
   </ReactiveMapContainer>;
 };
 
