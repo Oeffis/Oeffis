@@ -1,0 +1,86 @@
+ion-label {
+    padding: 2px;
+}
+
+.detail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bottom-section-closed {
+    position: relative;
+    padding-top: 4px;
+}
+
+.bottom-section-opened {
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+}
+
+IonButton {
+    color: transparent;
+}
+
+.JourneyDetail {
+    width: 100%;
+}
+
+.back-button {
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    right: 0;
+}
+
+.swiper-div {
+    z-index: -10;
+    height: 50%;
+}
+
+.circle-button {
+    --border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.result-swiper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    overflow-y: auto;
+    width: 50%;
+}
+
+.left-align {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 25%;
+}
+
+.right-align {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 25%;
+}
+
+#map {
+    transition: 500ms ease-in-out;
+    height: 0;
+}

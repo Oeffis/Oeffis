@@ -1,6 +1,5 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import logo from "../../public/images/OeffisLogo1.svg";
-import "./UserHistoryPage.css";
 
 const UserHistoryPage: React.FC = () => (
   <IonPage id="main-content">

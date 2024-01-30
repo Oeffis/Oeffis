@@ -4,11 +4,24 @@ import logo from "../../public/images/OeffisLogo1.svg";
 import RoutePlanner from "../components/RoutePlanner/RoutePlanner";
 import LeafletMapContainer from "../components/map/LeafletMapContainer";
 import { useStateParams } from "../hooks/useStateParams";
-import "./JourneyPage.css";
+import styles from "./JourneyPage.module.css";
 
 const JourneyPage: React.FC = () => {
   const [originId, setOriginId] = useStateParams<string | null>(null, "origin", String, String);
   const [destinationId, setDestinationId] = useStateParams<string | null>(null, "destination", String, String);
+
+  const getLocationIds = (): string[] => {
+    const ids: string[] = [];
+
+    if (originId !== null) {
+      ids.push(originId);
+    }
+    if (destinationId !== null) {
+      ids.push(destinationId);
+    }
+
+    return ids;
+  };
 
   return (
     <IonPage id="main-content">
@@ -25,16 +38,17 @@ const JourneyPage: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <div className="journey-content">
-          <div className="map">
+      <IonContent scrollY={false}>
+        <div className={styles.journey_content}>
+          <div className={styles.map}>
             <LeafletMapContainer
               originId={originId}
               destinationId={destinationId}
+              locationIds={getLocationIds()}
               showLines={true}
             />
           </div>
-          <div className="planner">
+          <div className={styles.planner}>
             <RoutePlanner
               originId={originId}
               destinationId={destinationId}

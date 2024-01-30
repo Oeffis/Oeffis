@@ -1,4 +1,5 @@
-import { IonButton } from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
+import { locateOutline } from "ionicons/icons";
 import "leaflet/dist/leaflet.css";
 import { Location, LocationWithAssignedStops } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
@@ -37,6 +38,10 @@ export function CurrentLocationButton(props: CurrentLocationButtonProps): JSX.El
     }
   };
 
-  return <IonButton onClick={setCurrentLocationAsInputValue} />;
+  return (
+    <IonButton onClick={setCurrentLocationAsInputValue}>
+      <IonIcon icon={locateOutline} />
+    </IonButton>
+  );
 
 }
