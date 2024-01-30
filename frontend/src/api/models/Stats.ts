@@ -27,6 +27,18 @@ import {
  */
 export interface Stats {
     /**
+     * Whether the stats are filled.
+     * @type {boolean}
+     * @memberof Stats
+     */
+    filled: boolean;
+    /**
+     * When the stats were last updated.
+     * @type {Date}
+     * @memberof Stats
+     */
+    time: Date;
+    /**
      * The most delayed trips
      * @type {Array<DelayWithRoute>}
      * @memberof Stats
@@ -39,6 +51,8 @@ export interface Stats {
  */
 export function instanceOfStats(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "filled" in value;
+    isInstance = isInstance && "time" in value;
     isInstance = isInstance && "delays" in value;
 
     return isInstance;
@@ -54,6 +68,8 @@ export function StatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
     }
     return {
         
+        'filled': json['filled'],
+        'time': (new Date(json['time'])),
         'delays': ((json['delays'] as Array<any>).map(DelayWithRouteFromJSON)),
     };
 }
@@ -67,6 +83,8 @@ export function StatsToJSON(value?: Stats | null): any {
     }
     return {
         
+        'filled': value.filled,
+        'time': (value.time.toISOString()),
         'delays': ((value.delays as Array<any>).map(DelayWithRouteToJSON)),
     };
 }
