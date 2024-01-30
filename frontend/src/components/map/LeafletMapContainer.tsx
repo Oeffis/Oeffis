@@ -45,7 +45,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
       polygons.push(
         <Polygon
           key={"line" + i}
-          color={window.matchMedia('(prefers-color-scheme: dark)') ? "rgb(0,148,236)" : "rgb(77, 77, 77)"}
+          color={window.matchMedia("(prefers-color-scheme: dark)") ? "rgb(0,148,236)" : "rgb(77, 77, 77)"}
           opacity={1}
           dashArray={"30,20"}
           weight={2}
