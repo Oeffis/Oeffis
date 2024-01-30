@@ -1,11 +1,12 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonModal, IonTitle, IonToolbar } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../../public/images/train_image.png";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
+import { useJourneyApi, useLocationFinderApi } from "../../services/apiClients/ApiClientsContext";
 import { blackListJourney, findJourneyFromNextStop, parseJSONToJourney } from "../../services/smartSuggestion/smartSuggestionFunctions";
 import styles from "./LiveNavigation.module.css";
 
@@ -13,15 +14,18 @@ const LiveNavigation: React.FC = () => {
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(parseJSONToJourney(window.localStorage.getItem("selectedJourney")));
   const [showModal, setshowModal] = useState<boolean>(false);
   const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
+  const locationFinderApi = useLocationFinderApi();
+  const journeyApi = useJourneyApi();
 
-  void findJourneyFromNextStop();
-
-  setInterval(() => {
-    setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
-    if (window.localStorage.getItem("recJourney") !== null) {
-      setshowModal(true);
-    }
-  }, 120000);
+  useEffect(() => {
+    setInterval(() => {
+      void findJourneyFromNextStop(locationFinderApi, journeyApi);
+      setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
+      if (window.localStorage.getItem("recJourney") !== null) {
+        setshowModal(true);
+      }
+    }, 120000);
+  }, []);
 
   return (
     <>

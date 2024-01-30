@@ -1,7 +1,6 @@
-import { FootpathLeg, Journey, LegOriginLocationTypeEnum, TransportationLeg, TransportationLegTypeEnum } from "../../api";
+import { FootpathLeg, Journey, JourneyApi, LegOriginLocationTypeEnum, LocationFinderApi, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
-import { useJourneyApi, useLocationFinderApi } from "../apiClients/ApiClientsContext";
 
 let selectedJourneyJSON: string | null;
 const blackList: number[] = [];
@@ -24,14 +23,11 @@ export function parseJSONToJourney(journey: string | null): IJourney {
   return {} as IJourney;
 }
 
-export async function findJourneyFromNextStop(): Promise<void> {
+export async function findJourneyFromNextStop(locationFinderApi: LocationFinderApi, journeyApi: JourneyApi): Promise<void> {
   const nextStop = getNextStop();
   if (!nextStop) {
     return;
   }
-
-  const locationFinderApi = useLocationFinderApi();
-  const journeyApi = useJourneyApi();
 
   const originLocations = await locationFinderApi.locationFinderControllerFindLocationsByName({ name: nextStop.stopName });
   const arrivalLocations = await locationFinderApi.locationFinderControllerFindLocationsByName({ name: parseJSONToJourney(selectedJourneyJSON)?.arrivalStation });
