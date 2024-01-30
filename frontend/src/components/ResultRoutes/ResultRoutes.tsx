@@ -135,6 +135,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   };
 
   useEffect(() => {
+    console.log("ResultRoutes");
     setSlideNames();
     if (iJourneys !== false) {
       setSelectedJourney(iJourneys[activeJourneyIndex]);
