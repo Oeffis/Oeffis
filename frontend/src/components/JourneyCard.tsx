@@ -12,6 +12,8 @@ const timeSplitter = (traveltime: number): number[] => {
   const traveltimeHours = Math.floor(traveltime / 60);
   const traveltimeMinutes = traveltime % 60;
   return [traveltimeHours, traveltimeMinutes];
+
+  //TODO: Round uneven minutes
 };
 
 const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
@@ -32,28 +34,30 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
       <IonCol className={jc.duration}>
         <div>
           {props.journey.travelDurationInMinutes < 60 && (
-            <IonCol>
-              <IonLabel>
-                <h1>{props.journey.travelDurationInMinutes}</h1>
-              </IonLabel>
-              <IonLabel className={jc.minuteTime}>Min</IonLabel>
-            </IonCol>
+            <IonRow className={jc.traveltime}>
+              <IonCol>
+                <IonLabel className={jc.time_word_center}>
+                  <h1>{props.journey.travelDurationInMinutes}</h1>
+                </IonLabel>
+                <IonLabel className={jc.time_word_center}>Min</IonLabel>
+              </IonCol>
+            </IonRow>
           )}
         </div>
         <div>
           {props.journey.travelDurationInMinutes >= 60 && (
             <IonRow className={jc.traveltime}>
               <IonCol>
-                <IonLabel>
+                <IonLabel className={jc.time_word_center}>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[0]}</h1>
                 </IonLabel>
-                <IonLabel>Std</IonLabel>
+                <IonLabel className={jc.time_word_center}>Std</IonLabel>
               </IonCol>
               <IonCol>
-                <IonLabel>
+                <IonLabel className={jc.time_word_center}>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[1]}</h1>
                 </IonLabel>
-                <IonLabel>Min</IonLabel>
+                <IonLabel className={jc.time_word_center}>Min</IonLabel>
               </IonCol>
             </IonRow>
 

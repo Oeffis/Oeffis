@@ -30,9 +30,9 @@ import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import LeafletMapContainer from "../map/LeafletMapContainer";
-import rr from "./ResultRoutes.module.css";
+import styles from "./ResultRoutes.module.css";
 
-export const JoruneyLocationResolver: React.FC = () => {
+export const JourneyLocationResolver: React.FC = () => {
 
   const [originId] = useStateParams<string>("", "origin", String, String);
   const [destinationId] = useStateParams<string>("", "destination", String, String);
@@ -51,7 +51,7 @@ export const JoruneyLocationResolver: React.FC = () => {
     );
   }
 
-  return (<p>Lade daten ...</p>);
+  return (<p>Lade Daten ...</p>);
 
 };
 
@@ -170,37 +170,37 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             showLines={true}
           />
         </div>
-        <div className="result-header">
+        <div className={styles.result_header}>
           {
-            <div className="left-align">
-              <IonButton className="circle-button"
+            <div className={styles.left_align}>
+              <IonButton className={styles.circle_button}
               //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
               >
                 <IonIcon icon={mapOutline} />
               </IonButton>
             </div>
           }
-          <div className="result-swiper">
+          <div className={styles.result_swiper}>
             <IonRadioGroup value={slideName}>
-              <IonRadio mode="md" onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
-              <IonRadio mode="md" onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
+              <IonRadio mode="md" onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Verfügbare Routen" />
+              <IonRadio mode="md" onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Ausgewählte Routen" />
             </IonRadioGroup>
             <p>{slideName}</p>
           </div>
-          <div className="right-align">
+          <div className={styles.right_align}>
             {
               selectedJourney &&
-              <IonButton className="circle-button" routerLink="livenavigation">
+              <IonButton className={styles.circle_button} routerLink="livenavigation">
                 <IonIcon icon={playOutline} />
               </IonButton>
             }
           </div>
         </div>
-        <IonButton className={rr.back_button} onClick={() => { history.back(); }}
+        <IonButton className={styles.back_button} onClick={() => { history.back(); }}
           size="default" expand="block">
           Zurück zum Routenplaner
         </IonButton>
-        <SwiperReact className={rr.swiper_div}
+        <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
@@ -232,4 +232,4 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     </>);
 };
 
-export default JoruneyLocationResolver;
+export default JourneyLocationResolver;

@@ -12,7 +12,7 @@ const JourneyListComponent: React.FC<IJourneyListProps> = (props: IJourneyListPr
   <div className="JourneyListComponent">
     <IonList className={jlc.detail_list_sizing} inset={false} lines="none">
       {(props.journeys.map((journey, index) =>
-        <IonItem mode="ios" className="no-border-item" key={"item" + index} onClick={() => props.setActiveJourney(journey)} >
+        <IonItem mode="ios" className={jlc.stretch} key={"item" + index} onClick={() => props.setActiveJourney(journey)} >
           <JourneyCard key={"journey" + index} journey={journey} />
         </IonItem>
       ))}
