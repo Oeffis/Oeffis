@@ -1,6 +1,6 @@
 import { format, isFuture } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import "./JourneyStepComponent.css";
+import styles from "./JourneyStepComponent.module.css";
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date }
@@ -10,19 +10,19 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
 
   return (
     <>
-    <div className="centerBlock">
-      <p className="m0">Ankunft</p>
-      <p className="m0">{formatDateTime(props.arrivalTime)}</p>
+    <div className={styles.centerBlock}>
+      <p className={styles.m0}>Ankunft</p>
+      <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
     </div>
-    <div className={arrived? "arrived circle center" : " circle center"}/>
-      <p className="centerVertically bold">
+    <div className={arrived? styles.circleArrived : styles.circleNotArrived}/>
+      <p className={styles.centerVertically + styles.bold}>
         {
           props.step
             ? props.step.stationName
             : props.arrivalDestination
         }
       </p>
-    <p className="centerVertically textAlignCenter">{"Gl. " + props.step?.trackOrigin}</p>
+    <p className={styles.centerVertically + " " + styles.textAlignCenter}>{"Gl. " + props.step?.trackOrigin}</p>
     </>
   );
 };

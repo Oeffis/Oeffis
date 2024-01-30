@@ -6,19 +6,11 @@ IonButton {
   color: transparent;
 }
 
-.JourneyDetail {
-  width: 100%;
-}
-
 .header {
   display: flex;
   align-items: center;
   background-color: var(--ion-color-light-shade);
   padding: 1em;
-}
-
-.headerImg {
-  flex: 20;
 }
 
 .headerDetails {
@@ -48,15 +40,15 @@ IonButton {
   width: 100%;
   grid-template-columns: 18% 10% 57% 15%;
   grid-auto-rows: auto;
-  padding: 1em 1em 7em;
-}
-
-.headline {
-  font-weight: bold;
+  padding: 1em 1em 5em;
 }
 
 .trainIcon {
   width: 2.5rem;
   height: 2.5rem;
   color: var(--ion-color-primary);
+}
+
+.journeyDetail {
+  width: 100%;
 }

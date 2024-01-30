@@ -5,7 +5,7 @@ import {
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
-import { heart, play } from "ionicons/icons";
+import { play } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -19,10 +19,9 @@ import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
-import "./ResultRoutes.css";
 import { Button } from "../controls/Button";
 import { Header } from "../Header";
-import { FloatingActionButton } from "../controls/FloatingActionButton";
+import styles from "./ResultRoutes.module.css";
 
 const ResultRoutes: React.FC = () => {
   const [originId] = useStateParams<string | null>(null, "origin", String, String);
@@ -66,26 +65,26 @@ const ResultRoutes: React.FC = () => {
     <>
       <Header/>
       <IonContent>
-        <div className="result-header">
-          <div className="result-swiper">
+        <div className={styles.resultHeader}>
+          <div className={styles.resultSwiper}>
             <IonRadioGroup value={slideName}>
-              <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value={availableRoutesString} mode="md" />
-              <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value={selectedRouteString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
             </IonRadioGroup>
-            <h4 className="headline">{slideName}</h4>
+            <h4 className={styles.headline}>{slideName}</h4>
           </div>
-          <div className="back-button">
+          <div className={styles.backButton}>
             <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner"/>
           </div>
           {
-            swiper?.activeIndex === 1 && selectedJourney && <div className="right-align">
-              <IonButton className="circle-button" routerLink="livenavigation">
+            swiper?.activeIndex === 1 && selectedJourney && <div className={styles.rightAlign}>
+              <IonButton className={styles.circleButton} routerLink="livenavigation">
                 <IonIcon icon={play} />
               </IonButton>
             </div>
           }
         </div>
-        <SwiperReact className="swiper-div"
+        <SwiperReact className={styles.swiperDiv}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
@@ -115,10 +114,6 @@ const ResultRoutes: React.FC = () => {
             }
           </SwiperSlide>
         </SwiperReact>
-        {swiper?.activeIndex === 1 && selectedJourney &&         
-        <div className="floatingActionButton">
-          <FloatingActionButton icon={heart} className="floatingActionButton"/>
-        </div>}
       </IonContent>
     </>);
 };

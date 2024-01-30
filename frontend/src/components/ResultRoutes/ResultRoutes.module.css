@@ -1,0 +1,53 @@
+ion-label {
+  padding: 2px;
+}
+
+IonButton {
+  color: transparent;
+}
+
+.backButton {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.swiperDiv {
+  z-index: -10;
+}
+
+.circleButton {
+  --border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.resultSwiper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.rightAlign {
+  position: absolute;
+  right: 2%;
+}
+
+.radio {
+  margin: 5px;
+}
+
+.headline {
+  font-weight: bold;
+}
