@@ -76,6 +76,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
+        mode="ios"
         onClick={applyLocationName}
         readonly
         placeholder={props.inputLabel}

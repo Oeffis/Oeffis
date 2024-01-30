@@ -115,8 +115,8 @@ const RoutePlanner = ({
 
   return (
     <>
-      <IonList className={rp.center_all_column} inset={true}>
-        <IonItem className={rp.date_time_card} lines="none">
+      <IonList mode="ios" className={rp.center_all_column} inset={true}>
+        <IonItem mode="ios" className={rp.date_time_card} lines="none">
           <IonRow className={rp.center_all_row}>
             <IonCol>
               <IonRow className={rp.center_all_row}>
@@ -126,9 +126,10 @@ const RoutePlanner = ({
               <IonRow className={rp.toggle_button_row}>
                 <IonLabel className={rp.toggle_button_label}>Abfahrtszeit</IonLabel>
                 <IonToggle className={rp.toggle_button}
+                  mode="md"
                   checked={asArrivalTime}
                   onIonChange={() => setAsArrivalTime(!asArrivalTime)} />
-                <IonLabel className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
+                <IonLabel mode="md" className={rp.toggle_button_label}>Ankunftszeit</IonLabel>
               </IonRow>
               <IonRow className={rp.date_time_row}>
                 {/* Date-Time-Picker, allowing the user to select dates in the present as well as in the future. */}
@@ -160,7 +161,7 @@ const RoutePlanner = ({
         </IonItem>
         <IonRow className={rp.start_all_row}>
           <IonCol className={rp.input_field_width}>
-            <IonItem>
+            <IonItem className={rp.input_field_item}>
               <LocationSearchInput
                 inputLabel="Startpunkt"
                 selectedLocation={originLocation}
@@ -172,7 +173,7 @@ const RoutePlanner = ({
                 searchInput={originInput ?? ""}
               />
             </IonItem>
-            <IonItem>
+            <IonItem className={rp.input_field_item}>
               <LocationSearchInput
                 inputLabel="Zielpunkt"
                 selectedLocation={destinationLocation}
