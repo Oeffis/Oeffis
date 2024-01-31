@@ -1,16 +1,21 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { UnavailableDelayStats, UnavailableReason } from "historicData/dto/legStats.dto";
-import { DelayStatsService } from "historicData/service/delay-stats.service";
 import { Journey } from "journey/entity/journey.entity";
 import { LocationFinderModule } from "locationFinder/locationFinder.module";
 import { LocationType } from "vrr/entity/locationType.entity";
 import { VrrModule } from "vrr/vrr.module";
 import { FootpathModule } from "../../footpath/footpath.module";
+import { UnavailableReason, UnavailableStats } from "../../historicData/dto/maybeStats.dto";
+import { HistoricDataService } from "../../historicData/service/historicData.service";
+import { HistoricDataProcessorService } from "../../historicData/service/historicDataProcessor.service";
 import { Location } from "../../locationFinder/entity/location.entity";
 import { JourneyRequestDto } from "../dto/journeyRequest.dto";
 import { LegType } from "../entity/leg.entity";
 import { JourneyService } from "../service/journey.service";
+import { JourneyLocationMapperService } from "../service/mapper/journeyLocationMapper.service";
 import { JourneyMapperService } from "../service/mapper/journeyMapper.service";
+import { JourneyStatsFactoryService } from "../service/mapper/journeyStatsFactory.service";
+import { LegDetailsMapperService } from "../service/mapper/legDetailsMapper.service";
+import { TransportationMapperService } from "../service/mapper/transportationMapper.service";
 import { JourneyController } from "./journey.controller";
 
 const LOCATION1: Location = {
@@ -78,12 +83,19 @@ let app: TestingModule;
 
 beforeEach(async () => {
   app = await Test.createTestingModule({
-    providers: [JourneyService, JourneyMapperService, {
-      provide: DelayStatsService,
-      useValue: {
-        getLegStats: vi.fn()
-      }
-    }],
+    providers: [JourneyService, TransportationMapperService,
+      JourneyLocationMapperService, LegDetailsMapperService,
+      JourneyStatsFactoryService, JourneyMapperService, {
+        provide: HistoricDataService,
+        useValue: {
+          getLegStats: vi.fn()
+        }
+      }, {
+        provide: HistoricDataProcessorService,
+        useValue: {
+          getAggregatedLegDelayStats: vi.fn()
+        }
+      }],
     controllers: [JourneyController],
     imports: [VrrModule, LocationFinderModule, FootpathModule]
   }).compile();
@@ -130,12 +142,19 @@ it("should query trip", async () => {
             stopSequence: [],
             interchange: undefined
           },
-          delayStats: {
-            originDelayStats: unavailableLegStats(),
-            destinationDelayStats: unavailableLegStats()
+          legStats: {
+            originDelayStats: unavailableStats(),
+            destinationDelayStats: unavailableStats(),
+            interchangeReachableStat: unavailableStats(),
+            cancellationStat: unavailableStats()
           }
         }
-      ]
+      ],
+      journeyStats: {
+        aggregatedDelayStats: unavailableStats(),
+        aggregatedInterchangeReachableStat: unavailableStats(),
+        aggregatedCancellationStat: unavailableStats()
+      }
     }
   ];
 
@@ -152,9 +171,9 @@ it("should query trip", async () => {
   expect(response).toEqual(mockAlternatives);
 });
 
-function unavailableLegStats(): UnavailableDelayStats {
+function unavailableStats(): UnavailableStats {
   return {
     reason: UnavailableReason.noData,
-    areAvailable: false
+    status: "unavailable"
   };
 }

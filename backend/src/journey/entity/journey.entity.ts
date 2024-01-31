@@ -1,5 +1,6 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
-import { IsArray, IsInt, Min } from "class-validator";
+import { IsArray, IsInstance, IsInt, Min } from "class-validator";
+import { JourneyStats } from "../../historicData/dto/journeyStats.dto";
 import { FootpathLeg, TransportationLeg } from "./leg.entity";
 
 @ApiExtraModels(TransportationLeg, FootpathLeg)
@@ -37,11 +38,21 @@ export class Journey {
   })
   legs: (TransportationLeg | FootpathLeg)[];
 
+  @IsInstance(JourneyStats)
+  @ApiProperty({
+    description: "Statistics for the journey as a whole.",
+    type: JourneyStats,
+    required: true
+  })
+  journeyStats: JourneyStats;
+
   constructor(
     interchanges: number,
-    legs: (TransportationLeg | FootpathLeg)[]) {
+    legs: (TransportationLeg | FootpathLeg)[],
+    journeyStats: JourneyStats) {
 
     this.interchanges = interchanges;
     this.legs = legs;
+    this.journeyStats = journeyStats;
   }
 }

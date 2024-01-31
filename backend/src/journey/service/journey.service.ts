@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { TripRequestClient } from "@oeffis/vrr_client";
 import { QueryTripParameters } from "@oeffis/vrr_client/dist/TripRequestClient";
 import { Journey as VrrJourney } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
-import { DelayStatsService } from "historicData/service/delay-stats.service";
+import { HistoricDataService } from "historicData/service/historicData.service";
 import { JourneyRequestDto } from "journey/dto/journeyRequest.dto";
 import { Journey } from "journey/entity/journey.entity";
 import { ApiService } from "vrr/service/api.service";
@@ -13,16 +13,16 @@ export class JourneyService {
 
   private readonly client: TripRequestClient;
   private readonly journeyMapper: JourneyMapperService;
-  private readonly delayStatsService: DelayStatsService;
+  private readonly historicDataService: HistoricDataService;
 
   constructor(
     @Inject(JourneyMapperService) journeyMapper: JourneyMapperService,
     @Inject(ApiService) apiService: ApiService,
-    @Inject(DelayStatsService) historicDataService: DelayStatsService,
+    @Inject(HistoricDataService) historicDataService: HistoricDataService,
   ) {
     this.client = apiService.getInstanceOf(TripRequestClient);
     this.journeyMapper = journeyMapper;
-    this.delayStatsService = historicDataService;
+    this.historicDataService = historicDataService;
   }
 
   async queryJourney(journeyRequest: JourneyRequestDto): Promise<Journey[]> {

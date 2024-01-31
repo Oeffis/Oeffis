@@ -13,7 +13,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
-import { FootpathLeg, LegDestinationLocationTypeEnum, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
+import {
+  FootpathLeg,
+  LegOriginLocationTypeEnum,
+  LegDestinationLocationTypeEnum,
+  Location,
+  TransportationLeg,
+  TransportationLegTypeEnum
+} from "../../api";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
@@ -101,10 +108,14 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
             line: "transportation" in leg ? leg.transportation.line : "",
-            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
-              destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
-              originDelayStats: { status: "unavailable", reason: "Fußpfad" }
-            }
+            stats: leg.type === TransportationLegTypeEnum.Transportation
+              ? (leg as TransportationLeg).legStats
+              : {
+                originDelayStats: { status: "unavailable", reason: "Fußpfad" },
+                destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+                interchangeReachableStat: { status: "unavailable", reason: "Fußpfad" },
+                cancellationStat: { status: "unavailable", reason: "Fußpfad" }
+              }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };

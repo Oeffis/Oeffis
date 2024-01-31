@@ -1,3 +1,4 @@
+import { Inject, Injectable } from "@nestjs/common";
 import { Info as VrrInfo, Leg as VrrLeg } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { parse } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
@@ -21,6 +22,7 @@ const LEG_INTERCHANGE_FALLBACK_VAL = undefined;
 /**
  * Service to transfer some other-typed leg details to leg details of custom type {@link LegDetails}.
  */
+@Injectable()
 export class LegDetailsMapperService {
 
   private readonly apiService: ApiService;
@@ -29,10 +31,10 @@ export class LegDetailsMapperService {
   private readonly footpathMapper: FootpathMapperService;
 
   constructor(
-    apiService: ApiService,
-    locationCoordinatesMapper: LocationCoordinatesMapperService,
-    journeyLocationMapper: JourneyLocationMapperService,
-    footpathMapper: FootpathMapperService
+    @Inject(ApiService) apiService: ApiService,
+    @Inject(LocationCoordinatesMapperService) locationCoordinatesMapper: LocationCoordinatesMapperService,
+    @Inject(JourneyLocationMapperService) journeyLocationMapper: JourneyLocationMapperService,
+    @Inject(FootpathMapperService) footpathMapper: FootpathMapperService
   ) {
     this.apiService = apiService;
     this.locationCoordinatesMapper = locationCoordinatesMapper;
