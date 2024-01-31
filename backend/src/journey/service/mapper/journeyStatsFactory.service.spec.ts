@@ -5,7 +5,7 @@ import { LegStats } from "../../../historicData/dto/legStats.dto";
 import { UnavailableReason, UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
 import { HistoricDataService } from "../../../historicData/service/historicData.service";
 import { HistoricDataProcessorService } from "../../../historicData/service/historicDataProcessor.service";
-import { HistoricDataQueryRunner } from "../../../historicData/service/historicDataQueryRunner.service";
+import { HistoricDataQueryRunnerService } from "../../../historicData/service/query/historicDataQueryRunner.service";
 import { ParentLocation } from "../../../locationFinder/entity/location.entity";
 import { LocationMapperService } from "../../../locationFinder/service/mapper/locationMapper.service";
 import { LocationType } from "../../../vrr/entity/locationType.entity";
@@ -38,7 +38,7 @@ const LEG_INTERCHANGE = {
 } as LegInterchange;
 
 const historicDataService: HistoricDataService =
-  new HistoricDataService(undefined as unknown as HistoricDataQueryRunner);
+  new HistoricDataService(undefined as unknown as HistoricDataQueryRunnerService);
 const historicDataProcessor: HistoricDataProcessorService = new HistoricDataProcessorService();
 let factory: JourneyStatsFactoryService;
 
@@ -118,11 +118,11 @@ it.each([
   vi.spyOn(historicDataService, "getInterchangeReachableStat")
     .mockImplementationOnce(arg => {
       // Check if correct arguments are given.
-      assert(arg.delayAtCurrentTripDestinationOptions.tripId === TRANSPORTATION.id
-        && arg.delayAtCurrentTripDestinationOptions.stopId === STOP_PARENT.id,
+      assert(arg.currentTripOptions.tripId === TRANSPORTATION.id
+        && arg.currentTripOptions.stopId === STOP_PARENT.id,
         "validate current trip delay stats options.");
-      assert(arg.delayAtNextTripOriginOptions.tripId === TRANSPORTATION2.id
-        && arg.delayAtNextTripOriginOptions.stopId === STOP_PARENT.id,
+      assert(arg.nextTripOptions.tripId === TRANSPORTATION2.id
+        && arg.nextTripOptions.stopId === STOP_PARENT.id,
         "validate next trip delay stats options.");
 
       assert(arg.interchangeFootpathTime === expectedFootpathTime,

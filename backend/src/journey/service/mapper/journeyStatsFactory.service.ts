@@ -5,13 +5,10 @@ import { InterchangeReachableStat } from "../../../historicData/dto/interchangeR
 import { JourneyStats } from "../../../historicData/dto/journeyStats.dto";
 import { LegStats } from "../../../historicData/dto/legStats.dto";
 import { UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
-import {
-  DelayAtStationAndTimeSubOptions,
-  DelayAtStationOptions,
-  HistoricDataService
-} from "../../../historicData/service/historicData.service";
+import { HistoricDataService } from "../../../historicData/service/historicData.service";
 import { HistoricDataProcessorService } from "../../../historicData/service/historicDataProcessor.service";
-import { NO_DATA_RESULT } from "../../../historicData/service/historicDataQueryRunner.service";
+import { DelayAtStopAndTimeOptions, DelayAtStopOptions } from "../../../historicData/service/query/delayAtStop.query";
+import { NO_DATA_RESULT } from "../../../historicData/service/query/historicDataQueryRunner.service";
 import { FootpathLeg, TransportationLeg } from "../../entity/leg.entity";
 import { JourneyLocationMapperService } from "./journeyLocationMapper.service";
 
@@ -142,9 +139,9 @@ export class JourneyStatsFactoryService {
     const destinationParentStopId = this.journeyLocationMapper.getStopParent(currentLeg.destination).id;
     const plannedDestinationArrival = currentLeg.destination.arrivalTimePlanned;
 
-    const delayAtOriginOptions: DelayAtStationOptions =
+    const delayAtOriginOptions: DelayAtStopOptions =
       { tripId: tripId, stopId: originParentStopId, since: HISTORIC_DATA_SINCE };
-    const delayAtDestinationOptions: DelayAtStationOptions =
+    const delayAtDestinationOptions: DelayAtStopOptions =
       { tripId: tripId, stopId: destinationParentStopId, since: HISTORIC_DATA_SINCE };
 
     const originDelayStats =
@@ -177,14 +174,14 @@ export class JourneyStatsFactoryService {
 
   private async createInterchangeReachableStat(
     currentLeg: TransportationLegWithoutStats,
-    delayAtCurrentLegDestinationOptions: DelayAtStationAndTimeSubOptions,
+    delayAtCurrentLegDestinationOptions: DelayAtStopAndTimeOptions,
     nextTransportationLeg: TransportationLegWithoutStats,
     intermediateFootpathLeg?: FootpathLeg
   ): Promise<InterchangeReachableStat | UnavailableStats> {
 
     const nextTripId = nextTransportationLeg.transportation.id;
     const nextOriginParentStopId = this.journeyLocationMapper.getStopParent(nextTransportationLeg.origin).id;
-    const delayAtNextTripOriginOptions: DelayAtStationAndTimeSubOptions = {
+    const delayAtNextTripOriginOptions: DelayAtStopAndTimeOptions = {
       tripId: nextTripId,
       stopId: nextOriginParentStopId,
       plannedTime: nextTransportationLeg.origin.departureTimePlanned
@@ -194,8 +191,8 @@ export class JourneyStatsFactoryService {
       ?? LEG_INTERCHANGE_FOOTPATH_DURATION_FALLBACK_VAL;
 
     return await this.historicDataService.getInterchangeReachableStat({
-      delayAtCurrentTripDestinationOptions: delayAtCurrentLegDestinationOptions,
-      delayAtNextTripOriginOptions: delayAtNextTripOriginOptions,
+      currentTripOptions: delayAtCurrentLegDestinationOptions,
+      nextTripOptions: delayAtNextTripOriginOptions,
       interchangeFootpathTime: footpathTimeForInterchange,
       since: HISTORIC_DATA_SINCE
     });

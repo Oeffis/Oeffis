@@ -4,7 +4,7 @@ import { DelayStats } from "../dto/delayStats.dto";
 import { InterchangeReachableStat } from "../dto/interchangeReachableStat.dto";
 import { LegStats } from "../dto/legStats.dto";
 import { UnavailableReason, UnavailableStats } from "../dto/maybeStats.dto";
-import { NO_DATA_RESULT } from "./historicDataQueryRunner.service";
+import { NO_DATA_RESULT } from "./query/historicDataQueryRunner.service";
 
 @Injectable()
 export class HistoricDataProcessorService {
