@@ -28,17 +28,17 @@ import {
 } from './UnavailableStats';
 
 /**
- * @type LegStatsOriginDelayStats
- * Delay statistics at origin of leg/trip.
+ * @type JourneyStatsAggregatedDelayStats
+ * Aggregated delay statistics of all journey's legs.
  * @export
  */
-export type LegStatsOriginDelayStats = { status: 'available' } & DelayStats | { status: 'unavailable' } & UnavailableStats;
+export type JourneyStatsAggregatedDelayStats = { status: 'available' } & DelayStats | { status: 'unavailable' } & UnavailableStats;
 
-export function LegStatsOriginDelayStatsFromJSON(json: any): LegStatsOriginDelayStats {
-    return LegStatsOriginDelayStatsFromJSONTyped(json, false);
+export function JourneyStatsAggregatedDelayStatsFromJSON(json: any): JourneyStatsAggregatedDelayStats {
+    return JourneyStatsAggregatedDelayStatsFromJSONTyped(json, false);
 }
 
-export function LegStatsOriginDelayStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): LegStatsOriginDelayStats {
+export function JourneyStatsAggregatedDelayStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): JourneyStatsAggregatedDelayStats {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,11 +48,11 @@ export function LegStatsOriginDelayStatsFromJSONTyped(json: any, ignoreDiscrimin
         case 'unavailable':
             return {...UnavailableStatsFromJSONTyped(json, true), status: 'unavailable'};
         default:
-            throw new Error(`No variant of LegStatsOriginDelayStats exists with 'status=${json['status']}'`);
+            throw new Error(`No variant of JourneyStatsAggregatedDelayStats exists with 'status=${json['status']}'`);
     }
 }
 
-export function LegStatsOriginDelayStatsToJSON(value?: LegStatsOriginDelayStats | null): any {
+export function JourneyStatsAggregatedDelayStatsToJSON(value?: JourneyStatsAggregatedDelayStats | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -65,7 +65,7 @@ export function LegStatsOriginDelayStatsToJSON(value?: LegStatsOriginDelayStats 
         case 'unavailable':
             return UnavailableStatsToJSON(value);
         default:
-            throw new Error(`No variant of LegStatsOriginDelayStats exists with 'status=${value['status']}'`);
+            throw new Error(`No variant of JourneyStatsAggregatedDelayStats exists with 'status=${value['status']}'`);
     }
 
 }

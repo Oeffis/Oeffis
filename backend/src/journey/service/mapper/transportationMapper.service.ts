@@ -1,3 +1,4 @@
+import { Inject, Injectable } from "@nestjs/common";
 import { Leg as VrrLeg, Location as VrrLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { ApiService } from "../../../vrr/service/api.service";
 import { Transportation, TransportationDestination } from "../../entity/transportation.entity";
@@ -10,11 +11,14 @@ const TRANSPORTATION_DESTINATION_ID_FALLBACK_VAL = "";
 /**
  * Service to transfer some other-typed journey transportation to transportation of custom type {@link Transportation}.
  */
+@Injectable()
 export class TransportationMapperService {
 
   private readonly apiService: ApiService;
 
-  constructor(apiService: ApiService) {
+  constructor(
+    @Inject(ApiService) apiService: ApiService
+  ) {
     this.apiService = apiService;
   }
 

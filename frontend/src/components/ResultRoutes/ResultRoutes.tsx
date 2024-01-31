@@ -20,7 +20,13 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import logo from "../../../public/images/OeffisLogo1.svg";
-import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
+import {
+  FootpathLeg,
+  LegOriginLocationTypeEnum,
+  Location,
+  TransportationLeg,
+  TransportationLegTypeEnum
+} from "../../api";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
@@ -28,8 +34,8 @@ import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import JourneyDetail from "../JourneyDetail";
-import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import LeafletMapContainer from "../map/LeafletMapContainer";
+import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import "./ResultRoutes.css";
 
 export const JoruneyLocationResolver: React.FC = () => {
@@ -99,10 +105,14 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
             line: "transportation" in leg ? leg.transportation.line : "",
-            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
-              destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
-              originDelayStats: { status: "unavailable", reason: "Fußpfad" }
-            }
+            stats: leg.type === TransportationLegTypeEnum.Transportation
+              ? (leg as TransportationLeg).legStats
+              : {
+                originDelayStats: { status: "unavailable", reason: "Fußpfad" },
+                destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+                interchangeReachableStat: { status: "unavailable", reason: "Fußpfad" },
+                cancellationStat: { status: "unavailable", reason: "Fußpfad" }
+              }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
