@@ -1,0 +1,44 @@
+.line {
+  border-radius: 15px;
+  width: 8px;
+  height: 130px;
+  background: var(--ion-color-light-shade);
+  margin: auto;
+}
+
+.fillLine {
+  border-radius: 15px;
+  border: 1px solid var(--ion-color-dark-shade);
+  width: 9px;
+  background: var(--ion-color-primary);
+}
+
+.timelineContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.lineInfo {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.centerBlock {
+  margin: auto;
+  text-align: center;
+}
+
+.m0 {
+  margin: 0;
+}
+
+.centerVertically {
+  margin: auto 0;
+}
+
+.bold {
+  font-weight: bold;
+}

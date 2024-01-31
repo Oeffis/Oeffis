@@ -7,7 +7,8 @@ export interface IJourneyStep {
   arrivalTime: Date;
   stopIds: string[];
   travelDurationInMinutes: number;
-  track: string;
+  trackOrigin: string;
+  trackDestination: string;
   line: string;
   stats: LegStats;
 }

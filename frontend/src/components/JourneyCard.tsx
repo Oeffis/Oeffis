@@ -2,7 +2,7 @@ import { IonCard, IonCol, IonIcon, IonLabel, IonRow } from "@ionic/react";
 import { format } from "date-fns";
 import { trainOutline } from "ionicons/icons";
 import { IJourney } from "../interfaces/IJourney.interface";
-import "./JourneyCard.css";
+import styles from "./JourneyCard.module.css";
 
 export interface TravelProps { journey: IJourney }
 
@@ -15,12 +15,11 @@ const timeSplitter = (traveltime: number): number[] => {
 };
 
 const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
-  <IonCard className="detail-card-sizing">
-    <IonRow className="center_all_row_2">
-
-      <IonIcon className="train_icon" icon={trainOutline} />
-      <IonCol className="mid-section">
-        <IonLabel>
+  <IonCard className={styles.detailCardSizing}>
+    <IonRow className={styles.centerAllRow2}>
+      <IonIcon className={styles.trainIcon} icon={trainOutline}/>
+      <IonCol className={styles.midSection}>
+      <IonLabel>
           <h2>
             {formatDateShort(props.journey.startTime)} - {formatDateShort(props.journey.arrivalTime)}
           </h2>
@@ -29,20 +28,20 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
           {props.journey.startStation} - {props.journey.arrivalStation}
         </IonLabel>
       </IonCol>
-      <IonCol className="duration">
+      <IonCol className={styles.duration}>
         <div>
           {props.journey.travelDurationInMinutes < 60 && (
-            <IonCol>
-              <IonLabel>
-                <h1>{props.journey.travelDurationInMinutes}</h1>
-              </IonLabel>
-              <IonLabel className="minuteTime">Min</IonLabel>
-            </IonCol>
-          )}
-        </div>
-        <div>
+          <IonCol>
+          <IonLabel>
+            <h1>{props.journey.travelDurationInMinutes}</h1>
+          </IonLabel>
+          <IonLabel className={styles.minuteTime}>Min</IonLabel>
+        </IonCol>
+      )}
+      </div>
+      <div>
           {props.journey.travelDurationInMinutes >= 60 && (
-            <IonRow className="traveltime">
+            <IonRow className={styles.traveltime}>
               <IonCol>
                 <IonLabel>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[0]}</h1>
@@ -56,7 +55,6 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
                 <IonLabel>Min</IonLabel>
               </IonCol>
             </IonRow>
-
           )}
         </div>
       </IonCol>

@@ -1,42 +1,37 @@
 import { IonLabel } from "@ionic/react";
-import { differenceInMilliseconds, format, minutesToMilliseconds } from "date-fns";
+import { format, differenceInMilliseconds, minutesToMilliseconds } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { DisplayDelayStats } from "./DisplayDelayStats";
-import "./StepProgressComponent.css";
-
-const formatDateTime = (date: Date): string => format(date, "HH:mm");
+import styles from "./StepProgressComponent.module.css";
 
 export interface StepProgressProps { step: IJourneyStep }
 
-const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressProps) => (
-  <div className="container" data-testid="journey-step" >
-    <div className="left">
-      <IonLabel>
-        Abfahrt
-      </IonLabel>
-      <IonLabel>
-        {formatDateTime(props.step.startTime)}
-      </IonLabel>
+const formatDateTime = (date: Date): string => format(date, "HH:mm");
+
+const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressProps) => 
+  
+  (
+  <>
+    <div className={styles.centerBlock}>
+      <p className={styles.m0}>Abfahrt</p>
+      <p className={styles.m0}>{formatDateTime(props.step.startTime)}</p>
     </div>
-    <div className="middle">
-      <div className="line">
-        <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
-      </div>
+    <div className={styles.line + " " + styles.centerBlock}>
+      <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
     </div>
-    <div className="line-info">
-      <IonLabel>
-        {props.step.line && "Linie:" + props.step.line}
-      </IonLabel>
-      <IonLabel>
+    <div className={styles.centerVertically}>
+      <p className={styles.m0 + " " + styles.bold}>{props.step.line}</p>
+      <p className={styles.m0}>
         {props.step.line && "Fahrtzeit: "}
         {!props.step.line && "Fußweg: "}
         {props.step.travelDurationInMinutes} Min
-      </IonLabel>
+      </p>
       {
         props.step.line && <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
       }
     </div>
-  </div >
+    <IonLabel/>
+  </>
 );
 
 export default StepProgressComponent;
@@ -55,6 +50,6 @@ export function FillLine(props: FillLineProps): JSX.Element {
   }
 
   return (
-    <div className="fill-line" style={{ height: progress.toString() + "%" }} />
+    <div className={styles.fillLine} style={{ height: progress.toString() + "%" }} />
   );
 }
