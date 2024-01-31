@@ -1,7 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { CancellationStat } from "../dto/cancellationStat.dto";
 import { DelayStats } from "../dto/delayStats.dto";
-import { InterchangeReachableStat } from "../dto/interchangeReachableStat.dto";
 import { UnavailableStats } from "../dto/maybeStats.dto";
 import {
   DELAY_AT_STOP_QUERY,
@@ -9,8 +8,7 @@ import {
   parseDelayAtStopQueryResult,
   serializeDelayAtStopQueryOptions
 } from "./query/delayAtStop.query";
-import { HistoricDataQueryRunnerService, NO_DATA_RESULT } from "./query/historicDataQueryRunner.service";
-import { InterchangeReachableOptions } from "./query/interchangeReachable.query";
+import { HistoricDataQueryRunnerService, NO_DATA_RESULT, QueryOptions } from "./query/historicDataQueryRunner.service";
 import {
   parseTripCancellationQueryResult,
   serializeTripCancellationQueryOptions,
@@ -48,8 +46,10 @@ export class HistoricDataService {
    * @param options options for stats
    */
   public async getInterchangeReachableStat(
-    options: InterchangeReachableOptions
-  ): Promise<InterchangeReachableStat | UnavailableStats> {
+    // TODO To implement later
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    options: /*InterchangeReachableOptions*/QueryOptions
+  ): Promise</*InterchangeReachableStat*/ | UnavailableStats> {
 
     // return await this.historicDataQueryRunner.runQuery(
     //   INTERCHANGE_REACHABLE_QUERY, options,

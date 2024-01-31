@@ -1,7 +1,7 @@
 import { IonLabel } from "@ionic/react";
 import { differenceInMilliseconds, format, minutesToMilliseconds } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import { DisplayDelayStats } from "./DisplayDelayStats";
+import { DisplayLegDelayStats } from "./DisplayLegDelayStats";
 import styles from "./StepProgressComponent.module.css";
 
 export interface StepProgressProps { step: IJourneyStep; showProgress?: boolean }
@@ -29,7 +29,8 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
         {props.step.travelDurationInMinutes} Min
       </p>
       {
-        props.step.line && <DisplayDelayStats stats={props.step.stats} originName={props.step.stationName} destinationName={props.step.stopName} />
+        props.step.line && <DisplayLegDelayStats stats={props.step.stats} originName={props.step.stationName}
+                                                 destinationName={props.step.stopName}/>
       }
     </div>
     <IonLabel />

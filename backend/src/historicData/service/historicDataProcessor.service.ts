@@ -89,9 +89,14 @@ export class HistoricDataProcessorService {
       .map(cancellationStat => cancellationStat.cancellationProbability)
       .reduce((prev, curr) => prev + curr)) / allCancellationStats.length;
 
+    const avgCancellationDowTimeProbability: number = (allCancellationStats
+      .map(cancellationStat => cancellationStat.cancellationAtDowTimeProbability)
+      .reduce((prev, curr) => prev + curr)) / allCancellationStats.length;
+
     return {
       status: "available",
-      cancellationProbability: avgCancellationProbability
+      cancellationProbability: avgCancellationProbability,
+      cancellationAtDowTimeProbability: avgCancellationDowTimeProbability
     } as CancellationStat;
   }
 }
