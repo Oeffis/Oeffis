@@ -54,7 +54,7 @@ IonButton {
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 12px;
+  background-color: var(--ion-background-color);
 }
 
 .result_swiper {
@@ -63,11 +63,15 @@ IonButton {
   align-items: center;
   justify-content: center;
   align-self: center;
+  padding-top: 0.8rem;
+  width: 50%;
 }
 
 .right_align {
-  position: absolute;
-  right: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 25%;
 }
 
 .left_align {

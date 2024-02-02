@@ -2,6 +2,7 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonItemDivider,
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
@@ -30,7 +31,6 @@ import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import { Header } from "../Header";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
-import { Button } from "../controls/Button";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import styles from "./ResultRoutes.module.css";
 
@@ -168,7 +168,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           showLines={true}
         />
       </div>
-      <div className={styles.result_header}>
+      <IonItemDivider color="light" className={styles.result_header}>
         {
           <div className={styles.left_align}>
             <IonButton className={styles.circle_button}
@@ -183,20 +183,17 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
             <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
           </IonRadioGroup>
-          <h4 className={styles.headline}>{slideName}</h4>
-        </div>
-        <div className={styles.backButton}>
-          <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
+          <h5 className={styles.headline}>{slideName}</h5>
         </div>
         <div className={styles.right_align}>
           {
             swiper?.activeIndex === 1 && selectedJourney &&
-            <IonButton className={styles.circleButton} routerLink="livenavigation">
+            <IonButton className={styles.circle_button} routerLink="livenavigation">
               <IonIcon icon={play} />
             </IonButton>
           }
         </div>
-      </div>
+      </IonItemDivider>
       <IonContent>
         <IonButton className={styles.back_button} onClick={() => { history.back(); }}
           size="default" expand="block">
