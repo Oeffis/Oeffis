@@ -1,7 +1,7 @@
 import { IonItem, IonList } from "@ionic/react";
 import { IJourney } from "../interfaces/IJourney.interface";
 import JourneyCard from "./JourneyCard";
-import jlc from "./JourneyListComponent.module.css";
+import styles from "./JourneyListComponent.module.css";
 
 interface IJourneyListProps {
   setActiveJourney: (journey: IJourney) => void,
@@ -10,9 +10,9 @@ interface IJourneyListProps {
 
 const JourneyListComponent: React.FC<IJourneyListProps> = (props: IJourneyListProps) => (
   <div className="JourneyListComponent">
-    <IonList className={jlc.detail_list_sizing} inset={false} lines="none">
+    <IonList className={styles.detail_list_sizing} inset={false} lines="none">
       {(props.journeys.map((journey, index) =>
-        <IonItem mode="ios" className={jlc.stretch} key={"item" + index} onClick={() => props.setActiveJourney(journey)} >
+        <IonItem mode="ios" className={styles.stretch} key={"item" + index} onClick={() => props.setActiveJourney(journey)} >
           <JourneyCard key={"journey" + index} journey={journey} />
         </IonItem>
       ))}
