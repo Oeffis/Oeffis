@@ -16,19 +16,19 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UnavailableDelayStats
+ * @interface UnavailableStats
  */
-export interface UnavailableDelayStats {
+export interface UnavailableStats {
     /**
      * Status of the leg stats.
      * @type {string}
-     * @memberof UnavailableDelayStats
+     * @memberof UnavailableStats
      */
-    status: UnavailableDelayStatsStatusEnum;
+    status: UnavailableStatsStatusEnum;
     /**
      * The reason, why the data is not available
      * @type {string}
-     * @memberof UnavailableDelayStats
+     * @memberof UnavailableStats
      */
     reason: string;
 }
@@ -37,17 +37,17 @@ export interface UnavailableDelayStats {
 /**
  * @export
  */
-export const UnavailableDelayStatsStatusEnum = {
+export const UnavailableStatsStatusEnum = {
     Available: 'available',
     Unavailable: 'unavailable'
 } as const;
-export type UnavailableDelayStatsStatusEnum = typeof UnavailableDelayStatsStatusEnum[keyof typeof UnavailableDelayStatsStatusEnum];
+export type UnavailableStatsStatusEnum = typeof UnavailableStatsStatusEnum[keyof typeof UnavailableStatsStatusEnum];
 
 
 /**
- * Check if a given object implements the UnavailableDelayStats interface.
+ * Check if a given object implements the UnavailableStats interface.
  */
-export function instanceOfUnavailableDelayStats(value: object): boolean {
+export function instanceOfUnavailableStats(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "status" in value;
     isInstance = isInstance && "reason" in value;
@@ -55,11 +55,11 @@ export function instanceOfUnavailableDelayStats(value: object): boolean {
     return isInstance;
 }
 
-export function UnavailableDelayStatsFromJSON(json: any): UnavailableDelayStats {
-    return UnavailableDelayStatsFromJSONTyped(json, false);
+export function UnavailableStatsFromJSON(json: any): UnavailableStats {
+    return UnavailableStatsFromJSONTyped(json, false);
 }
 
-export function UnavailableDelayStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): UnavailableDelayStats {
+export function UnavailableStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): UnavailableStats {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -70,7 +70,7 @@ export function UnavailableDelayStatsFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-export function UnavailableDelayStatsToJSON(value?: UnavailableDelayStats | null): any {
+export function UnavailableStatsToJSON(value?: UnavailableStats | null): any {
     if (value === undefined) {
         return undefined;
     }

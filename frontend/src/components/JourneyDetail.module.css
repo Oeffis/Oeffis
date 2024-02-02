@@ -2,39 +2,53 @@ ion-label {
   padding: 2px;
 }
 
-.content_section {
-  min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.mid_section {
-  display: flex;
-  flex-direction: column;
-}
-
-.bottom_section_closed {
-  position: relative;
-  padding-top: 4px;
-}
-
-.bottom_section_opened {
-  position: relative;
-  min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 32px;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 IonButton {
   color: transparent;
 }
 
-.JourneyDetail {
+.header {
+  display: flex;
+  align-items: center;
+  background-color: var(--ion-color-light-shade);
+  padding: 1em;
+}
+
+.headerDetails {
+  padding: 0em 1em;
+  flex: 65;
+}
+
+.headerDuration {
+  flex: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headerDurationAmount {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.headerDetails p, .headerDuration p {
+  margin: 0;
+}
+
+.contentGrid {
+  display: grid;
+  row-gap: 0.5em;
+  width: 100%;
+  grid-template-columns: 18% 10% 57% 15%;
+  grid-auto-rows: auto;
+  padding: 1em 1em 8em;
+}
+
+.trainIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--ion-color-primary);
+}
+
+.journeyDetail {
   width: 100%;
 }

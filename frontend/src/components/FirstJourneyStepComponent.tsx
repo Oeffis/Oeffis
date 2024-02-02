@@ -1,33 +1,29 @@
-import { IonLabel } from "@ionic/react";
 import { format, isFuture } from "date-fns";
-import "./JourneyStepComponent.css";
+import styles from "./FirstJourneyStepComponent.module.css";
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
-export interface StationProps { stationName: string, startTime: Date }
+export interface StationProps { key: string, startTime: Date, stationName: string, isFirst: boolean, trackOrigin: string, trackDestination: string}
 
 const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const color = isFuture(props.startTime) ? "lightgray" : "gray";
+  const arrived = isFuture(props.startTime) ? false : true;
 
   return (
-    <div className="container" data-testid="journey-step">
-      <div className="left">
-        <IonLabel>
-          {formatDateTime(props.startTime)}
-        </IonLabel>
+    <>
+      <div className={styles.centerBlock}>
+        {props.isFirst 
+          ? "" 
+          : <p className={styles.m0}>Ankunft</p>
+          }
+          <p className={styles.m0}>{formatDateTime(props.startTime)}</p>
       </div>
-      <div className="middle">
-        <div className="circle" style={{ background: color }} />
-      </div>
-      <div className="step-info">
-        <IonLabel>
-          <span data-testid="journey-step-stop-name">
-            {
-              props.stationName
-            }
-          </span>
-        </IonLabel>
-      </div>
-    </div>
+      <div className={arrived ? styles.circleArrived : styles.circleNotArrived} />
+      <p className={styles.centerVertically + " " + styles.bold}>{props.stationName}</p>
+      <p className={styles.centerVertically + " " + styles.textAlignCenter}>Gl. 
+        {props.isFirst
+          ? props.trackOrigin
+          : props.trackDestination
+      }</p>
+    </>
   );
 };
 

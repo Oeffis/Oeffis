@@ -6,11 +6,11 @@ import { InterchangeReachableStat } from "./interchangeReachableStat.dto";
 import { MaybeStats, UnavailableStats } from "./maybeStats.dto";
 
 @ApiExtraModels(DelayStats, InterchangeReachableStat, CancellationStat, UnavailableStats)
-export class LegStats {
+export class JourneyStats {
 
   @IsInstance(MaybeStats)
   @ApiProperty({
-    description: "Delay statistics at origin of leg/trip.",
+    description: "Aggregated delay statistics of all journey's legs.",
     oneOf: [
       { $ref: getSchemaPath(DelayStats) },
       { $ref: getSchemaPath(UnavailableStats) }
@@ -24,29 +24,11 @@ export class LegStats {
     },
     required: true
   })
-  originDelayStats: DelayStats | UnavailableStats;
+  aggregatedDelayStats: DelayStats | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
-    description: "Delay statistics at destination of leg/trip.",
-    oneOf: [
-      { $ref: getSchemaPath(DelayStats) },
-      { $ref: getSchemaPath(UnavailableStats) }
-    ],
-    discriminator: {
-      propertyName: "status",
-      mapping: {
-        "available": getSchemaPath(DelayStats),
-        "unavailable": getSchemaPath(UnavailableStats)
-      }
-    },
-    required: true
-  })
-  destinationDelayStats: DelayStats | UnavailableStats;
-
-  @IsInstance(MaybeStats)
-  @ApiProperty({
-    description: "Stat about interchange to following leg/trip being successful.",
+    description: "Aggregated probability of reaching interchanges on journey.",
     oneOf: [
       { $ref: getSchemaPath(InterchangeReachableStat) },
       { $ref: getSchemaPath(UnavailableStats) }
@@ -60,11 +42,11 @@ export class LegStats {
     },
     required: true
   })
-  interchangeReachableStat: InterchangeReachableStat | UnavailableStats;
+  aggregatedInterchangeReachableStat: InterchangeReachableStat | UnavailableStats;
 
   @IsInstance(MaybeStats)
   @ApiProperty({
-    description: "Stat about leg/trip being cancelled.",
+    description: "Aggregated probability of cancellation to happen on journey.",
     oneOf: [
       { $ref: getSchemaPath(CancellationStat) },
       { $ref: getSchemaPath(UnavailableStats) }
@@ -78,17 +60,15 @@ export class LegStats {
     },
     required: true
   })
-  cancellationStat: CancellationStat | UnavailableStats;
+  aggregatedCancellationStat: CancellationStat | UnavailableStats;
 
   public constructor(
-    originDelayStats: DelayStats | UnavailableStats,
-    destinationDelayStats: DelayStats | UnavailableStats,
-    interchangeReachableStat: InterchangeReachableStat | UnavailableStats,
-    cancellationStat: CancellationStat | UnavailableStats
+    aggregatedDelayStats: DelayStats | UnavailableStats,
+    aggregatedInterchangeReachableStat: InterchangeReachableStat | UnavailableStats,
+    aggregatedCancellationStat: CancellationStat | UnavailableStats
   ) {
-    this.originDelayStats = originDelayStats;
-    this.destinationDelayStats = destinationDelayStats;
-    this.interchangeReachableStat = interchangeReachableStat;
-    this.cancellationStat = cancellationStat;
+    this.aggregatedDelayStats = aggregatedDelayStats;
+    this.aggregatedInterchangeReachableStat = aggregatedInterchangeReachableStat;
+    this.aggregatedCancellationStat = aggregatedCancellationStat;
   }
 }

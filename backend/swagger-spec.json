@@ -1071,7 +1071,53 @@
           "minDelay"
         ]
       },
-      "UnavailableDelayStats": {
+      "InterchangeReachableStat": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the leg stats.",
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "example": "available"
+          },
+          "interchangeReachableProbability": {
+            "type": "number",
+            "description": "Probability of interchange(s) (following current leg) that were successful in the past.",
+            "example": 0.75
+          }
+        },
+        "required": [
+          "status",
+          "interchangeReachableProbability"
+        ]
+      },
+      "CancellationStat": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the leg stats.",
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "example": "available"
+          },
+          "cancellationProbability": {
+            "type": "number",
+            "description": "Probability of leg/trip being cancelled in the past.",
+            "example": 0.46
+          }
+        },
+        "required": [
+          "status",
+          "cancellationProbability"
+        ]
+      },
+      "UnavailableStats": {
         "type": "object",
         "properties": {
           "status": {
@@ -1098,45 +1144,83 @@
         "type": "object",
         "properties": {
           "originDelayStats": {
-            "description": "Delay statistics at origin.",
+            "description": "Delay statistics at origin of leg/trip.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/DelayStats"
               },
               {
-                "$ref": "#/components/schemas/UnavailableDelayStats"
+                "$ref": "#/components/schemas/UnavailableStats"
               }
             ],
             "discriminator": {
               "propertyName": "status",
               "mapping": {
                 "available": "#/components/schemas/DelayStats",
-                "unavailable": "#/components/schemas/UnavailableDelayStats"
+                "unavailable": "#/components/schemas/UnavailableStats"
               }
             }
           },
           "destinationDelayStats": {
-            "description": "Delay statistics at destination.",
+            "description": "Delay statistics at destination of leg/trip.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/DelayStats"
               },
               {
-                "$ref": "#/components/schemas/UnavailableDelayStats"
+                "$ref": "#/components/schemas/UnavailableStats"
               }
             ],
             "discriminator": {
               "propertyName": "status",
               "mapping": {
                 "available": "#/components/schemas/DelayStats",
-                "unavailable": "#/components/schemas/UnavailableDelayStats"
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            }
+          },
+          "interchangeReachableStat": {
+            "description": "Stat about interchange to following leg/trip being successful.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InterchangeReachableStat"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/InterchangeReachableStat",
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            }
+          },
+          "cancellationStat": {
+            "description": "Stat about leg/trip being cancelled.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CancellationStat"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/CancellationStat",
+                "unavailable": "#/components/schemas/UnavailableStats"
               }
             }
           }
         },
         "required": [
           "originDelayStats",
-          "destinationDelayStats"
+          "destinationDelayStats",
+          "interchangeReachableStat",
+          "cancellationStat"
         ]
       },
       "TransportationLeg": {
@@ -1183,7 +1267,7 @@
               }
             ]
           },
-          "delayStats": {
+          "legStats": {
             "description": "Statistics about this leg.",
             "allOf": [
               {
@@ -1198,7 +1282,7 @@
           "details",
           "type",
           "transportation",
-          "delayStats"
+          "legStats"
         ]
       },
       "FootpathLeg": {
@@ -1254,6 +1338,70 @@
           "footpath"
         ]
       },
+      "JourneyStats": {
+        "type": "object",
+        "properties": {
+          "aggregatedDelayStats": {
+            "description": "Aggregated delay statistics of all journey's legs.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DelayStats"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/DelayStats",
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            }
+          },
+          "aggregatedInterchangeReachableStat": {
+            "description": "Aggregated probability of reaching interchanges on journey.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InterchangeReachableStat"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/InterchangeReachableStat",
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            }
+          },
+          "aggregatedCancellationStat": {
+            "description": "Aggregated probability of cancellation to happen on journey.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CancellationStat"
+              },
+              {
+                "$ref": "#/components/schemas/UnavailableStats"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "status",
+              "mapping": {
+                "available": "#/components/schemas/CancellationStat",
+                "unavailable": "#/components/schemas/UnavailableStats"
+              }
+            }
+          }
+        },
+        "required": [
+          "aggregatedDelayStats",
+          "aggregatedInterchangeReachableStat",
+          "aggregatedCancellationStat"
+        ]
+      },
       "Journey": {
         "type": "object",
         "properties": {
@@ -1282,11 +1430,20 @@
                 }
               }
             }
+          },
+          "journeyStats": {
+            "description": "Statistics for the journey as a whole.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JourneyStats"
+              }
+            ]
           }
         },
         "required": [
           "interchanges",
-          "legs"
+          "legs",
+          "journeyStats"
         ]
       }
     }

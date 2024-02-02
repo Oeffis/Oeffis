@@ -12,11 +12,12 @@ import { StopTimeEntry } from "./entity/stopTimeEntry.entity";
 import { TransferEntry } from "./entity/transferEntry.entity";
 import { TripEntry } from "./entity/tripEntry.entity";
 import { VrrTimetableVersionEntry } from "./entity/vrrTimetableVersionEntry.entity";
-import { DelayStatsService } from "./service/delay-stats.service";
 import { HistoricDataService } from "./service/historicData.service";
+import { HistoricDataProcessorService } from "./service/historicDataProcessor.service";
+import { HistoricDataQueryRunner } from "./service/historicDataQueryRunner.service";
 
 @Module({
-  providers: [HistoricDataService, DelayStatsService],
+  providers: [HistoricDataService, HistoricDataQueryRunner, HistoricDataProcessorService],
   controllers: [],
   imports: [TypeOrmModule.forFeature([
     AgencyEntry,
@@ -32,6 +33,6 @@ import { HistoricDataService } from "./service/historicData.service";
     TripEntry,
     VrrTimetableVersionEntry
   ])],
-  exports: [DelayStatsService]
+  exports: [HistoricDataService, HistoricDataProcessorService]
 })
 export class HistoricDataModule { }

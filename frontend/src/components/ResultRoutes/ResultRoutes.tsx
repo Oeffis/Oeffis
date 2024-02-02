@@ -1,17 +1,11 @@
 import {
   IonButton,
-  IonButtons,
   IonContent,
-  IonHeader,
   IonIcon,
-  IonImg,
-  IonMenuButton,
   IonRadio,
-  IonRadioGroup,
-  IonTitle,
-  IonToolbar
+  IonRadioGroup
 } from "@ionic/react";
-import { mapOutline, playOutline } from "ionicons/icons";
+import { mapOutline, play } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -19,8 +13,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
-import logo from "../../../public/images/OeffisLogo1.svg";
-import { FootpathLeg, LegOriginLocationTypeEnum, Location, TransportationLeg, TransportationLegTypeEnum } from "../../api";
+import {
+  FootpathLeg,
+  LegOriginLocationTypeEnum,
+  LegDestinationLocationTypeEnum,
+  Location,
+  TransportationLeg,
+  TransportationLegTypeEnum
+} from "../../api";
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useJourneyQuery } from "../../hooks/useJourneyQuery";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
@@ -30,7 +30,9 @@ import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
 import LeafletMapContainer from "../map/LeafletMapContainer";
-import "./ResultRoutes.css";
+import { Button } from "../controls/Button";
+import { Header } from "../Header";
+import styles from "./ResultRoutes.module.css";
 
 export const JoruneyLocationResolver: React.FC = () => {
 
@@ -63,7 +65,11 @@ export type ResultRoutesProps = {
 const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
-  const [slideName, setSlideName] = useState<string>("Verfügbare Routen");
+  // Using specific deserialize because using Boolean() constructor trues everything except empty string.
+  const availableRoutesString = "Verfügbare Routen";
+  const selectedRouteString = "Ausgewählte Route";
+
+  const [slideName, setSlideName] = useState<string>(availableRoutesString);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
   const [mapHeight] = useState<number>(30);
@@ -93,16 +99,23 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             startTime: leg.origin.departureTimeEstimated,
             stopIds: leg.details.stopSequence.map(jl => jl.id),
             stationName: leg.origin.name,
-            track: leg.origin.type === LegOriginLocationTypeEnum.Platform
-              ? leg.origin.details.shortName
-              : "",
+            trackOrigin: leg.origin.type === LegOriginLocationTypeEnum.Platform
+            ? leg.origin.details.shortName
+            : "",
+          trackDestination: leg.destination.type === LegDestinationLocationTypeEnum.Platform
+            ? leg.destination.details.shortName
+            : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
             line: "transportation" in leg ? leg.transportation.line : "",
-            stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
-              destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
-              originDelayStats: { status: "unavailable", reason: "Fußpfad" }
-            }
+            stats: leg.type === TransportationLegTypeEnum.Transportation
+              ? (leg as TransportationLeg).legStats
+              : {
+                originDelayStats: { status: "unavailable", reason: "Fußpfad" },
+                destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+                interchangeReachableStat: { status: "unavailable", reason: "Fußpfad" },
+                cancellationStat: { status: "unavailable", reason: "Fußpfad" }
+              }
           })),
           travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
         };
@@ -128,10 +141,10 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {
-      setSlideName("Verfügbare Routen");
+      setSlideName(availableRoutesString);
     }
     if (activeSlideIndex === 1) {
-      setSlideName("Ausgewählte Routen");
+      setSlideName(selectedRouteString);
     }
   };
 
@@ -147,19 +160,9 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     <>
       {result.type === "error" && <div>Error: {result.error.message}</div>}
       {result.type === "pending" && <div>Searching...</div>}
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Öffis</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
-      </IonHeader>
+      <Header/>
       <IonContent>
-        <div id="map" style={{ height: mapHeight + "%" }}>
+      <div id="map" style={{ height: mapHeight + "%" }}>
           <LeafletMapContainer
             originId={origin.id}
             destinationId={destination.id}
@@ -167,37 +170,36 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             showLines={true}
           />
         </div>
-        <div className="result-header">
-          {
-            <div className="left-align">
-              <IonButton className="circle-button"
+        <div className={styles.resultHeader}>
+        {
+            <div className={styles.leftAlign}>
+              <IonButton className={styles.circleButton}
               //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
               >
                 <IonIcon icon={mapOutline} />
               </IonButton>
             </div>
           }
-          <div className="result-swiper">
+          <div className={styles.resultSwiper}>
             <IonRadioGroup value={slideName}>
-              <IonRadio mode="md" onClick={() => swiper?.slideTo(0)} className="radio" value="Verfügbare Routen" />
-              <IonRadio mode="md" onClick={() => swiper?.slideTo(1)} className="radio" value="Ausgewählte Routen" />
+              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
             </IonRadioGroup>
-            <p>{slideName}</p>
+            <h4 className={styles.headline}>{slideName}</h4>
           </div>
-          <div className="right-align">
-            {
-              selectedJourney &&
-              <IonButton className="circle-button" routerLink="livenavigation">
-                <IonIcon icon={playOutline} />
+          <div className={styles.backButton}>
+            <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner"/>
+          </div>
+          <div className={styles.rightAlign}>
+          {
+            swiper?.activeIndex === 1 && selectedJourney && 
+              <IonButton className={styles.circleButton} routerLink="livenavigation">
+                <IonIcon icon={play} />
               </IonButton>
-            }
+          }
           </div>
         </div>
-        <IonButton className="back-button" onClick={() => { history.back(); }}
-          size="default" expand="block">
-          Zurück zum Routenplaner
-        </IonButton>
-        <SwiperReact className="swiper-div"
+        <SwiperReact className={styles.swiperDiv}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
@@ -220,8 +222,9 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           </SwiperSlide>
           <SwiperSlide>
             {
-              selectedJourney !== null &&
+              selectedJourney !== null && <>
               <JourneyDetail journey={selectedJourney} />
+              </>
             }
           </SwiperSlide>
         </SwiperReact>

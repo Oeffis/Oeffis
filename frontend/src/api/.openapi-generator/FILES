@@ -3,13 +3,19 @@ src/apis/LocationFinderApi.ts
 src/apis/index.ts
 src/index.ts
 src/models/BadRequest.ts
+src/models/CancellationStat.ts
 src/models/DelayStats.ts
 src/models/Footpath.ts
 src/models/FootpathLeg.ts
+src/models/InterchangeReachableStat.ts
 src/models/Journey.ts
 src/models/JourneyLegsInner.ts
 src/models/JourneyLocation.ts
 src/models/JourneyRequestDto.ts
+src/models/JourneyStats.ts
+src/models/JourneyStatsAggregatedCancellationStat.ts
+src/models/JourneyStatsAggregatedDelayStats.ts
+src/models/JourneyStatsAggregatedInterchangeReachableStat.ts
 src/models/LegDestinationLocation.ts
 src/models/LegDetails.ts
 src/models/LegInfo.ts
@@ -17,7 +23,9 @@ src/models/LegInfoValidity.ts
 src/models/LegInterchange.ts
 src/models/LegOriginLocation.ts
 src/models/LegStats.ts
+src/models/LegStatsCancellationStat.ts
 src/models/LegStatsDestinationDelayStats.ts
+src/models/LegStatsInterchangeReachableStat.ts
 src/models/LegStatsOriginDelayStats.ts
 src/models/Location.ts
 src/models/LocationCoordinates.ts
@@ -31,6 +39,6 @@ src/models/RatedLocation.ts
 src/models/Transportation.ts
 src/models/TransportationDestination.ts
 src/models/TransportationLeg.ts
-src/models/UnavailableDelayStats.ts
+src/models/UnavailableStats.ts
 src/models/index.ts
 src/runtime.ts
