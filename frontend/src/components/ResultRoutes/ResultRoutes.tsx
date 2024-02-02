@@ -161,41 +161,41 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           </IonToolbar>
         </IonHeader>
       </IonHeader>
-      <IonContent>
-        <div id="map" style={{ height: mapHeight + "%" }}>
-          <LeafletMapContainer
-            originId={origin.id}
-            destinationId={destination.id}
-            locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
-            showLines={true}
-          />
+      <div id="map" style={{ height: mapHeight + "%" }}>
+        <LeafletMapContainer
+          originId={origin.id}
+          destinationId={destination.id}
+          locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
+          showLines={true}
+        />
+      </div>
+      <div className={styles.result_header}>
+        {
+          <div className={styles.left_align}>
+            <IonButton className={styles.circle_button}
+            //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
+            >
+              <IonIcon icon={mapOutline} />
+            </IonButton>
+          </div>
+        }
+        <div className={styles.result_swiper}>
+          <IonRadioGroup value={slideName}>
+            <IonRadio mode="md" onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Verfügbare Routen" />
+            <IonRadio mode="md" onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Ausgewählte Routen" />
+          </IonRadioGroup>
+          <p>{slideName}</p>
         </div>
-        <div className={styles.result_header}>
+        <div className={styles.right_align}>
           {
-            <div className={styles.left_align}>
-              <IonButton className={styles.circle_button}
-              //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
-              >
-                <IonIcon icon={mapOutline} />
-              </IonButton>
-            </div>
+            selectedJourney &&
+            <IonButton className={styles.circle_button} routerLink="livenavigation">
+              <IonIcon icon={playOutline} />
+            </IonButton>
           }
-          <div className={styles.result_swiper}>
-            <IonRadioGroup value={slideName}>
-              <IonRadio mode="md" onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Verfügbare Routen" />
-              <IonRadio mode="md" onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Ausgewählte Routen" />
-            </IonRadioGroup>
-            <p>{slideName}</p>
-          </div>
-          <div className={styles.right_align}>
-            {
-              selectedJourney &&
-              <IonButton className={styles.circle_button} routerLink="livenavigation">
-                <IonIcon icon={playOutline} />
-              </IonButton>
-            }
-          </div>
         </div>
+      </div>
+      <IonContent>
         <IonButton className={styles.back_button} onClick={() => { history.back(); }}
           size="default" expand="block">
           Zurück zum Routenplaner
