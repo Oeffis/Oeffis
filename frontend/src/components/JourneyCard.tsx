@@ -9,11 +9,10 @@ export interface TravelProps { journey: IJourney }
 const formatDateShort = (date: Date): string => format(date, "HH:mm");
 
 const timeSplitter = (traveltime: number): number[] => {
-  const traveltimeHours = Math.floor(traveltime / 60);
-  const traveltimeMinutes = traveltime % 60;
+  const traveltimeRounded = Math.round(traveltime);
+  const traveltimeHours = Math.floor(traveltimeRounded / 60);
+  const traveltimeMinutes = traveltimeRounded % 60;
   return [traveltimeHours, traveltimeMinutes];
-
-  //TODO: Round uneven minutes
 };
 
 const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
