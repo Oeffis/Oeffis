@@ -77,6 +77,10 @@ IonButton {
   width: 25%;
 }
 
+.headline {
+  font-weight: bold;
+}
+
 #map {
   transition: 500ms ease-in-out;
   height: 0;

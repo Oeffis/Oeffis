@@ -60,7 +60,6 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
                 <IonLabel className={jc.time_word_center}>Min</IonLabel>
               </IonCol>
             </IonRow>
-
           )}
         </div>
       </IonCol>

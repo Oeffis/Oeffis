@@ -14,7 +14,7 @@ import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { CreateFavoriteLocation, useFavoriteLocations } from "../services/favorites/FavoritesContext";
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
-import "./FavoriteLocationsComponent.css";
+import styles from "./FavoriteLocationsComponent.module.css";
 
 export interface FavoriteLocationsComponentProps {
   onLocationSelected?: (location: CreateFavoriteLocation) => void;
@@ -84,7 +84,7 @@ interface LoadedFavouriteLocationEntryProps {
 
 const LoadedFavoriteLocationEntryComponent: React.FC<LoadedFavouriteLocationEntryProps> = (props) => (
   <>
-    <div className="location-destinations">
+    <div className={styles.locationDestinations}>
       <IonLabel>
         {props.location.name}
       </IonLabel>
