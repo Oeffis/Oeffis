@@ -10,20 +10,6 @@ ion-label {
   margin-bottom: 60px;
 }
 
-.bottom-section_closed {
-  position: relative;
-  padding-top: 4px;
-}
-
-.bottom-section_opened {
-  position: relative;
-  min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 32px;
-}
-
 IonButton {
   color: transparent;
 }
