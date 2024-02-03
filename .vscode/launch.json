@@ -13,7 +13,8 @@
       "runtimeArgs": [
         "run-script",
         "start:dev"
-      ]
+      ],
+      "envFile": "${workspaceFolder}/prod-db.env"
     },
     {
       "type": "chrome",
