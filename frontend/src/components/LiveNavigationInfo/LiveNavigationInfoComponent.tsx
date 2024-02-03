@@ -2,14 +2,12 @@ import { IonIcon, IonLabel } from "@ionic/react";
 import { differenceInHours, differenceInMinutes, format } from "date-fns";
 import { chevronDownOutline, chevronUpOutline } from "ionicons/icons";
 import { useState } from "react";
-import "./LiveNavigationInfoComponent.css";
+import styles from "./LiveNavigationInfoComponent.module.css";
 interface LiveNavigationInfoComponentProps {
   arrivalTime: Date;
 }
 
 const getHours = (arrivalTime: Date): string => {
-  // format returns duration + 1 hour thats why we subtract 60
-
   const hours = differenceInHours(arrivalTime, new Date());
   return hours.toString();
 };
@@ -29,7 +27,7 @@ export const LiveNavigationInfoComponent: React.FC<LiveNavigationInfoComponentPr
 
       {!showInformation &&
 
-        <div className="content-small">
+        <div className={styles.content_small}>
           <IonIcon onClick={() => setShowInformation(true)} icon={chevronUpOutline} />
         </div>
       }
@@ -44,41 +42,41 @@ export function NavigationInformation(
 ): JSX.Element {
   return (
     <>
-      <div className="content">
+      <div className={styles.content}>
 
-        <div className="row">
-          <div className="col">
+        <div className={styles.row}>
+          <div className={styles.col}>
             <div>
               <IonLabel>
                 Verbleibend
               </IonLabel>
             </div>
             <div>
-              <IonLabel className="time-number">
+              <IonLabel className={styles.time_number}>
                 {getHours(props.arrivalTime)}
               </IonLabel>
-              <IonLabel className="time-text">
+              <IonLabel className={styles.time_text}>
                 Std
               </IonLabel>
-              <IonLabel className="time-number">
+              <IonLabel className={styles.time_number}>
                 {getMinutes(props.arrivalTime)}
               </IonLabel>
-              <IonLabel className="time-text">
+              <IonLabel className={styles.time_text}>
                 Min
               </IonLabel>
             </div>
-          </div>
-          <div className="col">
-            <IonLabel className="time-text">
+          </div >
+          <div className={styles.col}>
+            <IonLabel className={styles.time_text}>
               Ankunfszeit
             </IonLabel>
-            <IonLabel className="time-number">
+            <IonLabel className={styles.time_number}>
               {formatDateShort(props.arrivalTime)}
             </IonLabel>
           </div>
         </div>
         <IonIcon onClick={() => props.setShowInformation(false)} icon={chevronDownOutline} />
-      </div>
+      </div >
 
     </>
   );

@@ -1,0 +1,54 @@
+ion-label {
+  padding: 2px;
+}
+
+IonButton {
+  color: transparent;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: var(--ion-color-light-shade);
+  padding: 1em;
+}
+
+.headerDetails {
+  padding: 0em 1em;
+  flex: 65;
+}
+
+.headerDuration {
+  flex: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headerDurationAmount {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.headerDetails p, .headerDuration p {
+  margin: 0;
+}
+
+.contentGrid {
+  display: grid;
+  row-gap: 0.5em;
+  width: 100%;
+  grid-template-columns: 18% 10% 52% 20%;
+  grid-auto-rows: auto;
+  padding: 1em 1em 8em;
+}
+
+.trainIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--ion-color-primary);
+}
+
+.journeyDetail {
+  width: 100%;
+}

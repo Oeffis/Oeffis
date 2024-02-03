@@ -1,6 +1,5 @@
 import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import logo from "../../public/images/train_image.png";
-import "./UserPreferencesPage.css";
+import logo from "../../public/images/OeffisLogo1.svg";
 
 const UserPreferencesPage: React.FC = () => (
   <IonPage id="main-content">
@@ -10,7 +9,7 @@ const UserPreferencesPage: React.FC = () => (
           <IonMenuButton />
         </IonButtons>
         <div className="menuBar">
-          <IonTitle>Oeffies</IonTitle>
+          <IonTitle>Öffis</IonTitle>
           <IonImg className="menuLogo" src={logo} />
         </div>
       </IonToolbar>

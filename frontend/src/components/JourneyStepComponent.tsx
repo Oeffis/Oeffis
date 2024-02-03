@@ -1,39 +1,33 @@
-import { IonLabel } from "@ionic/react";
 import { format, isFuture } from "date-fns";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
-import "./JourneyStepComponent.css";
+import styles from "./JourneyStepComponent.module.css";
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
 export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
-  const color = isFuture(props.arrivalTime) ? "lightgray" : "gray";
+  const arrived = isFuture(props.arrivalTime) ? false : true;
 
   return (
-    <div className="container" data-testid="journey-step">
-      <div className="left">
-        <IonLabel>
-          Ankunft:
-        </IonLabel>
-        <IonLabel>
-          {formatDateTime(props.arrivalTime)}
-        </IonLabel>
+    <>
+      <div className={styles.centerBlock}>
+        <p className={styles.m0}>Ankunft</p>
+        <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
       </div>
-      <div className="middle">
-        <div className="circle" style={{ background: color }} />
-      </div>
-      <div className="step-info">
-        <IonLabel>
-          <span data-testid="journey-step-stop-name">
-            {
-              props.step
-                ? props.step.stationName
-                : props.arrivalDestination
-            }
-          </span>
-        </IonLabel>
-      </div>
-    </div>
+      <div className={arrived ? styles.circleArrived : styles.circleNotArrived} />
+      <p className={styles.centerVertically + " " + styles.bold}>
+        {
+          props.step
+            ? props.step.stationName
+            : props.arrivalDestination
+        }
+      </p>
+      <p className={styles.centerVertically + " " + styles.textAlignCenter + " " + styles.track}>
+        {props.step?.trackOrigin !== ""
+          ? "Gl. " + props.step?.trackOrigin
+          : ""
+        }</p>
+    </>
   );
 };
 

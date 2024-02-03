@@ -1,6 +1,6 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonModal, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useState } from "react";
-import logo from "../../../public/images/train_image.png";
+import logo from "../../../public/images/OeffisLogo1.svg";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
@@ -35,7 +35,7 @@ const LiveNavigation: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <div className="menuBar">
-            <IonTitle>Oeffies</IonTitle>
+            <IonTitle>Öffis</IonTitle>
             <IonImg className="menuLogo" src={logo} />
           </div>
         </IonToolbar>

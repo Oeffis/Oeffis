@@ -1,0 +1,50 @@
+.circleNotArrived {
+  border-radius: 50%;
+  background: var(--ion-color-light-shade);
+  height: 28px;
+  width: 28px;
+  border: 1px solid var(--ion-color-light-shade);
+  margin: auto;
+}
+
+.littleCircle {
+  border-radius: 50%;
+  background: var(--ion-color-light-shade);
+  height: 24px;
+  width: 24px;
+  border: 1px solid var(--ion-color-light-shade);
+}
+
+.circleArrived {
+  border-radius: 50%;
+  background-color: var(--ion-color-primary);
+  border: 1px solid var(--ion-color-dark-shade);
+  height: 28px;
+  width: 28px;
+  margin: auto;
+}
+
+.centerVertically {
+  margin: auto 0;
+}
+
+.centerBlock {
+  margin: auto;
+  text-align: center;
+}
+
+.m0 {
+  margin: 0;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.textAlignCenter {
+  text-align: center;
+}
+
+.track {
+  padding-left: 1em;
+}

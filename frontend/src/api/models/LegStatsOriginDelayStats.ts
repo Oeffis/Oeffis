@@ -20,19 +20,19 @@ import {
     DelayStatsToJSON,
 } from './DelayStats';
 import {
-    UnavailableDelayStats,
-    instanceOfUnavailableDelayStats,
-    UnavailableDelayStatsFromJSON,
-    UnavailableDelayStatsFromJSONTyped,
-    UnavailableDelayStatsToJSON,
-} from './UnavailableDelayStats';
+    UnavailableStats,
+    instanceOfUnavailableStats,
+    UnavailableStatsFromJSON,
+    UnavailableStatsFromJSONTyped,
+    UnavailableStatsToJSON,
+} from './UnavailableStats';
 
 /**
  * @type LegStatsOriginDelayStats
- * Delay statistics at origin.
+ * Delay statistics at origin of leg/trip.
  * @export
  */
-export type LegStatsOriginDelayStats = { status: 'available' } & DelayStats | { status: 'unavailable' } & UnavailableDelayStats;
+export type LegStatsOriginDelayStats = { status: 'available' } & DelayStats | { status: 'unavailable' } & UnavailableStats;
 
 export function LegStatsOriginDelayStatsFromJSON(json: any): LegStatsOriginDelayStats {
     return LegStatsOriginDelayStatsFromJSONTyped(json, false);
@@ -46,7 +46,7 @@ export function LegStatsOriginDelayStatsFromJSONTyped(json: any, ignoreDiscrimin
         case 'available':
             return {...DelayStatsFromJSONTyped(json, true), status: 'available'};
         case 'unavailable':
-            return {...UnavailableDelayStatsFromJSONTyped(json, true), status: 'unavailable'};
+            return {...UnavailableStatsFromJSONTyped(json, true), status: 'unavailable'};
         default:
             throw new Error(`No variant of LegStatsOriginDelayStats exists with 'status=${json['status']}'`);
     }
@@ -63,7 +63,7 @@ export function LegStatsOriginDelayStatsToJSON(value?: LegStatsOriginDelayStats 
         case 'available':
             return DelayStatsToJSON(value);
         case 'unavailable':
-            return UnavailableDelayStatsToJSON(value);
+            return UnavailableStatsToJSON(value);
         default:
             throw new Error(`No variant of LegStatsOriginDelayStats exists with 'status=${value['status']}'`);
     }

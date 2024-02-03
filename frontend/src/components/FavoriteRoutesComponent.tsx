@@ -14,7 +14,7 @@ import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
 import { CreateFavoriteRoute, useFavoriteRoutes } from "../services/favorites/FavoritesContext";
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
-import "./FavoriteRoutesComponent.css";
+import styles from "./FavoriteRoutesComponent.module.css";
 
 export interface FavoriteRoutesComponentProps {
   onRouteSelected?: (route: CreateFavoriteRoute) => void;
@@ -88,7 +88,7 @@ interface LoadedFavouriteRouteEntryProps {
 
 const LoadedFavoriteRouteEntryComponent: React.FC<LoadedFavouriteRouteEntryProps> = (props) => (
   <>
-    <div className="route-destinations">
+    <div className={styles.route_destinations}>
       <IonLabel>
         {props.origin.name}
       </IonLabel>
@@ -109,7 +109,7 @@ const LoadedFavoriteRouteEntryComponent: React.FC<LoadedFavouriteRouteEntryProps
 
 const PendingFavoriteRouteEntry: React.FC = () => <>
   <IonLabel>
-    <IonSkeletonText animated={true} style={{ width: "50%" }} />
+    <IonSkeletonText animated={true} className={styles.pending} />
   </IonLabel>
   <IonIcon icon={star} />
   <IonReorder slot="start" />

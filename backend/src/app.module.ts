@@ -16,6 +16,7 @@ import { TripEntry } from "./historicData/entity/tripEntry.entity";
 import { VrrTimetableVersionEntry } from "./historicData/entity/vrrTimetableVersionEntry.entity";
 import { JourneyModule } from "./journey/journey.module";
 import { LocationFinderModule } from "./locationFinder/locationFinder.module";
+import { StatsModule } from "./stats/stats.module";
 import { VrrModule } from "./vrr/vrr.module";
 
 @Module({
@@ -24,6 +25,7 @@ import { VrrModule } from "./vrr/vrr.module";
     JourneyModule,
     VrrModule,
     HistoricDataModule,
+    StatsModule,
     TypeOrmModule.forRoot({
       type: "postgres",
       host: process.env.PG_HOST ?? "localhost",

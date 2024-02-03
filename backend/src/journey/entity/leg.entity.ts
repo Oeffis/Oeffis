@@ -80,19 +80,19 @@ export class TransportationLeg extends Leg {
     type: LegStats,
     required: true
   })
-  delayStats: LegStats;
+  legStats: LegStats;
 
   constructor(
     origin: LegOriginLocation,
     destination: LegDestinationLocation,
     details: LegDetails,
     transportation: Transportation,
-    delayStats: LegStats
+    legStats: LegStats
   ) {
 
     super(origin, destination, details);
     this.transportation = transportation;
-    this.delayStats = delayStats;
+    this.legStats = legStats;
   }
 
   public static isTransportationLeg(leg: TransportationLeg | FootpathLeg): leg is TransportationLeg {
@@ -131,5 +131,9 @@ export class FootpathLeg extends Leg {
 
     super(origin, destination, details);
     this.footpath = footpath;
+  }
+
+  public static isFootpathLeg(leg: TransportationLeg | FootpathLeg): leg is FootpathLeg {
+    return leg.type === LegType.footpath as string;
   }
 }

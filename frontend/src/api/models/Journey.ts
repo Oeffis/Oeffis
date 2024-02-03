@@ -19,6 +19,12 @@ import {
     JourneyLegsInnerFromJSONTyped,
     JourneyLegsInnerToJSON,
 } from './JourneyLegsInner';
+import type { JourneyStats } from './JourneyStats';
+import {
+    JourneyStatsFromJSON,
+    JourneyStatsFromJSONTyped,
+    JourneyStatsToJSON,
+} from './JourneyStats';
 
 /**
  * 
@@ -38,6 +44,12 @@ export interface Journey {
      * @memberof Journey
      */
     legs: Array<JourneyLegsInner>;
+    /**
+     * 
+     * @type {JourneyStats}
+     * @memberof Journey
+     */
+    journeyStats: JourneyStats;
 }
 
 /**
@@ -47,6 +59,7 @@ export function instanceOfJourney(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "interchanges" in value;
     isInstance = isInstance && "legs" in value;
+    isInstance = isInstance && "journeyStats" in value;
 
     return isInstance;
 }
@@ -63,6 +76,7 @@ export function JourneyFromJSONTyped(json: any, ignoreDiscriminator: boolean): J
         
         'interchanges': json['interchanges'],
         'legs': ((json['legs'] as Array<any>).map(JourneyLegsInnerFromJSON)),
+        'journeyStats': JourneyStatsFromJSON(json['journeyStats']),
     };
 }
 
@@ -77,6 +91,7 @@ export function JourneyToJSON(value?: Journey | null): any {
         
         'interchanges': value.interchanges,
         'legs': ((value.legs as Array<any>).map(JourneyLegsInnerToJSON)),
+        'journeyStats': JourneyStatsToJSON(value.journeyStats),
     };
 }
 

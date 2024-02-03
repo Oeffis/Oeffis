@@ -24,9 +24,11 @@ import { LocationSearchList } from "./LocationSearchList";
 
 export interface LocationSearchInputProps {
   onSelectedLocationChanged: (location: Location) => void;
+  onSearchInputChanged: (input: string) => void;
   selectedLocation: Location | null;
   inputLabel: string;
   prefixDataTestId?: string;
+  searchInput?: string;
 }
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
@@ -39,6 +41,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
 
   const setSelectedLocationAndCloseModal = (location: Location): void => {
     props.onSelectedLocationChanged(location);
+    props.onSearchInputChanged(searchInput);
     setModalOpen(false);
     setShowMap(false);
   };
@@ -56,6 +59,11 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   const showLoadingIndicator = searchInput !== "" && (foundLocations.type === "outdated" || inputStillInDebounce);
   const showResults = searchInput !== "" && (foundLocations.type === "success" || foundLocations.type === "outdated");
 
+  const applyLocationName = (): void => {
+    setSearchInput(props.searchInput ?? "");
+    setModalOpen(true);
+  };
+
   useEffect(() => {
     if (searchInput === "") {
       setIsMapBtnDisabled(true);
@@ -68,7 +76,8 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
   return (
     <>
       <IonInput
-        onClick={() => setModalOpen(true)}
+        mode="ios"
+        onClick={applyLocationName}
         readonly
         placeholder={props.inputLabel}
         data-testid={props.prefixDataTestId + "-clickable"}
