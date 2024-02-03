@@ -18,10 +18,14 @@ const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) 
       </div>
       <div className={arrived ? styles.circleArrived : styles.circleNotArrived} />
       <p className={styles.centerVertically + " " + styles.bold}>{props.stationName}</p>
-      <p className={styles.centerVertically + " " + styles.textAlignCenter}>Gl. 
+      <p className={styles.centerVertically + " " + styles.textAlignCenter + " " + styles.track}> 
         {props.isFirst
-          ? props.trackOrigin
-          : props.trackDestination
+          ? props.trackOrigin !== "" 
+            ? "Gl. " +  props.trackOrigin
+            : ""
+          : props.trackDestination !== ""
+            ? "Gl. " + props.trackDestination
+            : ""
       }</p>
     </>
   );

@@ -1,4 +1,4 @@
-import { IonContent, IonPage, IonRadio, IonRadioGroup} from "@ionic/react";
+import { IonContent, IonPage, IonRadio, IonRadioGroup } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -9,22 +9,24 @@ import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import { FavoriteLocationsComponent } from "../components/FavoriteLocationsComponent";
 import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
-import { CreateFavoriteLocation, CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
-import styles from "./FavoritesPage.module.css";
 import { Header } from "../components/Header";
+import PlanFavoriteDialogueComponent from "../components/PlanFavoriteDialogue/PlanFavoriteDialogueComponent";
+import styles from "./FavoritesPage.module.css";
 
 export interface FavoritesPageProps {
   launchTab?: number;
   showHeader?: boolean;
-  onTripSelected?: (trip: CreateFavoriteTrip) => void;
-  onRouteSelected?: (trip: CreateFavoriteRoute) => void;
-  onLocationSelected?: (trip: CreateFavoriteLocation) => void;
 }
 const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
   const [slideName, setSlideName] = useState<string>("Stations");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(props.launchTab ?? 0);
   const [swiper, setSwiper] = useState<Swiper | null>(null);
+  const [displayDialogue, setDisplayDialogue] = useState<boolean>(false);
+  const [routerLink, setRouterLink] = useState<string>("");
+  const [origin, setOrigin] = useState<string | null>(null);
+  const [destination, setDestination] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<string>("");
 
   const initialSlide = props.launchTab ?? 0;
   const setSlideNames = (): void => {
@@ -45,17 +47,17 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
   return (
     <IonPage id="main-content">
-      {!(props.showHeader === false) && <Header/>}
+      {!(props.showHeader === false) && <Header />}
       <IonContent>
         <div className={styles.selection}>
           <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md"/>
-            <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md"/>
-            <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md"/>
+            <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
+            <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
+            <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>
-
+        <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
         <SwiperReact
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
@@ -68,13 +70,13 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
         >
           <div>
             <SwiperSlide>
-              <FavoriteLocationsComponent onLocationSelected={(route: CreateFavoriteLocation) => { props.onLocationSelected ? props.onLocationSelected(route) : void 0; }} />
+              <FavoriteLocationsComponent />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { props.onRouteSelected ? props.onRouteSelected(route) : void 0; }} />
+              <FavoriteRoutesComponent onRouteSelected={(route, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(route.originId); setDestination(route.destinationId); }} />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { props.onTripSelected ? props.onTripSelected(trip) : void 0; }} />
+              <FavoriteTripsComponent onTripSelected={(trip, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(trip.originId); setDestination(trip.destinationId); setStartTime(trip.startTime); }} />
             </SwiperSlide>
           </div>
         </SwiperReact>

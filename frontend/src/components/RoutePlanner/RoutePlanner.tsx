@@ -5,7 +5,6 @@ import {
   IonContent,
   IonDatetime,
   IonDatetimeButton,
-  IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
@@ -22,10 +21,7 @@ import { Journey, TransportationLeg, TransportationLegTypeEnum } from "../../api
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
-import FavoritesPage from "../../pages/FavoritesPage";
 import {
-  CreateFavoriteRoute,
-  CreateFavoriteTrip,
   useFavoriteRoutes,
   useFavoriteTrips
 } from "../../services/favorites/FavoritesContext";
@@ -55,21 +51,6 @@ const RoutePlanner = ({
   const { favoriteTrips, addFavoriteTrip } = useFavoriteTrips();
   const { favoriteRoutes, addFavoriteRoute } = useFavoriteRoutes();
 
-  const setTrip = (trip: CreateFavoriteTrip): void => {
-    setIsFavoritesDialogueOpen(false);
-    setIsFavoritesModalOpen(false);
-    setOriginId(trip.originId);
-    setDestinationId(trip.destinationId);
-    setDepartureTime(trip.startTime);
-  };
-
-  const setRoute = (route: CreateFavoriteRoute): void => {
-    setIsFavoritesDialogueOpen(false);
-    setIsFavoritesModalOpen(false);
-    setOriginId(route.originId);
-    setDestinationId(route.destinationId);
-  };
-
   const currentIsFavoriteTrip = (): boolean => {
     const existing = favoriteTrips.find(c =>
       c.originId === originId
@@ -96,8 +77,6 @@ const RoutePlanner = ({
   };
 
   const [isFavoriteDialogueOpen, setIsFavoritesDialogueOpen] = useState(false);
-
-  const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
 
   const toggleOriginDestinationLocation = (): void => {
     setOriginId(destinationId);
@@ -234,24 +213,6 @@ const RoutePlanner = ({
               }}>Trip</IonButton>
             </div>
           </div>
-        </IonContent>
-      </IonModal>
-      <IonModal
-        isOpen={isFavoritesModalOpen}
-        onDidDismiss={() => setIsFavoritesModalOpen(false)}
-      >
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Favorites</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          {/* set launchTab=1 to start at Routes Tab -> 0=stations, 2=Journeys */}
-          <FavoritesPage
-            launchTab={1}
-            showHeader={false}
-            onRouteSelected={(route: CreateFavoriteRoute) => setRoute(route)}
-            onTripSelected={(trip: CreateFavoriteTrip) => setTrip(trip)} />
         </IonContent>
       </IonModal>
     </>
