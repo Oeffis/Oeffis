@@ -15,14 +15,18 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
       <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
     </div>
     <div className={arrived? styles.circleArrived : styles.circleNotArrived}/>
-      <p className={styles.centerVertically + styles.bold}>
+      <p className={styles.centerVertically + " " + styles.bold}>
         {
           props.step
             ? props.step.stationName
             : props.arrivalDestination
         }
       </p>
-    <p className={styles.centerVertically + " " + styles.textAlignCenter}>{"Gl. " + props.step?.trackOrigin}</p>
+    <p className={styles.centerVertically + " " + styles.textAlignCenter + " " + styles.track}>
+      {props.step?.trackOrigin !== ""
+        ? "Gl. " + props.step?.trackOrigin
+        : ""
+      }</p>
     </>
   );
 };
