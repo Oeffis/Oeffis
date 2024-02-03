@@ -81,7 +81,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const [mapHeight, setMapHeight] = useState<number>(30);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
-  const [activeJourneyIndex] = useState<number>(0);
 
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
@@ -137,11 +136,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   };
 
   const setActiveJourney = (journey: IJourney): void => {
+    setSelectedJourney(journey);
     if (swiper !== null) {
       swiper.slideNext();
     }
     window.localStorage.setItem("selectedJourney", JSON.stringify(journey));
-    setSelectedJourney(journey);
   };
 
   const setSlideNames = (): void => {
@@ -156,7 +155,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   useEffect(() => {
     setSlideNames();
     if (iJourneys !== false) {
-      setSelectedJourney(iJourneys[activeJourneyIndex]);
       getLocationIds();
     }
   }, [activeSlideIndex]);
