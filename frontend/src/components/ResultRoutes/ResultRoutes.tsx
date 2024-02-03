@@ -2,6 +2,7 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonPage,
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
@@ -44,12 +45,12 @@ export const JoruneyLocationResolver: React.FC = () => {
 
   if (originLocation !== null && destinationLocation !== null) {
     return (
-      <>
+      <IonPage id="main-content">
         <ResultRoutes
           origin={originLocation}
           destination={destinationLocation}
         />
-      </>
+      </IonPage>
     );
   }
 
