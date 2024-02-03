@@ -2,6 +2,7 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonProgressBar,
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
@@ -15,8 +16,8 @@ import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import {
   FootpathLeg,
-  LegOriginLocationTypeEnum,
   LegDestinationLocationTypeEnum,
+  LegOriginLocationTypeEnum,
   Location,
   TransportationLeg,
   TransportationLegTypeEnum
@@ -27,11 +28,13 @@ import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
+import { UserPreferences, UserPreferencesValues } from "../../pages/UserPreferencesPage";
+import { PersistenceService } from "../../services/persistence/PersistenceService";
+import { Header } from "../Header";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
-import LeafletMapContainer from "../map/LeafletMapContainer";
 import { Button } from "../controls/Button";
-import { Header } from "../Header";
+import LeafletMapContainer from "../map/LeafletMapContainer";
 import styles from "./ResultRoutes.module.css";
 
 export const JoruneyLocationResolver: React.FC = () => {
@@ -64,6 +67,9 @@ export type ResultRoutesProps = {
 
 const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
+  const persistance = new PersistenceService();
+  const isDarkThemeEnabeled = persistance.get(UserPreferences.isDarkThemeEnabled) !== undefined && persistance.get(UserPreferences.isDarkThemeEnabled) === UserPreferencesValues.enabled;
+
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
   const availableRoutesString = "Verfügbare Routen";
@@ -72,7 +78,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const [slideName, setSlideName] = useState<string>(availableRoutesString);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
-  const [mapHeight] = useState<number>(30);
+  const [mapHeight, setMapHeight] = useState<number>(30);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
   const [activeJourneyIndex] = useState<number>(0);
@@ -100,11 +106,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             stopIds: leg.details.stopSequence.map(jl => jl.id),
             stationName: leg.origin.name,
             trackOrigin: leg.origin.type === LegOriginLocationTypeEnum.Platform
-            ? leg.origin.details.shortName
-            : "",
-          trackDestination: leg.destination.type === LegDestinationLocationTypeEnum.Platform
-            ? leg.destination.details.shortName
-            : "",
+              ? leg.origin.details.shortName
+              : "",
+            trackDestination: leg.destination.type === LegDestinationLocationTypeEnum.Platform
+              ? leg.destination.details.shortName
+              : "",
             stopName: leg.destination.name,
             travelDurationInMinutes: leg.details.duration / 60,
             line: "transportation" in leg ? leg.transportation.line : "",
@@ -158,22 +164,26 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   return (
     <>
       {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
-      <Header/>
+      {result.type === "pending" && <IonProgressBar type="indeterminate" />}
+      <Header />
       <IonContent>
-      <div id="map" style={{ height: mapHeight + "%" }}>
+        <div id="map" style={{
+          height: mapHeight + "%",
+          transition: "height 500ms ease-in-out"
+        }}>
           <LeafletMapContainer
             originId={origin.id}
             destinationId={destination.id}
             locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
             showLines={true}
+            isDarkThemeEnabeled={isDarkThemeEnabeled}
           />
         </div>
         <div className={styles.resultHeader}>
-        {
+          {
             <div className={styles.leftAlign}>
               <IonButton className={styles.circleButton}
-              //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
+                onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
               >
                 <IonIcon icon={mapOutline} />
               </IonButton>
@@ -187,15 +197,15 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             <h4 className={styles.headline}>{slideName}</h4>
           </div>
           <div className={styles.backButton}>
-            <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner"/>
+            <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
           </div>
           <div className={styles.rightAlign}>
-          {
-            swiper?.activeIndex === 1 && selectedJourney && 
+            {
+              swiper?.activeIndex === 1 && selectedJourney &&
               <IonButton className={styles.circleButton} routerLink="livenavigation">
                 <IonIcon icon={play} />
               </IonButton>
-          }
+            }
           </div>
         </div>
         <SwiperReact className={styles.swiperDiv}
@@ -222,7 +232,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           <SwiperSlide>
             {
               selectedJourney !== null && <>
-              <JourneyDetail journey={selectedJourney} />
+                <JourneyDetail journey={selectedJourney} />
               </>
             }
           </SwiperSlide>
