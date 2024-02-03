@@ -38,7 +38,7 @@ IonButton {
   display: grid;
   row-gap: 0.5em;
   width: 100%;
-  grid-template-columns: 18% 10% 57% 15%;
+  grid-template-columns: 18% 10% 52% 20%;
   grid-auto-rows: auto;
   padding: 1em 1em 8em;
 }
