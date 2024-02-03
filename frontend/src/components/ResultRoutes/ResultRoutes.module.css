@@ -21,7 +21,7 @@ IonButton {
 .back_button {
   position: fixed;
   left: 0;
-  bottom: 10px;
+  bottom: 0;
   right: 0;
 }
 
