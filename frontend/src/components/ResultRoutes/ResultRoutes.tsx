@@ -31,6 +31,7 @@ import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import { Header } from "../Header";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
+import { Button } from "../controls/Button";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import styles from "./ResultRoutes.module.css";
 
@@ -75,7 +76,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const [mapHeight] = useState<number>(30);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
-  const [activeJourneyIndex] = useState<number>(0);
 
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
@@ -131,11 +131,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   };
 
   const setActiveJourney = (journey: IJourney): void => {
+    setSelectedJourney(journey);
     if (swiper !== null) {
       swiper.slideNext();
     }
     window.localStorage.setItem("selectedJourney", JSON.stringify(journey));
-    setSelectedJourney(journey);
   };
 
   const setSlideNames = (): void => {
@@ -150,7 +150,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   useEffect(() => {
     setSlideNames();
     if (iJourneys !== false) {
-      setSelectedJourney(iJourneys[activeJourneyIndex]);
       getLocationIds();
     }
   }, [activeSlideIndex]);
@@ -172,7 +171,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
         {
           <div className={styles.left_align}>
             <IonButton className={styles.circle_button}
-            //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
             >
               <IonIcon icon={mapOutline} />
             </IonButton>
@@ -185,6 +183,9 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           </IonRadioGroup>
           <h5 className={styles.headline}>{slideName}</h5>
         </div>
+        <div className={styles.back_button}>
+          <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
+        </div>
         <div className={styles.right_align}>
           {
             swiper?.activeIndex === 1 && selectedJourney &&
@@ -195,10 +196,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
         </div>
       </IonItemDivider>
       <IonContent>
-        <IonButton className={styles.back_button} onClick={() => { history.back(); }}
-          size="default" expand="block">
-          Zurück zum Routenplaner
-        </IonButton>
         <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
