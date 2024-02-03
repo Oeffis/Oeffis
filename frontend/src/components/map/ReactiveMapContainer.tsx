@@ -47,8 +47,8 @@ const ReactiveMapContainer: React.FC<PropsWithChildren<ReactiveContainerProps>> 
 
     const view = props.view;
     if (isCenterZoomView(view)) {
-      //setTimeout(() => map.flyTo(view.center, view.zoom, { animate: true, duration: 0.5 }), 250);
-      map.flyTo(view.center, view.zoom, { animate: true, duration: 0.5 });
+      setTimeout(() => map.flyTo(view.center, view.zoom, { animate: true, duration: 0.5 }), 50);
+      //map.flyTo(view.center, view.zoom, { animate: true, duration: 0.5 });
     } else {
       map.flyToBounds(view.bounds);
     }
