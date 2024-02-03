@@ -1,4 +1,4 @@
-import { FootpathLeg, Journey, JourneyApi, LegOriginLocationTypeEnum, LocationFinderApi, TransportationLeg, TransportationLegTypeEnum } from "../../api";
+import { FootpathLeg, Journey, JourneyApi, LegDestinationLocationTypeEnum, LegOriginLocationTypeEnum, LocationFinderApi, TransportationLeg, TransportationLegTypeEnum } from "../../api";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 
@@ -92,17 +92,25 @@ function parseJourneyToIJourney(journey: Journey): IJourney {
     stops: legs.map((leg): IJourneyStep => ({
       arrivalTime: leg.destination.arrivalTimeEstimated,
       startTime: leg.origin.departureTimeEstimated,
+      stopIds: leg.details.stopSequence.map(jl => jl.id),
       stationName: leg.origin.name,
-      track: leg.origin.type === LegOriginLocationTypeEnum.Platform
+      trackOrigin: leg.origin.type === LegOriginLocationTypeEnum.Platform
         ? leg.origin.details.shortName
+        : "",
+      trackDestination: leg.destination.type === LegDestinationLocationTypeEnum.Platform
+        ? leg.destination.details.shortName
         : "",
       stopName: leg.destination.name,
       travelDurationInMinutes: leg.details.duration / 60,
       line: "transportation" in leg ? leg.transportation.line : "",
-      stats: leg.type === TransportationLegTypeEnum.Transportation ? (leg as TransportationLeg).delayStats : {
-        destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
-        originDelayStats: { status: "unavailable", reason: "Fußpfad" }
-      }
+      stats: leg.type === TransportationLegTypeEnum.Transportation
+        ? (leg as TransportationLeg).legStats
+        : {
+          originDelayStats: { status: "unavailable", reason: "Fußpfad" },
+          destinationDelayStats: { status: "unavailable", reason: "Fußpfad" },
+          interchangeReachableStat: { status: "unavailable", reason: "Fußpfad" },
+          cancellationStat: { status: "unavailable", reason: "Fußpfad" }
+        }
     })),
     travelDurationInMinutes: legs.reduce((acc, leg) => acc + leg.details.duration, 0) / 60
   };
