@@ -177,6 +177,27 @@
           "journey"
         ]
       }
+    },
+    "/stats": {
+      "get": {
+        "operationId": "StatsController_getStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Stats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Stats"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "stats"
+        ]
+      }
     }
   },
   "info": {
@@ -1444,6 +1465,71 @@
           "interchanges",
           "legs",
           "journeyStats"
+        ]
+      },
+      "WorstDelayEntry": {
+        "type": "object",
+        "properties": {
+          "routeShortName": {
+            "type": "string",
+            "description": "The short name of the route"
+          },
+          "routeLongName": {
+            "type": "string",
+            "description": "The long name of the route"
+          },
+          "routeId": {
+            "type": "string",
+            "description": "The id to the route"
+          },
+          "delay": {
+            "type": "number",
+            "description": "The delay"
+          },
+          "planned": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The planned time"
+          },
+          "estimated": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The estimated time"
+          }
+        },
+        "required": [
+          "routeShortName",
+          "routeLongName",
+          "routeId",
+          "delay",
+          "planned",
+          "estimated"
+        ]
+      },
+      "Stats": {
+        "type": "object",
+        "properties": {
+          "filled": {
+            "type": "boolean",
+            "description": "Whether the stats are filled."
+          },
+          "time": {
+            "format": "date-time",
+            "type": "string",
+            "description": "When the stats were last updated."
+          },
+          "delays": {
+            "description": "The most delayed trips",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorstDelayEntry"
+            }
+          }
+        },
+        "required": [
+          "filled",
+          "time",
+          "delays"
         ]
       }
     }
