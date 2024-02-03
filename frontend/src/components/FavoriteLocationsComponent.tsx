@@ -85,7 +85,7 @@ interface LoadedFavouriteLocationEntryProps {
 
 const LoadedFavoriteLocationEntryComponent: React.FC<LoadedFavouriteLocationEntryProps> = (props) => (
   <>
-    <div className={styles.station_info}>
+    <div className={styles.locationDestinations}>
       <IonLabel>
         {props.location.name}
       </IonLabel>

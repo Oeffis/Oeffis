@@ -1,4 +1,4 @@
-import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonRadio, IonRadioGroup, IonTitle, IonToolbar } from "@ionic/react";
+import { IonContent, IonPage, IonRadio, IonRadioGroup } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -6,12 +6,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
-import logo from "../../public/images/OeffisLogo1.svg";
 import { FavoriteLocationsComponent } from "../components/FavoriteLocationsComponent";
 import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
+import { Header } from "../components/Header";
 import PlanFavoriteDialogueComponent from "../components/PlanFavoriteDialogue/PlanFavoriteDialogueComponent";
-import "./FavoritesPage.css";
+import styles from "./FavoritesPage.module.css";
 
 export interface FavoritesPageProps {
   launchTab?: number;
@@ -47,23 +47,13 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
   return (
     <IonPage id="main-content">
-      {!(props.showHeader === false) && <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Oeffies</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
-      </IonHeader>}
+      {!(props.showHeader === false) && <Header />}
       <IonContent>
-        <div className="selection">
+        <div className={styles.selection}>
           <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className="radio" value="Stations" />
-            <IonRadio onClick={() => swiper?.slideTo(1)} className="radio" value="Routes" />
-            <IonRadio onClick={() => swiper?.slideTo(2)} className="radio" value="Journeys" />
+            <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
+            <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
+            <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>

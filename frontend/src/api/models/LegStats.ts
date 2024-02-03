@@ -13,12 +13,24 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { LegStatsCancellationStat } from './LegStatsCancellationStat';
+import {
+    LegStatsCancellationStatFromJSON,
+    LegStatsCancellationStatFromJSONTyped,
+    LegStatsCancellationStatToJSON,
+} from './LegStatsCancellationStat';
 import type { LegStatsDestinationDelayStats } from './LegStatsDestinationDelayStats';
 import {
     LegStatsDestinationDelayStatsFromJSON,
     LegStatsDestinationDelayStatsFromJSONTyped,
     LegStatsDestinationDelayStatsToJSON,
 } from './LegStatsDestinationDelayStats';
+import type { LegStatsInterchangeReachableStat } from './LegStatsInterchangeReachableStat';
+import {
+    LegStatsInterchangeReachableStatFromJSON,
+    LegStatsInterchangeReachableStatFromJSONTyped,
+    LegStatsInterchangeReachableStatToJSON,
+} from './LegStatsInterchangeReachableStat';
 import type { LegStatsOriginDelayStats } from './LegStatsOriginDelayStats';
 import {
     LegStatsOriginDelayStatsFromJSON,
@@ -44,6 +56,18 @@ export interface LegStats {
      * @memberof LegStats
      */
     destinationDelayStats: LegStatsDestinationDelayStats;
+    /**
+     * 
+     * @type {LegStatsInterchangeReachableStat}
+     * @memberof LegStats
+     */
+    interchangeReachableStat: LegStatsInterchangeReachableStat;
+    /**
+     * 
+     * @type {LegStatsCancellationStat}
+     * @memberof LegStats
+     */
+    cancellationStat: LegStatsCancellationStat;
 }
 
 /**
@@ -53,6 +77,8 @@ export function instanceOfLegStats(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "originDelayStats" in value;
     isInstance = isInstance && "destinationDelayStats" in value;
+    isInstance = isInstance && "interchangeReachableStat" in value;
+    isInstance = isInstance && "cancellationStat" in value;
 
     return isInstance;
 }
@@ -69,6 +95,8 @@ export function LegStatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         
         'originDelayStats': LegStatsOriginDelayStatsFromJSON(json['originDelayStats']),
         'destinationDelayStats': LegStatsDestinationDelayStatsFromJSON(json['destinationDelayStats']),
+        'interchangeReachableStat': LegStatsInterchangeReachableStatFromJSON(json['interchangeReachableStat']),
+        'cancellationStat': LegStatsCancellationStatFromJSON(json['cancellationStat']),
     };
 }
 
@@ -83,6 +111,8 @@ export function LegStatsToJSON(value?: LegStats | null): any {
         
         'originDelayStats': LegStatsOriginDelayStatsToJSON(value.originDelayStats),
         'destinationDelayStats': LegStatsDestinationDelayStatsToJSON(value.destinationDelayStats),
+        'interchangeReachableStat': LegStatsInterchangeReachableStatToJSON(value.interchangeReachableStat),
+        'cancellationStat': LegStatsCancellationStatToJSON(value.cancellationStat),
     };
 }
 

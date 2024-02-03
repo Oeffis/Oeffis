@@ -32,6 +32,7 @@
   flex-direction: column;
   align-content: center;
   justify-content: center;
+  background-color: transparent;
 }
 
 .center_all_row {
@@ -59,7 +60,7 @@
 }
 
 .date_time_card{
-  background-color: transparent;
+  --ion-item-background: transparent;
   border: 1px solid darkslategrey;
   border-radius: 1rem;
   margin-inline-start: 4%;
@@ -76,10 +77,13 @@
   flex-direction: row;
   justify-content: center;
   padding-bottom: 0.5rem;
+  flex-wrap: nowrap;
 }
 
 .toggle_button_label{
   align-self: center;
+  text-wrap: nowrap;
+  --overflow: visible;
 }
 
 .date_time_button {
@@ -159,4 +163,8 @@
   flex-direction: row;
   justify-content: flex-end;
   width: 100%;
+}
+
+.input_field_item {
+  --ion-item-background: transparent;
 }

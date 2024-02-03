@@ -1,3 +1,4 @@
+import { Inject, Injectable } from "@nestjs/common";
 import { JourneyLocationElement as VrrJourneyLocation } from "@oeffis/vrr_client/dist/vendor/VrrApiTypes";
 import { ParentLocation } from "../../../locationFinder/entity/location.entity";
 import { LocationMapperService } from "../../../locationFinder/service/mapper/locationMapper.service";
@@ -9,11 +10,14 @@ import { JourneyLocation, LegDestinationLocation, LegOriginLocation } from "../.
  * journey location(s) of custom type ({@link JourneyLocation}, {@link LegOriginLocation}, {@link
  * LegDestinationLocation}).
  */
+@Injectable()
 export class JourneyLocationMapperService {
 
   private readonly locationMapper: LocationMapperService;
 
-  constructor(locationMapper: LocationMapperService) {
+  constructor(
+    @Inject(LocationMapperService) locationMapper: LocationMapperService
+  ) {
     this.locationMapper = locationMapper;
   }
 
