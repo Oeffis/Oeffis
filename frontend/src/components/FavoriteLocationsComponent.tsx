@@ -8,7 +8,7 @@ import {
   IonSkeletonText,
   ItemReorderEventDetail
 } from "@ionic/react";
-import { star } from "ionicons/icons";
+import { heart } from "ionicons/icons";
 import React from "react";
 import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
@@ -37,9 +37,10 @@ export const FavoriteLocationsComponent: React.FC<FavoriteLocationsComponentProp
         >
           {
             favoriteLocations.length > 0
-              ? favoriteLocations.map((location, idx) => (
+              ? favoriteLocations.map((location) => (
                 <FavoriteLocationEntryComponent
-                  identifier={idx}
+                  key={location.locationId}
+                  identifier={location.locationId}
                   onLocationSelected={props.onLocationSelected}
                   location={location} />
               ))
@@ -54,12 +55,12 @@ export const FavoriteLocationsComponent: React.FC<FavoriteLocationsComponentProp
 export interface FavoriteLocationEntryComponentProps {
   onLocationSelected?: (location: CreateFavoriteLocation) => void;
   location: PersistedObject<CreateFavoriteLocation>;
-  identifier: number;
+  identifier: string;
 }
 
 const FavoriteLocationEntryComponent: React.FC<FavoriteLocationEntryComponentProps> = (props) => {
   const location = useLocationByIdOrNull(props.location.locationId);
-  const { removeFavoriteLocation } = useFavoriteLocations();
+  const { removeFavoriteLocationById } = useFavoriteLocations();
 
   const isReady = location !== null;
   return <IonItem
@@ -70,7 +71,7 @@ const FavoriteLocationEntryComponent: React.FC<FavoriteLocationEntryComponentPro
       isReady ?
         <LoadedFavoriteLocationEntryComponent
           location={location}
-          starClicked={() => { removeFavoriteLocation(props.location); }}
+          starClicked={() => { removeFavoriteLocationById(props.location.id); }}
         />
         : <PendingFavoriteLocationEntry />
     }
@@ -91,8 +92,8 @@ const LoadedFavoriteLocationEntryComponent: React.FC<LoadedFavouriteLocationEntr
     </div>
 
     <IonIcon
-      icon={star}
-      color="warning"
+      icon={heart}
+      color="primary"
       onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
       title="Remove from favorites"
     />
@@ -104,6 +105,6 @@ const PendingFavoriteLocationEntry: React.FC = () => <>
   <IonLabel>
     <IonSkeletonText animated={true} style={{ width: "50%" }} />
   </IonLabel>
-  <IonIcon icon={star} />
+  <IonIcon icon={heart} />
   <IonReorder slot="start" />
 </>;

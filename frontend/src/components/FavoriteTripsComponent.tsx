@@ -8,7 +8,8 @@ import {
   IonSkeletonText,
   ItemReorderEventDetail
 } from "@ionic/react";
-import { star } from "ionicons/icons";
+import { format } from "date-fns";
+import { heart } from "ionicons/icons";
 import React from "react";
 import { Location } from "../api";
 import { useLocationByIdOrNull } from "../hooks/useLocationByIdOrNull";
@@ -17,7 +18,7 @@ import { PersistedObject } from "../services/persistence/generatePersistedObject
 import styles from "./FavoriteTripsComponent.module.css";
 
 export interface FavoriteTripsComponentProps {
-  onTripSelected: (trip: CreateFavoriteTrip) => void;
+  onTripSelected: (route: CreateFavoriteTrip, routerLink: string) => void;
 }
 
 export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (props) => {
@@ -39,9 +40,10 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
             favoriteTrips.length > 0
               ? favoriteTrips.map((trip, idx) => (
                 <FavoriteTripEntryComponent
+                  key={idx}
                   identifier={idx}
-                  onTripSelected={props.onTripSelected}
-                  trip={trip} />
+                  trip={trip}
+                  onTripSelected={props.onTripSelected} />
               ))
               : <IonLabel>Keine favorisierten Trips vorhanden</IonLabel>
           }
@@ -51,9 +53,9 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
   );
 };
 export interface FavoriteTripEntryComponentProps {
-  onTripSelected: (trip: CreateFavoriteTrip) => void;
   trip: PersistedObject<CreateFavoriteTrip>;
   identifier: number;
+  onTripSelected: (trip: CreateFavoriteTrip, routerLink: string) => void;
 }
 
 const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (props) => {
@@ -66,8 +68,9 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
   const isReady = origin !== null && destination !== null;
 
   return <IonItem
+    onClick={() => props.onTripSelected(props.trip,
+      `/journey?origin=${origin?.id}&destination=${destination?.id}&departureTime=${startTime}`)}
     key={props.identifier}
-    onClick={() => props.onTripSelected(props.trip)}
   >
     {
       isReady ?
@@ -93,11 +96,7 @@ const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> 
   <>
     <div className={styles.trip_information}>
       <IonLabel>
-        {props.startTime.getDate() < 10 ? "0" + props.startTime.getDate() : props.startTime.getDate()}.
-        {props.startTime.getMonth() < 10 ? "0" + props.startTime.getMonth() : props.startTime.getMonth()}.
-        {props.startTime.getFullYear() + " - "}
-        {props.startTime.getHours() < 10 ? "0" + props.startTime.getHours() : props.startTime.getHours()}:
-        {props.startTime.getMinutes() < 10 ? "0" + props.startTime.getMinutes() : props.startTime.getMinutes()} Uhr
+        {format(props.startTime, "dd/MM/yyyy HH:mm")} Uhr
       </IonLabel>
       <div>
         <IonLabel>
@@ -109,8 +108,8 @@ const LoadedFavoriteTripEntryComponent: React.FC<LoadedFavouriteTripEntryProps> 
       </div>
     </div>
     <IonIcon
-      icon={star}
-      color="warning"
+      icon={heart}
+      color="primary"
       onClick={(e): void => { props.starClicked(); e.stopPropagation(); }}
       title="Remove from favorites"
     />
@@ -123,6 +122,6 @@ const PendingFavoriteTripEntry: React.FC = () => <>
   <IonLabel>
     <IonSkeletonText animated={true} className={styles.pending} />
   </IonLabel>
-  <IonIcon icon={star} />
+  <IonIcon icon={heart} />
   <IonReorder slot="start" />
 </>;

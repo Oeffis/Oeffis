@@ -10,21 +10,23 @@ import { FavoriteLocationsComponent } from "../components/FavoriteLocationsCompo
 import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
 import { Header } from "../components/Header";
-import { CreateFavoriteLocation, CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
+import PlanFavoriteDialogueComponent from "../components/PlanFavoriteDialogue/PlanFavoriteDialogueComponent";
 import styles from "./FavoritesPage.module.css";
 
 export interface FavoritesPageProps {
   launchTab?: number;
   showHeader?: boolean;
-  onTripSelected?: (trip: CreateFavoriteTrip) => void;
-  onRouteSelected?: (trip: CreateFavoriteRoute) => void;
-  onLocationSelected?: (trip: CreateFavoriteLocation) => void;
 }
 const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
   const [slideName, setSlideName] = useState<string>("Stations");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(props.launchTab ?? 0);
   const [swiper, setSwiper] = useState<Swiper | null>(null);
+  const [displayDialogue, setDisplayDialogue] = useState<boolean>(false);
+  const [routerLink, setRouterLink] = useState<string>("");
+  const [origin, setOrigin] = useState<string | null>(null);
+  const [destination, setDestination] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<string>("");
 
   const initialSlide = props.launchTab ?? 0;
   const setSlideNames = (): void => {
@@ -55,7 +57,7 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>
-
+        <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
         <SwiperReact
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
@@ -68,13 +70,13 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
         >
           <div>
             <SwiperSlide>
-              <FavoriteLocationsComponent onLocationSelected={(route: CreateFavoriteLocation) => { props.onLocationSelected ? props.onLocationSelected(route) : void 0; }} />
+              <FavoriteLocationsComponent />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { props.onRouteSelected ? props.onRouteSelected(route) : void 0; }} />
+              <FavoriteRoutesComponent onRouteSelected={(route, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(route.originId); setDestination(route.destinationId); }} />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { props.onTripSelected ? props.onTripSelected(trip) : void 0; }} />
+              <FavoriteTripsComponent onTripSelected={(trip, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(trip.originId); setDestination(trip.destinationId); setStartTime(trip.startTime); }} />
             </SwiperSlide>
           </div>
         </SwiperReact>
