@@ -17,7 +17,11 @@ import { CreateFavoriteTrip, useFavoriteTrips } from "../services/favorites/Favo
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
 import styles from "./FavoriteTripsComponent.module.css";
 
-export const FavoriteTripsComponent: React.FC = () => {
+export interface FavoriteTripsComponentProps {
+  onTripSelected: (route: CreateFavoriteTrip, routerLink: string) => void;
+}
+
+export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (props) => {
   const { favoriteTrips, setFavoriteTrips } = useFavoriteTrips();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
@@ -36,8 +40,10 @@ export const FavoriteTripsComponent: React.FC = () => {
             favoriteTrips.length > 0
               ? favoriteTrips.map((trip, idx) => (
                 <FavoriteTripEntryComponent
+                  key={idx}
                   identifier={idx}
-                  trip={trip} />
+                  trip={trip}
+                  onTripSelected={props.onTripSelected} />
               ))
               : <IonLabel>Keine favorisierten Trips vorhanden</IonLabel>
           }
@@ -49,6 +55,7 @@ export const FavoriteTripsComponent: React.FC = () => {
 export interface FavoriteTripEntryComponentProps {
   trip: PersistedObject<CreateFavoriteTrip>;
   identifier: number;
+  onTripSelected: (trip: CreateFavoriteTrip, routerLink: string) => void;
 }
 
 const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (props) => {
@@ -61,7 +68,8 @@ const FavoriteTripEntryComponent: React.FC<FavoriteTripEntryComponentProps> = (p
   const isReady = origin !== null && destination !== null;
 
   return <IonItem
-    routerLink={`/journey?origin=${origin?.id}&destination=${destination?.id}&departureTime=${startTime}`}
+    onClick={() => props.onTripSelected(props.trip,
+      `/journey?origin=${origin?.id}&destination=${destination?.id}&departureTime=${startTime}`)}
     key={props.identifier}
   >
     {

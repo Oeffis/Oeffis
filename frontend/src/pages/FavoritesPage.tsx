@@ -10,7 +10,7 @@ import logo from "../../public/images/OeffisLogo1.svg";
 import { FavoriteLocationsComponent } from "../components/FavoriteLocationsComponent";
 import { FavoriteRoutesComponent } from "../components/FavoriteRoutesComponent";
 import { FavoriteTripsComponent } from "../components/FavoriteTripsComponent";
-import { CreateFavoriteRoute, CreateFavoriteTrip } from "../services/favorites/FavoritesContext";
+import PlanFavoriteDialogueComponent from "../components/PlanFavoriteDialogue/PlanFavoriteDialogueComponent";
 import "./FavoritesPage.css";
 
 export interface FavoritesPageProps {
@@ -22,6 +22,11 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
   const [slideName, setSlideName] = useState<string>("Stations");
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(props.launchTab ?? 0);
   const [swiper, setSwiper] = useState<Swiper | null>(null);
+  const [displayDialogue, setDisplayDialogue] = useState<boolean>(false);
+  const [routerLink, setRouterLink] = useState<string>("");
+  const [origin, setOrigin] = useState<string | null>(null);
+  const [destination, setDestination] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<string>("");
 
   const initialSlide = props.launchTab ?? 0;
   const setSlideNames = (): void => {
@@ -62,7 +67,7 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
           </IonRadioGroup>
           <p>{slideName}</p>
         </div>
-
+        <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
         <SwiperReact
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
@@ -78,10 +83,10 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
               <FavoriteLocationsComponent />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteRoutesComponent onRouteSelected={(route: CreateFavoriteRoute) => { console.log(route); }} />
+              <FavoriteRoutesComponent onRouteSelected={(route, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(route.originId); setDestination(route.destinationId); }} />
             </SwiperSlide>
             <SwiperSlide>
-              <FavoriteTripsComponent onTripSelected={(trip: CreateFavoriteTrip): void => { console.log(trip); }} />
+              <FavoriteTripsComponent onTripSelected={(trip, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(trip.originId); setDestination(trip.destinationId); setStartTime(trip.startTime); }} />
             </SwiperSlide>
           </div>
         </SwiperReact>

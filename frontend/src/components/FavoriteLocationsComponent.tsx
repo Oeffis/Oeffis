@@ -39,6 +39,7 @@ export const FavoriteLocationsComponent: React.FC<FavoriteLocationsComponentProp
             favoriteLocations.length > 0
               ? favoriteLocations.map((location) => (
                 <FavoriteLocationEntryComponent
+                  key={location.locationId}
                   identifier={location.locationId}
                   onLocationSelected={props.onLocationSelected}
                   location={location} />

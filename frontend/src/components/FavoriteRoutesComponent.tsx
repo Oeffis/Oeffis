@@ -16,7 +16,11 @@ import { CreateFavoriteRoute, useFavoriteRoutes } from "../services/favorites/Fa
 import { PersistedObject } from "../services/persistence/generatePersistedObjectStorage";
 import styles from "./FavoriteRoutesComponent.module.css";
 
-export const FavoriteRoutesComponent: React.FC = () => {
+export interface FavoriteRoutesComponentProps {
+  onRouteSelected: (route: CreateFavoriteRoute, routerLink: string) => void;
+}
+
+export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (props) => {
   const { favoriteRoutes, setFavoriteRoutes } = useFavoriteRoutes();
 
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
@@ -35,8 +39,10 @@ export const FavoriteRoutesComponent: React.FC = () => {
             favoriteRoutes.length > 0
               ? favoriteRoutes.map((route, idx) => (
                 <FavoriteRouteEntryComponent
+                  key={idx}
                   identifier={idx}
-                  route={route} />
+                  route={route}
+                  onRouteSelected={props.onRouteSelected} />
               ))
               : <IonLabel>Keine favorisierten Routen vorhanden</IonLabel>
           }
@@ -49,6 +55,7 @@ export const FavoriteRoutesComponent: React.FC = () => {
 export interface FavoriteRouteEntryComponentProps {
   route: PersistedObject<CreateFavoriteRoute>;
   identifier: number;
+  onRouteSelected: (route: CreateFavoriteRoute, routerLink: string) => void;
 }
 
 const FavoriteRouteEntryComponent: React.FC<FavoriteRouteEntryComponentProps> = (props) => {
@@ -57,8 +64,9 @@ const FavoriteRouteEntryComponent: React.FC<FavoriteRouteEntryComponentProps> = 
   const { removeFavoriteRoute } = useFavoriteRoutes();
 
   const isReady = origin !== null && destination !== null;
-  console.log(props.route);
-  return <IonItem routerLink={`/journey?origin=${origin?.id}&destination=${destination?.id}`}
+  return <IonItem
+    onClick={() => props.onRouteSelected(props.route,
+      `/journey?origin=${origin?.id}&destination=${destination?.id}`)}
     key={props.identifier}
   >
     {
