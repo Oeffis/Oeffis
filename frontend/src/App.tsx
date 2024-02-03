@@ -16,6 +16,7 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
+import { useEffect, useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Menu from "./components/Menu";
 import ResultRoutes from "./components/ResultRoutes/ResultRoutes";
@@ -25,7 +26,7 @@ import JourneyPage from "./pages/JourneyPage";
 import LiveNavigation from "./pages/LiveNavigation/LiveNavigation";
 import StatsPage from "./pages/StatsPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
-import UserPreferencesPage from "./pages/UserPreferencesPage";
+import UserPreferencesPage, { UserPreferences, UserPreferencesValues } from "./pages/UserPreferencesPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
 import {
@@ -34,56 +35,79 @@ import {
   FavoriteTripsProvider
 } from "./services/favorites/FavoritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
+import { PersistenceService } from "./services/persistence/PersistenceService";
 import "./theme/variables.css";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <AppConfigProvider>
-    <CurrentLocationProvider>
-      <ApiClientsProvider>
-        <PersistenceProvider>
-          <FavoriteLocationsProvider>
-            <FavoriteTripsProvider>
-              <FavoriteRoutesProvider>
-                <IonApp>
-                  <IonReactRouter>
-                    <Menu />
-                    <Switch>
-                      <Route exact path="/">
-                        <Redirect to="/journey" />
-                      </Route>
-                      <Route exact path="/journey">
-                        <JourneyPage />
-                      </Route>
-                      <Route exact path="/favorites">
-                        <FavoritesPage />
-                      </Route>
-                      <Route exact path="/userHistory">
-                        <UserHistoryPage />
-                      </Route>
-                      <Route exact path="/userPreferences">
-                        <UserPreferencesPage />
-                      </Route>
-                      <Route exact path="/results">
-                        <ResultRoutes />
-                      </Route>
-                      <Route exact path="/liveNavigation">
-                        <LiveNavigation />
-                      </Route>
-                      <Route exact path="/stats">
-                        <StatsPage />
-                      </Route>
-                    </Switch >
-                  </IonReactRouter >
-                </IonApp >
-              </FavoriteRoutesProvider >
-            </FavoriteTripsProvider >
-          </FavoriteLocationsProvider >
-        </PersistenceProvider >
-      </ApiClientsProvider >
-    </CurrentLocationProvider >
-  </AppConfigProvider >
-);
+const App: React.FC = () => {
+
+  const persistance = new PersistenceService();
+  const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState<boolean>();
+
+  useEffect(() => {
+    persistance.get(UserPreferences.isDarkThemeEnabled) !== undefined
+      ? persistance.get(UserPreferences.isDarkThemeEnabled) === UserPreferencesValues.enabled
+        ? setIsDarkThemeEnabled(true)
+        : setIsDarkThemeEnabled(false)
+      : setIsDarkThemeEnabled(false);
+    isDarkThemeEnabled
+      ? document.body.setAttribute("color-theme", "dark")
+      : document.body.removeAttribute("color-theme");
+  }, [isDarkThemeEnabled]);
+
+  return (
+    <AppConfigProvider>
+      <CurrentLocationProvider>
+        <ApiClientsProvider>
+          <PersistenceProvider>
+            <FavoriteLocationsProvider>
+              <FavoriteTripsProvider>
+                <FavoriteRoutesProvider>
+                  <IonApp>
+                    <IonReactRouter>
+                      <Menu />
+                      <Switch>
+                        <Route exact path="/">
+                          <Redirect to="/journey" />
+                        </Route>
+                        <Route exact path="/journey">
+                          <JourneyPage
+                            isDarkThemeEnabeld={isDarkThemeEnabled ?? false}
+                          />
+                        </Route>
+                        <Route exact path="/favorites">
+                          <FavoritesPage />
+                        </Route>
+                        <Route exact path="/userHistory">
+                          <UserHistoryPage />
+                        </Route>
+                        <Route exact path="/userPreferences">
+                          <UserPreferencesPage
+                            isDarkThemeEnabled={isDarkThemeEnabled ?? false}
+                            setIsDarkThemeEnabled={setIsDarkThemeEnabled}
+                          />
+                        </Route>
+                        <Route exact path="/results">
+                          <ResultRoutes />
+                        </Route>
+                        <Route exact path="/liveNavigation">
+                          <LiveNavigation />
+                        </Route>
+                        <Route exact path="/stats">
+                          <StatsPage />
+                        </Route>
+                      </Switch >
+                    </IonReactRouter >
+                  </IonApp >
+                </FavoriteRoutesProvider >
+              </FavoriteTripsProvider >
+            </FavoriteLocationsProvider >
+          </PersistenceProvider >
+        </ApiClientsProvider >
+      </CurrentLocationProvider >
+    </AppConfigProvider >
+  );
+};
 
 export default App;
