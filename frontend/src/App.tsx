@@ -23,6 +23,7 @@ import { CurrentLocationProvider } from "./hooks/useCurrentLocation";
 import FavoritesPage from "./pages/FavoritesPage";
 import JourneyPage from "./pages/JourneyPage";
 import LiveNavigation from "./pages/LiveNavigation/LiveNavigation";
+import StatsPage from "./pages/StatsPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import UserPreferencesPage from "./pages/UserPreferencesPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
@@ -69,6 +70,9 @@ const App: React.FC = () => (
                       </Route>
                       <Route exact path="/liveNavigation">
                         <LiveNavigation />
+                      </Route>
+                      <Route exact path="/stats">
+                        <StatsPage />
                       </Route>
                     </Switch >
                   </IonReactRouter >
