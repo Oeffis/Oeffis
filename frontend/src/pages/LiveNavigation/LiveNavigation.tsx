@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonTitle, IonToast, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToast, IonToolbar } from "@ionic/react";
 import { notificationsCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import logo from "../../../public/images/OeffisLogo1.svg";
@@ -14,7 +14,7 @@ const LiveNavigation: React.FC = () => {
   const currentLocation = useCurrentLocation();
 
   const [displayArrivedNotification, setDisplayArrivedNotification] = useState<boolean>(false);
-  const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("You arrived at ... !");
+  const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("Sie haben die Haltestelle ... erreicht.");
 
   const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
   let selectedJourney: IJourney | null = null;
@@ -28,7 +28,7 @@ const LiveNavigation: React.FC = () => {
     for (const step of selectedJourney.stops) {
       step.arrivalTime = new Date(step.arrivalTime);
       step.startTime = new Date(step.startTime);
-      console.log(step.stopName + " " + step.stopIds[step.stopIds.length - 1]);
+      //console.log(step.stopName + " " + step.stopIds[step.stopIds.length - 1]);
       stopIds.push(step.stopIds[step.stopIds.length - 1]);
     }
   }
@@ -37,10 +37,10 @@ const LiveNavigation: React.FC = () => {
   /* console.log("LOCATIONS");
   console.log(locations); */
 
-  const isInRadius = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
-    const interval = 0.0001;
-    return ((destination.latitude + interval) >= position.latitude && (destination.latitude - interval) <= position.latitude)
-      && ((destination.longitude + interval) >= position.longitude && (destination.longitude - interval) <= position.longitude);
+  const isCurrentLocationArrivedAtStopLocation = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
+    const range = 0.000001;
+    return ((destination.latitude + range) >= position.latitude && (destination.latitude - range) <= position.latitude)
+      && ((destination.longitude + range) >= position.longitude && (destination.longitude - range) <= position.longitude);
   };
 
   const watchPosition = (): void => {
@@ -50,20 +50,24 @@ const LiveNavigation: React.FC = () => {
     } as LocationCoordinates;
 
     locations.map(location => {
-      if (isInRadius(currentPositionCoordinates, location.details.coordinates)) {
+      /* console.log(currentPositionCoordinates);
+      console.log(location.details.coordinates); */
+      if (isCurrentLocationArrivedAtStopLocation(currentPositionCoordinates, location.details.coordinates)) {
         setDisplayArrivedNotification(true);
-        setArrivedNotificationMessage("You arrived at " + location.name + " !");
+        setArrivedNotificationMessage("Sie haben die Haltestelle " + location.name + " erreicht.");
+        console.log("Sie haben die Haltestelle " + location.name + " erreicht.");
       }
     });
   };
 
   useEffect(() => {
-    const intervalWatchPosition = setInterval(() => watchPosition, 5000);
-    return (() => clearInterval(intervalWatchPosition));
-  }, []);
+    watchPosition();
+    /* const intervalWatchPosition = setInterval(() => watchPosition, 5000);
+    return (() => clearInterval(intervalWatchPosition)); */
+  }, [currentLocation]);
 
   return (
-    <>
+    <IonPage id="main-content">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -87,9 +91,15 @@ const LiveNavigation: React.FC = () => {
           size="default" expand="block">
           Navigation Beenden
         </IonButton>
-        <IonToast isOpen={displayArrivedNotification} message={arrivedNotificationMessage} position="top" duration={3000} icon={notificationsCircle} />
+        <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton>
+        <IonToast
+          isOpen={displayArrivedNotification}
+          message={arrivedNotificationMessage}
+          position="bottom"
+          duration={3000}
+          icon={notificationsCircle} />
       </IonContent>
-    </>);
+    </IonPage>);
 };
 
 export default LiveNavigation;
