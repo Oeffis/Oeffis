@@ -1,4 +1,5 @@
-import { IonContent, IonPage, IonRadio, IonRadioGroup } from "@ionic/react";
+import { IonContent, IonIcon, IonPage, IonRadio, IonRadioGroup, IonRow } from "@ionic/react";
+import { chevronBackOutline, chevronForwardOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -50,11 +51,15 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
       {!(props.showHeader === false) && <Header />}
       <IonContent>
         <div className={styles.selection}>
-          <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
-            <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
-            <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
-          </IonRadioGroup>
+          <IonRow>
+            <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
+            <IonRadioGroup value={slideName}>
+              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
+            </IonRadioGroup>
+            <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+          </IonRow>
           <p>{slideName}</p>
         </div>
         <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
@@ -69,13 +74,13 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
           onInit={(swiper: Swiper) => setSwiper(swiper)}
         >
           <div>
-            <SwiperSlide>
+            <SwiperSlide className={styles.bottom_responsiveness_extension}>
               <FavoriteLocationsComponent />
             </SwiperSlide>
-            <SwiperSlide>
+            <SwiperSlide className={styles.bottom_responsiveness_extension}>
               <FavoriteRoutesComponent onRouteSelected={(route, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(route.originId); setDestination(route.destinationId); }} />
             </SwiperSlide>
-            <SwiperSlide>
+            <SwiperSlide className={styles.bottom_responsiveness_extension}>
               <FavoriteTripsComponent onTripSelected={(trip, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(trip.originId); setDestination(trip.destinationId); setStartTime(trip.startTime); }} />
             </SwiperSlide>
           </div>

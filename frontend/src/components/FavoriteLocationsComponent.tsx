@@ -44,7 +44,9 @@ export const FavoriteLocationsComponent: React.FC<FavoriteLocationsComponentProp
                   onLocationSelected={props.onLocationSelected}
                   location={location} />
               ))
-              : <IonLabel>Keine favorisierten Locationn vorhanden</IonLabel>
+              : <IonLabel>
+                <p className={styles.no_favorites_text}>Keine favorisierten Locations vorhanden</p>
+              </IonLabel>
           }
         </IonReorderGroup>
       </IonList>

@@ -5,3 +5,8 @@
 .pending {
   width: 50%;
 }
+
+.no_favorites_text {
+  padding-bottom: 79vh;
+  padding-left: 1rem;
+}

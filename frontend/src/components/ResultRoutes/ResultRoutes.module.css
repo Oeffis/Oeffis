@@ -64,6 +64,13 @@ IonButton {
   font-weight: bold;
 }
 
+.arrow_icon {
+  font-size: 1.5rem;
+  color: grey;
+  opacity: 50%;
+  padding-top: 0.16rem;
+}
+
 #map {
   transition: 500ms ease-in-out;
   height: 0;

@@ -9,3 +9,15 @@
 .radio {
   margin: 5px;
 }
+
+.bottom_responsiveness_extension {
+  min-height: 10%;
+  margin-bottom: 79vh;
+}
+
+.arrow_icon {
+  font-size: 1.5rem;
+  color: grey;
+  opacity: 50%;
+  padding-top: 0.16rem;
+}
