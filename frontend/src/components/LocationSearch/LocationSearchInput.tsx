@@ -29,6 +29,7 @@ export interface LocationSearchInputProps {
   inputLabel: string;
   prefixDataTestId?: string;
   searchInput?: string;
+  isDarkThemeEnabeled: boolean;
 }
 
 export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Element => {
@@ -126,6 +127,7 @@ export const LocationSearchInput = (props: LocationSearchInputProps): JSX.Elemen
               destinationId={null}
               locationIds={[...foundLocations.searchResults]}
               showLines={false}
+              isDarkThemeEnabeled={props.isDarkThemeEnabeled}
               onItemClicked={setSelectedLocationAndCloseModal}
             />
             : <IonList>
