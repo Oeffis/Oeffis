@@ -2,6 +2,8 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonItemDivider,
+  IonPage,
   IonRadio,
   IonRadioGroup,
   IonRow
@@ -35,7 +37,7 @@ import { Button } from "../controls/Button";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import styles from "./ResultRoutes.module.css";
 
-export const JoruneyLocationResolver: React.FC = () => {
+export const JourneyLocationResolver: React.FC = () => {
 
   const [originId] = useStateParams<string>("", "origin", String, String);
   const [destinationId] = useStateParams<string>("", "destination", String, String);
@@ -45,16 +47,16 @@ export const JoruneyLocationResolver: React.FC = () => {
 
   if (originLocation !== null && destinationLocation !== null) {
     return (
-      <>
+      <IonPage id="main-content">
         <ResultRoutes
           origin={originLocation}
           destination={destinationLocation}
         />
-      </>
+      </IonPage>
     );
   }
 
-  return (<p>Lade daten ...</p>);
+  return (<p>Lade Daten ...</p>);
 
 };
 
@@ -156,54 +158,51 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   return (
     <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
       <Header />
-      <IonContent>
-        <div id="map" style={{ height: mapHeight + "%" }}>
-          <LeafletMapContainer
-            originId={origin.id}
-            destinationId={destination.id}
-            locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
-            showLines={true}
-          />
+      <div id="map" style={{ height: mapHeight + "%" }}>
+        <LeafletMapContainer
+          originId={origin.id}
+          destinationId={destination.id}
+          locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
+          showLines={true}
+        />
+      </div>
+      <IonItemDivider color="light" className={styles.result_header}>
+        {
+          <div className={styles.left_align}>
+            <IonButton className={styles.circle_button}
+            >
+              <IonIcon icon={mapOutline} />
+            </IonButton>
+          </div>
+        }
+        <div className={styles.result_swiper}>
+          <IonRow>
+            <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
+            <IonRadioGroup value={slideName}>
+              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
+            </IonRadioGroup>
+            <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+          </IonRow>
+          <h5 className={styles.headline}>{slideName}</h5>
         </div>
-        <div className={styles.resultHeader}>
+        <div className={styles.back_button}>
+          <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
+        </div>
+        <div className={styles.right_align}>
           {
-            <div className={styles.leftAlign}>
-              <IonButton className={styles.circleButton}
-              //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
-              >
-                <IonIcon icon={mapOutline} />
-              </IonButton>
-            </div>
+            swiper?.activeIndex === 1 && selectedJourney &&
+            <IonButton className={styles.circle_button} routerLink="livenavigation">
+              <IonIcon icon={play} />
+            </IonButton>
           }
-          <div className={styles.resultSwiper}>
-            <IonRow>
-              <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
-              <IonRadioGroup value={slideName}>
-                <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
-                <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
-              </IonRadioGroup>
-              <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
-
-            </IonRow>
-
-            <h4 className={styles.headline}>{slideName}</h4>
-          </div>
-          <div className={styles.backButton}>
-            <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
-          </div>
-          <div className={styles.rightAlign}>
-            {
-              swiper?.activeIndex === 1 && selectedJourney &&
-              <IonButton className={styles.circleButton} routerLink="livenavigation">
-                <IonIcon icon={play} />
-              </IonButton>
-            }
-          </div>
         </div>
-        <SwiperReact className={styles.swiperDiv}
+      </IonItemDivider>
+      {result.type === "error" && <div>Error: {result.error.message}</div>}
+      {result.type === "pending" && <div>Suche Routen...</div>}
+      <IonContent>
+        <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
@@ -236,4 +235,4 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     </>);
 };
 
-export default JoruneyLocationResolver;
+export default JourneyLocationResolver;

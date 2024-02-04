@@ -16,6 +16,7 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
+import { useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Menu from "./components/Menu";
 import ResultRoutes from "./components/ResultRoutes/ResultRoutes";
@@ -38,52 +39,59 @@ import "./theme/variables.css";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <AppConfigProvider>
-    <CurrentLocationProvider>
-      <ApiClientsProvider>
-        <PersistenceProvider>
-          <FavoriteLocationsProvider>
-            <FavoriteTripsProvider>
-              <FavoriteRoutesProvider>
-                <IonApp>
-                  <IonReactRouter>
-                    <Menu />
-                    <Switch>
-                      <Route exact path="/">
-                        <Redirect to="/journey" />
-                      </Route>
-                      <Route exact path="/journey">
-                        <JourneyPage />
-                      </Route>
-                      <Route exact path="/favorites">
-                        <FavoritesPage />
-                      </Route>
-                      <Route exact path="/userHistory">
-                        <UserHistoryPage />
-                      </Route>
-                      <Route exact path="/userPreferences">
-                        <UserPreferencesPage />
-                      </Route>
-                      <Route exact path="/results">
-                        <ResultRoutes />
-                      </Route>
-                      <Route exact path="/liveNavigation">
-                        <LiveNavigation />
-                      </Route>
-                      <Route exact path="/stats">
-                        <StatsPage />
-                      </Route>
-                    </Switch >
-                  </IonReactRouter >
-                </IonApp >
-              </FavoriteRoutesProvider >
-            </FavoriteTripsProvider >
-          </FavoriteLocationsProvider >
-        </PersistenceProvider >
-      </ApiClientsProvider >
-    </CurrentLocationProvider >
-  </AppConfigProvider >
-);
+const App: React.FC = () => {
+
+  const [currnetJourneyUrl, setCurrentJourneyUrl] = useState<string>("/journey");
+
+  return (
+    <AppConfigProvider>
+      <CurrentLocationProvider>
+        <ApiClientsProvider>
+          <PersistenceProvider>
+            <FavoriteLocationsProvider>
+              <FavoriteTripsProvider>
+                <FavoriteRoutesProvider>
+                  <IonApp>
+                    <IonReactRouter>
+                      <Menu currentJourneyUrl={currnetJourneyUrl} />
+                      <Switch>
+                        <Route exact path="/">
+                          <Redirect to="/journey" />
+                        </Route>
+                        <Route exact path="/journey">
+                          <JourneyPage
+                            setCurrentJourneyUrl={setCurrentJourneyUrl}
+                          />
+                        </Route>
+                        <Route exact path="/favorites">
+                          <FavoritesPage />
+                        </Route>
+                        <Route exact path="/userHistory">
+                          <UserHistoryPage />
+                        </Route>
+                        <Route exact path="/userPreferences">
+                          <UserPreferencesPage />
+                        </Route>
+                        <Route exact path="/results">
+                          <ResultRoutes />
+                        </Route>
+                        <Route exact path="/liveNavigation">
+                          <LiveNavigation />
+                        </Route>
+                        <Route exact path="/stats">
+                          <StatsPage />
+                        </Route>
+                      </Switch >
+                    </IonReactRouter >
+                  </IonApp >
+                </FavoriteRoutesProvider >
+              </FavoriteTripsProvider >
+            </FavoriteLocationsProvider >
+          </PersistenceProvider >
+        </ApiClientsProvider >
+      </CurrentLocationProvider >
+    </AppConfigProvider >
+  );
+};
 
 export default App;
