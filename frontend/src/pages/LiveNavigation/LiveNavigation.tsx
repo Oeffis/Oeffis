@@ -30,7 +30,7 @@ const LiveNavigation: React.FC = () => {
       if (window.localStorage.getItem("recJourney") !== null) {
         setshowModal(true);
       }
-    }, 3000); // 120000
+    }, 120000);
     return () => clearInterval(intervalId.current);
   }, []);
 

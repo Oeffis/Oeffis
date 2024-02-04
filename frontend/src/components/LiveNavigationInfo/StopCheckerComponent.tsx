@@ -18,16 +18,21 @@ const StopCheckerComponent: React.FC<StopCheckerComponentProps> = (props) => {
   const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("Sie haben die Haltestelle ... erreicht.");
 
   const currentLocation = useCurrentLocation();
-  let locations: Location[] = [];
 
-  if (props.journey !== null) {
+  const getStopoverIds = (journey: IJourney | null): string[] => {
     const stopIds: string[] = [];
-    for (let i = 0; i < props.journey.stops.length - 1; i++) {
-      const stop = props.journey.stops[i];
-      stopIds.push(stop.stopIds[stop.stopIds.length - 1]);
+    if (journey !== null) {
+      for (let i = 0; i < journey.stops.length; i++) {
+        if (journey.stops[i].stopIds.length !== 0) {
+          const stop = journey.stops[i];
+          stopIds.push(stop.stopIds[stop.stopIds.length - 1]);
+        }
+      }
     }
-    locations = stopIds.length > 0 && stopIds !== undefined ? useMultipleLocationsByIdOrNull(stopIds) : [];
-  }
+    return stopIds;
+  };
+
+  const [locations] = useState<Location[]>(useMultipleLocationsByIdOrNull(getStopoverIds(props.journey)));
 
   const isCurrentLocationArrivedAtStopLocation = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
     const range = 0.000001;
@@ -35,7 +40,7 @@ const StopCheckerComponent: React.FC<StopCheckerComponentProps> = (props) => {
       && ((destination.longitude + range) >= position.longitude && (destination.longitude - range) <= position.longitude);
   };
 
-  const watchPosition = (): void => {
+  const checkPosition = (): void => {
     const currentPositionCoordinates: LocationCoordinates = {
       latitude: currentLocation.location?.coords.latitude,
       longitude: currentLocation.location?.coords.longitude
@@ -52,8 +57,8 @@ const StopCheckerComponent: React.FC<StopCheckerComponentProps> = (props) => {
 
   useEffect(() => {
     intervalId.current = setInterval(() => {
-      watchPosition();
-      console.log("watching position");
+      checkPosition();
+      console.log("checking position");
     }, 5000);
     return () => clearInterval(intervalId.current);
   }, [props.journey]);
