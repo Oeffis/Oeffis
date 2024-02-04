@@ -24,6 +24,7 @@ import { CurrentLocationProvider } from "./hooks/useCurrentLocation";
 import FavoritesPage from "./pages/FavoritesPage";
 import JourneyPage from "./pages/JourneyPage";
 import LiveNavigation from "./pages/LiveNavigation/LiveNavigation";
+import NotFoundPage from "./pages/NotFoundPage";
 import StatsPage from "./pages/StatsPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
 import UserPreferencesPage, { UserPreferences, UserPreferencesValues } from "./pages/UserPreferencesPage";
@@ -98,6 +99,9 @@ const App: React.FC = () => {
                         </Route>
                         <Route exact path="/stats">
                           <StatsPage />
+                        </Route>
+                        <Route>
+                          <NotFoundPage />
                         </Route>
                       </Switch >
                     </IonReactRouter >
