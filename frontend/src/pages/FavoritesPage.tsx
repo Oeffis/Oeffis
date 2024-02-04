@@ -32,13 +32,13 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
   const initialSlide = props.launchTab ?? 0;
   const setSlideNames = (): void => {
     if (activeSlideIndex === 0) {
-      setSlideName("Stations");
+      setSlideName("Stationen");
     }
     if (activeSlideIndex === 1) {
-      setSlideName("Routes");
+      setSlideName("Routen");
     }
     if (activeSlideIndex === 2) {
-      setSlideName("Journeys");
+      setSlideName("Trips");
     }
   };
 
@@ -49,7 +49,7 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
   return (
     <IonPage id="main-content">
       {!(props.showHeader === false) && <Header />}
-      <IonContent>
+      <IonContent scrollY={false}>
         <IonRow className={styles.result_header}>
           <div className={styles.right_align}>
             <IonLabel />
@@ -58,9 +58,9 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
             <IonRow className={styles.result_swiper}>
               <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
               <IonRadioGroup value={slideName}>
-                <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
-                <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
-                <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
+                <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stationen" mode="md" />
+                <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routen" mode="md" />
+                <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Trips" mode="md" />
               </IonRadioGroup>
               <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
             </IonRow>
@@ -72,29 +72,31 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
             </IonButton>
           </div>
         </IonRow>
-        <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
-        <SwiperReact
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-          onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: false }}
-          spaceBetween={100}
-          slidesPerView={1}
-          initialSlide={initialSlide}
-          onInit={(swiper: Swiper) => setSwiper(swiper)}
-        >
-          <div>
-            <SwiperSlide className={styles.bottom_responsiveness_extension}>
-              <FavoriteLocationsComponent />
-            </SwiperSlide>
-            <SwiperSlide className={styles.bottom_responsiveness_extension}>
-              <FavoriteRoutesComponent onRouteSelected={(route, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(route.originId); setDestination(route.destinationId); }} />
-            </SwiperSlide>
-            <SwiperSlide className={styles.bottom_responsiveness_extension}>
-              <FavoriteTripsComponent onTripSelected={(trip, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(trip.originId); setDestination(trip.destinationId); setStartTime(trip.startTime); }} />
-            </SwiperSlide>
-          </div>
-        </SwiperReact>
+        <IonContent>
+          <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
+          <SwiperReact
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+            onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: false }}
+            spaceBetween={100}
+            slidesPerView={1}
+            initialSlide={initialSlide}
+            onInit={(swiper: Swiper) => setSwiper(swiper)}
+          >
+            <div>
+              <SwiperSlide>
+                <FavoriteLocationsComponent />
+              </SwiperSlide>
+              <SwiperSlide>
+                <FavoriteRoutesComponent onRouteSelected={(route, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(route.originId); setDestination(route.destinationId); }} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <FavoriteTripsComponent onTripSelected={(trip, routerLink) => { setDisplayDialogue(true); setRouterLink(routerLink); setOrigin(trip.originId); setDestination(trip.destinationId); setStartTime(trip.startTime); }} />
+              </SwiperSlide>
+            </div>
+          </SwiperReact>
+        </IonContent>
       </IonContent>
     </IonPage>
   );
