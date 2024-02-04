@@ -2,12 +2,15 @@ import styles from "./HistoryEntry.module.css";
 
 export interface HistoryEntryProps {
   date: Date;
+  originId: string,
   originName: string,
+  destinationId: string,
   destinationName: string,
+  loadHistoryEntry: () => void
 }
 
 const HistoryEntry: React.FC<HistoryEntryProps> = (props) => (
-  <div className={styles.historyEntry}>
+  <div className={styles.historyEntry} onClick={() => props.loadHistoryEntry()}>
     <div className={styles.date}>
       {props.date.toLocaleDateString()}
     </div>
@@ -31,5 +34,4 @@ const HistoryEntry: React.FC<HistoryEntryProps> = (props) => (
     </div>
   </div>
 );
-
 export default HistoryEntry;
