@@ -32,26 +32,15 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
       </IonCol>
       <IonCol className={styles.duration}>
         <div>
-          {props.journey.travelDurationInMinutes < 60 && (
-            <IonRow className={styles.traveltime}>
-              <IonCol>
-                <IonLabel className={styles.time_word_center}>
-                  <h1>{Math.round(props.journey.travelDurationInMinutes)}</h1>
-                </IonLabel>
-                <IonLabel className={styles.time_word_center}>Min</IonLabel>
-              </IonCol>
-            </IonRow>
-          )}
-        </div>
-        <div>
-          {props.journey.travelDurationInMinutes >= 60 && (
-            <IonRow className={styles.traveltime}>
-              <IonCol>
+          <IonRow className={styles.traveltime}>
+              {props.journey.travelDurationInMinutes >= 60 && 
+                <IonCol>
                 <IonLabel className={styles.time_word_center}>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[0]}</h1>
                 </IonLabel>
                 <IonLabel className={styles.time_word_center}>Std</IonLabel>
               </IonCol>
+              }
               <IonCol>
                 <IonLabel className={styles.time_word_center}>
                   <h1>{timeSplitter(props.journey.travelDurationInMinutes)[1]}</h1>
@@ -59,7 +48,6 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
                 <IonLabel className={styles.time_word_center}>Min</IonLabel>
               </IonCol>
             </IonRow>
-          )}
         </div>
       </IonCol>
     </IonRow>

@@ -26,7 +26,7 @@
 
 .circleNotArrived {
   border-radius: 50%;
-  background: var(--ion-color-light-shade);
+  background: dimgray;
   height: 28px;
   width: 28px;
   border: 1px solid var(--ion-color-light-shade);
@@ -39,4 +39,8 @@
 
 .track {
   padding-left: 1em;
+}
+
+.paddingLeft {
+  padding-left: 0.5em;
 }

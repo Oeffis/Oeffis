@@ -21,7 +21,7 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
         props.showProgress && <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
       }
     </div>
-    <div className={styles.centerVertically}>
+    <div className={styles.centerVertically + " " + styles.paddingLeft}>
       <p className={styles.m0 + " " + styles.bold}>{props.step.line}</p>
       <p className={styles.m0}>
         {props.step.line && "Fahrtzeit: "}

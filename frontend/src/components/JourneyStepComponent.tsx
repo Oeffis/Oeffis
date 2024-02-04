@@ -15,7 +15,7 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
         <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
       </div>
       <div className={arrived && props.showProgress ? styles.circleArrived : styles.circleNotArrived} />
-      <p className={styles.centerVertically + " " + styles.bold}>
+      <p className={styles.centerVertically + " " + styles.bold + " " + styles.paddingLeft}>
         {
           props.step
             ? props.step.stationName
