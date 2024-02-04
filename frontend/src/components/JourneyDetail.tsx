@@ -12,22 +12,32 @@ export interface TravelProps { journey: IJourney; hideProgress?: boolean }
 
 const formatDateShort = (date: Date): string => format(date, "HH:mm");
 
+const timeSplitter = (traveltime: number): number[] => {
+  const traveltimeRounded = Math.round(traveltime);
+  const traveltimeHours = Math.floor(traveltimeRounded / 60);
+  const traveltimeMinutes = traveltimeRounded % 60;
+  return [traveltimeHours, traveltimeMinutes];
+};
+
 const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
   <div className={styles.journeyDetail}>
     <div className={styles.header}>
       <IonIcon className={styles.trainIcon} icon={trainOutline} />
       <div className={styles.headerDetails}>
-        <p>
-          <span>{formatDateShort(props.journey.startTime)} -</span>
-          <span>{formatDateShort(props.journey.arrivalTime)}</span>
-        </p>
+        <p>{formatDateShort(props.journey.startTime)} - {formatDateShort(props.journey.arrivalTime)}</p>
         <p>
           <span>{props.journey.startStation} - </span>
           <span>{props.journey.arrivalStation}</span>
         </p>
       </div>
+      {props.journey.travelDurationInMinutes > 60 && 
+        <div className={styles.headerDuration}>
+          <p className={styles.headerDurationAmount}>{timeSplitter(props.journey.travelDurationInMinutes)[0]}</p>
+          <p>Std</p>
+        </div>
+      }
       <div className={styles.headerDuration}>
-        <p className={styles.headerDurationAmount}>{props.journey.travelDurationInMinutes}</p>
+        <p className={styles.headerDurationAmount}>{timeSplitter(props.journey.travelDurationInMinutes)[1]}</p>
         <p>Min</p>
       </div>
     </div>
