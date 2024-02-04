@@ -2,7 +2,7 @@
   border-radius: 15px;
   width: 8px;
   height: 130px;
-  background: var(--ion-color-light-shade);
+  background: dimgray;
   margin: auto;
 }
 
@@ -41,4 +41,8 @@
 
 .bold {
   font-weight: bold;
+}
+
+.paddingLeft {
+  padding-left: 0.5em;
 }

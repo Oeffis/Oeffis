@@ -182,7 +182,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             <IonButton className={styles.circle_button}
               onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
             >
-              <IonIcon icon={mapOutline} />
+              <IonIcon icon={mapOutline}/>
             </IonButton>
           </div>
         }
@@ -200,13 +200,13 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           {
             swiper?.activeIndex === 1 && selectedJourney &&
             <IonButton className={styles.circle_button} routerLink="livenavigation">
-              <IonIcon icon={play} />
+              <IonIcon icon={play}/>
             </IonButton>
           }
         </div>
       </IonItemDivider>
       {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <IonProgressBar type="indeterminate" />}
+      {result.type === "pending" && <IonProgressBar type="indeterminate"/>}
       <IonContent>
         <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
@@ -232,9 +232,9 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           <SwiperSlide>
             <>
             {
-              (selectedJourney !== null)
-              ? <JourneyDetail journey={selectedJourney} hideProgress={true}/>
-              : iJourneys && <JourneyDetail journey={iJourneys[0]} hideProgress={true}/>
+              selectedJourney !== null
+                ? <JourneyDetail journey={selectedJourney} hideProgress={true}/>
+                : iJourneys && <JourneyDetail journey={iJourneys[0]} hideProgress={true}/>
             }
             </>
           </SwiperSlide>
