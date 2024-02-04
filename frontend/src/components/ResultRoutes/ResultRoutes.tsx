@@ -2,8 +2,8 @@ import {
   IonButton,
   IonContent,
   IonIcon,
-  IonPage,
   IonItemDivider,
+  IonPage,
   IonProgressBar,
   IonRadio,
   IonRadioGroup
@@ -134,7 +134,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     selectedJourney?.stops.map(stop => {
       stop.stopIds.map(id => ids.push(id));
     });
-    ids[ids.length - 1] = destination.id;
+    ids.push(destination.id);
+
     return ids;
   };
 
