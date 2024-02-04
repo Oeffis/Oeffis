@@ -8,7 +8,7 @@ import styles from "./JourneyDetail.module.css";
 import JourneyStepComponent from "./JourneyStepComponent";
 import StepProgressComponent from "./StepProgressComponent";
 
-export interface TravelProps { journey: IJourney }
+export interface TravelProps { journey: IJourney; hideProgress?: boolean }
 
 const formatDateShort = (date: Date): string => format(date, "HH:mm");
 
@@ -31,15 +31,15 @@ const JourneyDetail: React.FC<TravelProps> = (props: TravelProps) => (
         <p>Min</p>
       </div>
     </div>
-    <StepDetails journey={props.journey} />
+    <StepDetails journey={props.journey} hideProgress={props.hideProgress} />
   </div>
 );
 
 export default JourneyDetail;
 
-export interface StepDetailsProps { journey: IJourney, }
+export interface StepDetailsProps { journey: IJourney, hideProgress?: boolean }
 export function StepDetails(props: StepDetailsProps): JSX.Element {
-
+  const showProgress = props.hideProgress ? false : true;
   return (
     <div className={styles.contentGrid}>
       {
@@ -48,6 +48,7 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
             {
               index === 0
               && <FirstJourneyStepComponent
+                showProgress={showProgress}
                 key={"firstJourney" + index}
                 startTime={step.startTime}
                 stationName={step.stationName}
@@ -57,10 +58,12 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
             {
               index !== 0
               && <JourneyStepComponent
+                showProgress={showProgress}
                 key={"journeyStep" + index}
                 step={step}
                 arrivalTime={props.journey.stops[index - 1].arrivalTime} />}
             <StepProgressComponent
+              showProgress={showProgress}
               key={"stepProgress" + index}
               step={step} />
             {index === props.journey.stops.length - 1
