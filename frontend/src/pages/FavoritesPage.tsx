@@ -1,5 +1,5 @@
-import { IonContent, IonIcon, IonPage, IonRadio, IonRadioGroup, IonRow } from "@ionic/react";
-import { chevronBackOutline, chevronForwardOutline } from "ionicons/icons";
+import { IonButton, IonContent, IonIcon, IonLabel, IonPage, IonRadio, IonRadioGroup, IonRow } from "@ionic/react";
+import { chevronBackOutline, chevronForwardOutline, closeOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -50,18 +50,28 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
     <IonPage id="main-content">
       {!(props.showHeader === false) && <Header />}
       <IonContent>
-        <div className={styles.selection}>
-          <IonRow>
-            <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
-            <IonRadioGroup value={slideName}>
-              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
-              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
-              <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
-            </IonRadioGroup>
-            <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
-          </IonRow>
-          <p>{slideName}</p>
-        </div>
+        <IonRow className={styles.result_header}>
+          <div className={styles.right_align}>
+            <IonLabel />
+          </div>
+          <div className={styles.selection}>
+            <IonRow className={styles.result_swiper}>
+              <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
+              <IonRadioGroup value={slideName}>
+                <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stations" mode="md" />
+                <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routes" mode="md" />
+                <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Journeys" mode="md" />
+              </IonRadioGroup>
+              <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+            </IonRow>
+            <p>{slideName}</p>
+          </div>
+          <div className={styles.right_align}>
+            <IonButton fill="clear" color="medium" onClick={() => { history.back(); }}>
+              <IonIcon icon={closeOutline} />
+            </IonButton>
+          </div>
+        </IonRow>
         <PlanFavoriteDialogueComponent display={displayDialogue} routerLink={routerLink} dismiss={setDisplayDialogue} origin={origin} destination={destination} startTime={startTime} />
         <SwiperReact
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
