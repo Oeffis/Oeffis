@@ -33,13 +33,17 @@ export interface RoutePlannerProps {
   destinationId: string | null
   setOriginId: (location: string | null) => void
   setDestinationId: (location: string | null) => void
+  setCurrentJourneyUrl: (url: string) => void
+  isDarkThemeEnabeled: boolean
 }
 
 const RoutePlanner = ({
   originId,
   destinationId,
   setOriginId,
-  setDestinationId
+  setDestinationId,
+  setCurrentJourneyUrl,
+  isDarkThemeEnabeled
 }: RoutePlannerProps): JSX.Element => {
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
@@ -150,6 +154,7 @@ const RoutePlanner = ({
                 onSearchInputChanged={(input): void => setOriginInput(input)}
                 prefixDataTestId="origin-input"
                 searchInput={originInput ?? ""}
+                isDarkThemeEnabeled={isDarkThemeEnabeled}
               />
             </IonItem>
             <IonItem className={rp.input_field_item}>
@@ -162,6 +167,7 @@ const RoutePlanner = ({
                 onSearchInputChanged={(input): void => setDestinationInput(input)}
                 prefixDataTestId="destination-input"
                 searchInput={destinationInput ?? ""}
+                isDarkThemeEnabeled={isDarkThemeEnabeled}
               />
             </IonItem>
           </IonCol>
@@ -181,6 +187,7 @@ const RoutePlanner = ({
             Merken
           </IonButton>
           <IonButton
+            onClick={() => setCurrentJourneyUrl(`/journey?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`)}
             routerLink={`/results?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`}
             disabled={originLocation === null || destinationLocation === null} className={rp.button_primary}
             size="default" expand="block">
