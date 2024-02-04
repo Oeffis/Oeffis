@@ -41,7 +41,8 @@ const RoutePlanner = ({
   originId,
   destinationId,
   setOriginId,
-  setCurrentJourneyUrl
+  setDestinationId,
+  setCurrentJourneyUrl,
   isDarkThemeEnabeled
 }: RoutePlannerProps): JSX.Element => {
   const [departureTime, setDepartureTime, resetDepartureTimeToCurrentTime] = useDepartureTimeParamOrCurrentTime();

@@ -47,8 +47,9 @@ const JourneyPage: React.FC<JourneyPageProps> = (props) => {
               originId={originId}
               destinationId={destinationId}
               setOriginId={setOriginId}
-              setCurrentJourneyUrl={props.setCurrentJourneyUrl} />
-              isDarkThemeEnabeled={props.isDarkThemeEnabeld}
+              setDestinationId={setDestinationId}
+              setCurrentJourneyUrl={props.setCurrentJourneyUrl}
+              isDarkThemeEnabeled={props.isDarkThemeEnabeld} />
           </div>
         </div>
       </IonContent>
