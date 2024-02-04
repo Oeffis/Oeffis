@@ -1,50 +1,53 @@
-.detailCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-ion-label {
-  padding: 0.125rem;;
-}
-
-/* .contentSection {
-  min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-} */
-
-.midSection {
+.mid_section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 57%;
+  width: 55%;
   padding-top: 3%;
 }
 
 .duration {
-  width: 20%;
+  width: 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: end;
-  padding: 0% 0% 0% 0%;
+  padding-top: 0%;
+  padding-bottom: 0%;
+}
+
+.bottom_section_closed {
+  position: relative;
+  padding-top: 0.25rem;
+}
+
+.bottom_section_opened {
+  position: relative;
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
 }
 
 IonButton {
   color: transparent;
 }
 
-.detailCardSizing {
+.JourneyDetail {
+  width: 100%;
+}
+
+.detail_card_sizing {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  width: 100%;
 }
 
-.centerAllRow2 {
+.center_all_row_2 {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -52,15 +55,19 @@ IonButton {
   width: 100%;
 }
 
-.trainIcon {
+.train_icon {
   width: 2.5rem;
   height: 2.5rem;
   color: var(--ion-color-primary-tint);
   padding-right: 0.5rem;
 }
 
-.travelTime {
+.traveltime {
   width: 100%;
   font-size: 0.8rem;
   font-weight: bold;
+}
+
+.time_word_center {
+  text-align: center;
 }
