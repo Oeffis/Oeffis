@@ -10,7 +10,6 @@ import markerShadow from "../../../src/images/marker-shadow.png";
 import redPinIcon from "../../../src/images/pin-red-map-marker.svg";
 import whitePinIcon from "../../../src/images/pin-white-map-marker.svg";
 import currentPositionIcon from "../../../src/images/position-map-marker.svg";
-
 import { Location, LocationTypeEnum } from "../../api";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
