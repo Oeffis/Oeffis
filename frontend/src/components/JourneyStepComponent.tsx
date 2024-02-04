@@ -10,11 +10,11 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
 
   return (
     <>
-    <div className={styles.centerBlock}>
-      <p className={styles.m0}>Ankunft</p>
-      <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
-    </div>
-    <div className={arrived? styles.circleArrived : styles.circleNotArrived}/>
+      <div className={styles.centerBlock}>
+        <p className={styles.m0}>Ankunft</p>
+        <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
+      </div>
+      <div className={arrived ? styles.circleArrived : styles.circleNotArrived} />
       <p className={styles.centerVertically + " " + styles.bold}>
         {
           props.step
@@ -22,11 +22,11 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
             : props.arrivalDestination
         }
       </p>
-    <p className={styles.centerVertically + " " + styles.textAlignCenter + " " + styles.track}>
-      {props.step?.trackOrigin !== ""
-        ? "Gl. " + props.step?.trackOrigin
-        : ""
-      }</p>
+      <p className={styles.centerVertically + " " + styles.textAlignCenter + " " + styles.track}>
+        {props.step?.trackOrigin !== ""
+          ? "Gl. " + props.step?.trackOrigin
+          : ""
+        }</p>
     </>
   );
 };

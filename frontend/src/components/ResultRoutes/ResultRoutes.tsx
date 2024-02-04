@@ -157,8 +157,6 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   return (
     <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
       <Header />
       <div id="map" style={{ height: mapHeight + "%" }}>
         <LeafletMapContainer
@@ -196,6 +194,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           }
         </div>
       </IonItemDivider>
+      {result.type === "error" && <div>Error: {result.error.message}</div>}
+      {result.type === "pending" && <div>Suche Routen...</div>}
       <IonContent>
         <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access

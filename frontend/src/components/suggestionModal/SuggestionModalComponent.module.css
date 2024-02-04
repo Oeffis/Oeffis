@@ -1,0 +1,44 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+}
+
+.textContent {
+  height: 70%;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.newLines {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonSection {
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  height: 38px;
+  width: 33%;
+  --border-radius: 12px; 
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemLeft {
+  min-width: 60%;
+}
+
+.itemRight{
+  width: 40%;
+}

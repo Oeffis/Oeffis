@@ -8,7 +8,6 @@ interface LiveNavigationInfoComponentProps {
 }
 
 const getHours = (arrivalTime: Date): string => {
-
   const hours = differenceInHours(arrivalTime, new Date());
   return hours.toString();
 };
@@ -66,7 +65,7 @@ export function NavigationInformation(
                 Min
               </IonLabel>
             </div>
-          </div>
+          </div >
           <div className={styles.col}>
             <IonLabel className={styles.time_text}>
               Ankunfszeit
@@ -77,7 +76,7 @@ export function NavigationInformation(
           </div>
         </div>
         <IonIcon onClick={() => props.setShowInformation(false)} icon={chevronDownOutline} />
-      </div>
+      </div >
 
     </>
   );
