@@ -50,22 +50,24 @@ IonButton {
   justify-content: center;
   align-self: center;
   padding-top: 0.8rem;
-  width: 70%;
+  width: 60%;
 }
 
 .right_align {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  width: 15%;
+  justify-content: start;
+  width: 20%;
+  height: 20%;
 }
 
 .left_align {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 15%;
-  height: 15%;
+  width: 20%;
+  height: 20%;
+  padding-right: 0rem;
 }
 
 .headline {
