@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonContent, IonModal } from "@ionic/react";
 import { useEffect, useState } from "react";
-import logo from "../../../public/images/OeffisLogo1.svg";
+import { Header } from "../../components/Header";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
@@ -29,17 +29,7 @@ const LiveNavigation: React.FC = () => {
 
   return (
     <>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Öffis</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
-      </IonHeader>
+      <Header />
       <IonContent>
         {
           selectedJourney !== null &&

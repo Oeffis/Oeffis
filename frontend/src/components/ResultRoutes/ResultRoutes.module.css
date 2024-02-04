@@ -50,23 +50,65 @@ IonButton {
   justify-content: center;
   align-self: center;
   padding-top: 0.8rem;
-  width: 50%;
+  width: 60%;
 }
 
 .right_align {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  width: 25%;
+  justify-content: start;
+  width: 20%;
+  height: 20%;
 }
 
 .left_align {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 25%;
+  width: 20%;
+  height: 20%;
+  padding-right: 0rem;
 }
 
 .headline {
   font-weight: bold;
+}
+
+.arrow_icon {
+  font-size: 1.5rem;
+  color: grey;
+  opacity: 50%;
+  padding-top: 0.16rem;
+}
+
+.arrow_button {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 20%;
+}
+
+.wide_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%
+}
+
+.radio_group {
+  padding-top: 0.05rem;
+}
+
+.radio {
+  margin: 5px;
+}
+
+.information {
+  padding-left: 1rem;
+}
+
+#map {
+  transition: 500ms ease-in-out;
+  height: 0;
 }
