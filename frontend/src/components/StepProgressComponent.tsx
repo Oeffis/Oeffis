@@ -4,7 +4,7 @@ import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import { DisplayDelayStats } from "./DisplayDelayStats";
 import styles from "./StepProgressComponent.module.css";
 
-export interface StepProgressProps { step: IJourneyStep }
+export interface StepProgressProps { step: IJourneyStep; showProgress?: boolean }
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
 
@@ -17,7 +17,9 @@ const StepProgressComponent: React.FC<StepProgressProps> = (props: StepProgressP
       <p className={styles.m0}>{formatDateTime(props.step.startTime)}</p>
     </div>
     <div className={styles.line + " " + styles.centerBlock}>
-      <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
+      {
+        props.showProgress && <FillLine startTime={props.step.startTime} travelDurationInMinutes={props.step.travelDurationInMinutes} />
+      }
     </div>
     <div className={styles.centerVertically}>
       <p className={styles.m0 + " " + styles.bold}>{props.step.line}</p>
@@ -50,6 +52,10 @@ export function FillLine(props: FillLineProps): JSX.Element {
   }
 
   return (
-    <div className={styles.fillLine} style={{ height: progress.toString() + "%" }} />
+    <>
+    {
+      progress > 0 && <div className={styles.fillLine} style={{ height: progress.toString() + "%" }} />
+    }
+  </>
   );
 }
