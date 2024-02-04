@@ -7,11 +7,12 @@
 }
 
 .row {
+  margin-top: 1rem;
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: left;
+  justify-content: center;
 }
 
 .key {

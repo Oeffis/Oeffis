@@ -1,5 +1,6 @@
-import { IonContent, IonLabel, IonPage, IonToggle } from "@ionic/react";
-import { useEffect } from "react";
+import { IonButton, IonContent, IonLabel, IonPage, IonToggle } from "@ionic/react";
+import { useEffect, useState } from "react";
+import DialogComponent from "../components/DialogComponent";
 import { Header } from "../components/Header";
 import { PersistenceService } from "../services/persistence/PersistenceService";
 import styles from "./UserPreferencesPage.module.css";
@@ -20,6 +21,7 @@ export interface UserPreferencesPageProps {
 const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
 
   const persistance = new PersistenceService();
+  const [isDialogueOpen, setIsDialogueOpen] = useState<boolean>(false);
 
   const setIsDarkThemeEnabledPersistence = (): void => {
     props.setIsDarkThemeEnabled(!props.isDarkThemeEnabled);
@@ -29,6 +31,15 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
         ? UserPreferencesValues.disabled
         : UserPreferencesValues.enabled
     );
+  };
+
+  const openClearHistoryDialog = (): void => {
+    setIsDialogueOpen(true);
+    console.log("Open clear history dialog");
+  };
+
+  const clearHistory = (): void => {
+    console.log("Clearing user history");
   };
 
   useEffect(() => {
@@ -55,9 +66,31 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
               <IonToggle checked={props.isDarkThemeEnabled} disabled={false} onClick={() => setIsDarkThemeEnabledPersistence()} />
             </div>
           </div>
+          <div className={styles.row}>
+            <div className={styles.key}>
+              <IonLabel>User History</IonLabel>
+            </div>
+            <div className={styles.value}>
+              <IonButton onClick={() => openClearHistoryDialog()}>CLEAR</IonButton>
+            </div>
+          </div>
         </div>
       </IonContent>
-    </IonPage>
+      <DialogComponent
+        id="dialog_clear_user_history"
+        title="Clear history"
+        message="Do you want to clear user history?"
+        buttons={[
+          <IonButton onClick={() => {
+            setIsDialogueOpen(false);
+            clearHistory();
+          }}> Yes</IonButton>,
+          <IonButton onClick={() => setIsDialogueOpen(false)}>No</IonButton>
+        ]}
+        isDialogueOpen={isDialogueOpen}
+        setIsDialogueOpen={setIsDialogueOpen}
+      />
+    </IonPage >
 
   );
 };
