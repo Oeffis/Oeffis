@@ -85,7 +85,6 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 }
 
-/* @media (prefers-color-scheme: dark) { */
 /*
    * Dark Colors
    * -------------------------------------------
@@ -245,5 +244,3 @@ body[color-theme="dark"] {
 .dark-map {
   filter: var(--dark-map-filter, none);
 }
-
-/* } */
