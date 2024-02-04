@@ -131,10 +131,12 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const getLocationIds = (): string[] => {
     const ids: string[] = [];
+    ids.push(origin.id);
     selectedJourney?.stops.map(stop => {
       stop.stopIds.map(id => ids.push(id));
     });
-    ids[ids.length - 1] = destination.id;
+    ids.push(destination.id);
+
     return ids;
   };
 
