@@ -1,0 +1,5 @@
+.suggestionModal {
+  --height: 50%;
+  --width: 75%;
+  --border-radius: 16px;
+}
