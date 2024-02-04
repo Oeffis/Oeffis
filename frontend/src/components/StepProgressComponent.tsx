@@ -52,6 +52,10 @@ export function FillLine(props: FillLineProps): JSX.Element {
   }
 
   return (
-    <div className={styles.fillLine} style={{ height: progress.toString() + "%" }} />
+    <>
+    {
+      progress > 0 && <div className={styles.fillLine} style={{ height: progress.toString() + "%" }} />
+    }
+  </>
   );
 }
