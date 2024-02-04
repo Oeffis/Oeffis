@@ -1,9 +1,13 @@
-import { IonButton, IonContent, IonModal, IonPage } from "@ionic/react";
+import { IonButton, IonContent, IonModal, IonPage, IonToast } from "@ionic/react";
+import { notificationsCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
+import { Location, LocationCoordinates } from "../../api";
 import { Header } from "../../components/Header";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocationsByIdOrNull";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import { useJourneyApi, useLocationFinderApi } from "../../services/apiClients/ApiClientsContext";
@@ -12,35 +16,26 @@ import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(parseJSONToJourney(window.localStorage.getItem("selectedJourney")));
+  const stopIds: string[] = [];
   const [showModal, setshowModal] = useState<boolean>(false);
   const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
   const [recommendedJourneyInterval, setRecommendedJourneyInterval] = useState<NodeJS.Timeout>();
+
+  const [displayArrivedNotification, setDisplayArrivedNotification] = useState<boolean>(false);
+  const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("Sie haben die Haltestelle ... erreicht.");
+
+  const currentLocation = useCurrentLocation();
   const locationFinderApi = useLocationFinderApi();
   const journeyApi = useJourneyApi();
 
-  /*
-  const [displayArrivedNotification, setDisplayArrivedNotification] = useState<boolean>(false);
-  const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("Sie haben die Haltestelle ... erreicht.");
-  const currentLocation = useCurrentLocation();
-  
-  const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
-  let selectedJourney: IJourney | null = null;
-  const stopIds: string[] = [];
-
-  if (selectedJourneyAsString !== null) {
-    selectedJourney = JSON.parse(selectedJourneyAsString) as IJourney;
-    selectedJourney.arrivalTime = new Date(selectedJourney.arrivalTime);
-    selectedJourney.startTime = new Date(selectedJourney.startTime);
-
+  if (selectedJourney !== null) {
     for (const step of selectedJourney.stops) {
-      step.arrivalTime = new Date(step.arrivalTime);
-      step.startTime = new Date(step.startTime);
       stopIds.push(step.stopIds[step.stopIds.length - 1]);
     }
   }
 
   const locations: Location[] = stopIds.length > 0 ? useMultipleLocationsByIdOrNull(stopIds) : [];
-  
+
   const isCurrentLocationArrivedAtStopLocation = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
     const range = 0.000001;
     return ((destination.latitude + range) >= position.latitude && (destination.latitude - range) <= position.latitude)
@@ -61,11 +56,9 @@ const LiveNavigation: React.FC = () => {
       }
     });
   };
-*/
+
   useEffect(() => {
-
-    // watchPosition();
-
+    watchPosition();
     if (recommendedJourneyInterval === undefined) {
       setRecommendedJourneyInterval(setInterval(() => {
         void findJourneyFromNextStop(locationFinderApi, journeyApi);
@@ -75,11 +68,10 @@ const LiveNavigation: React.FC = () => {
         }
       }, 120000));
     }
-
     return recommendedJourneyInterval !== undefined
       ? () => clearInterval(recommendedJourneyInterval)
       : () => console.log("No interval set.");
-  }, []);
+  }, [recommendedJourneyInterval, currentLocation]);
 
   return (
     <IonPage id="main-content">
@@ -96,13 +88,13 @@ const LiveNavigation: React.FC = () => {
           size="default" expand="block">
           Navigation Beenden
         </IonButton>
-        {/*   <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton>
+        {/* <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton> */}
         <IonToast
           isOpen={displayArrivedNotification}
           message={arrivedNotificationMessage}
           position="bottom"
           duration={3000}
-          icon={notificationsCircle} /> */}
+          icon={notificationsCircle} />
       </IonContent>
       <IonModal className={styles.suggestionModal} isOpen={showModal} >
         <SuggestionModalComponent
