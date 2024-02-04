@@ -2,6 +2,7 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonPage,
   IonItemDivider,
   IonRadio,
   IonRadioGroup
@@ -45,12 +46,12 @@ export const JourneyLocationResolver: React.FC = () => {
 
   if (originLocation !== null && destinationLocation !== null) {
     return (
-      <>
+      <IonPage id="main-content">
         <ResultRoutes
           origin={originLocation}
           destination={destinationLocation}
         />
-      </>
+      </IonPage>
     );
   }
 
