@@ -25,7 +25,7 @@ const Menu: React.FC<MenuProps> = (props) => (
         <IonMenuToggle autoHide={false}>
           <IonItem button routerLink={"/favorites"} routerDirection="none">
             <IonIcon icon={starHalf} />
-            <IonLabel>Favourites</IonLabel>
+            <IonLabel>Favorites</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
