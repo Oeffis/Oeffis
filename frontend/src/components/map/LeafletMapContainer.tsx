@@ -14,12 +14,13 @@ export interface MapProps {
   destinationId: string | null,
   locationIds?: string[],
   showLines?: boolean,
+  isDarkThemeEnabeled: boolean,
   onItemClicked?: (location: Location) => void
 }
 
 const NRW_BOUNDS: LatLngTuple[] = [[50.30527, 5.71687], [52.69499, 9.47241]];
 
-const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, onItemClicked }: MapProps): JSX.Element => {
+const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, isDarkThemeEnabeled, onItemClicked }: MapProps): JSX.Element => {
   const locations = useMultipleLocationsByIdOrNull(locationIds);
   const usersPosition = useCurrentLocation();
   const [view, setView] = useState<View>({ bounds: NRW_BOUNDS });
@@ -45,7 +46,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
       polygons.push(
         <Polygon
           key={"line" + i}
-          color={window.matchMedia("(prefers-color-scheme: dark)") ? "rgb(0,148,236)" : "rgb(77, 77, 77)"}
+          color={"rgb(0,148,236)"}
           opacity={1}
           dashArray={"30,20"}
           weight={2}
@@ -77,7 +78,7 @@ const LeafletMapContainer = ({ originId, destinationId, locationIds, showLines, 
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      className="map-tiles"
+      className={isDarkThemeEnabeled ? "dark-map" : ""}
     />
     <CurrentLocationMapMarker />
     <OriginMapMarker originId={originId} />

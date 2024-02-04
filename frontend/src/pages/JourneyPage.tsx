@@ -7,6 +7,7 @@ import { useStateParams } from "../hooks/useStateParams";
 import styles from "./JourneyPage.module.css";
 
 export interface JourneyPageProps {
+  isDarkThemeEnabeld: boolean
   setCurrentJourneyUrl: (url: string) => void,
 }
 
@@ -38,6 +39,7 @@ const JourneyPage: React.FC<JourneyPageProps> = (props) => {
               destinationId={destinationId}
               locationIds={getLocationIds()}
               showLines={true}
+              isDarkThemeEnabeled={props.isDarkThemeEnabeld}
             />
           </div>
           <div className={styles.planner}>
@@ -46,7 +48,8 @@ const JourneyPage: React.FC<JourneyPageProps> = (props) => {
               destinationId={destinationId}
               setOriginId={setOriginId}
               setDestinationId={setDestinationId}
-              setCurrentJourneyUrl={props.setCurrentJourneyUrl} />
+              setCurrentJourneyUrl={props.setCurrentJourneyUrl}
+              isDarkThemeEnabeled={props.isDarkThemeEnabeld} />
           </div>
         </div>
       </IonContent>

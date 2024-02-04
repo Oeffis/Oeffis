@@ -16,7 +16,7 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Menu from "./components/Menu";
 import ResultRoutes from "./components/ResultRoutes/ResultRoutes";
@@ -26,7 +26,7 @@ import JourneyPage from "./pages/JourneyPage";
 import LiveNavigation from "./pages/LiveNavigation/LiveNavigation";
 import StatsPage from "./pages/StatsPage";
 import UserHistoryPage from "./pages/UserHistoryPage";
-import UserPreferencesPage from "./pages/UserPreferencesPage";
+import UserPreferencesPage, { UserPreferences, UserPreferencesValues } from "./pages/UserPreferencesPage";
 import { ApiClientsProvider } from "./services/apiClients/ApiClientsContext";
 import { AppConfigProvider } from "./services/config/AppConfigContext";
 import {
@@ -35,13 +35,27 @@ import {
   FavoriteTripsProvider
 } from "./services/favorites/FavoritesContext";
 import { PersistenceProvider } from "./services/persistence/PersistenceContext";
+import { PersistenceService } from "./services/persistence/PersistenceService";
 import "./theme/variables.css";
 
 setupIonicReact();
 
 const App: React.FC = () => {
 
+  const persistance = new PersistenceService();
+  const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState<boolean>();
   const [currnetJourneyUrl, setCurrentJourneyUrl] = useState<string>("/journey");
+
+  useEffect(() => {
+    persistance.get(UserPreferences.isDarkThemeEnabled) !== undefined
+      ? persistance.get(UserPreferences.isDarkThemeEnabled) === UserPreferencesValues.enabled
+        ? setIsDarkThemeEnabled(true)
+        : setIsDarkThemeEnabled(false)
+      : setIsDarkThemeEnabled(false);
+    isDarkThemeEnabled
+      ? document.body.setAttribute("color-theme", "dark")
+      : document.body.removeAttribute("color-theme");
+  }, [isDarkThemeEnabled]);
 
   return (
     <AppConfigProvider>
@@ -60,6 +74,7 @@ const App: React.FC = () => {
                         </Route>
                         <Route exact path="/journey">
                           <JourneyPage
+                            isDarkThemeEnabeld={isDarkThemeEnabled ?? false}
                             setCurrentJourneyUrl={setCurrentJourneyUrl}
                           />
                         </Route>
@@ -70,7 +85,10 @@ const App: React.FC = () => {
                           <UserHistoryPage />
                         </Route>
                         <Route exact path="/userPreferences">
-                          <UserPreferencesPage />
+                          <UserPreferencesPage
+                            isDarkThemeEnabled={isDarkThemeEnabled ?? false}
+                            setIsDarkThemeEnabled={setIsDarkThemeEnabled}
+                          />
                         </Route>
                         <Route exact path="/results">
                           <ResultRoutes />

@@ -27,8 +27,6 @@ const MapMarker = ({ location, onItemClicked }: MarkerProps): JSX.Element => {
     iconUrl: currentPositionIcon,
     iconSize: [10, 10],
     iconAnchor: [5, 5],
-    shadowUrl: markerShadow,
-    shadowAnchor: [0, 3],
     popupAnchor: [0, 0]
   });
 
