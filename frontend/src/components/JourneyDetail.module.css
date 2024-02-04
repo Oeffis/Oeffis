@@ -40,7 +40,7 @@ IonButton {
   width: 100%;
   grid-template-columns: 18% 10% 52% 20%;
   grid-auto-rows: auto;
-  padding: 1em 1em 5em;
+  padding: 1em 1em 4em;
 }
 
 .trainIcon {

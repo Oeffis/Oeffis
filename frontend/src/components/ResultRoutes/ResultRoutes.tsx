@@ -201,11 +201,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             </div>
             <IonRadioGroup className={styles.radio_group} value={slideName}>
               <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
-              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" disabled={selectedJourney === null}/>
             </IonRadioGroup>
             <div className={styles.arrow_button}>
               {
-                activeSlideIndex === 1 ? null :
+                selectedJourney === null || activeSlideIndex === 1 ? null :
                   <div>
                     <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex + 1)}>
                       <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
@@ -253,13 +253,11 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             }
           </SwiperSlide>
           <SwiperSlide>
-            <>
             {
-              selectedJourney !== null
+              selectedJourney !== null 
                 ? <JourneyDetail journey={selectedJourney} hideProgress={true}/>
-                : iJourneys && <JourneyDetail journey={iJourneys[0]} hideProgress={true}/>
+                : <p className={styles.noRouteSelected}>Keine Route ausgewählt.</p>
             }
-            </>
           </SwiperSlide>
         </SwiperReact>
       </IonContent>

@@ -112,3 +112,8 @@ IonButton {
   transition: 500ms ease-in-out;
   height: 0;
 }
+
+.noRouteSelected {
+  padding-left: 1em;;
+  padding-bottom: 12em;
+}
