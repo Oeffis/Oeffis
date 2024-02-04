@@ -44,6 +44,7 @@ const App: React.FC = () => {
 
   const persistance = new PersistenceService();
   const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState<boolean>();
+  const [currnetJourneyUrl, setCurrentJourneyUrl] = useState<string>("/journey");
 
   useEffect(() => {
     persistance.get(UserPreferences.isDarkThemeEnabled) !== undefined
@@ -66,7 +67,7 @@ const App: React.FC = () => {
                 <FavoriteRoutesProvider>
                   <IonApp>
                     <IonReactRouter>
-                      <Menu />
+                      <Menu currentJourneyUrl={currnetJourneyUrl} />
                       <Switch>
                         <Route exact path="/">
                           <Redirect to="/journey" />
@@ -74,6 +75,7 @@ const App: React.FC = () => {
                         <Route exact path="/journey">
                           <JourneyPage
                             isDarkThemeEnabeld={isDarkThemeEnabled ?? false}
+                            setCurrentJourneyUrl={setCurrentJourneyUrl}
                           />
                         </Route>
                         <Route exact path="/favorites">
