@@ -50,21 +50,22 @@ IonButton {
   justify-content: center;
   align-self: center;
   padding-top: 0.8rem;
-  width: 50%;
+  width: 70%;
 }
 
 .right_align {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 25%;
+  width: 15%;
 }
 
 .left_align {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 25%;
+  width: 15%;
+  height: 15%;
 }
 
 .headline {
@@ -76,6 +77,33 @@ IonButton {
   color: grey;
   opacity: 50%;
   padding-top: 0.16rem;
+}
+
+.arrow_button {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 20%;
+}
+
+.wide_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%
+}
+
+.radio_group {
+  padding-top: 0.05rem;
+}
+
+.radio {
+  margin: 5px;
+}
+
+.information {
+  padding-left: 1rem;
 }
 
 #map {

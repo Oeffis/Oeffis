@@ -30,7 +30,7 @@ export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (
 
   return (
     <>
-      <IonList>
+      <IonList className={styles.scroll_padding}>
         <IonReorderGroup
           onIonItemReorder={handleReorder}
           disabled={false}

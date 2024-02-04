@@ -31,7 +31,7 @@ export const FavoriteTripsComponent: React.FC<FavoriteTripsComponentProps> = (pr
 
   return (
     <>
-      <IonList>
+      <IonList className={styles.scroll_padding}>
         <IonReorderGroup
           onIonItemReorder={handleReorder}
           disabled={false}

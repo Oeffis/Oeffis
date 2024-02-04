@@ -56,15 +56,35 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
           </div>
           <div className={styles.selection}>
             <IonRow className={styles.result_swiper}>
-              <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
-              <IonRadioGroup value={slideName}>
+              <div className={styles.arrow_button}>
+                {
+                  activeSlideIndex === 0 ? null :
+                    <div>
+                      <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex - 1)}>
+                        <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
+                      </IonButton>
+                    </div>
+                }
+              </div>
+              <IonRadioGroup className={styles.radio_group} value={slideName}>
                 <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value="Stationen" mode="md" />
                 <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value="Routen" mode="md" />
                 <IonRadio onClick={() => swiper?.slideTo(2)} className={styles.radio} value="Trips" mode="md" />
               </IonRadioGroup>
-              <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+              <div className={styles.arrow_button}>
+                {
+                  activeSlideIndex === 2 ? null :
+                    <div>
+                      <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex + 1)}>
+                        <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+                      </IonButton>
+                    </div>
+                }
+              </div>
             </IonRow>
-            <p>{slideName}</p>
+            <div className={styles.headline_div}>
+              <p><h5 className={styles.headline}>{slideName}</h5></p>
+            </div>
           </div>
           <div className={styles.right_align}>
             <IonButton fill="clear" color="medium" onClick={() => { history.back(); }}>
@@ -97,8 +117,8 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
             </div>
           </SwiperReact>
         </IonContent>
-      </IonContent>
-    </IonPage>
+      </IonContent >
+    </IonPage >
   );
 };
 

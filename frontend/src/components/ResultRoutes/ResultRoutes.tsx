@@ -170,20 +170,37 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
       <IonItemDivider color="light" className={styles.result_header}>
         {
           <div className={styles.left_align}>
-            <IonButton className={styles.circle_button}
-            >
+            <IonButton className={styles.circle_button}>
               <IonIcon icon={mapOutline} />
             </IonButton>
           </div>
         }
         <div className={styles.result_swiper}>
-          <IonRow>
-            <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
-            <IonRadioGroup value={slideName}>
+          <IonRow className={styles.wide_row}>
+            <div className={styles.arrow_button}>
+              {
+                activeSlideIndex === 0 ? null :
+                  <div>
+                    <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex - 1)}>
+                      <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
+                    </IonButton>
+                  </div>
+              }
+            </div>
+            <IonRadioGroup className={styles.radio_group} value={slideName}>
               <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
               <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
             </IonRadioGroup>
-            <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+            <div className={styles.arrow_button}>
+              {
+                activeSlideIndex === 1 ? null :
+                  <div>
+                    <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex + 1)}>
+                      <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+                    </IonButton>
+                  </div>
+              }
+            </div>
           </IonRow>
           <h5 className={styles.headline}>{slideName}</h5>
         </div>
@@ -200,7 +217,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
         </div>
       </IonItemDivider>
       {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Suche Routen...</div>}
+      {result.type === "pending" && <div className={styles.information}>Suche Routen...</div>}
       <IonContent>
         <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
