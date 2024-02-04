@@ -230,11 +230,13 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             }
           </SwiperSlide>
           <SwiperSlide>
+            <>
             {
-              selectedJourney !== null && <>
-                <JourneyDetail journey={selectedJourney} hideProgress={true} />
-              </>
+              (selectedJourney !== null)
+              ? <JourneyDetail journey={selectedJourney} hideProgress={true}/>
+              : iJourneys && <JourneyDetail journey={iJourneys[0]} hideProgress={true}/>
             }
+            </>
           </SwiperSlide>
         </SwiperReact>
       </IonContent>
