@@ -2,6 +2,9 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonPage,
+  IonItemDivider,
+  IonProgressBar,
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
@@ -27,6 +30,8 @@ import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
+import { UserPreferences, UserPreferencesValues } from "../../pages/UserPreferencesPage";
+import { PersistenceService } from "../../services/persistence/PersistenceService";
 import { Header } from "../Header";
 import JourneyDetail from "../JourneyDetail";
 import { TripOptionsDisplay } from "../RoutePlanner/TripOptionsDisplay";
@@ -34,7 +39,7 @@ import { Button } from "../controls/Button";
 import LeafletMapContainer from "../map/LeafletMapContainer";
 import styles from "./ResultRoutes.module.css";
 
-export const JoruneyLocationResolver: React.FC = () => {
+export const JourneyLocationResolver: React.FC = () => {
 
   const [originId] = useStateParams<string>("", "origin", String, String);
   const [destinationId] = useStateParams<string>("", "destination", String, String);
@@ -44,16 +49,16 @@ export const JoruneyLocationResolver: React.FC = () => {
 
   if (originLocation !== null && destinationLocation !== null) {
     return (
-      <>
+      <IonPage id="main-content">
         <ResultRoutes
           origin={originLocation}
           destination={destinationLocation}
         />
-      </>
+      </IonPage>
     );
   }
 
-  return (<p>Lade daten ...</p>);
+  return (<p>Lade Daten ...</p>);
 
 };
 
@@ -64,6 +69,9 @@ export type ResultRoutesProps = {
 
 const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
+  const persistance = new PersistenceService();
+  const isDarkThemeEnabeled = persistance.get(UserPreferences.isDarkThemeEnabled) !== undefined && persistance.get(UserPreferences.isDarkThemeEnabled) === UserPreferencesValues.enabled;
+
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
   const availableRoutesString = "Verfügbare Routen";
@@ -72,7 +80,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   const [slideName, setSlideName] = useState<string>(availableRoutesString);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
 
-  const [mapHeight] = useState<number>(30);
+  const [mapHeight, setMapHeight] = useState<number>(30);
 
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(null);
 
@@ -156,48 +164,52 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   return (
     <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
       <Header />
-      <IonContent>
-        <div id="map" style={{ height: mapHeight + "%" }}>
-          <LeafletMapContainer
-            originId={origin.id}
-            destinationId={destination.id}
-            locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
-            showLines={true}
-          />
+      <div id="map" style={{
+        height: mapHeight + "%",
+        transition: "height 500ms ease-in-out"
+      }}>
+        <LeafletMapContainer
+          originId={origin.id}
+          destinationId={destination.id}
+          locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
+          showLines={true}
+          isDarkThemeEnabeled={isDarkThemeEnabeled}
+        />
+      </div>
+      <IonItemDivider color="light" className={styles.result_header}>
+        {
+          <div className={styles.left_align}>
+            <IonButton className={styles.circle_button}
+              onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
+            >
+              <IonIcon icon={mapOutline} />
+            </IonButton>
+          </div>
+        }
+        <div className={styles.result_swiper}>
+          <IonRadioGroup value={slideName}>
+            <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
+            <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
+          </IonRadioGroup>
+          <h5 className={styles.headline}>{slideName}</h5>
         </div>
-        <div className={styles.resultHeader}>
+        <div className={styles.back_button}>
+          <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
+        </div>
+        <div className={styles.right_align}>
           {
-            <div className={styles.leftAlign}>
-              <IonButton className={styles.circleButton}
-              //onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
-              >
-                <IonIcon icon={mapOutline} />
-              </IonButton>
-            </div>
+            swiper?.activeIndex === 1 && selectedJourney &&
+            <IonButton className={styles.circle_button} routerLink="livenavigation">
+              <IonIcon icon={play} />
+            </IonButton>
           }
-          <div className={styles.resultSwiper}>
-            <IonRadioGroup value={slideName}>
-              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
-              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
-            </IonRadioGroup>
-            <h4 className={styles.headline}>{slideName}</h4>
-          </div>
-          <div className={styles.backButton}>
-            <Button onClick={() => { history.back(); }} expand="full" title="Zurück zum Routenplaner" />
-          </div>
-          <div className={styles.rightAlign}>
-            {
-              swiper?.activeIndex === 1 && selectedJourney &&
-              <IonButton className={styles.circleButton} routerLink="livenavigation">
-                <IonIcon icon={play} />
-              </IonButton>
-            }
-          </div>
         </div>
-        <SwiperReact className={styles.swiperDiv}
+      </IonItemDivider>
+      {result.type === "error" && <div>Error: {result.error.message}</div>}
+      {result.type === "pending" && <IonProgressBar type="indeterminate" />}
+      <IonContent>
+        <SwiperReact className={styles.swiper_div}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
           pagination={{ clickable: true }}
@@ -221,7 +233,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           <SwiperSlide>
             {
               selectedJourney !== null && <>
-                <JourneyDetail journey={selectedJourney} />
+                <JourneyDetail journey={selectedJourney} hideProgress={true} />
               </>
             }
           </SwiperSlide>
@@ -230,4 +242,4 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
     </>);
 };
 
-export default JoruneyLocationResolver;
+export default JourneyLocationResolver;

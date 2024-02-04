@@ -3,7 +3,11 @@ import { clipboard, compass, settings, starHalf, statsChart } from "ionicons/ico
 import React from "react";
 import "./Menu.css";
 
-const Menu: React.FC = () => (
+export interface MenuProps {
+  currentJourneyUrl: string
+}
+
+const Menu: React.FC<MenuProps> = (props) => (
   <IonMenu contentId="main-content">
     <IonHeader>
       <IonToolbar>
@@ -13,7 +17,7 @@ const Menu: React.FC = () => (
     <IonContent className="ion-padding">
       <IonList>
         <IonMenuToggle autoHide={false}>
-          <IonItem button routerLink={"/journey"} routerDirection="none">
+          <IonItem button routerLink={props.currentJourneyUrl} routerDirection="none">
             <IonIcon icon={compass} />
             <IonLabel>Journey</IonLabel>
           </IonItem>
@@ -21,7 +25,7 @@ const Menu: React.FC = () => (
         <IonMenuToggle autoHide={false}>
           <IonItem button routerLink={"/favorites"} routerDirection="none">
             <IonIcon icon={starHalf} />
-            <IonLabel>Favourites</IonLabel>
+            <IonLabel>Favorites</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>

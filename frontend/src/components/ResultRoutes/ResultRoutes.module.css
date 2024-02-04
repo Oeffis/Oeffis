@@ -2,69 +2,71 @@ ion-label {
   padding: 2px;
 }
 
+.detail_card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 60px;
+}
+
 IonButton {
   color: transparent;
 }
 
-.backButton {
+.JourneyDetail {
+  width: 100%;
+}
+
+.back_button {
   position: fixed;
   left: 0;
   bottom: 0;
   right: 0;
 }
 
-.swiperDiv {
+.swiper_div {
   z-index: -10;
-  height: 50%;
 }
 
-.circleButton {
+.circle_button {
   --border-radius: 50%;
   height: 50px;
   width: 50px;
 }
 
-.resultHeader {
+.result_header {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
-  margin-top: 12px;
+  background-color: var(--ion-background-color);
 }
 
-.resultSwiper {
+.result_swiper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   align-self: center;
-  overflow-y: auto;
+  padding-top: 0.8rem;
   width: 50%;
 }
 
-.leftAlign {
+.right_align {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 25%;
 }
 
-.rightAlign {
+.left_align {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 25%;
-}
-
-.radio {
-  margin: 5px;
 }
 
 .headline {
   font-weight: bold;
-}
-
-#map {
-  transition: 500ms ease-in-out;
-  height: 0;
 }
