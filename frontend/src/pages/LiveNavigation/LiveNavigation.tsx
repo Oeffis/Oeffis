@@ -28,14 +28,11 @@ const LiveNavigation: React.FC = () => {
     for (const step of selectedJourney.stops) {
       step.arrivalTime = new Date(step.arrivalTime);
       step.startTime = new Date(step.startTime);
-      //console.log(step.stopName + " " + step.stopIds[step.stopIds.length - 1]);
       stopIds.push(step.stopIds[step.stopIds.length - 1]);
     }
   }
 
   const locations: Location[] = stopIds.length > 0 ? useMultipleLocationsByIdOrNull(stopIds) : [];
-  /* console.log("LOCATIONS");
-  console.log(locations); */
 
   const isCurrentLocationArrivedAtStopLocation = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
     const range = 0.000001;
@@ -50,8 +47,6 @@ const LiveNavigation: React.FC = () => {
     } as LocationCoordinates;
 
     locations.map(location => {
-      /* console.log(currentPositionCoordinates);
-      console.log(location.details.coordinates); */
       if (isCurrentLocationArrivedAtStopLocation(currentPositionCoordinates, location.details.coordinates)) {
         setDisplayArrivedNotification(true);
         setArrivedNotificationMessage("Sie haben die Haltestelle " + location.name + " erreicht.");
@@ -62,8 +57,6 @@ const LiveNavigation: React.FC = () => {
 
   useEffect(() => {
     watchPosition();
-    /* const intervalWatchPosition = setInterval(() => watchPosition, 5000);
-    return (() => clearInterval(intervalWatchPosition)); */
   }, [currentLocation]);
 
   return (
