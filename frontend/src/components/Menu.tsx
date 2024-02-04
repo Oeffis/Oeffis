@@ -17,31 +17,31 @@ const Menu: React.FC<MenuProps> = (props) => (
     <IonContent className="ion-padding">
       <IonList>
         <IonMenuToggle autoHide={false}>
-          <IonItem button routerLink={props.currentJourneyUrl} routerDirection="none">
+          <IonItem button onClick={() => cleanAllIntervals()} routerLink={props.currentJourneyUrl} routerDirection="none">
             <IonIcon icon={compass} />
             <IonLabel>Journey</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
-          <IonItem button routerLink={"/favorites"} routerDirection="none">
+          <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/favorites"} routerDirection="none">
             <IonIcon icon={starHalf} />
             <IonLabel>Favorites</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
-          <IonItem button routerLink={"/userHistory"} routerDirection="none">
+          <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/userHistory"} routerDirection="none">
             <IonIcon icon={clipboard} />
             <IonLabel>User History</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
-          <IonItem button routerLink={"/userPreferences"} routerDirection="none">
+          <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/userPreferences"} routerDirection="none">
             <IonIcon icon={settings} />
             <IonLabel>User Preferences</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
-          <IonItem button routerLink={"/stats"} routerDirection="none">
+          <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/stats"} routerDirection="none">
             <IonIcon icon={statsChart} />
             <IonLabel>Stats</IonLabel>
           </IonItem>
@@ -52,3 +52,12 @@ const Menu: React.FC<MenuProps> = (props) => (
 );
 
 export default Menu;
+
+export const cleanAllIntervals = (): void => {
+  const intervalId = window.setInterval(function () { }, Number.MAX_SAFE_INTEGER);
+  // Clear any timeout/interval up to that id
+  for (let i = 1; i < intervalId; i++) {
+    window.clearInterval(i);
+  }
+  console.log("All intervals cleared.");
+};
