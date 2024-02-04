@@ -1,23 +1,29 @@
-import { IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import logo from "../../public/images/OeffisLogo1.svg";
+import { IonContent, IonPage } from "@ionic/react";
+import { useEffect, useState } from "react";
+import { Header } from "../components/Header";
 
-const UserHistoryPage: React.FC = () => (
-  <IonPage id="main-content">
-    <IonHeader>
-      <IonToolbar>
-        <IonButtons slot="start">
-          <IonMenuButton />
-        </IonButtons>
-        <div className="menuBar">
-          <IonTitle>Oeffies</IonTitle>
-          <IonImg className="menuLogo" src={logo} />
+const UserHistoryPage: React.FC = () => {
+
+  const [historyEntries, setHistoryEntries] = useState<string[]>([]);
+
+  useEffect(() => {
+    // read persistence
+  }, []);
+
+  return (
+    <IonPage id="main-content">
+      <Header />
+      <IonContent fullscreen>
+        <div className="userHistory">
+          {
+            historyEntries.length === 0
+              ? <p>No entries</p>
+              : historyEntries
+          }
         </div>
-      </IonToolbar>
-    </IonHeader>
-    <IonContent fullscreen>
-      <p>User History</p>
-    </IonContent>
-  </IonPage>
-);
+      </IonContent>
+    </IonPage>
+  );
+};
 
 export default UserHistoryPage;
