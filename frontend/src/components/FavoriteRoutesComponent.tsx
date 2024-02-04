@@ -30,7 +30,7 @@ export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (
 
   return (
     <>
-      <IonList>
+      <IonList className={styles.scroll_padding}>
         <IonReorderGroup
           onIonItemReorder={handleReorder}
           disabled={false}
@@ -44,7 +44,9 @@ export const FavoriteRoutesComponent: React.FC<FavoriteRoutesComponentProps> = (
                   route={route}
                   onRouteSelected={props.onRouteSelected} />
               ))
-              : <IonLabel>Keine favorisierten Routen vorhanden</IonLabel>
+              : <IonLabel>
+                <p className={styles.no_favorites_text}>Keine favorisierten Routen vorhanden</p>
+              </IonLabel>
           }
         </IonReorderGroup>
       </IonList>

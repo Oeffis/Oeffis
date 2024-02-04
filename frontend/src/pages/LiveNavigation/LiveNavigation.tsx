@@ -1,5 +1,5 @@
-import { IonButton, IonContent, IonModal, IonPage } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
+import { IonButton, IonContent, IonModal, IonPage } from "@ionic/react";
 import { Header } from "../../components/Header";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
