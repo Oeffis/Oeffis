@@ -1,13 +1,11 @@
-import { IonButton, IonContent, IonModal, IonPage, IonToast } from "@ionic/react";
-import { notificationsCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
-import { Location, LocationCoordinates } from "../../api";
+import { IonButton, IonContent, IonModal, IonPage } from "@ionic/react";
+import { useEffect, useRef, useState } from "react";
 import { Header } from "../../components/Header";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
+import StopCheckerComponent from "../../components/LiveNavigationInfo/StopCheckerComponent";
+import { cleanAllIntervals } from "../../components/Menu";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
-import { useCurrentLocation } from "../../hooks/useCurrentLocation";
-import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocationsByIdOrNull";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
 import { useJourneyApi, useLocationFinderApi } from "../../services/apiClients/ApiClientsContext";
@@ -15,63 +13,26 @@ import { blackListJourney, findJourneyFromNextStop, parseJSONToJourney } from ".
 import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
+
+  const intervalId = useRef<NodeJS.Timeout>();
+
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(parseJSONToJourney(window.localStorage.getItem("selectedJourney")));
-  const stopIds: string[] = [];
   const [showModal, setshowModal] = useState<boolean>(false);
   const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
-  const [recommendedJourneyInterval, setRecommendedJourneyInterval] = useState<NodeJS.Timeout>();
 
-  const [displayArrivedNotification, setDisplayArrivedNotification] = useState<boolean>(false);
-  const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("Sie haben die Haltestelle ... erreicht.");
-
-  const currentLocation = useCurrentLocation();
   const locationFinderApi = useLocationFinderApi();
   const journeyApi = useJourneyApi();
 
-  if (selectedJourney !== null) {
-    for (const step of selectedJourney.stops) {
-      stopIds.push(step.stopIds[step.stopIds.length - 1]);
-    }
-  }
-
-  const locations: Location[] = stopIds.length > 0 ? useMultipleLocationsByIdOrNull(stopIds) : [];
-
-  const isCurrentLocationArrivedAtStopLocation = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
-    const range = 0.000001;
-    return ((destination.latitude + range) >= position.latitude && (destination.latitude - range) <= position.latitude)
-      && ((destination.longitude + range) >= position.longitude && (destination.longitude - range) <= position.longitude);
-  };
-
-  const watchPosition = (): void => {
-    const currentPositionCoordinates: LocationCoordinates = {
-      latitude: currentLocation.location?.coords.latitude,
-      longitude: currentLocation.location?.coords.longitude
-    } as LocationCoordinates;
-
-    locations.map(location => {
-      if (isCurrentLocationArrivedAtStopLocation(currentPositionCoordinates, location.details.coordinates)) {
-        setDisplayArrivedNotification(true);
-        setArrivedNotificationMessage("Sie haben die Haltestelle " + location.name + " erreicht.");
-        console.log("Sie haben die Haltestelle " + location.name + " erreicht.");
-      }
-    });
-  };
-
   useEffect(() => {
-    watchPosition();
-    if (recommendedJourneyInterval === undefined) {
-      setRecommendedJourneyInterval(setInterval(() => {
-        void findJourneyFromNextStop(locationFinderApi, journeyApi);
-        setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
-        if (window.localStorage.getItem("recJourney") !== null) {
-          setshowModal(true);
-        }
-      }, 120000));
-    }
-    return recommendedJourneyInterval !== undefined
-      ? () => clearInterval(recommendedJourneyInterval)
-      : () => console.log("No interval set.");
-  }, [recommendedJourneyInterval, currentLocation]);
+    intervalId.current = setInterval(() => {
+      void findJourneyFromNextStop(locationFinderApi, journeyApi);
+      setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
+      if (window.localStorage.getItem("recJourney") !== null) {
+        setshowModal(true);
+      }
+    }, 3000); // 120000
+    return () => clearInterval(intervalId.current);
+  }, []);
 
   return (
     <IonPage id="main-content">
@@ -82,19 +43,20 @@ const LiveNavigation: React.FC = () => {
           <>
             <LiveNavigationInfoComponent arrivalTime={selectedJourney?.arrivalTime} />
             <JourneyDetail journey={selectedJourney} />
+            <StopCheckerComponent journey={selectedJourney} />
           </>
         }
-        <IonButton className="back-button" onClick={() => { window.localStorage.removeItem("selectedJourney"); history.back(); }}
+        <IonButton
+          className="back-button"
+          onClick={() => {
+            window.localStorage.removeItem("selectedJourney");
+            cleanAllIntervals();
+            history.back();
+          }}
           size="default" expand="block">
           Navigation Beenden
         </IonButton>
         {/* <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton> */}
-        <IonToast
-          isOpen={displayArrivedNotification}
-          message={arrivedNotificationMessage}
-          position="bottom"
-          duration={3000}
-          icon={notificationsCircle} />
       </IonContent>
       <IonModal className={styles.suggestionModal} isOpen={showModal} >
         <SuggestionModalComponent
@@ -110,7 +72,6 @@ const LiveNavigation: React.FC = () => {
       </IonModal>
     </IonPage>);
 };
-
 export default LiveNavigation;
 
 function updateSelectedJourney(recJourney: IJourney | null, setSelectedJourney: (journey: IJourney | null) => void, selectedJourney: IJourney | null): void {
