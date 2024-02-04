@@ -36,7 +36,7 @@ const JourneyCard: React.FC<TravelProps> = (props: TravelProps) => (
             <IonRow className={styles.traveltime}>
               <IonCol>
                 <IonLabel className={styles.time_word_center}>
-                  <h1>{props.journey.travelDurationInMinutes}</h1>
+                  <h1>{Math.round(props.journey.travelDurationInMinutes)}</h1>
                 </IonLabel>
                 <IonLabel className={styles.time_word_center}>Min</IonLabel>
               </IonCol>

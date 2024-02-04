@@ -30,7 +30,7 @@ export const FavoriteLocationsComponent: React.FC<FavoriteLocationsComponentProp
 
   return (
     <>
-      <IonList>
+      <IonList className={styles.scroll_padding}>
         <IonReorderGroup
           onIonItemReorder={handleReorder}
           disabled={false}
@@ -44,7 +44,9 @@ export const FavoriteLocationsComponent: React.FC<FavoriteLocationsComponentProp
                   onLocationSelected={props.onLocationSelected}
                   location={location} />
               ))
-              : <IonLabel>Keine favorisierten Location vorhanden</IonLabel>
+              : <IonLabel>
+                <p className={styles.no_favorites_text}>Keine favorisierten Stationen vorhanden</p>
+              </IonLabel>
           }
         </IonReorderGroup>
       </IonList>
