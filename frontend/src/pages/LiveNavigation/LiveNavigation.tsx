@@ -1,22 +1,31 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { useEffect, useState } from "react";
 import logo from "../../../public/images/OeffisLogo1.svg";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
+import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
+import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
+import { useJourneyApi, useLocationFinderApi } from "../../services/apiClients/ApiClientsContext";
+import { blackListJourney, findJourneyFromNextStop, parseJSONToJourney } from "../../services/smartSuggestion/smartSuggestionFunctions";
+import styles from "./LiveNavigation.module.css";
 
 const LiveNavigation: React.FC = () => {
-  const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
-  let selectedJourney: IJourney | null = null;
-  if (selectedJourneyAsString !== null) {
-    selectedJourney = JSON.parse(selectedJourneyAsString) as IJourney;
-    selectedJourney.arrivalTime = new Date(selectedJourney.arrivalTime);
-    selectedJourney.startTime = new Date(selectedJourney.startTime);
+  const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(parseJSONToJourney(window.localStorage.getItem("selectedJourney")));
+  const [showModal, setshowModal] = useState<boolean>(false);
+  const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
+  const locationFinderApi = useLocationFinderApi();
+  const journeyApi = useJourneyApi();
 
-    for (const step of selectedJourney.stops) {
-      step.arrivalTime = new Date(step.arrivalTime);
-      step.startTime = new Date(step.startTime);
-    }
-  }
+  useEffect(() => {
+    setInterval(() => {
+      void findJourneyFromNextStop(locationFinderApi, journeyApi);
+      setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
+      if (window.localStorage.getItem("recJourney") !== null) {
+        setshowModal(true);
+      }
+    }, 120000);
+  }, []);
 
   return (
     <>
@@ -44,7 +53,27 @@ const LiveNavigation: React.FC = () => {
           Navigation Beenden
         </IonButton>
       </IonContent>
+      <IonModal className={styles.suggestionModal} isOpen={showModal} >
+        <SuggestionModalComponent updateSelectedJourney={() => { updateSelectedJourney(recommendedJourney, setSelectedJourney, selectedJourney); setshowModal(false); }} dismiss={() => { setshowModal(false); blackListJourney(); }} recommendedJourney={recommendedJourney} />
+      </IonModal>
     </>);
 };
 
 export default LiveNavigation;
+
+function updateSelectedJourney(recJourney: IJourney | null, setSelectedJourney: (journey: IJourney | null) => void, selectedJourney: IJourney | null): void {
+  let updatedStops: IJourneyStep[] = [];
+  if (recJourney && selectedJourney) {
+    updatedStops = selectedJourney?.stops.filter(
+      stop => stop.startTime < recJourney?.stops[0].startTime
+    );
+    updatedStops = updatedStops?.concat(recJourney?.stops);
+  }
+
+  if (recJourney) {
+    recJourney.stops = updatedStops;
+  }
+  window.localStorage.removeItem("selectedJourney");
+  window.localStorage.setItem("selectedJourney", JSON.stringify(recJourney));
+  setSelectedJourney(recJourney);
+}
