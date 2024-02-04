@@ -1,4 +1,5 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
+import { thunderstorm } from "ionicons/icons";
 import { Header } from "../components/Header";
 
 const NotFoundPage: React.FC = () => (
@@ -6,7 +7,11 @@ const NotFoundPage: React.FC = () => (
     <Header />
     <IonContent fullscreen>
       <div className="error">
-        <p>error</p>
+        <IonIcon className="errorIcon" src={thunderstorm} />
+        <div>
+          <p className="errorCode">404</p>
+          <p className="errorMessage">Page not found</p>
+        </div>
       </div>
     </IonContent>
   </IonPage>
