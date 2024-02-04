@@ -24,12 +24,6 @@ export const SuggestionModalComponent: React.FC<SuggestionModalComponentProps> =
         </IonLabel>
         <div className={styles.newLines}>
           <LegList journey={props.recommendedJourney} />
-          {/* <IonLabel>
-            Neue Verbindungen
-          </IonLabel>
-          <IonLabel>
-            S11 --- Bremen HBF
-          </IonLabel> */}
         </div>
       </div>
       <div className={styles.buttonSection}>

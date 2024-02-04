@@ -1,9 +1,15 @@
 import {
   IonButton,
+  IonButtons,
   IonContent,
+  IonHeader,
   IonIcon,
+  IonImg,
+  IonMenuButton,
   IonRadio,
-  IonRadioGroup
+  IonRadioGroup,
+  IonTitle,
+  IonToolbar
 } from "@ionic/react";
 import { mapOutline, play } from "ionicons/icons";
 import { useEffect, useState } from "react";
@@ -13,6 +19,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
+import logo from "../../../public/images/OeffisLogo1.svg";
 import {
   FootpathLeg,
   LegDestinationLocationTypeEnum,
@@ -156,8 +163,17 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   return (
     <>
-      {result.type === "error" && <div>Error: {result.error.message}</div>}
-      {result.type === "pending" && <div>Searching...</div>}
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <div className="menuBar">
+            <IonTitle>Öffis</IonTitle>
+            <IonImg className="menuLogo" src={logo} />
+          </div>
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
         <div id="map" style={{ height: mapHeight + "%" }}>
           <LeafletMapContainer
@@ -196,6 +212,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
             }
           </div>
         </div>
+        {result.type === "error" && <div>Error: {result.error.message}</div>}
+        {result.type === "pending" && <div>Suche Routen...</div>}
         <SwiperReact className={styles.swiperDiv}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           onSlideChange={(swiper: Swiper) => setActiveSlideIndex(swiper.activeIndex)}
