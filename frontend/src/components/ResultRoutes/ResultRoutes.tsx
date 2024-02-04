@@ -2,13 +2,14 @@ import {
   IonButton,
   IonContent,
   IonIcon,
-  IonPage,
   IonItemDivider,
+  IonPage,
   IonProgressBar,
   IonRadio,
-  IonRadioGroup
+  IonRadioGroup,
+  IonRow
 } from "@ionic/react";
-import { mapOutline, play } from "ionicons/icons";
+import { chevronBackOutline, chevronForwardOutline, mapOutline, play } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
 import "swiper/css";
@@ -187,10 +188,32 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           </div>
         }
         <div className={styles.result_swiper}>
-          <IonRadioGroup value={slideName}>
-            <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
-            <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
-          </IonRadioGroup>
+          <IonRow className={styles.wide_row}>
+            <div className={styles.arrow_button}>
+              {
+                activeSlideIndex === 0 ? null :
+                  <div>
+                    <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex - 1)}>
+                      <IonIcon icon={chevronBackOutline} className={styles.arrow_icon} />
+                    </IonButton>
+                  </div>
+              }
+            </div>
+            <IonRadioGroup className={styles.radio_group} value={slideName}>
+              <IonRadio onClick={() => swiper?.slideTo(0)} className={styles.radio} value={availableRoutesString} mode="md" />
+              <IonRadio onClick={() => swiper?.slideTo(1)} className={styles.radio} value={selectedRouteString} mode="md" />
+            </IonRadioGroup>
+            <div className={styles.arrow_button}>
+              {
+                activeSlideIndex === 1 ? null :
+                  <div>
+                    <IonButton fill="clear" onClick={() => swiper?.slideTo(activeSlideIndex + 1)}>
+                      <IonIcon icon={chevronForwardOutline} className={styles.arrow_icon} />
+                    </IonButton>
+                  </div>
+              }
+            </div>
+          </IonRow>
           <h5 className={styles.headline}>{slideName}</h5>
         </div>
         <div className={styles.back_button}>
