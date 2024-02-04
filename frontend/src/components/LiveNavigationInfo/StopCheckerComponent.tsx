@@ -50,7 +50,6 @@ const StopCheckerComponent: React.FC<StopCheckerComponentProps> = (props) => {
       if (isCurrentLocationArrivedAtStopLocation(currentPositionCoordinates, location.details.coordinates)) {
         setDisplayArrivedNotification(true);
         setArrivedNotificationMessage("Sie haben die Haltestelle " + location.name + " erreicht.");
-        console.log("Sie haben die Haltestelle " + location.name + " erreicht.");
       }
     });
   };
@@ -58,10 +57,10 @@ const StopCheckerComponent: React.FC<StopCheckerComponentProps> = (props) => {
   useEffect(() => {
     intervalId.current = setInterval(() => {
       checkPosition();
-      console.log("checking position");
+      setDisplayArrivedNotification(false);
     }, 5000);
     return () => clearInterval(intervalId.current);
-  }, [props.journey]);
+  }, [displayArrivedNotification, props.journey]);
 
   return (
     <IonToast

@@ -54,10 +54,8 @@ const Menu: React.FC<MenuProps> = (props) => (
 export default Menu;
 
 export const cleanAllIntervals = (): void => {
-  const intervalId = window.setInterval(function () { }, Number.MAX_SAFE_INTEGER);
-  // Clear any timeout/interval up to that id
+  const intervalId = window.setInterval(() => { }, Number.MAX_SAFE_INTEGER);
   for (let i = 1; i < intervalId; i++) {
     window.clearInterval(i);
   }
-  console.log("All intervals cleared.");
 };
