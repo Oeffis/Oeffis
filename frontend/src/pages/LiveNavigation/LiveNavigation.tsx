@@ -1,12 +1,8 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonImg, IonMenuButton, IonPage, IonTitle, IonToast, IonToolbar } from "@ionic/react";
-import { notificationsCircle } from "ionicons/icons";
+import { IonButton, IonContent, IonModal, IonPage } from "@ionic/react";
 import { useEffect, useState } from "react";
-import logo from "../../../public/images/OeffisLogo1.svg";
-import { Location, LocationCoordinates } from "../../api";
+import { Header } from "../../components/Header";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
-import { useCurrentLocation } from "../../hooks/useCurrentLocation";
-import { useMultipleLocationsByIdOrNull } from "../../hooks/useMultipleLocationsByIdOrNull";
 import { SuggestionModalComponent } from "../../components/suggestionModal/SuggestionModalComponent";
 import { IJourney } from "../../interfaces/IJourney.interface";
 import { IJourneyStep } from "../../interfaces/IJourneyStep.interface";
@@ -18,12 +14,15 @@ const LiveNavigation: React.FC = () => {
   const [selectedJourney, setSelectedJourney] = useState<IJourney | null>(parseJSONToJourney(window.localStorage.getItem("selectedJourney")));
   const [showModal, setshowModal] = useState<boolean>(false);
   const [recommendedJourney, setRecommendedJourney] = useState<IJourney | null>(null);
+  const [recommendedJourneyInterval, setRecommendedJourneyInterval] = useState<NodeJS.Timeout>();
   const locationFinderApi = useLocationFinderApi();
   const journeyApi = useJourneyApi();
+
+  /*
   const [displayArrivedNotification, setDisplayArrivedNotification] = useState<boolean>(false);
   const [arrivedNotificationMessage, setArrivedNotificationMessage] = useState<string>("Sie haben die Haltestelle ... erreicht.");
   const currentLocation = useCurrentLocation();
-  /*
+  
   const selectedJourneyAsString = window.localStorage.getItem("selectedJourney");
   let selectedJourney: IJourney | null = null;
   const stopIds: string[] = [];
@@ -39,9 +38,9 @@ const LiveNavigation: React.FC = () => {
       stopIds.push(step.stopIds[step.stopIds.length - 1]);
     }
   }
-  */
-  const locations: Location[] = stopIds.length > 0 ? useMultipleLocationsByIdOrNull(stopIds) : [];
 
+  const locations: Location[] = stopIds.length > 0 ? useMultipleLocationsByIdOrNull(stopIds) : [];
+  
   const isCurrentLocationArrivedAtStopLocation = (position: LocationCoordinates, destination: LocationCoordinates): boolean => {
     const range = 0.000001;
     return ((destination.latitude + range) >= position.latitude && (destination.latitude - range) <= position.latitude)
@@ -62,32 +61,29 @@ const LiveNavigation: React.FC = () => {
       }
     });
   };
+*/
+  useEffect(() => {
 
-useEffect(() => {
-    watchPosition();
-    setInterval(() => {
-      void findJourneyFromNextStop(locationFinderApi, journeyApi);
-      setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
-      if (window.localStorage.getItem("recJourney") !== null) {
-        setshowModal(true);
-      }
-    }, 120000);
-  }, [currentLocation]);
+    // watchPosition();
 
+    if (recommendedJourneyInterval === undefined) {
+      setRecommendedJourneyInterval(setInterval(() => {
+        void findJourneyFromNextStop(locationFinderApi, journeyApi);
+        setRecommendedJourney(parseJSONToJourney(window.localStorage.getItem("recJourney")));
+        if (window.localStorage.getItem("recJourney") !== null) {
+          setshowModal(true);
+        }
+      }, 120000));
+    }
+
+    return recommendedJourneyInterval !== undefined
+      ? () => clearInterval(recommendedJourneyInterval)
+      : () => console.log("No interval set.");
+  }, []);
 
   return (
     <IonPage id="main-content">
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Öffis</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
-      </IonHeader>
+      <Header />
       <IonContent>
         {
           selectedJourney !== null &&
@@ -100,18 +96,26 @@ useEffect(() => {
           size="default" expand="block">
           Navigation Beenden
         </IonButton>
-        <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton>
+        {/*   <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton>
         <IonToast
           isOpen={displayArrivedNotification}
           message={arrivedNotificationMessage}
           position="bottom"
           duration={3000}
-          icon={notificationsCircle} />
+          icon={notificationsCircle} /> */}
       </IonContent>
       <IonModal className={styles.suggestionModal} isOpen={showModal} >
-        <SuggestionModalComponent updateSelectedJourney={() => { updateSelectedJourney(recommendedJourney, setSelectedJourney, selectedJourney); setshowModal(false); }} dismiss={() => { setshowModal(false); blackListJourney(); }} recommendedJourney={recommendedJourney} />
+        <SuggestionModalComponent
+          updateSelectedJourney={() => {
+            updateSelectedJourney(recommendedJourney, setSelectedJourney, selectedJourney);
+            setshowModal(false);
+          }}
+          dismiss={() => {
+            setshowModal(false);
+            blackListJourney();
+          }}
+          recommendedJourney={recommendedJourney} />
       </IonModal>
-    </>);
     </IonPage>);
 };
 
