@@ -1,10 +1,15 @@
 import { IonContent, IonPage } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Header } from "../components/Header";
+import styles from "./UserHistoryPage.module.css";
 
 const UserHistoryPage: React.FC = () => {
 
-  const [historyEntries, setHistoryEntries] = useState<string[]>([]);
+  const [historyEntries, setHistoryEntries] = useState<ReactElement[]>([]);
+
+  const loadHistoryEntry = () => {
+
+  }
 
   useEffect(() => {
     // read persistence
@@ -14,10 +19,10 @@ const UserHistoryPage: React.FC = () => {
     <IonPage id="main-content">
       <Header />
       <IonContent fullscreen>
-        <div className="userHistory">
+        <div className={styles.userHistory}>
           {
             historyEntries.length === 0
-              ? <p>No entries</p>
+              ? <p>No entries in history</p>
               : historyEntries
           }
         </div>
