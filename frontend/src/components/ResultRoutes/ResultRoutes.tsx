@@ -220,7 +220,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           <SwiperSlide>
             {
               selectedJourney !== null && <>
-                <JourneyDetail journey={selectedJourney} />
+                <JourneyDetail journey={selectedJourney} hideProgress={true} />
               </>
             }
           </SwiperSlide>

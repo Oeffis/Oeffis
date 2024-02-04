@@ -3,7 +3,7 @@ import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import styles from "./JourneyStepComponent.module.css";
 
 const formatDateTime = (date: Date): string => format(date, "HH:mm");
-export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date }
+export interface StationProps { step?: IJourneyStep, arrivalDestination?: string, arrivalTime: Date; showProgress?: boolean; }
 
 const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
   const arrived = isFuture(props.arrivalTime) ? false : true;
@@ -14,7 +14,7 @@ const JourneyStepComponent: React.FC<StationProps> = (props: StationProps) => {
         <p className={styles.m0}>Ankunft</p>
         <p className={styles.m0}>{formatDateTime(props.arrivalTime)}</p>
       </div>
-      <div className={arrived ? styles.circleArrived : styles.circleNotArrived} />
+      <div className={arrived && props.showProgress ? styles.circleArrived : styles.circleNotArrived} />
       <p className={styles.centerVertically + " " + styles.bold}>
         {
           props.step
