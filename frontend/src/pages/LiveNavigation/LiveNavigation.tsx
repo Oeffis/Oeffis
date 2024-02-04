@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { IonButton, IonContent, IonModal, IonPage } from "@ionic/react";
+import { useEffect, useRef, useState } from "react";
 import { Header } from "../../components/Header";
 import JourneyDetail from "../../components/JourneyDetail";
 import LiveNavigationInfoComponent from "../../components/LiveNavigationInfo/LiveNavigationInfoComponent";
@@ -56,7 +56,6 @@ const LiveNavigation: React.FC = () => {
           size="default" expand="block">
           Navigation Beenden
         </IonButton>
-        {/* <IonButton onClick={() => setDisplayArrivedNotification(!displayArrivedNotification)}>show toast</IonButton> */}
       </IonContent>
       <IonModal className={styles.suggestionModal} isOpen={showModal} >
         <SuggestionModalComponent
