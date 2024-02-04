@@ -2,8 +2,8 @@ import {
   IonButton,
   IonContent,
   IonIcon,
-  IonProgressBar,
   IonItemDivider,
+  IonProgressBar,
   IonRadio,
   IonRadioGroup
 } from "@ionic/react";
@@ -163,22 +163,23 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   return (
     <>
       <Header />
-        <div id="map" style={{
-          height: mapHeight + "%",
-          transition: "height 500ms ease-in-out"
-        }}>
+      <div id="map" style={{
+        height: mapHeight + "%",
+        transition: "height 500ms ease-in-out"
+      }}>
         <LeafletMapContainer
           originId={origin.id}
           destinationId={destination.id}
           locationIds={(activeSlideIndex === 0) ? [origin.id, destination.id] : getLocationIds()}
           showLines={true}
-            isDarkThemeEnabeled={isDarkThemeEnabeled}
+          isDarkThemeEnabeled={isDarkThemeEnabeled}
         />
       </div>
       <IonItemDivider color="light" className={styles.result_header}>
         {
           <div className={styles.left_align}>
             <IonButton className={styles.circle_button}
+              onClick={mapHeight === 0 ? () => setMapHeight(30) : () => setMapHeight(0)}
             >
               <IonIcon icon={mapOutline} />
             </IonButton>
