@@ -1,6 +1,7 @@
 import { IonIcon } from "@ionic/react";
 import { format } from "date-fns";
 import { trainOutline } from "ionicons/icons";
+import React from "react";
 import { IJourney } from "../interfaces/IJourney.interface";
 import { IJourneyStep } from "../interfaces/IJourneyStep.interface";
 import FirstJourneyStepComponent from "./FirstJourneyStepComponent";
@@ -54,7 +55,7 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
     <div className={styles.contentGrid}>
       {
         props.journey.stops.map((step: IJourneyStep, index) =>
-          <>
+          <React.Fragment key={index}>
             {
               index === 0
               && <FirstJourneyStepComponent
@@ -84,7 +85,7 @@ export function StepDetails(props: StepDetailsProps): JSX.Element {
                 isFirst={false}
                 trackOrigin={step.trackOrigin}
                 trackDestination={step.trackDestination} />}
-          </>
+          </React.Fragment>
         )}
     </div>
   );

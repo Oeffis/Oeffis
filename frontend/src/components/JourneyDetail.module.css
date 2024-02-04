@@ -30,7 +30,8 @@ IonButton {
   font-size: 20px;
 }
 
-.headerDetails p, .headerDuration p {
+.headerDetails p,
+.headerDuration p {
   margin: 0;
 }
 
