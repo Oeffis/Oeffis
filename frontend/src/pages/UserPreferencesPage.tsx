@@ -1,6 +1,6 @@
-import { IonButtons, IonContent, IonHeader, IonImg, IonLabel, IonMenuButton, IonPage, IonTitle, IonToggle, IonToolbar } from "@ionic/react";
+import { IonContent, IonLabel, IonPage, IonToggle } from "@ionic/react";
 import { useEffect } from "react";
-import logo from "../../public/images/OeffisLogo1.svg";
+import { Header } from "../components/Header";
 import { PersistenceService } from "../services/persistence/PersistenceService";
 import styles from "./UserPreferencesPage.module.css";
 
@@ -44,17 +44,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
 
   return (
     <IonPage id="main-content">
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="menuBar">
-            <IonTitle>Öffis</IonTitle>
-            <IonImg className="menuLogo" src={logo} />
-          </div>
-        </IonToolbar>
-      </IonHeader>
+      <Header />
       <IonContent fullscreen>
         <div className={styles.userPreferences}>
           <div className={styles.row}>
