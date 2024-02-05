@@ -1,7 +1,6 @@
 import { IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonTitle, IonToolbar } from "@ionic/react";
 import { clipboard, compass, settings, starHalf, statsChart } from "ionicons/icons";
 import React from "react";
-import "./Menu.css";
 
 export interface MenuProps {
   currentJourneyUrl: string
@@ -11,7 +10,7 @@ const Menu: React.FC<MenuProps> = (props) => (
   <IonMenu contentId="main-content">
     <IonHeader>
       <IonToolbar>
-        <IonTitle>Menu</IonTitle>
+        <IonTitle>Menü</IonTitle>
       </IonToolbar>
     </IonHeader>
     <IonContent className="ion-padding">
@@ -19,31 +18,31 @@ const Menu: React.FC<MenuProps> = (props) => (
         <IonMenuToggle autoHide={false}>
           <IonItem button onClick={() => cleanAllIntervals()} routerLink={props.currentJourneyUrl} routerDirection="none">
             <IonIcon icon={compass} />
-            <IonLabel>Journey</IonLabel>
+            <IonLabel>Routenplaner</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
           <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/favorites"} routerDirection="none">
             <IonIcon icon={starHalf} />
-            <IonLabel>Favorites</IonLabel>
+            <IonLabel>Favoriten</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
           <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/userHistory"} routerDirection="none">
             <IonIcon icon={clipboard} />
-            <IonLabel>User History</IonLabel>
+            <IonLabel>Historie</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
           <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/userPreferences"} routerDirection="none">
             <IonIcon icon={settings} />
-            <IonLabel>User Preferences</IonLabel>
+            <IonLabel>Einstellungen</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
           <IonItem button onClick={() => cleanAllIntervals()} routerLink={"/stats"} routerDirection="none">
             <IonIcon icon={statsChart} />
-            <IonLabel>Stats</IonLabel>
+            <IonLabel>Statistiken</IonLabel>
           </IonItem>
         </IonMenuToggle>
       </IonList>

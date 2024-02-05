@@ -129,6 +129,8 @@ const RoutePlanner = ({
                   <IonDatetime
                     name="date_time"
                     id="datetime"
+                    doneText="Auswählen"
+                    cancelText="Zurück"
                     /* Don't use currentTime here because its frequent updates lead to "glitching"/"jumping" of UI/Map. */
                     value={departureTime}
                     multiple={false} // Assures that value cannot be an array but a single date string only.
@@ -208,7 +210,7 @@ const RoutePlanner = ({
           </IonToolbar>
           <div className={rp.modal_content_section} id="content_section">
             <div>
-              Do you want to save as Route or as Trip?
+              Als Route oder Trip speichern?
             </div>
             <div className={rp.modal_buttons} id="buttons">
               <IonButton disabled={!canCurrentRouteBeFavorited()} onClick={() => { if (originId && destinationId) { addFavoriteRoute({ originId, destinationId }); setIsFavoritesDialogueOpen(false); } }}>Route</IonButton>

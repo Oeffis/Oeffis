@@ -49,7 +49,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
         <div className={styles.userPreferences}>
           <div className={styles.row}>
             <div className={styles.key}>
-              <IonLabel>Dark Mode</IonLabel>
+              <IonLabel>Dunkelmodus</IonLabel>
             </div>
             <div className={styles.value}>
               <IonToggle checked={props.isDarkThemeEnabled} disabled={false} onClick={() => setIsDarkThemeEnabledPersistence()} />
