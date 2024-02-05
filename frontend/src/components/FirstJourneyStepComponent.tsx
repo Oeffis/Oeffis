@@ -17,7 +17,7 @@ const FirstJourneyStepComponent: React.FC<StationProps> = (props: StationProps) 
         <p className={styles.m0}>{formatDateTime(props.startTime)}</p>
       </div>
       <div className={arrived && props.showProgress ? styles.circleArrived : styles.circleNotArrived} />
-      <p className={styles.centerVertically + " " + styles.bold}>{props.stationName}</p>
+      <p className={styles.centerVertically + " " + styles.bold + " " + styles.paddingLeft}>{props.stationName}</p>
       <p className={styles.centerVertically + " " + styles.textAlignCenter + " " + styles.track}>
         {props.isFirst
           ? props.trackOrigin !== ""
