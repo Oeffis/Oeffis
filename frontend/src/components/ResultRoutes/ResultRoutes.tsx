@@ -168,7 +168,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
   }, [activeSlideIndex]);
 
   return (
-    <IonPage id="main-content">
+    <>
       <Header title="Routendetails" />
       <div id="map" style={{
         height: mapHeight + "%",
@@ -266,7 +266,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
           </SwiperSlide>
         </SwiperReact>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 
