@@ -3,7 +3,12 @@ import { Stats } from "../api";
 import { useStatsApi } from "../services/apiClients/ApiClientsContext";
 
 export const useStats = (): Stats => {
-  const [stats, setStats] = useState<Stats>({ delays: [], filled: false, time: new Date() });
+  const [stats, setStats] = useState<Stats>({
+    allTimeDelays: [],
+    last24HoursDelays: [],
+    filled: false,
+    time: new Date()
+  });
 
   const abortController = new AbortController();
   const statsApi = useStatsApi();
