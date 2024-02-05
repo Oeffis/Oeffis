@@ -4,6 +4,7 @@ import { Header } from "../components/Header";
 import HistoryEntryComponent, { HistoryEntryComponentProps } from "../components/history/HistoryEntryComponent";
 import { PersistenceService } from "../services/persistence/PersistenceService";
 import styles from "./UserHistoryPage.module.css";
+import { UserPreferences } from "./UserPreferencesPage";
 
 export interface PersistanceHistoryEntry {
   date: string,
@@ -17,169 +18,9 @@ export interface PersistanceHistoryEntry {
 const UserHistoryPage: React.FC = () => {
 
   const persistenceService = new PersistenceService();
-  const [historyEntries, setHistoryEntries] = useState<HistoryEntryComponentProps[]>(
-    [
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: false,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: false,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      },
-      {
-        date: new Date("2024-02-05T13:10:00"),
-        asArrival: true,
-        originId: "de:05513:4494",
-        originName: "Gelsenkirchen, Am stadtwald",
-        destinationId: "de:05513:5124",
-        destinationName: "Gelsenkirchen, Neidenburg"
-      }
-    ]
+  const [historyEntries, setHistoryEntries] = useState<HistoryEntryComponentProps[]>([]);
+  const [historyEntriesPersistence] = useState<PersistanceHistoryEntry[]>(
+    JSON.parse(persistenceService.get(UserPreferences.userHistory) ?? "[]") as PersistanceHistoryEntry[]
   );
 
   const loadHistoryEntry = (persistenceHistoryEntry: PersistanceHistoryEntry): HistoryEntryComponentProps => ({
@@ -192,7 +33,7 @@ const UserHistoryPage: React.FC = () => {
   });
 
   useEffect(() => {
-    // read persistence
+    setHistoryEntries(historyEntriesPersistence.map(entry => loadHistoryEntry(entry)));
   }, []);
 
   return (
@@ -202,7 +43,7 @@ const UserHistoryPage: React.FC = () => {
         <div className={styles.userHistory}>
           {
             historyEntries.length === 0
-              ? <p>Keine Einträge vorhanden</p>
+              ? <p className={styles.noEntries}>Keine Einträge vorhanden</p>
               : historyEntries.map((entry, index) => (
                 <HistoryEntryComponent
                   key={index}
@@ -222,3 +63,14 @@ const UserHistoryPage: React.FC = () => {
 };
 
 export default UserHistoryPage;
+
+export const saveJourneyToUserHistory = (newUserHistoryEntry: PersistanceHistoryEntry): void => {
+  const persistenceService = new PersistenceService();
+  const userHistory = JSON.parse(persistenceService.get(UserPreferences.userHistory) ?? "[]");
+  if (userHistory.length === 20) {
+    //userHistory.push(newUserHistoryEntry);
+  } else {
+    userHistory.push(newUserHistoryEntry);
+  }
+  persistenceService.set(UserPreferences.userHistory, JSON.stringify(userHistory));
+};
