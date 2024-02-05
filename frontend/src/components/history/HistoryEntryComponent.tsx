@@ -14,6 +14,8 @@ export interface HistoryEntryComponentProps {
 
 const HistoryEntryComponent: React.FC<HistoryEntryComponentProps> = (props) => {
 
+  const asTimeNumber = (number: number): string => (number < 10 ? "0" + number : "" + number);
+
   const historyEntryClicked = (): void => {
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
@@ -25,11 +27,23 @@ const HistoryEntryComponent: React.FC<HistoryEntryComponentProps> = (props) => {
     <div className={styles.historyEntry} onClick={() => historyEntryClicked()}>
       <div className={styles.rowTop}>
         <div className={`${styles.cell}`}>
-          <p className={props.asArrival ? styles.date : styles.time}>{props.asArrival ? props.date.toLocaleDateString() : props.date.getHours() + ":" + props.date.getMinutes() + " Uhr"}</p>
+          <p className={props.asArrival ? styles.date : styles.time}>
+            {
+              props.asArrival
+                ? props.date.toLocaleDateString()
+                : asTimeNumber(props.date.getHours()) + ":" + asTimeNumber(props.date.getMinutes()) + " Uhr"
+            }
+          </p>
         </div>
         <div className={`${styles.middleCell}`} />
         <div className={`${styles.cell}`}>
-          <p className={props.asArrival ? styles.time : styles.date}>{props.asArrival ? props.date.getHours() + ":" + props.date.getMinutes() + " Uhr" : props.date.toLocaleDateString()}</p>
+          <p className={props.asArrival ? styles.time : styles.date}>
+            {
+              props.asArrival
+                ? asTimeNumber(props.date.getHours()) + ":" + asTimeNumber(props.date.getMinutes()) + " Uhr"
+                : props.date.toLocaleDateString()
+            }
+          </p>
         </div>
       </div>
       <div className={styles.rowBottom}>
