@@ -1,4 +1,4 @@
-import { IonIcon } from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
 import {
   arrowRedoOutline,
   calendarOutline,
@@ -7,6 +7,7 @@ import {
   reloadOutline,
   timerOutline
 } from "ionicons/icons";
+import { useState } from "react";
 import { CancellationStatStatusEnum, DelayStatsStatusEnum, LegStats, LegStatsCancellationStat } from "../api";
 import styles from "./DisplayLegStats.module.css";
 
@@ -16,15 +17,31 @@ export function DisplayLegStats({ stats, destinationName, originName }: {
   originName: string
 }): JSX.Element {
 
+  const [isExpandedDelay, setIsExpandedDelay] = useState<boolean>(false);
+  const [isExpandedCancellation, setIsExpandedCancellation] = useState<boolean>(false);
+  const toggleDelayExpansion = (): void => {
+    setIsExpandedDelay(!isExpandedDelay);
+  };
+  const toggleCancellationExpansion = (): void => {
+    setIsExpandedCancellation(!isExpandedCancellation);
+  };
+
   return (
     <div>
       <div>
-        <p><IonIcon icon={timerOutline}/> Verspätungsquote: {renderDelayStatsSummary(stats)}</p>
-        {renderDelayStatsDetails(stats, originName, destinationName)}
+        <p><IonIcon icon={timerOutline}/> Verspätungsquote: {renderDelayStatsSummary(stats)} <IonButton
+          size="small" fill="clear" onClick={toggleDelayExpansion}>Details</IonButton></p>
+        {isExpandedDelay && (
+          <>{renderDelayStatsDetails(stats, originName, destinationName)}</>
+        )}
       </div>
       <div>
-        <p><IonIcon icon={closeCircleOutline}/>Ausfallquote: {renderCancellationStatSummary(stats.cancellationStat)}</p>
-        {renderCancellationStatDetails(stats.cancellationStat, originName, destinationName)}
+        <p><IonIcon icon={closeCircleOutline}/>Ausfallquote: {renderCancellationStatSummary(stats.cancellationStat)}
+          <IonButton
+            size="small" fill="clear" onClick={toggleCancellationExpansion}>Details</IonButton></p>
+        {isExpandedCancellation && (
+          <>{renderCancellationStatDetails(stats.cancellationStat, originName, destinationName)}</>
+        )}
       </div>
     </div>
   );
