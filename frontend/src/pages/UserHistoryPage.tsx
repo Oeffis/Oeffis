@@ -44,7 +44,7 @@ const UserHistoryPage: React.FC = () => {
           {
             historyEntries.length === 0
               ? <p className={styles.noEntries}>Keine Einträge vorhanden</p>
-              : historyEntries.map((entry, index) => (
+              : historyEntries.toReversed().map((entry, index) => (
                 <HistoryEntryComponent
                   key={index}
                   date={entry.date}
@@ -65,12 +65,12 @@ const UserHistoryPage: React.FC = () => {
 export default UserHistoryPage;
 
 export const saveJourneyToUserHistory = (newUserHistoryEntry: PersistanceHistoryEntry): void => {
+  const maxUserHistoryEntries = 20;
   const persistenceService = new PersistenceService();
   const userHistory = JSON.parse(persistenceService.get(UserPreferences.userHistory) ?? "[]");
-  if (userHistory.length === 20) {
-    //userHistory.push(newUserHistoryEntry);
-  } else {
-    userHistory.push(newUserHistoryEntry);
+  if (userHistory.length === maxUserHistoryEntries) {
+    userHistory.splice(0, 1);
   }
+  userHistory.push(newUserHistoryEntry);
   persistenceService.set(UserPreferences.userHistory, JSON.stringify(userHistory));
 };
