@@ -7,7 +7,7 @@ const StatsPage: React.FC = () => {
 
   return (
     <IonPage id="content">
-      <Header />
+      <Header title="Statistiken" />
       <IonContent class="ion-padding">
         {stats.filled && (<>
           <blockquote style={{

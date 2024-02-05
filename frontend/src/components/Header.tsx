@@ -2,14 +2,18 @@ import { IonButtons, IonHeader, IonImg, IonMenuButton, IonTitle, IonToolbar } fr
 import logo from "../../public/images/OeffisLogo1.svg";
 import styles from "./Header.module.css";
 
-export const Header: React.FC = () => (
+export interface HeaderProps {
+  title: string
+}
+
+export const Header: React.FC<HeaderProps> = (props) => (
   <IonHeader>
     <IonToolbar className={styles.headerToolbar}>
       <IonButtons slot="start">
         <IonMenuButton />
       </IonButtons>
       <IonTitle>
-        <h3>Öffis</h3>
+        <h3>{props.title}</h3>
       </IonTitle>
       <IonButtons slot="end">
         <IonImg className={styles.headerLogo} src={logo} />
