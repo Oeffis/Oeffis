@@ -6,7 +6,8 @@ import { PersistenceService } from "../services/persistence/PersistenceService";
 import styles from "./UserPreferencesPage.module.css";
 
 export enum UserPreferences {
-  isDarkThemeEnabled = "isDarkThemeEnabeld"
+  isDarkThemeEnabled = "isDarkThemeEnabeld",
+  userHistory = "userHistory"
 }
 export enum UserPreferencesValues {
   enabled = "enabled",
@@ -40,6 +41,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
 
   const clearHistory = (): void => {
     console.log("Clearing user history");
+    persistance.set(UserPreferences.userHistory, "[]");
   };
 
   useEffect(() => {
