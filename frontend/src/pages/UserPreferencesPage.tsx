@@ -51,7 +51,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
 
   return (
     <IonPage id="main-content">
-      <Header />
+      <Header title="Einstellungen" />
       <IonContent fullscreen>
         <div className={styles.userPreferences}>
           <div className={styles.row}>
