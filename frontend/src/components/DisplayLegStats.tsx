@@ -65,7 +65,7 @@ function renderDelayStatsDetails(stats: LegStats, originName: string, destinatio
 
   if (stats.destinationDelayStats.status === DelayStatsStatusEnum.Unavailable
     && stats.originDelayStats.status === DelayStatsStatusEnum.Unavailable) {
-    details = <span>"Keine historischen Verspätungsdaten für diesen Streckenabschnitt verfügbar."</span>;
+    details = <i>Keine historischen Verspätungsdaten für diesen Streckenabschnitt verfügbar.</i>;
 
   } else {
     const bulletPoints: JSX.Element[] = [];
@@ -118,7 +118,7 @@ function renderCancellationStatDetails(
   let details: JSX.Element;
 
   if (stat.status === CancellationStatStatusEnum.Unavailable) {
-    details = <span>"Keine historischen Ausfalldaten für diesen Streckenabschnitt verfügbar."</span>;
+    details = <i>Keine historischen Ausfalldaten für diesen Streckenabschnitt verfügbar.</i>;
 
   } else {
     const bulletPoints: JSX.Element[] = [];
