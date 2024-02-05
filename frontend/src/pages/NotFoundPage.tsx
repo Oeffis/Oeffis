@@ -11,7 +11,7 @@ const NotFoundPage: React.FC = () => (
         <IonIcon className={styles.errorIcon} src={thunderstorm} />
         <div>
           <p className={styles.errorCode}>404</p>
-          <p className={styles.errorMessage}>Page not found</p>
+          <p className={styles.errorMessage}>Ups! Die Suche hat ein Verkehrsgewitter ausgelöst. Probiere es mal mit einer sonnigeren Anfrage.</p>
         </div>
       </div>
     </IonContent>
