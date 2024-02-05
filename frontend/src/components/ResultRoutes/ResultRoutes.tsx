@@ -9,6 +9,7 @@ import {
   IonRadioGroup,
   IonRow
 } from "@ionic/react";
+import { parseISO } from "date-fns";
 import { chevronBackOutline, chevronForwardOutline, mapOutline, play } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Swiper } from "swiper";
@@ -75,6 +76,8 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const [departureTime] = useDepartureTimeParamOrCurrentTime();
   // Using specific deserialize because using Boolean() constructor trues everything except empty string.
+  const [asArrivalTime] = useStateParams<boolean>(false, "asArrivalTime", String, (boolStr) => boolStr === "true");
+
   const availableRoutesString = "Verfügbare Routen";
   const selectedRouteString = "Ausgewählte Route";
 
@@ -87,7 +90,7 @@ const ResultRoutes: React.FC<ResultRoutesProps> = ({ origin, destination }) => {
 
   const [swiper, setSwiper] = useState<Swiper | null>(null);
 
-  const result = useJourneyQuery(origin, destination, new Date(departureTime), false);
+  const result = useJourneyQuery(origin, destination, parseISO(departureTime), asArrivalTime);
   const iJourneys = result.type === "success"
     && result.journeyResults
       .map((journey): IJourney => {
