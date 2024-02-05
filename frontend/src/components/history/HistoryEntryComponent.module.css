@@ -1,0 +1,64 @@
+.historyEntry {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid var(--ion-color-primary);
+}
+
+.historyEntry:hover {
+  cursor: pointer;
+}
+
+.rowTop {
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.rowBottom {
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.cell {
+  width: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.middleCell {
+  width: 1.5rem;
+}
+
+.arrowIcon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+p {
+  margin: 0.1rem;
+  text-align: center;
+}
+
+.time {
+  color: var(--ion-color-secondary);
+  font-weight: bold;
+}
+
+.date {
+  color: var(--ion-color-secondary);
+  font-weight: bold;
+}
