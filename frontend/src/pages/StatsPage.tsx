@@ -6,22 +6,24 @@ import { useStats } from "../hooks/useStats";
 const StatsPage: React.FC = () => {
   const stats = useStats();
 
-  return (<IonPage>
-    <Header />
-    <IonContent class="ion-padding">
-      {stats.filled && (<>
-        <blockquote style={{
-          color: "gray",
-          fontSize: "0.8em"
-        }}>Stats were last refreshed at {stats.time.toLocaleString()}</blockquote>
-        <h1>Worst delays in last 24 hours</h1>
-        {DelayTable(stats.last24HoursDelays)}
-        <h1>Worst delays in all recorded time</h1>
-        {DelayTable(stats.allTimeDelays)}
-      </>)}
-      {!stats.filled && (<p>Data analysis still in progress. Check back a little later :&#41;</p>)}
-    </IonContent>
-  </IonPage >);
+  return (
+    <IonPage id="main-content">
+      <Header title="Statistiken" />
+      <IonContent class="ion-padding">
+        {stats.filled && (<>
+          <blockquote style={{
+            color: "gray",
+            fontSize: "0.8em"
+          }}>Stats were last refreshed at {stats.time.toLocaleString()}</blockquote>
+          <h1>Worst delays in last 24 hours</h1>
+          {DelayTable(stats.last24HoursDelays)}
+          <h1>Worst delays in all recorded time</h1>
+          {DelayTable(stats.allTimeDelays)}
+        </>)}
+        {!stats.filled && (<p>Data analysis still in progress. Check back a little later :&#41;</p>)}
+      </IonContent>
+    </IonPage >
+  );
 };
 
 function DelayTable(stats: WorstDelayEntry[]): JSX.Element {
