@@ -14,10 +14,10 @@ import { TripEntry } from "./entity/tripEntry.entity";
 import { VrrTimetableVersionEntry } from "./entity/vrrTimetableVersionEntry.entity";
 import { HistoricDataService } from "./service/historicData.service";
 import { HistoricDataProcessorService } from "./service/historicDataProcessor.service";
-import { HistoricDataQueryRunner } from "./service/historicDataQueryRunner.service";
+import { HistoricDataQueryRunnerService } from "./service/query/historicDataQueryRunner.service";
 
 @Module({
-  providers: [HistoricDataService, HistoricDataQueryRunner, HistoricDataProcessorService],
+  providers: [HistoricDataService, HistoricDataQueryRunnerService, HistoricDataProcessorService],
   controllers: [],
   imports: [TypeOrmModule.forFeature([
     AgencyEntry,
