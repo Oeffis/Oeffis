@@ -18,7 +18,7 @@ const Menu: React.FC<MenuProps> = (props) => (
         <IonMenuToggle autoHide={false}>
           <IonItem button onClick={() => cleanAllIntervals()} routerLink={props.currentJourneyUrl} routerDirection="none">
             <IonIcon icon={compass} />
-            <IonLabel>Reise planen</IonLabel>
+            <IonLabel>Routenplaner</IonLabel>
           </IonItem>
         </IonMenuToggle>
         <IonMenuToggle autoHide={false}>
