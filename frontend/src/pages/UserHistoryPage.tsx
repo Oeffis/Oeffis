@@ -44,7 +44,7 @@ const UserHistoryPage: React.FC = () => {
           {
             historyEntries.length === 0
               ? <p className={styles.noEntries}>Keine Einträge vorhanden</p>
-              : historyEntries.toReversed().map((entry, index) => (
+              : historyEntries.reverse().map((entry: HistoryEntryComponentProps, index: number) => (
                 <HistoryEntryComponent
                   key={index}
                   date={entry.date}
