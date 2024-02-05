@@ -88,21 +88,22 @@ it.each([
 
 it.each([
   ["all stats available", [
-    legStats(undefined, undefined, undefined, cancellationStat(25.20)),
-    legStats(undefined, undefined, undefined, cancellationStat(62.73)),
-    legStats(undefined, undefined, undefined, cancellationStat(2.25))
-  ], (25.20 + 62.73 + 2.25) / 3],
+    legStats(undefined, undefined, undefined, cancellationStat(25.20, 26.40)),
+    legStats(undefined, undefined, undefined, cancellationStat(62.73, 62.83)),
+    legStats(undefined, undefined, undefined, cancellationStat(2.25, 2.25))
+  ], (25.20 + 62.73 + 2.25) / 3, (26.40 + 62.83 + 2.25) / 3],
   ["some unavailable stats", [
     legStats(undefined, undefined, undefined, undefined),
-    legStats(undefined, undefined, undefined, cancellationStat(5.25)),
-    legStats(undefined, undefined, undefined, cancellationStat(17.50)),
+    legStats(undefined, undefined, undefined, cancellationStat(5.25, 0.0)),
+    legStats(undefined, undefined, undefined, cancellationStat(17.50, 12.25)),
     legStats(undefined, undefined, undefined)
-  ], (5.25 + 17.50) / 2]
-])("aggregate leg cancellation stats (%s)", (_descr, legStats, expectedVal) => {
+  ], (5.25 + 17.50) / 2, (12.25) / 2]
+])("aggregate leg cancellation stats (%s)", (_descr, legStats, expectedVal, expectedDowTimeVal) => {
   // Given
   const expectedAggregatedStat: CancellationStat = {
     status: "available",
-    cancellationProbability: expectedVal
+    cancellationProbability: expectedVal,
+    cancellationAtDowTimeProbability: expectedDowTimeVal
   };
 
   // When
@@ -173,12 +174,14 @@ function interchangeReachableStat(
 }
 
 function cancellationStat(
-  cancellationStatProb: number
+  cancellationStatProb: number,
+  cancellationStatDowTimeProb: number
 ): CancellationStat {
 
   return {
     status: "available",
-    cancellationProbability: cancellationStatProb
+    cancellationProbability: cancellationStatProb,
+    cancellationAtDowTimeProbability: cancellationStatDowTimeProb
   } as CancellationStat;
 }
 

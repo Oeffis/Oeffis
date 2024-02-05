@@ -31,6 +31,12 @@ export interface CancellationStat {
      * @memberof CancellationStat
      */
     cancellationProbability: number;
+    /**
+     * Probability of leg/trip being cancelled on same day of week (dow) and time in the past.
+     * @type {number}
+     * @memberof CancellationStat
+     */
+    cancellationAtDowTimeProbability: number;
 }
 
 
@@ -51,6 +57,7 @@ export function instanceOfCancellationStat(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "status" in value;
     isInstance = isInstance && "cancellationProbability" in value;
+    isInstance = isInstance && "cancellationAtDowTimeProbability" in value;
 
     return isInstance;
 }
@@ -67,6 +74,7 @@ export function CancellationStatFromJSONTyped(json: any, ignoreDiscriminator: bo
         
         'status': json['status'],
         'cancellationProbability': json['cancellationProbability'],
+        'cancellationAtDowTimeProbability': json['cancellationAtDowTimeProbability'],
     };
 }
 
@@ -81,6 +89,7 @@ export function CancellationStatToJSON(value?: CancellationStat | null): any {
         
         'status': value.status,
         'cancellationProbability': value.cancellationProbability,
+        'cancellationAtDowTimeProbability': value.cancellationAtDowTimeProbability,
     };
 }
 

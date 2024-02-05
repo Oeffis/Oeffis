@@ -1,0 +1,9 @@
+.stats_details {
+    color: grey;
+}
+
+.stats_data_basis {
+    font-style: italic;
+    margin-top: -5px;
+    text-indent: 20px;
+}

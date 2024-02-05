@@ -4,7 +4,7 @@ import { DelayStats } from "../dto/delayStats.dto";
 import { InterchangeReachableStat } from "../dto/interchangeReachableStat.dto";
 import { LegStats } from "../dto/legStats.dto";
 import { UnavailableReason, UnavailableStats } from "../dto/maybeStats.dto";
-import { NO_DATA_RESULT } from "./historicDataQueryRunner.service";
+import { NO_DATA_RESULT } from "./query/historicDataQueryRunner.service";
 
 @Injectable()
 export class HistoricDataProcessorService {
@@ -89,9 +89,14 @@ export class HistoricDataProcessorService {
       .map(cancellationStat => cancellationStat.cancellationProbability)
       .reduce((prev, curr) => prev + curr)) / allCancellationStats.length;
 
+    const avgCancellationDowTimeProbability: number = (allCancellationStats
+      .map(cancellationStat => cancellationStat.cancellationAtDowTimeProbability)
+      .reduce((prev, curr) => prev + curr)) / allCancellationStats.length;
+
     return {
       status: "available",
-      cancellationProbability: avgCancellationProbability
+      cancellationProbability: avgCancellationProbability,
+      cancellationAtDowTimeProbability: avgCancellationDowTimeProbability
     } as CancellationStat;
   }
 }
