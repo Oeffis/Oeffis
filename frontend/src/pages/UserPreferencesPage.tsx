@@ -34,13 +34,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
     );
   };
 
-  const openClearHistoryDialog = (): void => {
-    setIsDialogueOpen(true);
-    console.log("Open clear history dialog");
-  };
-
   const clearHistory = (): void => {
-    console.log("Clearing user history");
     persistance.set(UserPreferences.userHistory, "[]");
   };
 
@@ -73,7 +67,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
               <IonLabel>Historie</IonLabel>
             </div>
             <div className={styles.value}>
-              <IonButton onClick={() => openClearHistoryDialog()}>Löschen</IonButton>
+              <IonButton onClick={() => setIsDialogueOpen(true)}>Löschen</IonButton>
             </div>
           </div>
         </div>
