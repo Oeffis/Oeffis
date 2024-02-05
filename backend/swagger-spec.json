@@ -1524,8 +1524,15 @@
             "type": "string",
             "description": "When the stats were last updated."
           },
-          "delays": {
-            "description": "The most delayed trips",
+          "allTimeDelays": {
+            "description": "The most delayed trips of all time",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorstDelayEntry"
+            }
+          },
+          "last24HoursDelays": {
+            "description": "The most delayed trips of the last 24 hours",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/WorstDelayEntry"
@@ -1535,7 +1542,8 @@
         "required": [
           "filled",
           "time",
-          "delays"
+          "allTimeDelays",
+          "last24HoursDelays"
         ]
       }
     }
