@@ -1,0 +1,28 @@
+.dialogue {
+  --height: 25%;
+  --width: 90%;
+  --border-radius: 0.1rem;
+  --box-shadow: 0 0.3rem 0.5rem -0.1rem var(--ion-color-primary-contrast-rgb), 0 0.1rem 0.2rem -0.1rem rgb(0 0 0 / 0.1);
+  backdrop-filter: blur(3%);
+}
+
+.modal_toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
+
+.modal_content_section {
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.modal_buttons {
+  margin-top: 2%;
+  justify-content: space-around;
+  display: flex;
+  width: 100%;
+}

@@ -1,6 +1,8 @@
 
+import { IonSpinner } from "@ionic/react";
 import { createContext, useContext } from "react";
 import useSWR from "swr";
+import styles from "./AppConfigContext.module.css";
 import { AppConfig } from "./appConfig";
 
 export const AppConfigContext = createContext<AppConfig | null>(null);
@@ -15,10 +17,19 @@ export function AppConfigProvider(props: { children: React.ReactNode }): JSX.Ele
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { data, error } = useSWR<AppConfig>("/config/config.json", fetcher);
   if (error) {
-    return <div>Failed to load config</div>;
+    return (
+      <div className={styles.appConfigContext}>
+        <p className={styles.loadingText}>Failed to load config</p>
+      </div>
+    );
   }
   if (!data) {
-    return <div>Loading config...</div>;
+    return (
+      <div className={styles.appConfigContext}>
+        <IonSpinner className={styles.loadingIcon} name="dots" />
+        <p className={styles.loadingText}>Loading config</p>
+      </div>
+    );
   }
 
   return (
