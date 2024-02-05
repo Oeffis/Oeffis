@@ -48,7 +48,7 @@ const FavoritesPage: React.FC<FavoritesPageProps> = (props) => {
 
   return (
     <IonPage id="main-content">
-      {!(props.showHeader === false) && <Header />}
+      {!(props.showHeader === false) && <Header title="Favoriten" />}
       <IonContent scrollY={false}>
         <IonRow className={styles.result_header}>
           <div className={styles.right_align}>

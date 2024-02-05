@@ -36,7 +36,7 @@ const LiveNavigation: React.FC = () => {
 
   return (
     <IonPage id="main-content">
-      <Header />
+      <Header title="Live Navigation" />
       <IonContent>
         {
           selectedJourney !== null &&

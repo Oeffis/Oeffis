@@ -30,7 +30,7 @@ const JourneyPage: React.FC<JourneyPageProps> = (props) => {
 
   return (
     <IonPage id="main-content">
-      <Header />
+      <Header title="Routenplaner" />
       <IonContent scrollY={false}>
         <div className={styles.journey_content}>
           <div className={styles.map}>

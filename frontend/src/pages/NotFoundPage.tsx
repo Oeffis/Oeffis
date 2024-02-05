@@ -5,7 +5,7 @@ import styles from "./NotFoundPage.module.css";
 
 const NotFoundPage: React.FC = () => (
   <IonPage id="main-content">
-    <Header />
+    <Header title="Öffis" />
     <IonContent fullscreen>
       <div className={styles.error}>
         <IonIcon className={styles.errorIcon} src={thunderstorm} />

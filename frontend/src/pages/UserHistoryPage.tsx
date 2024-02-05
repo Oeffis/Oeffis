@@ -38,7 +38,7 @@ const UserHistoryPage: React.FC = () => {
 
   return (
     <IonPage id="main-content">
-      <Header />
+      <Header title="Historie" />
       <IonContent fullscreen>
         <div className={styles.userHistory}>
           {
