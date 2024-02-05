@@ -1,0 +1,10 @@
+.headerToolbar {
+  --background: var(--ion-background-color);
+}
+
+.headerLogo {
+  height: 50px;
+  width: 50px;
+  background-color: var(--ion-color-primary-contrast);
+  border-radius: 20%;
+}
