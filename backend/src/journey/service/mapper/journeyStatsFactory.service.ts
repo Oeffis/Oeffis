@@ -1,17 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { OmitType } from "@nestjs/swagger";
-import { subWeeks } from "date-fns";
+import { differenceInSeconds, subWeeks } from "date-fns";
 import { InterchangeReachableStat } from "../../../historicData/dto/interchangeReachableStat.dto";
 import { JourneyStats } from "../../../historicData/dto/journeyStats.dto";
 import { LegStats } from "../../../historicData/dto/legStats.dto";
 import { UnavailableStats } from "../../../historicData/dto/maybeStats.dto";
-import {
-  DelayAtStationAndTimeSubOptions,
-  DelayAtStationOptions,
-  HistoricDataService
-} from "../../../historicData/service/historicData.service";
+import { HistoricDataService } from "../../../historicData/service/historicData.service";
 import { HistoricDataProcessorService } from "../../../historicData/service/historicDataProcessor.service";
-import { NO_DATA_RESULT } from "../../../historicData/service/historicDataQueryRunner.service";
+import { DelayAtStopAndTimeOptions, DelayAtStopOptions } from "../../../historicData/service/query/delayAtStop.query";
+import { NO_DATA_RESULT } from "../../../historicData/service/query/historicDataQueryRunner.service";
 import { FootpathLeg, TransportationLeg } from "../../entity/leg.entity";
 import { JourneyLocationMapperService } from "./journeyLocationMapper.service";
 
@@ -23,7 +20,8 @@ const LEG_INTERCHANGE_FOOTPATH_DURATION_FALLBACK_VAL = 0;
 /*
  * Configuration of time-frame to consider when requesting historic data.
  */
-const HISTORIC_DATA_SINCE = subWeeks(new Date(), 2);
+const HISTORIC_DELAY_DATA_SINCE = subWeeks(new Date(), 2);
+const HISTORIC_CANCELLATION_DATA_SINCE = subWeeks(new Date(), 8);
 
 @Injectable()
 export class JourneyStatsFactoryService {
@@ -140,12 +138,16 @@ export class JourneyStatsFactoryService {
     const tripId = currentLeg.transportation.id;
     const originParentStopId = this.journeyLocationMapper.getStopParent(currentLeg.origin).id;
     const destinationParentStopId = this.journeyLocationMapper.getStopParent(currentLeg.destination).id;
-    const plannedDestinationArrival = currentLeg.destination.arrivalTimePlanned;
+    const plannedOriginDeparture = currentLeg.origin.departureTimePlanned;
+    // Historic data includes departure times only (no arrival times measured).
+    // But leg destination location includes arrival times only (so extract departure from last location of stop seq.).
+    //const plannedDestinationDeparture = currentLeg.details.stopSequence.slice(-1)[0].departureTimePlanned;
+    // There is no "departureTimePlanned" on last stop or its the same as "arrivalTimePlanned"!
 
-    const delayAtOriginOptions: DelayAtStationOptions =
-      { tripId: tripId, stopId: originParentStopId, since: HISTORIC_DATA_SINCE };
-    const delayAtDestinationOptions: DelayAtStationOptions =
-      { tripId: tripId, stopId: destinationParentStopId, since: HISTORIC_DATA_SINCE };
+    const delayAtOriginOptions: DelayAtStopOptions =
+      { tripId: tripId, stopId: originParentStopId, since: HISTORIC_DELAY_DATA_SINCE };
+    const delayAtDestinationOptions: DelayAtStopOptions =
+      { tripId: tripId, stopId: destinationParentStopId, since: HISTORIC_DELAY_DATA_SINCE };
 
     const originDelayStats =
       await this.historicDataService.getDelayStatsAtStation(delayAtOriginOptions);
@@ -155,16 +157,20 @@ export class JourneyStatsFactoryService {
     const interchangeReachableStat = nextTransportationLeg !== undefined
       ? await this.createInterchangeReachableStat(
         currentLeg,
-        { tripId: tripId, stopId: destinationParentStopId, plannedTime: plannedDestinationArrival },
+        { tripId: tripId, stopId: destinationParentStopId, plannedTime: new Date() }, // TODO
         nextTransportationLeg, intermediateFootpathLeg)
       : NO_DATA_RESULT;
 
+    // Stop before destination (if there are no intermediate stops, same as origin).
+    const prevDestinationStop = currentLeg.details.stopSequence[currentLeg.details.stopSequence.length - 2];
     const cancellationStat =
       await this.historicDataService.getCancellationStat({
         tripId: tripId,
         originStopId: originParentStopId,
-        destinationStopId: destinationParentStopId,
-        since: HISTORIC_DATA_SINCE
+        originPlannedDeparture: plannedOriginDeparture,
+        prevDestinationStopId: this.journeyLocationMapper.getStopParent(prevDestinationStop).id,
+        drivingTime: differenceInSeconds(prevDestinationStop.departureTimePlanned, plannedOriginDeparture),
+        since: HISTORIC_CANCELLATION_DATA_SINCE
       });
 
     return {
@@ -177,27 +183,30 @@ export class JourneyStatsFactoryService {
 
   private async createInterchangeReachableStat(
     currentLeg: TransportationLegWithoutStats,
-    delayAtCurrentLegDestinationOptions: DelayAtStationAndTimeSubOptions,
+    delayAtCurrentLegDestinationOptions: DelayAtStopAndTimeOptions,
     nextTransportationLeg: TransportationLegWithoutStats,
     intermediateFootpathLeg?: FootpathLeg
   ): Promise<InterchangeReachableStat | UnavailableStats> {
 
     const nextTripId = nextTransportationLeg.transportation.id;
     const nextOriginParentStopId = this.journeyLocationMapper.getStopParent(nextTransportationLeg.origin).id;
-    const delayAtNextTripOriginOptions: DelayAtStationAndTimeSubOptions = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const delayAtNextTripOriginOptions: DelayAtStopAndTimeOptions = {
       tripId: nextTripId,
       stopId: nextOriginParentStopId,
       plannedTime: nextTransportationLeg.origin.departureTimePlanned
     };
 
+    // TODO Implement later.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const footpathTimeForInterchange = this.getFootpathTimeForInterchange(currentLeg, intermediateFootpathLeg)
       ?? LEG_INTERCHANGE_FOOTPATH_DURATION_FALLBACK_VAL;
 
     return await this.historicDataService.getInterchangeReachableStat({
-      delayAtCurrentTripDestinationOptions: delayAtCurrentLegDestinationOptions,
-      delayAtNextTripOriginOptions: delayAtNextTripOriginOptions,
-      interchangeFootpathTime: footpathTimeForInterchange,
-      since: HISTORIC_DATA_SINCE
+      //currentTripOptions: delayAtCurrentLegDestinationOptions,
+      //nextTripOptions: delayAtNextTripOriginOptions,
+      //interchangeFootpathTime: footpathTimeForInterchange,
+      since: HISTORIC_DELAY_DATA_SINCE
     });
   }
 
