@@ -85,9 +85,16 @@ export class Stats {
   time: Date = new Date();
 
   @ApiProperty({
-    description: "The most delayed trips",
+    description: "The most delayed trips of all time",
     type: [WorstDelayEntry],
     required: true
   })
-  delays: WorstDelayEntry[] = [];
+  allTimeDelays: WorstDelayEntry[] = [];
+
+  @ApiProperty({
+    description: "The most delayed trips of the last 24 hours",
+    type: [WorstDelayEntry],
+    required: true
+  })
+  last24HoursDelays: WorstDelayEntry[] = [];
 }

@@ -39,11 +39,17 @@ export interface Stats {
      */
     time: Date;
     /**
-     * The most delayed trips
+     * The most delayed trips of all time
      * @type {Array<WorstDelayEntry>}
      * @memberof Stats
      */
-    delays: Array<WorstDelayEntry>;
+    allTimeDelays: Array<WorstDelayEntry>;
+    /**
+     * The most delayed trips of the last 24 hours
+     * @type {Array<WorstDelayEntry>}
+     * @memberof Stats
+     */
+    last24HoursDelays: Array<WorstDelayEntry>;
 }
 
 /**
@@ -53,7 +59,8 @@ export function instanceOfStats(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "filled" in value;
     isInstance = isInstance && "time" in value;
-    isInstance = isInstance && "delays" in value;
+    isInstance = isInstance && "allTimeDelays" in value;
+    isInstance = isInstance && "last24HoursDelays" in value;
 
     return isInstance;
 }
@@ -70,7 +77,8 @@ export function StatsFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         
         'filled': json['filled'],
         'time': (new Date(json['time'])),
-        'delays': ((json['delays'] as Array<any>).map(WorstDelayEntryFromJSON)),
+        'allTimeDelays': ((json['allTimeDelays'] as Array<any>).map(WorstDelayEntryFromJSON)),
+        'last24HoursDelays': ((json['last24HoursDelays'] as Array<any>).map(WorstDelayEntryFromJSON)),
     };
 }
 
@@ -85,7 +93,8 @@ export function StatsToJSON(value?: Stats | null): any {
         
         'filled': value.filled,
         'time': (value.time.toISOString()),
-        'delays': ((value.delays as Array<any>).map(WorstDelayEntryToJSON)),
+        'allTimeDelays': ((value.allTimeDelays as Array<any>).map(WorstDelayEntryToJSON)),
+        'last24HoursDelays': ((value.last24HoursDelays as Array<any>).map(WorstDelayEntryToJSON)),
     };
 }
 

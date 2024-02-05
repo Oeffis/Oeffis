@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from "fs/promises";
 import { DelayEntry } from "historicData/entity/delayEntry.entity";
 import { RouteEntry } from "historicData/entity/routeEntry.entity";
 import { join } from "path";
-import { Stats, WithRoute } from "stats/entity/stats";
+import { Stats, WithRoute, WorstDelayEntry } from "stats/entity/stats";
 import { Like, Repository } from "typeorm";
 
 interface RawDelayStatEntry {
@@ -33,7 +33,8 @@ export class StatsService {
   protected cachedResults: Stats = {
     filled: false,
     time: new Date(),
-    delays: []
+    allTimeDelays: [],
+    last24HoursDelays: []
   };
   protected currentRequest?: Promise<Stats>;
   protected lastRequestTime?: number;
@@ -111,32 +112,72 @@ export class StatsService {
 
   protected async getNewStats(): Promise<Stats> {
     const start = new Date();
-    const delays = await this.getMostDelayedTrips();
-    const uniqueDelays = this.removeDuplicateDelays(delays);
-    const topTen = uniqueDelays.slice(0, 10);
-    const withRoutes = await this.addRoutes(topTen);
+    const [allTimeDelays, last24hDelays] = await Promise.all([
+      this.getMostDelayedAllTime(),
+      this.getMostDelayed24Hours()
+    ]);
+
     return {
       filled: true,
       time: start,
-      delays: withRoutes.map(delay => ({
-        routeShortName: delay.route.routeShortName!,
-        routeLongName: delay.route.routeLongName!,
-        routeId: delay.route.routeId,
-        delay: delay.delay,
-        planned: delay.planned,
-        estimated: delay.estimated!
-      }))
+      allTimeDelays: allTimeDelays,
+      last24HoursDelays: last24hDelays
     };
   }
 
-  private async getMostDelayedTrips(): Promise<DelayStatEntry[]> {
+  private async getMostDelayedAllTime(): Promise<WorstDelayEntry[]> {
+    const delays = await this.queryMostDelayedAllTime();
+    return this.mapDelays(delays);
+  }
+
+  private async getMostDelayed24Hours(): Promise<WorstDelayEntry[]> {
+    const delays = await this.queryMostDelayed24Hours();
+    return this.mapDelays(delays);
+  }
+
+  private async mapDelays(delays: DelayStatEntry[]): Promise<WorstDelayEntry[]> {
+    const uniqueDelays = this.removeDuplicateDelays(delays);
+    const topTen = uniqueDelays.slice(0, 10);
+    const withRoutes = await this.addRoutes(topTen);
+    return withRoutes.map(delay => ({
+      routeShortName: delay.route.routeShortName!,
+      routeLongName: delay.route.routeLongName!,
+      routeId: delay.route.routeId,
+      delay: delay.delay,
+      planned: delay.planned,
+      estimated: delay.estimated!
+    }));
+  }
+
+  private async queryMostDelayedAllTime(): Promise<DelayStatEntry[]> {
     const maxDelays: RawDelayStatEntry[] = await this.delayEntryRepository.query(sql`
     WITH historic_with_delay AS (
       SELECT *, EXTRACT(EPOCH FROM (estimated - planned)::INTERVAL) / 60 AS delay 
       FROM historic_data
       WHERE estimated IS NOT NULL
     )
-    SELECT * FROM historic_with_delay WHERE delay > 1000 ORDER BY delay DESC LIMIT 50;
+    SELECT * FROM historic_with_delay ORDER BY delay DESC LIMIT 500;
+    `);
+
+    return maxDelays.map((delay) => ({
+      delay: parseFloat(delay.delay),
+      planned: delay.planned,
+      estimated: delay.estimated,
+      routeId: delay.route_id,
+      tripId: delay.trip_id,
+      tripCode: delay.trip_code
+    }));
+  }
+
+  private async queryMostDelayed24Hours(): Promise<DelayStatEntry[]> {
+    const maxDelays: RawDelayStatEntry[] = await this.delayEntryRepository.query(sql`
+    WITH historic_with_delay AS (
+      SELECT *, EXTRACT(EPOCH FROM (estimated - planned)::INTERVAL) / 60 AS delay 
+      FROM historic_data
+      WHERE estimated IS NOT NULL
+      AND estimated > NOW() - INTERVAL '1 day'
+    )
+    SELECT * FROM historic_with_delay ORDER BY delay DESC LIMIT 500;
     `);
 
     return maxDelays.map((delay) => ({
