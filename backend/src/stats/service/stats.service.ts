@@ -156,7 +156,7 @@ export class StatsService {
       FROM historic_data
       WHERE estimated IS NOT NULL
     )
-    SELECT * FROM historic_with_delay ORDER BY delay DESC LIMIT 50;
+    SELECT * FROM historic_with_delay ORDER BY delay DESC LIMIT 500;
     `);
 
     return maxDelays.map((delay) => ({
@@ -177,7 +177,7 @@ export class StatsService {
       WHERE estimated IS NOT NULL
       AND estimated > NOW() - INTERVAL '1 day'
     )
-    SELECT * FROM historic_with_delay ORDER BY delay DESC LIMIT 50;
+    SELECT * FROM historic_with_delay ORDER BY delay DESC LIMIT 500;
     `);
 
     return maxDelays.map((delay) => ({
