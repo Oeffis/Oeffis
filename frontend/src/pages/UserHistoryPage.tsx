@@ -22,7 +22,7 @@ const UserHistoryPage: React.FC = () => {
         <div className={styles.userHistory}>
           {
             historyEntries.length === 0
-              ? <p>No entries in history</p>
+              ? <p>Keine Einträge vorhanden</p>
               : historyEntries
           }
         </div>

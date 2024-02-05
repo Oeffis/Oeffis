@@ -60,7 +60,7 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
         <div className={styles.userPreferences}>
           <div className={styles.row}>
             <div className={styles.key}>
-              <IonLabel>Dark Mode</IonLabel>
+              <IonLabel>Dunkelmodus</IonLabel>
             </div>
             <div className={styles.value}>
               <IonToggle checked={props.isDarkThemeEnabled} disabled={false} onClick={() => setIsDarkThemeEnabledPersistence()} />
@@ -68,24 +68,24 @@ const UserPreferencesPage: React.FC<UserPreferencesPageProps> = (props) => {
           </div>
           <div className={styles.row}>
             <div className={styles.key}>
-              <IonLabel>User History</IonLabel>
+              <IonLabel>Historie</IonLabel>
             </div>
             <div className={styles.value}>
-              <IonButton onClick={() => openClearHistoryDialog()}>CLEAR</IonButton>
+              <IonButton onClick={() => openClearHistoryDialog()}>Löschen</IonButton>
             </div>
           </div>
         </div>
       </IonContent>
       <DialogComponent
         id="dialog_clear_user_history"
-        title="Clear history"
-        message="Do you want to clear user history?"
+        title="Historie löschen"
+        message="Alle Einträge in der Historie löschen?"
         buttons={[
           <IonButton onClick={() => {
             setIsDialogueOpen(false);
             clearHistory();
-          }}> Yes</IonButton>,
-          <IonButton onClick={() => setIsDialogueOpen(false)}>No</IonButton>
+          }}> Ja</IonButton>,
+          <IonButton onClick={() => setIsDialogueOpen(false)}>Nein</IonButton>
         ]}
         isDialogueOpen={isDialogueOpen}
         setIsDialogueOpen={setIsDialogueOpen}
