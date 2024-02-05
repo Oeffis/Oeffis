@@ -21,6 +21,7 @@ import { Journey, TransportationLeg, TransportationLegTypeEnum } from "../../api
 import { useDepartureTimeParamOrCurrentTime } from "../../hooks/useDepartureTimeParamOrCurrentTime";
 import { useLocationByIdOrNull } from "../../hooks/useLocationByIdOrNull";
 import { useStateParams } from "../../hooks/useStateParams";
+import { saveJourneyToUserHistory } from "../../pages/UserHistoryPage";
 import {
   useFavoriteRoutes,
   useFavoriteTrips
@@ -189,7 +190,18 @@ const RoutePlanner = ({
             Merken
           </IonButton>
           <IonButton
-            onClick={() => setCurrentJourneyUrl(`/journey?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`)}
+            onClick={() => {
+              setCurrentJourneyUrl(`/journey?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`);
+              originLocation && destinationLocation &&
+                saveJourneyToUserHistory({
+                  date: new Date(departureTime).toISOString(),
+                  asArrival: asArrivalTime ? "true" : "false",
+                  originId: originLocation.id,
+                  originName: originLocation.name,
+                  destinationId: destinationLocation.id,
+                  destinationName: destinationLocation.name
+                });
+            }}
             routerLink={`/results?origin=${originId}&destination=${destinationId}&departureTime=${new Date(departureTime).toISOString()}&asArrivalTime=${asArrivalTime}`}
             disabled={originLocation === null || destinationLocation === null} className={rp.button_primary}
             size="default" expand="block">

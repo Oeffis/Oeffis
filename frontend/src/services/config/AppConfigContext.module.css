@@ -1,0 +1,16 @@
+.appConfigContext {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingIcon {
+  height: 3rem;
+  width: 3rem;
+}
+
+.loadingText {
+  font-size: 1rem;
+}
