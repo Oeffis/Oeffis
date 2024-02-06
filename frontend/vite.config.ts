@@ -1,12 +1,14 @@
 import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    legacy()
+    legacy(),
+    VitePWA({ registerType: "autoUpdate" })
   ],
   test: {
     globals: true,
