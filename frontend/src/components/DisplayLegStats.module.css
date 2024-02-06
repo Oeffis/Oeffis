@@ -1,5 +1,8 @@
 .stats_details {
     color: grey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .stats_data_basis {
