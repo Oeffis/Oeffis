@@ -88,7 +88,7 @@ function renderDelayStatsDetails(stats: LegStats, originName: string, destinatio
       );
     }
 
-    details = (<div style={{ maxWidth: "75%" }}><ul>{bulletPoints}</ul>
+    details = (<div><ul>{bulletPoints}</ul>
       <p className={styles.stats_data_basis}>Grundlage sind historische Verspätungsdaten der letzten zwei Wochen.</p></div>
     );
   }
@@ -137,7 +137,7 @@ function renderCancellationStatDetails(
       </li>
     );
 
-    details = (<div style={{ maxWidth: "75%" }}><ul>{bulletPoints}</ul>
+    details = (<div><ul>{bulletPoints}</ul>
       <p
         className={styles.stats_data_basis}>Grundlage sind historische Ausfalldaten der letzten acht Wochen.</p></div>
     );
