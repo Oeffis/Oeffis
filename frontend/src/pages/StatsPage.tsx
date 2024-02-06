@@ -11,10 +11,10 @@ const StatsPage: React.FC = () => {
       <Header title="Statistiken" />
       <IonContent class="ion-padding">
         {stats.filled && (<>
-          <blockquote style={{
+          <span style={{
             color: "gray",
             fontSize: "0.8em"
-          }}>Letzte Aktualisierung: {stats.time.toLocaleString()}</blockquote>
+          }}>Letzte Aktualisierung: {stats.time.toLocaleString()}</span>
           <h1>Größte Verspätungen der letzten 24 Stunden</h1>
           {DelayTable(stats.last24HoursDelays)}
           <h1>Größte Verspätungen in der gesamten Aufzeichnungsdauer</h1>
