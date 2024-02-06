@@ -15,7 +15,7 @@ export class ServingLinesClient extends VrrClientBase {
     query: FindServingLinesByStopParameters,
   ): Promise<SERVINGLINESSchema> {
     return this.executeFetchRequest(
-      "/static03/XML_SERVINGLINES_REQUEST",
+      "/XML_SERVINGLINES_REQUEST",
       {
         name_sl: query.pointId,
         type_sl: "any",
@@ -31,7 +31,7 @@ export class ServingLinesClient extends VrrClientBase {
     query: FindServingLinesByLineName,
   ): Promise<SERVINGLINESSchema> {
     return this.executeFetchRequest(
-      "/static03/XML_SERVINGLINES_REQUEST",
+      "/XML_SERVINGLINES_REQUEST",
       {
         lineName: query.search,
         mode: "line"
