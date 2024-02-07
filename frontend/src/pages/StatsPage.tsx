@@ -11,16 +11,16 @@ const StatsPage: React.FC = () => {
       <Header title="Statistiken" />
       <IonContent class="ion-padding">
         {stats.filled && (<>
-          <blockquote style={{
+          <span style={{
             color: "gray",
             fontSize: "0.8em"
-          }}>Stats were last refreshed at {stats.time.toLocaleString()}</blockquote>
-          <h1>Worst delays in last 24 hours</h1>
+          }}>Letzte Aktualisierung: {stats.time.toLocaleString()}</span>
+          <h1>Größte Verspätungen der letzten 24 Stunden</h1>
           {DelayTable(stats.last24HoursDelays)}
-          <h1>Worst delays in all recorded time</h1>
+          <h1>Größte Verspätungen in der gesamten Aufzeichnungsdauer</h1>
           {DelayTable(stats.allTimeDelays)}
         </>)}
-        {!stats.filled && (<p>Data analysis still in progress. Check back a little later :&#41;</p>)}
+        {!stats.filled && (<p>Datenanalyse noch im Gange. Bitte schau in ein paar Minuten nochmal vorbei. :&#41;</p>)}
       </IonContent>
     </IonPage >
   );
@@ -34,11 +34,11 @@ function DelayTable(stats: WorstDelayEntry[]): JSX.Element {
       fontSize: "1.3em"
     }}>
       <tr>
-        <th>Place</th>
-        <th>Route</th>
-        <th>Delay</th>
-        <th>Planned</th>
-        <th>Estimated</th>
+        <th style={{ padding: "0.5em", color: "white" }}>Rang</th>
+        <th style={{ padding: "0.5em", color: "white" }}>Route</th>
+        <th style={{ padding: "0.5em", color: "white" }}>Verspätung</th>
+        <th style={{ padding: "0.5em", color: "white" }}>Geplante Abfahrtszeit</th>
+        <th style={{ padding: "0.5em", color: "white" }}>Erfasste Abfahrtszeit</th>
       </tr>
     </thead>
     <tbody>
@@ -47,7 +47,7 @@ function DelayTable(stats: WorstDelayEntry[]): JSX.Element {
         height: "4em"
       }} key={index}>
         <td>{index + 1}</td>
-        <td style={{ borderLeft: "1px solid gray" }}>{delay.routeShortName} {delay.routeLongName}</td>
+        <td style={{ borderLeft: "1px solid gray" }}>Linie {delay.routeShortName} über {delay.routeLongName.split("-").map(s => s.trim()).join(", ")}</td>
         <td style={{ borderLeft: "1px solid gray" }}>{(delay.delay / 60).toFixed(2)}h ({delay.delay.toFixed(2)}min)</td>
         <td style={{ borderLeft: "1px solid gray" }}>{delay.planned.toLocaleString("de")}</td>
         <td style={{ borderLeft: "1px solid gray" }}>{delay.estimated.toLocaleString("de")}</td>

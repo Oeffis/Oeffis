@@ -29,14 +29,14 @@ export function DisplayLegStats({ stats, destinationName, originName }: {
   return (
     <div>
       <div>
-        <p><IonIcon icon={timerOutline}/> Verspätungsquote: {renderDelayStatsSummary(stats)} <IonButton
+        <p><IonIcon icon={timerOutline} /> Verspätungsquote: {renderDelayStatsSummary(stats)} <IonButton
           size="small" fill="clear" onClick={toggleDelayExpansion}>Details</IonButton></p>
         {isExpandedDelay && (
           <>{renderDelayStatsDetails(stats, originName, destinationName)}</>
         )}
       </div>
       <div>
-        <p><IonIcon icon={closeCircleOutline}/>Ausfallquote: {renderCancellationStatSummary(stats.cancellationStat)}
+        <p><IonIcon icon={closeCircleOutline} />Ausfallquote: {renderCancellationStatSummary(stats.cancellationStat)}
           <IonButton
             size="small" fill="clear" onClick={toggleCancellationExpansion}>Details</IonButton></p>
         {isExpandedCancellation && (
@@ -55,9 +55,9 @@ function renderDelayStatsSummary(stats: LegStats): JSX.Element {
     ? formatToDelayMinutesString(stats.destinationDelayStats.averageDelay)
     : "n.a.";
 
-  return (<span>
-    <IonIcon icon={arrowRedoOutline}/> {originSummary} | <IonIcon icon={flagOutline}/> {destinationSummary}
-  </span>);
+  return (<div>
+    <IonIcon icon={arrowRedoOutline} /> {originSummary} | <IonIcon icon={flagOutline} /> {destinationSummary}
+  </div>);
 }
 
 function renderDelayStatsDetails(stats: LegStats, originName: string, destinationName: string): JSX.Element {
@@ -88,12 +88,12 @@ function renderDelayStatsDetails(stats: LegStats, originName: string, destinatio
       );
     }
 
-    details = (<span><ul>{bulletPoints}</ul>
-        <p className={styles.stats_data_basis}>Grundlage sind historische Verspätungsdaten der letzten zwei Wochen.</p></span>
+    details = (<div><ul>{bulletPoints}</ul>
+      <p className={styles.stats_data_basis}>Grundlage sind historische Verspätungsdaten der letzten zwei Wochen.</p></div>
     );
   }
 
-  return (<span className={styles.stats_details}>{details}</span>);
+  return (<div className={styles.stats_details}>{details}</div>);
 }
 
 function renderCancellationStatSummary(stat: LegStatsCancellationStat): JSX.Element {
@@ -106,7 +106,7 @@ function renderCancellationStatSummary(stat: LegStatsCancellationStat): JSX.Elem
     : "n.a.";
 
   return (<span>
-    <IonIcon icon={calendarOutline}/> {dowTimeProb} | <IonIcon icon={reloadOutline}/> {generalProb}
+    <IonIcon icon={calendarOutline} /> {dowTimeProb} | <IonIcon icon={reloadOutline} /> {generalProb}
   </span>);
 }
 
@@ -137,9 +137,9 @@ function renderCancellationStatDetails(
       </li>
     );
 
-    details = (<span><ul>{bulletPoints}</ul>
-        <p
-          className={styles.stats_data_basis}>Grundlage sind historische Ausfalldaten der letzten acht Wochen.</p></span>
+    details = (<div><ul>{bulletPoints}</ul>
+      <p
+        className={styles.stats_data_basis}>Grundlage sind historische Ausfalldaten der letzten acht Wochen.</p></div>
     );
 
   }

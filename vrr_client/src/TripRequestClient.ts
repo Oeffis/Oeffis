@@ -23,7 +23,7 @@ export class TripRequestClient extends VrrClientBase {
     const viaOptions = this.prepareViaOption(query);
 
     return this.executeFetchRequest(
-      "/static03/XML_TRIP_REQUEST2",
+      "/XML_TRIP_REQUEST2",
       {
         name_origin: query.originPointId,
         type_origin: "any",

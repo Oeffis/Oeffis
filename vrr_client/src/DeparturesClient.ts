@@ -10,7 +10,7 @@ interface DeparturesQuery {
 export class DeparturesClient extends VrrClientBase {
   public async findDeparturesByStop(query: DeparturesQuery): Promise<DMTTPSchema> {
     return this.executeFetchRequest(
-      "/static03/XML_DM_REQUEST",
+      "/XML_DM_REQUEST",
       {
         name_dm: query.stopId,
         type_dm: "any",

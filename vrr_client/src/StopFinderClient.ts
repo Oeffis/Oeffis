@@ -23,7 +23,7 @@ export class StopFinderClient extends VrrClientBase {
     );
 
     return this.executeFetchRequest(
-      "/static03/XML_STOPFINDER_REQUEST",
+      "/XML_STOPFINDER_REQUEST",
       {
         name_sf: formattedCoordinates,
         type_sf: "coord"
@@ -38,7 +38,7 @@ export class StopFinderClient extends VrrClientBase {
     const proprietaryVrrParameters = this.perpareDisableProprietaryVrrParametersOption(query);
 
     return this.executeFetchRequest(
-      "/static03/XML_STOPFINDER_REQUEST",
+      "/XML_STOPFINDER_REQUEST",
       {
         name_sf: query.search,
         type_sf: "any",
