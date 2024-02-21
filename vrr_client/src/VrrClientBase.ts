@@ -45,7 +45,8 @@ export class VrrClientBase {
       method: "GET"
     };
 
-    const urlWithParams = new URL(path, this.baseUrl);
+    const urlWithParams = new URL(this.baseUrl);
+    urlWithParams.pathname = urlWithParams.pathname + path;
     urlWithParams.search = new URLSearchParams({
       ...parameters,
       outputFormat: "rapidJSON",
